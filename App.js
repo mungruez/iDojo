@@ -1,20 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import HomeScreen from './screens/HomeScreen';
+import MoveListScreen from './screens/MoveListScreen'
+import MoveScreen from './screens/MoveScreen';
+import Chapters from './screens/Chapters';
+import Resources from './screens/Resources';
+
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+    <StatusBar style="light" />
+     <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home"     component={HomeScreen} options={{headerShown:false, animation: 'slide_from_left'}}/>
+        <Stack.Screen name="MoveList" component={MoveListScreen}/>
+        <Stack.Screen name="Move"     component={MoveScreen} />
+        <Stack.Screen name="Chapters" component={Chapters} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Res"     component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
+      </Stack.Navigator>
+     </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
