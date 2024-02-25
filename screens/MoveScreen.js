@@ -86,7 +86,7 @@ const MoveScreen = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9a9aa1' }}>
       <Spinner visible={isLoading} size="large" />
       {video?.title && (
         <>

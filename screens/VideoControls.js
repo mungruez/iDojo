@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
-    backgroundColor: "#000",
+    backgroundColor: "#323232",
   },
   controlButton: {
     marginHorizontal: 10,

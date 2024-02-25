@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, ImageBackground } from 'react-native'
 import React from 'react'
 import moves from '../data/moves'
 import { useNavigation } from '@react-navigation/native'
@@ -7,8 +7,9 @@ export default function MoveListScreen() {
   const navigation = useNavigation();
 
   return (
+    <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: '#2f4f4f',}}>
-      <View style={{backgroundColor: '#2f4f4f', color:"#dc143c", marginBottom:20, paddingBottom:10}}>
+      <View style={{backgroundColor: '#9a9aa1', color:"#dc143c", marginBottom:20, paddingBottom:10}}>
         <Text style={styles.title}>Moves List</Text>
       </View>
 
@@ -33,7 +34,7 @@ export default function MoveListScreen() {
                   height:"auto",
                   borderColor:"transparent",
                   borderWidth:0,
-                  backgroundColor:'darkslategray'
+                  backgroundColor:'#2f4f4f'
                 }}
               >
               
@@ -43,7 +44,7 @@ export default function MoveListScreen() {
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
                             <View style={styles.subCardView}>
                                 <Image
-                                  source={require('../assets/dodo2.png')}
+                                  source={require(item.thumb)}
                                   resizeMode="cover"
                                   style={{
                                     borderRadius: 12,
@@ -69,9 +70,11 @@ export default function MoveListScreen() {
                             
                             <View
                               style={{
-                                marginTop: 4,
-                                borderWidth: 0,
+                                marginTop: 3,
+                                borderWidth: .5,
+                                borderColor:'#228b22',
                                 flexDirection:'row',
+                                backgroundColor:'#323232',
                                 justifyContent:'space-between'
                               }}>
                                 <Text
@@ -99,6 +102,7 @@ export default function MoveListScreen() {
 
   </View>
 </SafeAreaView>
+</ImageBackground>
 
 )}
 
@@ -116,9 +120,10 @@ const styles = StyleSheet.create({
         borderColor:'#000',
         fontWeight:"500",
         borderWidth: 2,
-        backgroundColor:'#acd4c4',
-        fontSize: 24,
-        lineHeight: 32,
+        borderRadius: 5,
+        backgroundColor:'#9a9aa1',
+        fontSize: 22,
+        lineHeight: 29,
         textAlign:"center",
         marginTop: 4,
     },
@@ -223,7 +228,7 @@ const styles = StyleSheet.create({
         height: 190,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: "darkslategray",
+        backgroundColor: "#2f4f4f",
         borderRadius: 15,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
@@ -246,10 +251,10 @@ const styles = StyleSheet.create({
         width: 180,
         marginLeft:-15,
         borderRadius: 25,
-        backgroundColor: "228B22",
+        backgroundColor: "slategray",
         borderColor: "transparent",
         color: 'crimson',
-        borderWidth: .5,
+        borderWidth: 0,
         borderStyle: 'solid',
         alignSelf: 'center',
         justifyContent: 'center',
