@@ -1,91 +1,128 @@
-import React, { useState, useRef } from 'react';
-import { View, StyleSheet, Button, SafeAreaView, Text } from 'react-native';
-import Animated, {FadeInDown, FadeIn} from 'react-native-reanimated';
-import Video from 'react-native-video';
-import v1 from '../assets/videos/elbowstrike.mp4'
+import React, { useRef, useState, useEffect } from "react";
+import { Dimensions, SafeAreaView, View } from "react-native";
+import { Video } from "expo-av";
+import VideoControls from "./VideoControls";
+import * as ScreenOrientation from "expo-screen-orientation";
 
-export default function MoveScreen({ route, navigation }) {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
-    const [vrate, setVrate] = useState(1.0);
-    const videoRef = useRef(null); 
-    const { video } = route.params;
+const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
-    const togglePlaying = () => {
-      if (videoRef.current) {
-        if (isPlaying) {
-          videoRef.current.pause();
-        } else {
-          videoRef.current.play();
-        }
-        setIsPlaying(!isPlaying);
-        if (vrate==.5) {
-            setVrate(1.0);
-        }
-      }
-    };
+const MoveScreen = ({ route, navigation }) => {
+  const { video } = route.params;
+  const videoRef = useRef(null);
+  const [orientation, setOrientation] = useState(1);
+  const [showControls, setShowControls] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const toggleVrate = () => {
-      if (vrate==1) {
-        setVrate(.5);
-      }
-    };
 
-    const togglePrate = () => {
-        if (vrate==.5) {
-          setVrate(1.0);
-        }
-    };
+  useEffect(() => {
+    // Simulate fetching lessons by course
+    const fakeLessons = [
+      {
+        lessonId: "1",
+        lessonVideoUrl: "https://example.com/video1.mp4",
+        lessonTitle: "Lesson 1",
+        lessonDescription: "Introduction to React Native 1",
+        videoTotalDuration: "600",
+        lessonThumbnailImageUrl: "https://example.com/thumbnail1.jpg",
+      },
+      {
+        lessonId: "2",
+        lessonVideoUrl: "https://example.com/video2.mp4",
+        lessonTitle: "Lesson 2",
+        lessonDescription: "Introduction to React Native 2",
+        videoTotalDuration: "800",
+        lessonThumbnailImageUrl: "https://example.com/thumbnail2.jpg",
+      },
+      // Add more lessons here
+    ];
+    //setLessons(fakeLessons);
+  }, []);
 
-    return (
-      <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: '#fff',}}>
-        <View>
-          <Animated.Image
-            sharedTransitionTag={video.title}
-            source={require('../assets/dojo2.png')}
-            style={{width: 20, height: 20}}
-          />
-          <Animated.View
-            style={styles.textContainer}
-            entering={FadeIn.delay(600)}>
-              <Video
-                ref={videoRef}
-                source={require('../assets/videos/elbowstrike.mp4')}
-                paused={!isPlaying}
-                controls={false} // Hide built-in controls
-                rate={vrate}
-                style={styles.backgroundVideo}
-                muted={isMuted}
+
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      videoRef.current.pauseAsync();
+    } else {
+      videoRef.current.playAsync();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const togglePlaybackSpeed = () => {
+    //gets the next playback speed index
+    const nextSpeedIndex = playbackSpeedOptions.indexOf(playbackSpeed) + 1;
+    if (nextSpeedIndex < playbackSpeedOptions.length) {
+      videoRef.current.setRateAsync(playbackSpeedOptions[nextSpeedIndex], true);
+      setPlaybackSpeed(playbackSpeedOptions[nextSpeedIndex]);
+    }
+    //if the last option i.e. 2x speed is applied. then moves to first option 
+    else {
+      videoRef.current.setRateAsync(playbackSpeedOptions[0], true);
+      setPlaybackSpeed(playbackSpeedOptions[0]);
+    }
+  };
+
+  const toggleMute = () => {
+    videoRef.current.setIsMutedAsync(isMuted);
+    setIsMuted(!isMuted);
+  };
+
+  const toggleFullscreen = async () => {
+    if (!isFullscreen) {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+      );
+      setIsFullscreen(true);
+    } else {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+      setIsFullscreen(false);
+    }
+    setOrientation(await ScreenOrientation.getOrientationAsync());
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Spinner visible={isLoading} size="large" />
+      {video?.title && (
+        <>
+          <View>
+            <Video
+              ref={videoRef}
+              source={video.vid}
+              rate={playbackSpeed}
+              isMuted={isMuted}
+              shouldPlay={isPlaying}
+              resizeMode="cover"
+              style={{ flex: 1 }}
             />
-          </Animated.View>
-          
-          <Animated.View>
-          <Button onPress={togglePlaying} title={isPlaying ? 'Stop' : 'Play'} />
-
-          <Button
-            onPress={() => setIsMuted(m => !m)}
-            title={isMuted ? 'Unmute' : 'Mute'}
-          />
-          <Button onPress={toggleVrate} title={'Slow'} />
-          </Animated.View>
-
-          <Animated.View entering={FadeInDown.delay(800)}>
-            <Text>{video.title}</Text>
-            <Text>{video.style}</Text>
-          </Animated.View>
+          </View>
+          {showControls && (
+            <VideoControls
+              onTogglePlayPause={togglePlayPause}
+              onToggleMute={toggleMute}
+              onTogglePlaybackSpeed={togglePlaybackSpeed}
+              onToggleFullscreen={toggleFullscreen}
+              rate={playbackSpeed}
+              isMuted={isMuted}
+              shouldPlay={isPlaying}
+              fullScreenValue={isFullscreen}
+            />
+          )}
+        </>
+      )}
+      //this section is only displayed when fullscreen is not active
+      {orientation == 1 && (
+        <View>
+          {/* Simulate other UI elements here */}
         </View>
-        </SafeAreaView>
-    );
-}
+      )}
+    </SafeAreaView>
+  );
+};
 
-const styles = StyleSheet.create({
-    backgroundVideo: {
-    width: 320,
-    height: 620,
-  },
-  textContainer: {
-    margin: 20,
-    flexShrink: 1,
-    gap: 10,
-  },
-})
+export default MoveListScreen;

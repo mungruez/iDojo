@@ -1,33 +1,17 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable } from 'react-native'
 import React from 'react'
 import moves from '../data/moves'
 import { useNavigation } from '@react-navigation/native'
-import Animated, {FadeInDown} from 'react-native-reanimated';
-import * as VideoThumbnails from 'expo-video-thumbnails';
 
 export default function MoveListScreen() {
   const navigation = useNavigation();
-
-  const generateThumbnail = async (viduri) => {
-    try {
-      const { uri } = await VideoThumbnails.getThumbnailAsync(
-        require("../assets/videos/elbowstrike.mp4"),
-        {
-          time: 15000,
-        }
-      );
-      return uri;
-    } catch (e) {
-      console.warn(e);
-      return require("../assets/dojo3.png");
-    }
-  };
 
   return (
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: '#2f4f4f',}}>
       <View style={{backgroundColor: '#2f4f4f', color:"#dc143c", marginBottom:20, paddingBottom:10}}>
         <Text style={styles.title}>Moves List</Text>
       </View>
+
       <View style={{flex:1}}>
           <FlatList
             data={moves}
@@ -53,14 +37,13 @@ export default function MoveListScreen() {
                 }}
               >
               
-              <Animated.View entering={FadeInDown.delay(209 * (index+1))}>
-                <TouchableWithoutFeedback
+                <Pressable
                   onPress={() => {navigation.navigate('Move', {video: item});}}>
                     <View style={styles.mainCardView}>
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
                             <View style={styles.subCardView}>
-                                <Animated.Image
-                                  source={generateThumbnail}
+                                <Image
+                                  source={require('../assets/dodo2.png')}
                                   resizeMode="cover"
                                   style={{
                                     borderRadius: 12,
@@ -69,8 +52,8 @@ export default function MoveListScreen() {
                                     marginLeft:0,
                                     height: 130,
                                     width: 180,
-                                }}
-                                sharedTransitionTag={item.title}/>
+                                  }}
+                                />
                             
 
                         <View style={{marginLeft: 12}}>
@@ -88,7 +71,8 @@ export default function MoveListScreen() {
                               style={{
                                 marginTop: 4,
                                 borderWidth: 0,
-                                width: '85%',
+                                flexDirection:'row',
+                                justifyContent:'space-between'
                               }}>
                                 <Text
                                     style={{
@@ -97,13 +81,19 @@ export default function MoveListScreen() {
                                     }}>
                                     {item.style}
                                 </Text>
+                                <Text
+                                    style={{
+                                       color: '#fff',
+                                       fontSize: 12,
+                                    }}>
+                                    {item.type}
+                                </Text>
                             </View>
                             </View>
                         </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
-        </Animated.View>
+            </Pressable>
     </View>)}
   />
 
