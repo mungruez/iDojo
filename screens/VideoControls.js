@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 
-const VideoControls = ({
+export default function VideoControls({
   onTogglePlayPause,
   onToggleMute,
   onTogglePlaybackSpeed,
@@ -11,7 +11,7 @@ const VideoControls = ({
   isMuted,
   shouldPlay,
   fullScreenValue,
-}) => {
+}){
 
   return (
     <>
@@ -98,5 +98,3 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
-export default VideoControls;

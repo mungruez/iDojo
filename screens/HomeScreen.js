@@ -1,4 +1,4 @@
-import { Image,StyleSheet,SafeAreaView,View,Text,ScrollView,TouchableOpacity,ImageBackground} from 'react-native'
+import { Image,StyleSheet,SafeAreaView,View,Text,ScrollView,TouchableOpacity,ImageBackground, Dimensions} from 'react-native'
 import React, {useLayoutEffect} from 'react'
 import { useNavigation } from '@react-navigation/native'
 
@@ -12,7 +12,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-      <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/dojo1.jpg')}>
+      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpg')}>
         <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:38}}>
         <View style={{backgroundColor: '#2f4f4f', alignItems: "center", marginLeft:"5", marginRight:"5", marginBottom:19}}>
             <Text style={{ backgroundColor: '#2f4f4f', color:"#dc143c", width:"100%", textAlign: "center",fontSize: 19, fontWeight:"bold" }}>zDojo</Text>
@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
       color: 'white',
     },
     imgBackground: {
-      width: '100%',
-      height: '100%',
+      height: Dimensions.get('window').height,
+      width: Dimensions.get('window').width,
       flex: 1,
-      opacity: .9, 
+      opacity: .8, 
     },
   });

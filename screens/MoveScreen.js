@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Dimensions, SafeAreaView, View } from "react-native";
-import { Video } from "expo-av";
+import { Dimensions, SafeAreaView, View, Spinner, Text } from "react-native";
+import { Video, ResizeMode } from "expo-av";
 import VideoControls from "./VideoControls";
 import * as ScreenOrientation from "expo-screen-orientation";
 
@@ -10,7 +10,7 @@ const MoveScreen = ({ route, navigation }) => {
   const { video } = route.params;
   const videoRef = useRef(null);
   const [orientation, setOrientation] = useState(1);
-  const [showControls, setShowControls] = useState(false);
+  const [showControls, setShowControls] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
@@ -86,19 +86,25 @@ const MoveScreen = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#9a9aa1' }}>
-      <Spinner visible={isLoading} size="large" />
-      {video?.title && (
-        <>
-          <View>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9a9aa1',width:'100%', height:'100%' }}>
+     <Text>
+      {video.vid}
+     </Text>
+      {video.title && (
+        <View style={{width:'100%', height:'100%' }}>
+          <View  style={{ height:'90%', width:"100%", marginLeft:0,justifyContent:"center",padding:2 }}>
+            
             <Video
               ref={videoRef}
-              source={video.vid}
+              source={require('../assets/videos/elbowstrike.mp4')}
               rate={playbackSpeed}
               isMuted={isMuted}
               shouldPlay={isPlaying}
-              resizeMode="cover"
-              style={{ flex: 1 }}
+              resizeMode="ResizeMode.STRETCH"
+              
+              
+              
+              style={{ flex: 1, marginLeft:2, width:"95%",padding:5 }}
             />
           </View>
           {showControls && (
@@ -113,16 +119,16 @@ const MoveScreen = ({ route, navigation }) => {
               fullScreenValue={isFullscreen}
             />
           )}
-        </>
+        </View>
       )}
-      //this section is only displayed when fullscreen is not active
+      
       {orientation == 1 && (
         <View>
-          {/* Simulate other UI elements here */}
+    
         </View>
       )}
     </SafeAreaView>
   );
 };
 
-export default MoveListScreen;
+export default MoveScreen;

@@ -1,14 +1,18 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, ImageBackground, Image,Dimensions } from 'react-native'
 import React from 'react'
 import moves from '../data/moves'
 import { useNavigation } from '@react-navigation/native'
+
+const images = require.context('../assets/thumbnails', true, /\.png$/);
+// Create an array of image sources
+const imageSources = images.keys().map((key) => images(key));
 
 export default function MoveListScreen() {
   const navigation = useNavigation();
 
   return (
-    <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/dojo4.jpeg')}>
-    <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: '#2f4f4f',}}>
+    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+    <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
       <View style={{backgroundColor: '#9a9aa1', color:"#dc143c", marginBottom:20, paddingBottom:10}}>
         <Text style={styles.title}>Moves List</Text>
       </View>
@@ -44,7 +48,7 @@ export default function MoveListScreen() {
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
                             <View style={styles.subCardView}>
                                 <Image
-                                  source={require(item.thumb)}
+                                  source={imageSources[index]}
                                   resizeMode="cover"
                                   style={{
                                     borderRadius: 12,
@@ -229,11 +233,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: "#2f4f4f",
-        borderRadius: 15,
+        borderRadius: 12,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: 1,
-        shadowRadius: 8,
+        shadowRadius: 5,
         elevation: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -250,7 +254,7 @@ const styles = StyleSheet.create({
         height: 186,
         width: 180,
         marginLeft:-15,
-        borderRadius: 25,
+        borderRadius: 8,
         backgroundColor: "slategray",
         borderColor: "transparent",
         color: 'crimson',
@@ -260,5 +264,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginRight:9,
         padding:0,
+      },
+      imgBackground: {
+        minWidth: '100%',
+        minHeight: '100%',
+        height: Dimensions.get('window').height,
+        flex: 1,
+        opacity: .9, 
       },
 })

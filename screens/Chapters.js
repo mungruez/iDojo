@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image } from 'react-native'
 import React from 'react'
 import moves from '../data/moves'
 import { useNavigation } from '@react-navigation/native'
@@ -43,7 +43,7 @@ export default function Chapters() {
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
                             <View style={styles.subCardView}>
                                 <Image
-                                  source={require('../assets/dodo2.png')}
+                                  source={require('../assets/dojo2.png')}
                                   resizeMode="cover"
                                   style={{
                                     borderRadius: 12,
