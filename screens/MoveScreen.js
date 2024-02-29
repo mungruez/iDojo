@@ -86,13 +86,12 @@ const MoveScreen = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#9a9aa1',width:'100%', height:'100%' }}>
-     <Text>
-      {video.vid}
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%' }}>
+     <Text style={{ backgroundColor:'#323232',color:"crimson",textAlign:"center",fontSize:22,marginTop:19 }}>
+      {video.title}
      </Text>
       {video.title && (
-        <View style={{width:'100%', height:'100%' }}>
-          <View  style={{ height:'90%', width:"100%", marginLeft:0,justifyContent:"center",padding:2 }}>
+        <View style={{flex:1, padding:5,backgroundColor:'#323232',marginLeft:-25,marginBottom:20 }}>
             
             <Video
               ref={videoRef}
@@ -100,13 +99,11 @@ const MoveScreen = ({ route, navigation }) => {
               rate={playbackSpeed}
               isMuted={isMuted}
               shouldPlay={isPlaying}
-              resizeMode="ResizeMode.STRETCH"
-              
-              
-              
-              style={{ flex: 1, marginLeft:2, width:"95%",padding:5 }}
+              resizeMode={ResizeMode.CONTAIN}
+              width={"108%"}
+              style={{ flex: 1, marginLeft:-22, height:"100%", width:"108%", padding:0,borderColor:'#9a9aa1',borderWidth:2,marginBottom:30,elevation:8 }}
             />
-          </View>
+          
           {showControls && (
             <VideoControls
               onTogglePlayPause={togglePlayPause}

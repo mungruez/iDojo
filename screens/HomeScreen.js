@@ -12,7 +12,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpg')}>
+      <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/dojo1.jpg')}>
         <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:38}}>
         <View style={{backgroundColor: '#2f4f4f', alignItems: "center", marginLeft:"5", marginRight:"5", marginBottom:19}}>
             <Text style={{ backgroundColor: '#2f4f4f', color:"#dc143c", width:"100%", textAlign: "center",fontSize: 19, fontWeight:"bold" }}>zDojo</Text>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
       height: 57,
       width: 348,
       fontWeight: 'bold',
-      opacity:3 
+      opacity:1 
     },
     buttontext: {
       fontSize: 16,
@@ -68,10 +68,11 @@ const styles = StyleSheet.create({
       letterSpacing: 0.25,
       marginTop: 4,
       color: 'white',
+      opacity:3
     },
     imgBackground: {
-      height: Dimensions.get('window').height,
-      width: Dimensions.get('window').width,
+      minHeight: Dimensions.get('window').height,
+      minWidth: Dimensions.get('window').width,
       flex: 1,
       opacity: .8, 
     },
