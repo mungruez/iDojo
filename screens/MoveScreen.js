@@ -6,6 +6,11 @@ import * as ScreenOrientation from "expo-screen-orientation";
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
+const videos = require.context('../assets/videos', true, /\.mp4$/);
+
+const videoSources = videos.keys().map((key) => videos(key));
+
+
 const MoveScreen = ({ route, navigation }) => {
   const { video } = route.params;
   const videoRef = useRef(null);
@@ -15,7 +20,6 @@ const MoveScreen = ({ route, navigation }) => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
 
   useEffect(() => {
     // Simulate fetching lessons by course
