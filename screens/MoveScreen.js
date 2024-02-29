@@ -99,7 +99,7 @@ const MoveScreen = ({ route, navigation }) => {
             
             <Video
               ref={videoRef}
-              source={require('../assets/videos/elbowstrike.mp4')}
+              source={videoSources[video.mid]}
               rate={playbackSpeed}
               isMuted={isMuted}
               shouldPlay={isPlaying}

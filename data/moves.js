@@ -176,9 +176,9 @@ export default [
         title: "Uchi Uke",
         vid: "../assets/videos/uchiuke.mp4",
         thumb:'../assets/thumbnails/uchiuke.png',
-        type:"Kick",
+        type:"Block",
         style:"Muay Tai",
-        desc:"" 
+        desc:"The block works by taking the opponents blow at an angle which deflects the energy of the blow away from the vulnerable torso. The harder you block the further his blow will be deflected and the more open he will be to a counter strike." 
     },
     {
         mid: 20,
