@@ -30,6 +30,18 @@ export default function HomeScreen() {
               onPress={()=> navigation.navigate('Chapters')}>
               <Text style={{color: "#dc143c",marginTop: 4, fontWeight:"600",fontSize: 19}}>Chapters</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={()=> navigation.navigate('Res')}>
+              <Text style={{color: "#dc143c",marginTop: 4, fontWeight:"600",fontSize: 19}}>World's Top Fighters</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.button}
+              onPress={()=> navigation.navigate('Res')}>
+              <Text style={{color: "#fff",marginTop: 4, fontWeight:"600",fontSize: 19}}>Resources</Text>
+            </TouchableOpacity>
             
             <TouchableOpacity
               style={styles.button}

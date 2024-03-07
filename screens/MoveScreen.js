@@ -4,7 +4,7 @@ import { Video, ResizeMode } from "expo-av";
 import VideoControls from "./VideoControls";
 import * as ScreenOrientation from "expo-screen-orientation";
 
-const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
+const playbackSpeedOptions = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
 
 const videos = require.context('../assets/videos', true, /\.mp4$/);
 
@@ -91,11 +91,11 @@ const MoveScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%' }}>
-     <Text style={{ backgroundColor:'#323232',color:"crimson",textAlign:"center",fontSize:22,marginTop:19 }}>
+     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:169 }}>
       {video.title}
      </Text>
       {video.title && (
-        <View style={{flex:1, padding:5,backgroundColor:'#323232',marginLeft:-25,marginBottom:20 }}>
+        <View style={{flex:1, padding:0,backgroundColor:'#323232',marginLeft:0,marginTop:-19, marginBottom:0, height:"60" }}>
             
             <Video
               ref={videoRef}
@@ -103,12 +103,14 @@ const MoveScreen = ({ route, navigation }) => {
               rate={playbackSpeed}
               isMuted={isMuted}
               shouldPlay={isPlaying}
-              resizeMode={ResizeMode.CONTAIN}
-              width={"108%"}
-              style={{ flex: 1, marginLeft:-22, height:"100%", width:"108%", padding:0,borderColor:'#9a9aa1',borderWidth:2,marginBottom:30,elevation:8 }}
+              resizeMode={ResizeMode.STRETCH}
+              width={"100%"}
+              height={"53%"}
+              style={{ flex: 1, marginLeft:1, marginRight:3, marginTop:-152, width:"100%", padding:0,borderColor:'#9a9aa1',borderWidth:2,marginBottom:-107,elevation:5 }}
             />
           
           {showControls && (
+          <View style={{ marginLeft:1, marginRight:3, marginTop:-176, width:"100%", paddingTop:0,borderColor:'#9a9aa1',borderWidth:2,marginBottom:0,padding:7, elevation:3, backgroundColor:"#323232" }}>
             <VideoControls
               onTogglePlayPause={togglePlayPause}
               onToggleMute={toggleMute}
@@ -119,15 +121,23 @@ const MoveScreen = ({ route, navigation }) => {
               shouldPlay={isPlaying}
               fullScreenValue={isFullscreen}
             />
+          </View>
           )}
         </View>
       )}
-      
+
+      <View >
+            <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft:12, marginRight:7, marginBottom:138,padding:9, width:"96%"}}>
+              {video.desc}
+            </Text>
+      </View>
+
       {orientation == 1 && (
         <View>
     
         </View>
       )}
+
     </SafeAreaView>
   );
 };
