@@ -308,6 +308,168 @@ export default [
     },
     {
         mid: 27,
+        title: "Bursting",
+        vid: "../assets/videos/bursting.mp4",
+        thumb:'../assets/thumbnails/bursting.png',
+        type:"Counter",
+        style:"Judo",
+        desc:" Because you don't have time to cock your arm in a surprise attack. Bursting is effectiveness that doesn't come from the rotational power of the torso, instead it's driven by the legs which hurl you forward into your opponent. Both the block and the strike land with three hundred pounds of force, more than enough to collapse the windpipe, or fracture the delicate bones of the face." 
+    },
+    {
+        mid: 27,
+        title: "Pistol Disarm",
+        vid: "../assets/videos/pistoldisarm.mp4",
+        thumb:'../assets/thumbnails/pistoldisarm.png',
+        type:"Disarm",
+        style:"Judo",
+        desc:" This disarm is basically a Judo wrist lock and uses many of the same principles. By pulling your attacker forward as you turn, he loses his balance, giving you control of his wrist. The barrel of the gun, then becomes a lever, allowing you to take the gun. Because you are using the muscles of your torso which can deliver up to ten times more force than the muscles of the wrist, the disarm works against an opponent who is much stronger than you." 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
+        title: "Pointe",
+        vid: "../assets/videos/shoulderlock.mp4",
+        thumb:'../assets/thumbnails/shoulderlock.png',
+        type:"Kick",
+        style:"Muay Tai",
+        desc:"" 
+    },
+    {
+        mid: 27,
         title: "Pointe",
         vid: "../assets/videos/shoulderlock.mp4",
         thumb:'../assets/thumbnails/shoulderlock.png',
