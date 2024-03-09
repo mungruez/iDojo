@@ -398,9 +398,9 @@ export default [
     },
     {
         mid: 44,
-        title: "Rare Naked Choke",
-        vid: "../assets/videos/rarenakedchoke.mp4",
-        thumb:'../assets/thumbnails/rarenakedchoke.png',
+        title: "Rear Naked Choke",
+        vid: "../assets/videos/rearnakedchoke.mp4",
+        thumb:'../assets/thumbnails/rearnakedchoke.png',
         type:"Neck Lock",
         style:"Muay Tai",
         desc:"Working much like a nutcracker, your forearm and bicep supply pressure to your opponent's carotid arteries. Located on either side of the trachea, these two arteries are the only way to get blood to the brain. It can take less pressure than squeezing an orange to stop the flow of blood to the arteries. And with no blood flow, the brain shuts down almost instantly, fight over." 
@@ -638,14 +638,5 @@ export default [
         type:"Kick",
         style:"Muay Tai",
         desc:"The move is difficult but devastating. There is no opposing object to push against, so all the energy of the move, must come from the momentum of the leap and the acceleration of the kick. The snapping motion of the lower leg functions much like a coiled spring. When unleashed, the kick reaches impact speeds of twenty miles per hour and delivers up to four hundred pounds of force to the opponent's chest." 
-    },
-    {
-        mid: 27,
-        title: "Tornado Kick",
-        vid: "../assets/videos/shoulderlock.mp4",
-        thumb:'../assets/thumbnails/shoulderlock.png',
-        type:"Kick",
-        style:"Muay Tai",
-        desc:"" 
-    },
+    }
 ]
