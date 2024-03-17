@@ -14,7 +14,7 @@ export default [
         title: "Achilles Leg Lock",
         vid: "../assets/videos/achillesleglock.mp4",
         thumb:'../assets/thumbnails/achillesleglock.png',
-        type:"Leg-Lock",
+        type:"Leg Lock",
         style:"Muay Tai",
         desc:" The goal of this lock is to stretch the tendons at the top of the foot to their breaking point. The strongest tendons have a tensile force threshold of just over four hundred pounds, so applying any more pressure than that, can tear the tendons from their base, or snap them in two."
     },
@@ -254,6 +254,15 @@ export default [
     },
     {
         mid: 28,
+        title: "Inside Punch",
+        vid: "../assets/videos/insidepunch.mp4",
+        thumb:'../assets/thumbnails/insidepunch.png',
+        type:"Counter",
+        style:"Kav Maga",
+        desc:"There are variants in which this punch defense is performed with the palm. This method is a good start for beginners. When using your entire four arm to deflect the attack there is less chance you miss, as opposed to using only the palm of your hand. This variant of the inside defense is against a right handed straight punch, from a half passive stance. When your opponent attacks, stepping to the left outside of the line of attack, is very important. Deflect the attack with the bones of the forearm. Counter attacking is a very important aspect in eliminating the attacker. Make multiple counter attacks, preferably to the head. While you make the counter attacks, step around your opponent. When your opponent attacks with his left hand, start in the same way.  Step outside the line of attack and deflect the attack with the forearm. In a right handed attack, raise your elbow to protect the face. Make a horizontal hammer punch to the face. Make multiple counters to the face while stepping around your opponent. Scan the area for other trets. If its clear, run home." 
+    },
+    {
+        mid: 29,
         title: "Jodan Mawashi Geri",
         vid: "../assets/videos/jodanmawashigeri.mp4",
         thumb:'../assets/thumbnails/jodanmawashigeri.png',
@@ -262,7 +271,7 @@ export default [
         desc:"Because the area of impact is focused on a small part of the foot, it magnifies the force of the blow, making it capable of dropping one thousand pounds of force on your head. It's like getting whacked in the head with a Louisville Slugger." 
     },
     {
-        mid: 29,
+        mid: 30,
         title: "Juji Gatame",
         vid: "../assets/videos/jujigatame.mp4",
         thumb:'../assets/thumbnails/jujigatame.png',
@@ -271,7 +280,7 @@ export default [
         desc:" By bending the elbow across the fulcrum of your hips, you're subjecting the weak joint to the lever of two strong forces, the pull of your thighs on his shoulder, and your hands on his wrists. As little as one thousand pounds of force can be enough to destroy the elbow. The leverage of the armbar can supply much more than that." 
     },
     {
-        mid: 30,
+        mid: 31,
         title: "Knee Strike",
         vid: "../assets/videos/kneestrike.mp4",
         thumb:'../assets/thumbnails/kneestrike.png',
@@ -280,7 +289,7 @@ export default [
         desc:"Getting enclosed, neutralizes the opponent's weapon advantage. Then, in the clinch, we bring the power of the knee to bear. Unlike the kick which relies on rotation to create power, the knee gets its power from leverage. Pulling our opponent down as we drive the knee up and deliver up to two point five tons of force. Enough to lift a car." 
     },
     {
-        mid: 31,
+        mid: 32,
         title: "Kote Uchi",
         vid: "../assets/videos/koteuchi.mp4",
         thumb:'../assets/thumbnails/koteuchi.png',
@@ -289,7 +298,7 @@ export default [
         desc:"Because it swings through such a wide arc, the wrist is moving at speeds of up to fourty three miles per hour and since the radius doesn't deflect or compress nearly as much as a fist, it can deliver a staggering blow like being hit with an axe handle." 
     },
     {
-        mid: 32,
+        mid: 33,
         title: "Labai",
         vid: "../assets/videos/labai.mp4",
         thumb:'../assets/thumbnails/labai.png',
@@ -298,25 +307,25 @@ export default [
         desc:"Labai works on a concept called the couple. Basically, it's two levers, linked at a single Focal point, the elbow lock, and it doubles the foot pounds of torque you can generate when compared to a single arm lock. There's more than enough force to flip an opponent to the mat, or dislocate his elbow." 
     },
     {
-        mid: 33,
+        mid: 34,
         title: "Leg Sweep",
         vid: "../assets/videos/legsweep.mp4",
         thumb:'../assets/thumbnails/legsweep.png',
         type:"Kick",
-        style:"Muay Tai",
+        style:"Karate",
         desc:" By grabbing the wrist, you provide hundreds of pounds of additional leverage, this reduces your opponent's ground weight by half, and allows you to more easily knock your opponent off balance. The rotation of the hips then amplifies the power of the leg sweep. Combined, with the wrist grip you are in complete control of your opponent's body." 
     },
     {
-        mid: 34,
+        mid: 35,
         title: "Neck Strike",
         vid: "../assets/videos/neckstrike.mp4",
         thumb:'../assets/thumbnails/neckstrike.png',
         type:"Stun",
-        style:"Muay Tai",
+        style:"Karate",
         desc:"Pulling off the move lies on two factors, the first is to combine the block and the strike into a single action. This reduces the time your opponent has to respond to just tenths of a second. But the real focus is to aim your strike at the throat. Because as little as seventy six pounds of force can collapse the larynx, the strike doesn't need to deliver a lot of force to be deadly. One blow like this and the fight is over." 
     },
     {
-        mid: 35,
+        mid: 36,
         title: "Nerve Strike",
         vid: "../assets/videos/nervestrike.mp4",
         thumb:'../assets/thumbnails/nervestrike.png',
@@ -325,7 +334,7 @@ export default [
         desc:"They may not be the fastest or the strongest, but they may be the most deadly. Nerve Strikes are said to be the Ninjas secret weapon. A, deceptive attack that instantly paralyzes. It sounds like science fiction, or a Vulcan move by Mr Spock. Yet a precise blow to a vulnerable Target like the org zilla ree nerve in the arm pit can disable the entire body. Here's how it works, a sudden strike to the org zilla ree nerve causes eckt topic discharge, the un controlled firing of electrical signals. Receptors in the brain are overloaded, the message is pain. As the circuit overloads disruptive signals race to the limbs, calcium and pottassium flood the body. In a Storm of electrical charges the entire system shuts down. That's where the term shooting pain comes from. Certain points on the body contain the greatest density of nerve endings they're like bundles of exposed electrical wires the larger the cluster, the more signals sent to the receptors in the brain." 
     },
     {
-        mid: 36,
+        mid: 37,
         title: "Ob Klar",
         vid: "../assets/videos/obklar.mp4",
         thumb:'../assets/thumbnails/obklar.png',
@@ -334,7 +343,7 @@ export default [
         desc:"These alternating points of leverage are the basis for this Move. Locking the hands high behind the shoulder blades, put you in control of your opponent's center of mass, which in turn negatively affects his conditional stability. Dropping the hands behind the lower back and driving your chin into the chest, further disturbs his center of mass, and makes resistance from this position nearly impossible. The application of maximum force ensures you maintain control, while driving your opponent to the ground."
     },
     {
-        mid: 37,
+        mid: 38,
         title: "Okuri Eri Jime",
         vid: "../assets/videos/okurierijime.mp4",
         thumb:'../assets/thumbnails/okurierijime.png',
@@ -343,7 +352,7 @@ export default [
         desc:" You use the strength of your legs to maintain your dominant position, while you secure the choke. Just a few pounds of pressure on the collar of his Gi, is enough to reduce the blood flow to the brain to a trickle and end the match. Hold this move for ten seconds and the fighter will black out. Hold it just a bit longer and he's dead."
     },
     {
-        mid: 38,
+        mid: 39,
         title: "Palamut",
         vid: "../assets/videos/palamut.mp4",
         thumb:'../assets/thumbnails/palamut.png',
@@ -352,7 +361,7 @@ export default [
         desc:"By getting close, the opponent's neck is exposed, but because of the close range, the hand doesn't generate a huge amount of force. It's enough to stun and probably not enough to cause severe injury, but replace the hand with a weapon, a stick, or a knife as you would in combat and this could become a kill shot."
     },
     {
-        mid: 39,
+        mid: 40,
         title: "Pangilog",
         vid: "../assets/videos/pangilog.mp4",
         thumb:'../assets/thumbnails/panglilog.png',
@@ -361,7 +370,7 @@ export default [
         desc:"With the elbow locked, the opponent's forearm becomes a lever, and his elbow a fulcrum, so any force applied to his wrist is more than doubled by the mechanical advantage of leverage. By jerking hard on the arm, you can easily hyper extend the elbow, the same kind of injury that you'd sustained falling hard onto your outstretched arm." 
     },
     {
-        mid: 40,
+        mid: 41,
         title: "Pistol Disarm",
         vid: "../assets/videos/pistoldisarm.mp4",
         thumb:'../assets/thumbnails/pistoldisarm.png',
@@ -370,7 +379,7 @@ export default [
         desc:" This disarm is basically a Judo wrist lock and uses many of the same principles. By pulling your attacker forward as you turn, he loses his balance, giving you control of his wrist. The barrel of the gun, then becomes a lever, allowing you to take the gun. Because you are using the muscles of your torso which can deliver up to ten times more force than the muscles of the wrist, the disarm works against an opponent who is much stronger than you." 
     },
     {
-        mid: 41,
+        mid: 42,
         title: "Pointe Au Foie / Directe Visage",
         vid: "../assets/videos/pointeaufoie.mp4",
         thumb:'../assets/thumbnails/pointeaufoie.png',
@@ -379,7 +388,7 @@ export default [
         desc:" It's aimed at the largest gland in the human body, the liver. A direct hit won't just bring an opponent damage, it can rupture the gland, causing severe internal bleeding. But the liver is well protected by the ribcage, so the kick must be accurate to within half of an inch." 
     },
     {
-        mid: 42,
+        mid: 43,
         title: "Polick Haimau",
         vid: "../assets/videos/polickhaimau.mp4",
         thumb:'../assets/thumbnails/polickhaimau.png',
@@ -388,7 +397,7 @@ export default [
         desc:" The effectiveness of this combo lies not in raw power but on speed. By relying on your triceps to snap the strikes forward over the elbow, three blows can hit in seven tenths of a second. The final impact of the strike to your opponent's face, can deliver as much as one hundred and seventy five watts of power. More than enough power to stun him, or crush the cartilage of his nose. You then add insult to injury firing one last shot into one of the most sensitive regions of the body, the groin." 
     },
     {
-        mid: 43,
+        mid: 44,
         title: "Power Angle Kick",
         vid: "../assets/videos/poweranglekick.mp4",
         thumb:'../assets/thumbnails/poweranglekick.png',
@@ -397,16 +406,16 @@ export default [
         desc:"The kicks power comes from the torque generated by the rotation of the hips. It's the same principle that cracks a whip, turning the hips just a few degrees forces the foot to travel a much greater distance, and creates a lot of speed as it does. The longer the leg and quicker the rotation the faster the kick, and unlike karate, my Tai fighters are also taught to strike with the hard bone of the shin. A My Thai kick can generate roughly the same force as a baseball bat, enough to crack a rib or a lake." 
     },
     {
-        mid: 44,
-        title: "Rear Naked Choke",
-        vid: "../assets/videos/rearnakedchoke.mp4",
-        thumb:'../assets/thumbnails/rearnakedchoke.png',
-        type:"Neck Lock",
-        style:"Muay Tai",
-        desc:"Working much like a nutcracker, your forearm and bicep supply pressure to your opponent's carotid arteries. Located on either side of the trachea, these two arteries are the only way to get blood to the brain. It can take less pressure than squeezing an orange to stop the flow of blood to the arteries. And with no blood flow, the brain shuts down almost instantly, fight over." 
+        mid: 45,
+        title: "Rear Choke Defense",
+        vid: "../assets/videos/rearchokedefense.mp4",
+        thumb:'../assets/thumbnails/rearchokedefense.png',
+        type:"Choke Defense",
+        style:"Kav Maga",
+        desc:"The defense is performed from a passive stance. Since the attack comes from the rear, its likely that you won't see it coming so your in a worst case scenario. The attacker is squeezing, applying a backward force on the wind pipe. The defense starts with bringing both your hands behind your head. Cup your hands to make hooks and bring them behind your head. Move your arms down rapidly to pluck the choke. Grab your attackers hands at the base of the thumb. While making the pluck, step to the side of the attacker. In one continuous mtion with the pluck, use an open hand to strike the groin. Keep control over the other hand. The second counter strike is an elbow strike to the chin. Step to the side if necessary and kick through the attackers knee. Scan your surroundings for other threats. If its safe, go home." 
     },
     {
-        mid: 45,
+        mid: 46,
         title: "Rear Horse Kick",
         vid: "../assets/videos/rearhorsekick.mp4",
         thumb:'../assets/thumbnails/rearhorsekick.png',
@@ -415,7 +424,7 @@ export default [
         desc:"The power of this move comes from the spin. The rotation of the torso combined with the foot, at the extremity of that rotation, generates speeds of over twenty miles per hour. By the time the heel connects with the solar plexus it is traveling sixty miles per hour and transfers over four hundred and fifty pounds of force. Enough to break ribs and even damage internal organs." 
     },
     {
-        mid: 46,
+        mid: 47,
         title: "Rear Leg Front Kick",
         vid: "../assets/videos/rearlegfrontkick.mp4",
         thumb:'../assets/thumbnails/rearlegfrontkick.png',
@@ -424,7 +433,16 @@ export default [
         desc:"This kick is all about speed. The further the foot travels, the greater its acceleration, and the more dangerous a weapon it becomes. Powered by the muscles of the hip flexors and the quadriceps, by the time your foot reaches your opponent's throat it's traveling nearly forty miles per hour. That type of speed yields over one thousand pounds of force, enough to puncture the Adam's apple and crush your windpipe." 
     },
     {
-        mid: 47,
+        mid: 48,
+        title: "Rear Naked Choke",
+        vid: "../assets/videos/rearnakedchoke.mp4",
+        thumb:'../assets/thumbnails/rearnakedchoke.png',
+        type:"Neck Lock",
+        style:"Muay Tai",
+        desc:"Working much like a nutcracker, your forearm and bicep supply pressure to your opponent's carotid arteries. Located on either side of the trachea, these two arteries are the only way to get blood to the brain. It can take less pressure than squeezing an orange to stop the flow of blood to the arteries. And with no blood flow, the brain shuts down almost instantly, fight over." 
+    },
+    {
+        mid: 49,
         title: "Rolling Knee Bar",
         vid: "../assets/videos/rollingkneebar.mp4",
         thumb:'../assets/thumbnails/rollingkneebar.png',
@@ -433,7 +451,7 @@ export default [
         desc:" But the real damage from the knee bar doesn't come from gravity it comes from leverage. Once the knee is locked, your hips act like a fulcrum, and his leg acts like a lever, multiplying any force you apply. So even though the ligaments and tendons around the knee can sustain seventeen hundred newtons of force, the knee bar can load a lot more than that, enough to completely destroy the joint."
     },
     {
-        mid: 48,
+        mid: 50,
         title: "Round Kick Defense",
         vid: "../assets/videos/roundkickdefense.mp4",
         thumb:'../assets/thumbnails/roundkickdefense.png',
@@ -442,7 +460,7 @@ export default [
         desc:"By taking control of your opponent's leg you turn his hip into a pivot point, and there are two forces being imparted about the pivot point, one by the arm above, and one by the sweep below. These forces act as a couple, resulting in your opponent's rotation, rotation that slams him right to the deck, and given the speed of rotation and the force of gravity, that impact could cause permanent injury."
     },
     {
-        mid: 49,
+        mid: 51,
         title: "Sanda Takedown",
         vid: "../assets/videos/sandatakedown.mp4",
         thumb:'../assets/thumbnails/sandatakedown.png',
@@ -451,7 +469,7 @@ export default [
         desc:"The power of the takedown is derived from the simple mechanical advantage you hold over your opponent. By wrapping up his striking leg at the upper thigh, you've placed your opponent in what's called, conditional stability. If he remains stationary, he could technically maintain his balance indefinitely. But by driving him backward and initiating a sweep of his other leg, you've added two destabilizing factors, and the loose center of gravity simply cannot hold." 
     },
     {
-        mid: 50,
+        mid: 52,
         title: "Scissors Takedown",
         vid: "../assets/videos/scissorstakedown.mp4",
         thumb:'../assets/thumbnails/scissorstakedown.png',
@@ -460,7 +478,7 @@ export default [
         desc:"The key to the scissors take down can be found in the moves name. Throwing your legs around either side of your opponent, one high in the torso, the other just in the crease of the knee, provides you with a lever on either side of his body. It's literally like a piece of paper between two blades of a scissors. Only instead of slicing through paper, you're using a combination of potential and kinetic energy to cut through your opponent's center of gravity. The downward force exerted on his torso pulls your opponent across his tipping point. Along with your body weight you can generate enough instability in your opponent to drive his body to the mat, like a child tossing around a rag doll." 
     },
     {
-        mid: 51,
+        mid: 53,
         title: "Seiken Choku Zuki",
         vid: "../assets/videos/seikenchokuzuki.mp4",
         thumb:'../assets/thumbnails/seikenchokuzuki.png',
@@ -469,34 +487,34 @@ export default [
         desc:"The key is rotating your fist one hundred and eighty degrees right before it strikes the intended target. The twisting snap of the arm maximize the speed of the punch and magnifies the force of the blow. By concentrating the impact on the first two knuckles of you hand. Done correctly it can deliver as much energy as a bowling ball dropped from the top of a house, more than enough to cause soft tissue damage, or break a rib." 
     },
     {
-        mid: 52,
+        mid: 54,
         title: "Shoulder Lock",
         vid: "../assets/videos/shoulderlock.mp4",
         thumb:'../assets/thumbnails/shoulderlock.png',
-        type:"Shoulder-Lock",
+        type:"Shoulder Lock",
         style:"Muay Tai",
         desc:"" 
     },
     {
-        mid: 53,
+        mid: 55,
         title: "Shoulder Throw",
-        vid: "../assets/videos/shoulderlock.mp4",
-        thumb:'../assets/thumbnails/shoulderlock.png',
+        vid: "../assets/videos/shoulderthrow.mp4",
+        thumb:'../assets/thumbnails/shoulderthrow.png',
         type:"Throw",
         style:"Judo",
         desc:"First the opponent's arm works as the lever to optimize your control. Second your own back serves as a pivot point for the throw. The strength and stability of your back, allows you to throw a much heavier opponent than in a move that requires you to lift him."
     },
     {
-        mid: 54,
+        mid: 56,
         title: "Shuriken Throw",
-        vid: "../assets/videos/shoulderlock.mp4",
-        thumb:'../assets/thumbnails/shoulderlock.png',
+        vid: "../assets/videos/shurikenthrow.mp4",
+        thumb:'../assets/thumbnails/shurikenthrow.png',
         type:"Weapon",
-        style:"Muay Tai",
+        style:"Kung Fu",
         desc:"With practice, the ninja can hit his intended target from distances as great as forty five feet. At impact, that's more powerful than a major league baseball pitch."
     },
     {
-        mid: 55,
+        mid: 57,
         title: "Side Kick",
         vid: "../assets/videos/sidekick.mp4",
         thumb:'../assets/thumbnails/sidekick.png',
@@ -505,7 +523,16 @@ export default [
         desc:" Leaning back slightly and driving the knee up, utilizes the full power of the thigh, so that the foot accelerates up to sixteen miles an hour in just one quarter of a second. That's twice the acceleration speed of a Porsche. Coupled with the rotation of the hips, the kick can impact four hundred and fifty pounds of force upon impact with the ribs. When executed perfectly, it's a motion similar to cracking a two by four with a sledgehammer." 
     },
     {
-        mid: 56,
+        mid: 58,
+        title: "Silat Combo",
+        vid: "../assets/videos/silatcombo.mp4",
+        thumb:'../assets/thumbnails/silatcombo.png',
+        type:"Combo",
+        style:"Silat",
+        desc:"Cutting edge technology is now allowing us to take a deeper look at the true power of Silat and to break down each of their lightening fast moves to discover what happens inside the bodies of their victims. and understand the amazing science of Silat. Strike one is a rapid blow to the enemy's forearm, it aims to fracture the bone. Strike two, the see lat fighter locks onto the enemies shoulder and pulls back, tearing at the ligaments inside, and possibly dislocating the joint. Next a quick foot strike to the back of the knee brings the enemy instantly to the ground. Finally a dual purpose choke hold that compresses the win pipe and clamps down on both carotid arteries. As these giant veins in the neck compress, blood flow to the brain slows. If the technique is successful, the enemy will stop breathing and passes out." 
+    },
+    {
+        mid: 59,
         title: "Sinking Python",
         vid: "../assets/videos/sinkingpython.mp4",
         thumb:'../assets/thumbnails/sinkingpython.png',
@@ -514,7 +541,7 @@ export default [
         desc:" The secret to the move is wrist control. By rotating your opponent's wrist to the maximum extent of its range of motion, the bones of the wrist lock against the bones of the forearm, and make it impossible to bring the strong muscles of the upper arm to bear, then you can pull your opponent off balance and into a potent, knee strike. The combined force of the knee strike and your opponent's forward momentum can be as much as two thousand pounds. Enough to dead sheet them." 
     },
     {
-        mid: 57,
+        mid: 60,
         title: "Spinning Back Kick",
         vid: "../assets/videos/spinningbackkick.mp4",
         thumb:'../assets/thumbnails/spinningbackkick.png',
@@ -523,7 +550,7 @@ export default [
         desc:"The power of this move comes from the spin. Like the wrecking ball at the end of a demolition crane, the power is generated by the rotation of the body. In conjunction with the snap of the knee, the foot achieves a velocity of nearly thirty miles per hour. When the heel connects with the solar plexus, it transfers fourteen hundred pounds of force. Enough to damage internal organs and fracture multiple ribs." 
     },
     {
-        mid: 58,
+        mid: 61,
         title: "The Double (Leg Takedown)",
         vid: "../assets/videos/thedouble.mp4",
         thumb:'../assets/thumbnails/thedouble.png',
@@ -532,7 +559,7 @@ export default [
         desc: "The key to the double is to hit your opponent below his rib cage, which knocks him off his center of gravity. Wrapping your arms around his legs prevents him from regaining it. Your forward momentum, coupled with the upward thrust of your hips, gets your opponent airborne driving him to the mat, which can yield over, three thousand pounds of injury producing force. That's like dropping a twenty pound bag of cement off a nine foot ladder onto someone's chest."
     },
     {
-        mid: 59,
+        mid: 62,
         title: "The Hip Throw",
         vid: "../assets/videos/thehipthrow.mp4",
         thumb:'../assets/thumbnails/thehipthrow.png',
@@ -541,7 +568,7 @@ export default [
         desc:"The hip throw capitalizes on the body mechanics of both you and your opponent. Thrusting your hips into your opponent's waist creates a pivot point around which his arm is the lever. With your legs between his, you've created a center of gravity significantly lower than your opponent's. This imparts maximum instability and helps you maintain control while throwing him over your hip. The throw, combined with the downward force of gravity, generates a speed of eight miles per hour, which can create more injury producing impact energy, than falling down a small flight of stairs."
     },
     {
-        mid: 60,
+        mid: 63,
         title: "The Reap",
         vid: "../assets/videos/thereap.mp4",
         thumb:'../assets/thumbnails/thereap.png',
@@ -550,7 +577,7 @@ export default [
         desc:"To do that the Marine pushes his opponent at a location above his center of mass, while using a sweeping leg to create a tripping point which is below his opponent's center of mass. Once the loss of stability has occurred, gravity does the work and the damage. On the ground and on his back, your opponent is now vulnerable to any number of finishing strikes."
     },
     {
-        mid: 61,
+        mid: 64,
         title: "The Sprawl",
         vid: "../assets/videos/thesprawl.mp4",
         thumb:'../assets/thumbnails/thesprawl.png',
@@ -559,7 +586,7 @@ export default [
         desc:"The key to the sprawl is sliding your legs backward while leaning in and locking your hips at the same time. This forces your opponent's center of mass beyond a stability zone. Coupled with the downward thrust of your forearms, he's now supporting your entire upper body with the back of his neck and head, which leaves him face down on the mat, vulnerable to a number of attacks." 
     },
     {
-        mid: 62,
+        mid: 65,
         title: "Thpouk Kang Sdam",
         vid: "../assets/videos/thpoukkangsdam.mp4",
         thumb:'../assets/thumbnails/thpoukkangsdam.png',
@@ -568,7 +595,7 @@ export default [
         desc:"The rotation of the torso is the basis for the strikes power, because the torso has an effective mass far greater than the arms, its rotation can impact up to four hundred percent more force to your target, and the last minute rotation of the wrist can magnify that force even more." 
     },
     {
-        mid: 63,
+        mid: 66,
         title: "Tomoe Nage",
         vid: "../assets/videos/tomoenage.mp4",
         thumb:'../assets/thumbnails/tomoenage.png',
@@ -577,7 +604,7 @@ export default [
         desc:"The sacrifice throw is a simple lesson in conservation of energy. The stronger the opponent attacks, the further he gets thrown. It works like a caterpillar where your opponent's momentum supplies the counterweight. The faster he's going the further he's going to fly, and the harder he's going to land." 
     },
     {
-        mid: 64,
+        mid: 67,
         title: "Tornado Kick",
         vid: "../assets/videos/tornadokick.mp4",
         thumb:'../assets/thumbnails/tornadokick.png',
@@ -586,7 +613,7 @@ export default [
         desc:"The tornado kick is a sturdy and controlled chaos. A quick spin confuses your opponent, then one knee is thrust into the air, launching your entire body high enough to fire a powerful kick. The momentum generated by your bodyweight rotating freely, combined with a powerful hip thrust, creates a devastating blow of over seven hundred pounds of force, upon impact. More than enough to permanently damage the cartilage that protects the larynx and spinal cord." 
     },
     {
-        mid: 65,
+        mid: 68,
         title: "Triangle Choke",
         vid: "../assets/videos/trianglechoke.mp4",
         thumb:'../assets/thumbnails/trianglechoke.png',
@@ -595,7 +622,7 @@ export default [
         desc:" The move gets its power from the pressure exerted by your legs. The first leg imparts pressure to the carotid artery, the second leg working in conjunction with your arms, optimizes that pressure transforming you into a human vice grip. If your opponent doesn't tap out he'll pass out much longer and permanent brain damage can ensue."
     },
     {
-        mid: 66,
+        mid: 69,
         title: "Uchi Mata",
         vid: "../assets/videos/uchimata.mp4",
         thumb:'../assets/thumbnails/uchimata.png',
@@ -604,7 +631,7 @@ export default [
         desc:"The throw works just like a crowbar, where your leg is the lever and your hip is the fulcrum. The trick, is positioning your body in just the right place. If you're just an inch off the placement of your thigh and hip, then, the amount of energy needed to throw an opponent can more than double. But performed correctly, Uchi Mata requires almost no energy. Yet it can deliver up to five thousand pounds of force. If it weren't for the mat, a throw like a Uchi Mata would be enough to cause serious injury, or even paralysis." 
     },
     {
-        mid: 67,
+        mid: 70,
         title: "Uchi Uke",
         vid: "../assets/videos/uchiuke.mp4",
         thumb:'../assets/thumbnails/uchiuke.png',
@@ -613,7 +640,7 @@ export default [
         desc:"The block works by taking the opponents blow at an angle which deflects the energy of the blow away from the vulnerable torso. The harder you block the further his blow will be deflected and the more open he will be to a counter strike." 
     },
     {
-        mid: 68,
+        mid: 71,
         title: "Ude Gatame",
         vid: "../assets/videos/udegatame.mp4",
         thumb:'../assets/thumbnails/udegatame.png',
@@ -622,7 +649,7 @@ export default [
         desc:"The key to this move is turning your opponent's lower arm into a lever. By grabbing his arm during the initial attack you set up the lever such that, direct loading to his elbow joint is achieved. Once the elbow is locked and loaded you can pull a much heavier opponent off balance by simply lowering your center of weight." 
     },
     {
-        mid: 69,
+        mid: 72,
         title: "Wing Chun Punch",
         vid: "../assets/videos/wingchunpunch.mp4",
         thumb:'../assets/thumbnails/wingchunpunch.png',
@@ -631,7 +658,7 @@ export default [
         desc:"The key to this synergy of speed and power is punch technique, punch location and punch frequency. With your elbows tucked in behind your fist, the energy of each punch is maximized, and because the punch is delivered to your opponent's core along his center line, the more directly that force is transmitted to his body. The effect is similar to that of continually slamming a battering ram against a door, no matter how strong, it can only sustain so many blows before it collapses." 
     },
     {
-        mid: 70,
+        mid: 73,
         title: "Wire Fu Kick",
         vid: "../assets/videos/wirefukick.mp4",
         thumb:'../assets/thumbnails/wirefukick.png',
