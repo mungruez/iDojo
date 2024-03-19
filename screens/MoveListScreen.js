@@ -13,7 +13,8 @@ export default function MoveListScreen() {
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
-      <View style={{backgroundColor: '#9a9aa1', color:"#dc143c", marginBottom:20, paddingBottom:10}}>
+      <View style={{backgroundColor: '#323232', color:"#dc143c", marginBottom:20, paddingBottom:10, opacity: .7}}>
+        <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/moveslisttitle.png')} /> 
         <Text style={styles.title}>Moves List</Text>
       </View>
 
@@ -272,4 +273,9 @@ const styles = StyleSheet.create({
         flex: 1,
         opacity: .9, 
       },
+      icon: {
+        height: 57,
+        opacity: 1,
+        textAlign: "center" 
+      }
 })

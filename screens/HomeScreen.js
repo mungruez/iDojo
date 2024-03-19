@@ -1,4 +1,4 @@
-import { Image,StyleSheet,SafeAreaView,View,Text,ScrollView,TouchableOpacity,ImageBackground, Dimensions} from 'react-native'
+import { Image,StyleSheet,SafeAreaView,View,Text,ScrollView,TouchableOpacity,ImageBackground,Dimensions} from 'react-native'
 import React, {useLayoutEffect} from 'react'
 import { useNavigation } from '@react-navigation/native'
 
@@ -12,29 +12,27 @@ export default function HomeScreen() {
   }, []);
 
   return (
-      <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/dojo1.jpg')}>
+      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpg')}>
         <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:38}}>
-        <View style={{backgroundColor: '#2f4f4f', alignItems: "center", marginLeft:"5", marginRight:"5", marginBottom:19}}>
-            <Text style={{ backgroundColor: '#2f4f4f', color:"#dc143c", width:"100%", textAlign: "center",fontSize: 19, fontWeight:"bold" }}>zDojo</Text>
+        <View style={{backgroundColor: '#2f4f4f', alignItems: "left", marginLeft:"5", marginRight:"5", marginBottom:19}}>
+            <ImageBackground style={ styles.icon } resizeMode='cover' source={require('../assets/icon.png')} /> 
+
         </View>
 
         <ScrollView style={{ flexDirection:"column", marginTop:19}}>
-        <TouchableOpacity 
-              style={styles.button}
+            <TouchableOpacity
               onPress={()=> navigation.navigate('MoveList')}>
-              <Text style={{color: "#dc143c",marginTop: 4, fontWeight:"600",fontSize: 19}}>Moves List</Text>
+              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillmoveslist.png')} />
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              style={styles.button}
+            <TouchableOpacity
               onPress={()=> navigation.navigate('Chapters')}>
-              <Text style={{color: "#dc143c",marginTop: 4, fontWeight:"600",fontSize: 19}}>Chapters</Text>
+              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillmanuals.png')} />
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={styles.button}
+            <TouchableOpacity
               onPress={()=> navigation.navigate('Res')}>
-              <Text style={{color: "#dc143c",marginTop: 4, fontWeight:"600",fontSize: 19}}>World's Top Fighters</Text>
+              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillfighterslist.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity
@@ -68,8 +66,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#2f4f4f',
       marginBottom: 7,
       marginLeft:19,
-      height: 57,
-      width: 348,
+      height: 60,
+      width: 159,
       fontWeight: 'bold',
       opacity:1 
     },
@@ -87,5 +85,11 @@ const styles = StyleSheet.create({
       minWidth: Dimensions.get('window').width,
       flex: 1,
       opacity: .8, 
+    },
+    icon: {
+      height: 107,
+      width: 114,
+      opacity: .9,
+      textAlign: "left" 
     },
   });
