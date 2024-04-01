@@ -28,13 +28,13 @@ export const FIGHTERS_IMAGES = {
       moves:[
         {
           title: "One Inch Punch",
-          img: require('../assets/brucelee1inchpunch.png'),
+          img: require('../assets/bruceleeoneinchpunch.png'),
           desc: "A one-inch punch from just a finger length away, Lee could produce an impact that just didn't seem humanly possible. It's like watching a batter turn a bunt into a homerun, in a move that lasts .2 seconds, about as long as a flash  of lightning, Lee could generate between 230 and 470 pounds of force. That's like taking a direct shot on a knee strike from a hundred and eighty five pound UFC fighter and this secret to Lee's technique starts with his stance.",
       },
         {
           title: "Side Kick",
           img: require('../assets/bruceleesidekick.jpg'),
-          desc: "",
+          desc: "From a side facing stance, take a small lead with the front foot, using it to launch yourself toward the target. As you bring the rear foot toward the front foot, both feet momentarily leave the ground and the rear foot replaces where the front foot was. That's where the lunge happens (a side lunge in this case which becomes your kick). This gives you a deceptively fast approach to the target, and if you work on the timing a bit you can make it quite powerful as well. The difficult part is coordinating the chamber of the kick with the replacement step so that your kick lands as the rear foot makes the replacement. That lets you add the power of your rear leg to the momentum of the kick to make it particularly powerful. You don't see this lunging sidekick very often in the MMA because it's a high commitment move that requires a big opening, but you do sometimes see it as a followup.",
       }
       ],
     },
