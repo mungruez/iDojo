@@ -5,6 +5,7 @@ export default function Resources() {
   return (
     <View>
       <Text>Resources</Text>
+      <Text>Thank You for using iDojo. Special thanks to all those involved. </Text>
     </View>
   )
 }

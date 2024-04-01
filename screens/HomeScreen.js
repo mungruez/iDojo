@@ -12,7 +12,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpg')}>
+      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
         <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:38}}>
         <View style={{backgroundColor: '#2f4f4f', alignItems: "left", marginLeft:"5", marginRight:"5", marginBottom:19}}>
             <ImageBackground style={ styles.icon } resizeMode='cover' source={require('../assets/icon.png')} /> 
@@ -32,7 +32,7 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               onPress={()=> navigation.navigate('Res')}>
-              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillfighterslist.png')} />
+              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillfighterslist2.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity
