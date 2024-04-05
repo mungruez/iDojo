@@ -14,8 +14,7 @@ export default function MoveListScreen() {
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
       <View style={{backgroundColor: '#323232', color:"#dc143c", marginBottom:20, paddingBottom:10, opacity: .7}}>
-        <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/moveslisttitle.png')} /> 
-        <Text style={styles.title}>Moves List</Text>
+        <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/moveslisttitle.png')} />
       </View>
 
       <View style={{flex:1}}>

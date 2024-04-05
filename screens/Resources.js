@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
 import React from 'react'
 
 export default function Resources() {
   return (
-    <View>
+    <SafeAreaView>
+    <View style={{marginTop:120}}>
       <Text>Resources</Text>
       <Text>Thank You for using iDojo. Special thanks to all those involved. </Text>
     </View>
+    </SafeAreaView>
   )
 }
 

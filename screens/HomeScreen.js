@@ -13,38 +13,32 @@ export default function HomeScreen() {
 
   return (
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
-        <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:38}}>
-        <View style={{backgroundColor: '#2f4f4f', alignItems: "left", marginLeft:"5", marginRight:"5", marginBottom:19}}>
-            <ImageBackground style={ styles.icon } resizeMode='cover' source={require('../assets/icon.png')} /> 
-
+        <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:19}}>
+        <View style={{backgroundColor: '#2f4f4f', flexDirection:"row", marginHorizontal:3, marginVertical:19, textAlign:"center", justifyContent:"space-between"}}>
+          <Text style={{color: "lightgray", fontWeight:"700",fontSize: 23, textAlign:"center", marginLeft:38, marginTop:10}}>Main Menu</Text>
+            <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/icon.png')} /> 
         </View>
 
-        <ScrollView style={{ flexDirection:"column", marginTop:19}}>
+        <ScrollView style={{ flexDirection:"column", marginTop:57}}>
             <TouchableOpacity
               onPress={()=> navigation.navigate('MoveList')}>
-              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillmoveslist.png')} />
+              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillmoveslist.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity
               onPress={()=> navigation.navigate('Chapters')}>
-              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillmanuals.png')} />
+              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillmanuals.png')} />
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={()=> navigation.navigate('Res')}>
-              <ImageBackground style={ styles.button } resizeMode='cover' source={require('../assets/redpillfighterslist2.png')} />
+              onPress={()=> navigation.navigate('FightersList')}>
+              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillfighterslist.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity
               style={styles.button}
               onPress={()=> navigation.navigate('Res')}>
-              <Text style={{color: "#fff",marginTop: 4, fontWeight:"600",fontSize: 19}}>Resources</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={styles.button}
-              onPress={()=> navigation.navigate('Res')}>
-              <Text style={{color: "#fff",marginTop: 4, fontWeight:"600",fontSize: 19}}>Resources</Text>
+              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/bluepillresources.png')} />
             </TouchableOpacity>
             
         </ScrollView>
@@ -60,16 +54,17 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       paddingVertical: 8,
       paddingHorizontal: 16,
-      borderRadius: 5,
-      elevation: 3,
+      borderRadius: 25,
+      elevation: 5,
       color: "#dc143c",
-      backgroundColor: '#2f4f4f',
+      backgroundColor: 'transparent',
       marginBottom: 7,
       marginLeft:19,
       height: 60,
       width: 159,
       fontWeight: 'bold',
-      opacity:1 
+      opacity:1,
+      backgroundColor:"transparent",
     },
     buttontext: {
       fontSize: 16,
@@ -78,18 +73,20 @@ const styles = StyleSheet.create({
       letterSpacing: 0.25,
       marginTop: 4,
       color: 'white',
-      opacity:3
+      opacity:3,
+      backgroundColor:"transparent"
     },
     imgBackground: {
-      minHeight: Dimensions.get('window').height,
-      minWidth: Dimensions.get('window').width,
+      maxHeight: "95%",
+      minWidth: "100%",
       flex: 1,
-      opacity: .8, 
+      opacity: .8,
+      marginTop:"7%" 
     },
     icon: {
-      height: 107,
-      width: 114,
+      height: 57,
+      width: 76,
       opacity: .9,
-      textAlign: "left" 
+      marginRight:1,
     },
   });

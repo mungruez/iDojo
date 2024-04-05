@@ -1,13 +1,9 @@
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
-import fighters from '../data/fighters'
+import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, SafeAreaView, Dimensions } from 'react-native'
+import {fighters} from '../data/fighters'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-const images = require.context('../assets/avatars', true, /\.png$/);
-const imageSources = images.keys().map((key) => images(key));
-const navigation = useNavigation();
-
-function handleNavigation(item) {
+function handleNavigation(item,navigation) {
   let s=0;
   fighters.forEach((f) => {
     s = s + f.moves.length;
@@ -16,42 +12,50 @@ function handleNavigation(item) {
 }
 
 export default function FightersList() {
+  const navigation = useNavigation();
+
   return (
-    <View style={{backgroundColor: '#9a9aa1', color:"#dc143c", marginBottom:20, paddingBottom:10, opacity: .7}}>
-      <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
-      <View style={{flex:1}}>
-          <FlatList
-            data={fighters}
-            numColumns={2}
-            contentContainerStyle={{ paddingBottom: 57 }}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <View
-                key={item.name}
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  alignItems: "top",
-                  marginTop:7,
-                  marginLeft:"1",
-                  marginRight:"1",
-                  width:"50%",
-                  height:"auto",
-                  borderColor:"transparent",
-                  borderWidth:0,
-                  backgroundColor:'#2f4f4f'
-                }}
-              >
+    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
+      <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+
+        <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
+          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
+        </View>    
+            <View style={{flexDirection:'row' ,flex:1}}>
+              <FlatList
+                data={fighters}
+                numColumns={2}
+                contentContainerStyle={{ paddingBottom: 57 }}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item, index }) => (
+                  <View
+                    key={item.name}
+                    style={{
+                      alignItems: "center",
+                      flex:1,
+                      justifyContent: "space-between",
+                      flexDirection: "column",
+                      alignItems: "top",
+                      marginTop:7,
+                      marginLeft:"1",
+                      marginRight:"1",
+                      width:"50%",
+                      height:"auto",
+                      borderColor:"transparent",
+                      borderWidth:0,
+                      backgroundColor:'#2f4f4f'
+                    }}
+                  >
               
                 <Pressable
-                  onPress={() => handleNavigation(item)}>
+                  onPress={() => navigation.navigate('FighterScreen', {fighter: item, offset: 0})}>
                     <View style={styles.mainCardView}>
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
-                            <View style={styles.subCardView}>
+                          <Text>{item.name}</Text>
+                          <View style={styles.subCardView}>
                                 <Image
-                                  source={imageSources[index]}
-                                  resizeMode="cover"
+                                  source={item.avatar}
+                                  resizeMode="contain"
                                   style={{
                                     borderRadius: 12,
                                     alignSelf: 'flex-start',
@@ -67,11 +71,11 @@ export default function FightersList() {
                             <Text
                               style={{
                                 fontSize: 14,
-                                color: "crimson",
+                                color: "gold",
                                 fontWeight: 'bold',
                                 textTransform: 'capitalize',
                               }}>
-                                {item.desc}
+                                {item.name}
                             </Text>
                             
                             <View
@@ -91,25 +95,32 @@ export default function FightersList() {
                                     {item.style}
                                 </Text>
                             </View>
-                            </View>
+                          </View>
                         </View>
                     </View>
                 </View>
-            </Pressable>
-    </View>)}
-  />
+              </Pressable>
+            </View>)}
+          />
 
-  </View> 
-
-    </View>
-  
+        </View> 
+    </SafeAreaView>
+  </ImageBackground>
   )
 }
 
 const styles = StyleSheet.create({
+      imgBackground: {
+        minWidth: '100%',
+        minHeight: '100%',
+        height: Dimensions.get('window').height,
+        flex: 1,
+        opacity: .8, 
+      },
       icon: {
         height: 57,
         opacity: 1,
+        marginTop:38,
         textAlign: "center" 
       },
       mainCardView: {
