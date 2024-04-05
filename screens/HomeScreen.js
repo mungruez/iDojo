@@ -36,9 +36,9 @@ export default function HomeScreen() {
             </TouchableOpacity>
             
             <TouchableOpacity
-              style={styles.button}
+              style={styles.buttonimage}
               onPress={()=> navigation.navigate('Res')}>
-              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/bluepillresources.png')} />
+              <ImageBackground style={ styles.buttonres } resizeMode='contain' source={require('../assets/bluepillresources.png')} />
             </TouchableOpacity>
             
         </ScrollView>
@@ -58,14 +58,44 @@ const styles = StyleSheet.create({
       elevation: 5,
       color: "#dc143c",
       backgroundColor: 'transparent',
-      marginBottom: 7,
-      marginLeft:19,
-      height: 60,
-      width: 159,
+      marginBottom: 12,
+      marginLeft:30,
+      height: 57,
+      width: 180,
       fontWeight: 'bold',
       opacity:1,
       backgroundColor:"transparent",
     },
+    buttonres:{
+      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: 'center',
+      paddingVertical: 0,
+      paddingHorizontal:-10,
+      borderRadius: 25,
+      elevation: 3,
+      backgroundColor: 'transparent',
+      marginBottom: 12,
+      marginLeft:19,
+      height: 57,
+      width: 190,
+      opacity:1,
+    },
+    buttonimage:{  
+    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: 'center',
+    paddingVertical: -50,
+    paddingHorizontal:-50,
+    borderRadius: 25,
+    elevation: 3,
+    backgroundColor: 'transparent',
+    marginBottom: 12,
+    marginLeft:19,
+    height: 57,
+    width: 190,
+    opacity:1,
+  },
     buttontext: {
       fontSize: 16,
       lineHeight: 21,
