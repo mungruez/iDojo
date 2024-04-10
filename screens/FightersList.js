@@ -3,14 +3,6 @@ import {fighters} from '../data/fighters'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-function handleNavigation(item,navigation) {
-  let s=0;
-  fighters.forEach((f) => {
-    s = s + f.moves.length;
-   });
-  navigation.navigate('Fighter', {fighter: item, offset: s});
-}
-
 export default function FightersList() {
   const navigation = useNavigation();
 
