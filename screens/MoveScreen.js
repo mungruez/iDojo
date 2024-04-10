@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Dimensions, SafeAreaView, View, Spinner, Text } from "react-native";
+import { Dimensions, SafeAreaView, View, ScrollView, Text } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import VideoControls from "./VideoControls";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -90,12 +90,12 @@ const MoveScreen = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%', marginTop:38 }}>
      <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:169 }}>
       {video.title}
      </Text>
       {video.title && (
-        <View style={{flex:1, padding:0,backgroundColor:'#323232',marginLeft:0,marginTop:-19, marginBottom:0, height:"60" }}>
+        <View style={{flex:1, padding:0,backgroundColor:'#323232',marginLeft:0,marginTop:-19, marginBottom:0, height:"60%" }}>
             
             <Video
               ref={videoRef}
@@ -103,10 +103,12 @@ const MoveScreen = ({ route, navigation }) => {
               rate={playbackSpeed}
               isMuted={isMuted}
               shouldPlay={isPlaying}
-              resizeMode={ResizeMode.STRETCH}
+              resizeMode={ResizeMode.COVER}
               width={"100%"}
               height={"53%"}
-              style={{ flex: 1, marginLeft:1, marginRight:3, marginTop:-152, width:"100%", padding:0,borderColor:'#9a9aa1',borderWidth:2,marginBottom:-107,elevation:5 }}
+              minHeight={"53%"}
+              maxHeight={"60%"}
+              style={{ flex: 1, marginLeft:1, marginRight:3, marginTop:-152, width:"100%", padding:0,borderColor:'#9a9aa1',borderWidth:2,marginBottom:-107 }}
             />
           
           {showControls && (
@@ -126,10 +128,12 @@ const MoveScreen = ({ route, navigation }) => {
         </View>
       )}
 
-      <View >
-            <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft:12, marginRight:7, marginBottom:138,padding:9, width:"96%"}}>
+      <View style={{flex: 1, height:"45%"}}>
+        <ScrollView>
+          <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft:12, marginRight:7, marginBottom:138,padding:9, width:"96%"}}>
               {video.desc}
-            </Text>
+          </Text>
+        </ScrollView>
       </View>
 
       {orientation == 1 && (
