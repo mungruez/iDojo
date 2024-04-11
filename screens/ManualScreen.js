@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ManualScreen({ route, navigation }) {
     const { manual } = route.params;
     const bgColor = ['lightpurple','lightblue','skyblue','yellow','lightgreen','gold','silver','brown','crimson']
-    
+
   return (
-    <View>
+    <SafeAreaView>
       <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:19, marginTop:38 }}>
           {manual.title}
       </Text>
@@ -31,7 +32,7 @@ export default function ManualScreen({ route, navigation }) {
               </View>
             );
     })}
-    </View>
+    </SafeAreaView>
   )
 }
 

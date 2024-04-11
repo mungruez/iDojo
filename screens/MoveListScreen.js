@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, ImageBackground, Image,Dimensions } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 import moves from '../data/moves'
 import { useNavigation } from '@react-navigation/native'

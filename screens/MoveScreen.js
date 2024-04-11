@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Dimensions, SafeAreaView, View, ScrollView, Text } from "react-native";
+import { Dimensions, View, ScrollView, Text } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Video, ResizeMode } from "expo-av";
 import VideoControls from "./VideoControls";
 import * as ScreenOrientation from "expo-screen-orientation";

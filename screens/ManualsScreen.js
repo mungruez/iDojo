@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, SafeAreaView, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, Dimensions } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {manuals} from '../data/manuals'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -13,6 +14,7 @@ export default function ManualsScreen() {
         <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
         </View>    
+        
             <View style={{flexDirection:'row' ,flex:1}}>
               <FlatList
                 data={manuals}

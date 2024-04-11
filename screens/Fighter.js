@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 
 const images = require.context('../assets/fighters', true, /\.png$/);
