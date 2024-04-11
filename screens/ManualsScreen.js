@@ -42,7 +42,7 @@ export default function ManualsScreen() {
                   >
               
                 <Pressable
-                  onPress={() => navigation.navigate('ManualScreen', {manual: item})}>
+                  onPress={() => navigation.navigate('Manual', {manual: item})}>
                     <View style={styles.mainCardView}>
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
                           <Text>{item.title}</Text>
