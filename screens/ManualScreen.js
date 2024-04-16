@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ManualScreen({ route, navigation }) {
     const { manual } = route.params;
-    const bgColor = ['lightblue','skyblue','blue','darkblue','lightgreen','gold','silver','brown','crimson']
+    const bgColor = ['khaki','palegoldenrod','goldenrod','orange', 'gold','cornflowerblue','peru','darkgoldenrod','darkorange ','tan','chocolate', 'brown']
 
   return (
     <SafeAreaView style={{ backgroundColor:'#2f4f4f'}}>
