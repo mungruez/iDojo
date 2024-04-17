@@ -15,7 +15,7 @@ export default function ManualScreen({ route, navigation }) {
       <ScrollView>
       {manual.steps.map((step, index) => {
             return (
-              <View style={{backgroundColor: bgColor[index], fontSize:19}}>
+              <View key={step.title} style={{backgroundColor: bgColor[index], fontSize:19}}>
                 <Text>{step.title}</Text>
                 <Image
                   source={step.img}

@@ -54,11 +54,11 @@ export const manuals = [
         style: "Jiu Jitsu",
         conc: "",
         steps:[
-            {
-                title:"Edge Of Hand Slash",
-                img: require('../assets/manuals/edgeofhandslash1.png'),
-                desc: "Deliver a slashing blow wth arm slightly bent, with your fingers straight and close together. The palm of your hand must face down. Strike either the side of your attacker's neck or the spine close to his head or to his adams apple. You can use either hand for slashing. Slashes against the bridge or base of the nose are extremely dangerous.",
-              },  
+          {
+            title:"Edge Of Hand Slash",
+            img: require('../assets/manuals/edgeofhandslash1.png'),
+            desc: "Deliver a slashing blow wth arm slightly bent, with your fingers straight and close together. The palm of your hand must face down. Strike either the side of your attacker's neck or the spine close to his head or to his adams apple. You can use either hand for slashing. Slashes against the bridge or base of the nose are extremely dangerous.",
+          },  
           {
             title:"Vulnerable Spots For Knockout Blows",
             img: require('../assets/manuals/edgeofhandslash2.png'),
@@ -73,9 +73,9 @@ export const manuals = [
         conc: "",
         steps:[
           {
-                title:"Kick Defense Against Sharp Weapons",
-                img: require('../assets/manuals/kickdefenseforsharpweapons1.png'),
-                desc: "As the attacker attempts to use his knife, club or fist : Step in as if you are going to bow with him, grasping both hands directly in front of you for balance. Trurn your foot ninety degrees from your attacker and kick hard, bring the foot back immediately for another kick. Vulnerable spots are the knee-cap, groin, stomach, heart or into the neck. A lot of practice is required for this very important defense your foot is used in the same manner as you would use your fist. It must be done quickly and returned immediately into position for another kick. Caution must be used in practice.",
+            title:"Kick Defense Against Sharp Weapons",
+            img: require('../assets/manuals/kickdefenseforsharpweapons1.png'),
+            desc: "As the attacker attempts to use his knife, club or fist : Step in as if you are going to bow with him, grasping both hands directly in front of you for balance. Trurn your foot ninety degrees from your attacker and kick hard, bring the foot back immediately for another kick. Vulnerable spots are the knee-cap, groin, stomach, heart or into the neck. A lot of practice is required for this very important defense your foot is used in the same manner as you would use your fist. It must be done quickly and returned immediately into position for another kick. Caution must be used in practice.",
           },  
           {
             title:"Kick Defense Against Club or Blow",
@@ -86,6 +86,60 @@ export const manuals = [
             title:"Kick Defense Against Club or Blow with Left Foot",
             img: require('../assets/manuals/kickdefenseforclub2.png'),
             desc: "Pivot yourself on your right leg so as to be at a right angle with your attacker then clasp your hands in front of your chest to maintain balance. Kick your left leg straight out from your hip then bring your foot back quickly for an additional kick. Aim at vulnerable spots such as knee caps, groin, heart, etc. and use caution.",
+          }
+        ]
+      },
+      {
+        title: 'Back Hold under Arms Defense', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Break For Back Hug Under Arms",
+            img: require('../assets/manuals/backholdunderarms1.png'),
+            desc: "The attacker grasps you from around the waist and from the back, holding you tightly. Step forward with either foot and bend forward slightly. Clasps your hands shoulder high and swing hard to either side striking his head with your elbows. Grind the heel of your shoe into his toes or instep. If necessary you can try to reach back and grasp his testicles.",
+          }
+        ]
+      },
+      {
+        title: 'Break For Back Hug Over Arms', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[  
+          {
+            title:"Action 1",
+            img: require('../assets/manuals/backholdoverarms1.png'),
+            desc: "The attacker grasps you from the back, locking your arms to your sides. Immediately step forward with your right foot, form a 'V' by clasping your hands together then take a deep breath.",
+          },
+          {
+            title:"Break For Back Hold Over Arms - Action 2",
+            img: require('../assets/manuals/backholdoverarms2.png'),
+            desc: "Force your arms up, shoulder high exhaling at the same time. this will loosen his arms slightly.",
+          },
+          {
+            title:"Break For Back Hold Over Arms - Finish",
+            img: require('../assets/manuals/backholdoverarms3.png'),
+            desc: "Bend down quickly while clasping your hands to form a pivot and jab your left elbow into your attacker's heart, stomach or groin.",
+          }
+        ]
+      },
+      {
+        title: 'Back Hold Over Arms Defense', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Defense For Back Hold Over Arms",
+            img: require('../assets/manuals/backholddefense1.png'),
+            desc: "If the attacker grasps you from behind locking your arms against your bod: Step forward slightly with your right foot. Clasps your hands together and at the same time take a deep breath, bring yor hands up quickly exhaling at the same time.",
+          },
+          {
+            title:"Defense For Back Hold Over Arms",
+            img: require('../assets/manuals/backholddefense2.png'),
+            desc: "Then with his hands loosened, grasp his right arm with your left hand and with your right hand grasp him high near the collar and go into a Shoulder Throw or jab your left elbow into his torso.",
           }
         ]
       },

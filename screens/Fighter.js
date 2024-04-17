@@ -8,7 +8,7 @@ const imageSources = images.keys().map((key) => images(key));
 
 export default function Fighter({ route, navigation }) {
   const { fighter,offset } = route.params;
-  const bgColor = ['khaki','palegoldenrod','goldenrod','orange','gold','cornflowerblue','peru','darkgoldenrod','darkorange ','tan','chocolate', 'brown']
+  const bgColor = ['khaki','palegoldenrod','goldenrod','orange','gold','sandybrown','peru','darkgoldenrod','darkorange ','tan','chocolate', 'sienna']
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%' }}>
@@ -33,7 +33,7 @@ export default function Fighter({ route, navigation }) {
 
      {fighter.desc.map((quote, index) => {
             return (
-              <View>
+              <View key={index}>
                 <Text style={{backgroundColor: bgColor[index], fontSize:19}}>{quote}</Text>
               </View>
             );
@@ -41,7 +41,7 @@ export default function Fighter({ route, navigation }) {
 
     {fighter.moves.map((move, index) => {
             return (
-              <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize:19}}>
+              <View key={move.title} style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize:19}}>
                 <Text>{move.title}</Text>
                 <Image
                   source={move.img}

@@ -15,7 +15,7 @@ export default function ManualsScreen() {
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
         </View>    
         
-            <View style={{flexDirection:'row' ,flex:1}}>
+            <View style={{flexDirection:'row' ,flex:1, padding: 19, backgroundColor:'transparent'}}>
               <FlatList
                 data={manuals}
                 numColumns={1}
@@ -33,7 +33,7 @@ export default function ManualsScreen() {
                       marginTop:7,
                       marginLeft:"1",
                       marginRight:"1",
-                      width:"50%",
+                      width:"100%",
                       height:"auto",
                       borderColor:"transparent",
                       borderWidth:0,
@@ -43,43 +43,22 @@ export default function ManualsScreen() {
               
                 <Pressable
                   onPress={() => navigation.navigate('Manual', {manual: item})}>
-                    <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
-                          <Text>{item.title}</Text>
 
-                          <View style={styles.subCardView}>
-                            <View style={{marginLeft: 12}}>
-                            <Text
-                              style={{
-                                fontSize: 14,
-                                color: "gold",
-                                fontWeight: 'bold',
-                                textTransform: 'capitalize',
-                              }}>
-                                {item.title}
-                            </Text>
-                            
-                            <View
-                              style={{
-                                marginTop: 3,
-                                borderWidth: .5,
-                                borderColor:'#228b22',
-                                flexDirection:'row',
-                                backgroundColor:'#323232',
-                                justifyContent:'space-between'
-                              }}>
-                                <Text
-                                    style={{
-                                       color: '#9a9aa1',
-                                       fontSize: 12,
-                                    }}>
-                                    {item.style}
-                                </Text>
-                            </View>
-                          </View>
-                        </View>
+                    <View style={styles.box}>
+                      <Image style={styles.image} source={item.steps[0].img} />
+                      <Text style={styles.username}>{item.title}</Text>
+                      <Text
+                        style={{
+                          color: '#9a9aa1',
+                          fontSize: 12,
+                          alignSelf: 'flex-end',
+                          textAlignVertical:'bottom'
+                        }}>
+                          {item.style}
+                      </Text>
+                      
                     </View>
-                </View>
+
               </Pressable>
             </View>)}
           />
@@ -140,5 +119,39 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginRight:9,
         padding:0,
+      },
+      image: {
+        width: 60,
+        height: 60,
+      },
+      name: {
+        fontSize: 22,
+        color: '#FFFFFF',
+        fontWeight: '600',
+      },
+      body: {
+        padding: 30,
+        backgroundColor: '#E6E6FA',
+      },
+      box: {
+        padding: 5,
+        marginTop: 2,
+        marginBottom: 2,
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'row',
+        shadowColor: 'black',
+        shadowOpacity: 0.2,
+        shadowOffset: {
+          height: 1,
+          width: -2,
+        },
+        elevation: 2,
+        flexWrap:'wrap'
+      },
+      username: {
+        color: '#20B2AA',
+        fontSize: 19,
+        alignSelf: 'center',
+        marginLeft: 10,
       },
 })
