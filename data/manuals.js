@@ -223,7 +223,7 @@ export const manuals = [
         steps:[
           {
             title:"Club Defense Using Chin Jab And Kick Back",
-            img: require('../assets/manuals/.png'),
+            img: require('../assets/manuals/clubdefensechinjab1.png'),
             desc: "The attacker attempts to strike you with a club in his right hand. Step to his right side while blocking the blow with your left hand at the same time. Then place your right foot behind his right foot and at he same time kick back and jab hard into his chin with your open palm. This will dislocate his neck and throw him backward violently. ",
           }
         ]
