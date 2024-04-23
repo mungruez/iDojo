@@ -5,12 +5,14 @@ export default function Resources() {
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='repeat' source={require('../assets/resbackground.png')}>
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
-    <View style={{marginTop:120}}>
+    <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
+          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/resourcestitle.png')} /> 
+        </View> 
 
-      <Text style={ styles.title }>Resources</Text>
-      <Text>We hope you learned about self defense. Thanks for downloading iDojo mobile App. Special thanks to all those involved, a lot of time and effort was put into making the App .  Thanks the World Boxing Federation, MMA and UFC for giving us the opportunity to analyse the best fighters of all time. </Text>
-    
+    <View style={{marginTop:2}}>
+      <Text style={ styles.title }>We hope you learned about self defense. Thanks for downloading iDojo mobile App. Special thanks to all those involved, a lot of time and effort was put into making the App .  Thanks the World Boxing Federation, MMA and UFC for giving us the opportunity to analyse the best fighters of all time. </Text>
     </View>
+
     </SafeAreaView>
     </ImageBackground>
   )
@@ -22,12 +24,13 @@ const styles = StyleSheet.create({
     minHeight: '100%',
     flex: 1,
     opacity: .8, 
+    zIndex:2
   },
   title: {
-    fontSize: 21,
+    fontSize: 17,
     fontWeight:'700',
-    color:'crimson',
-    backgroundColor:'#2f4f4f',
+    color:'darkblue',
+    backgroundColor:'lightgrey',
     margin:5,
     borderColor:'silver',
     borderWidth:1.5,
@@ -39,5 +42,12 @@ const styles = StyleSheet.create({
     color:'white',
     backgroundColor:'#2f4f4f',
     margin:5,
-  }
+  },
+  icon: {
+    height: 76,
+    opacity: 1,
+    marginTop:38,
+    textAlign: "center",
+    zIndex:3 
+  },
 })

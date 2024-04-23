@@ -12,7 +12,7 @@ export default function ManualsScreen() {
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
         <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
-          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
+          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/manualstitle.png')} /> 
         </View>    
         
             <View style={{flexDirection:'row' ,flex:1, padding: 19, backgroundColor:'transparent'}}>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         minHeight: '100%',
         height: Dimensions.get('window').height,
         flex: 1,
-        opacity: .8, 
+        opacity: .9, 
       },
       icon: {
         height: 57,
@@ -152,6 +152,9 @@ const styles = StyleSheet.create({
         color: '#20B2AA',
         fontSize: 19,
         alignSelf: 'center',
-        marginLeft: 10,
+        marginLeft: 4,
+        flexWrap: 'wrap',
+        flex:1,
+        flexShrink:1
       },
 })

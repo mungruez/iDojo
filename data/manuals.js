@@ -134,12 +134,174 @@ export const manuals = [
           {
             title:"Defense For Back Hold Over Arms",
             img: require('../assets/manuals/backholddefense1.png'),
-            desc: "If the attacker grasps you from behind locking your arms against your bod: Step forward slightly with your right foot. Clasps your hands together and at the same time take a deep breath, bring yor hands up quickly exhaling at the same time.",
+            desc: "If the attacker grasps you from behind locking your arms against your body: Step forward slightly with your right foot. Clasps your hands together and at the same time take a deep breath, bring yor hands up quickly exhaling at the same time.",
           },
           {
             title:"Defense For Back Hold Over Arms",
             img: require('../assets/manuals/backholddefense2.png'),
             desc: "Then with his hands loosened, grasp his right arm with your left hand and with your right hand grasp him high near the collar and go into a Shoulder Throw or jab your left elbow into his torso.",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
           }
         ]
       },
