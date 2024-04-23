@@ -144,146 +144,141 @@ export const manuals = [
         ]
       },
       {
-        title: '', 
+        title: 'Front Hug Defense', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Front Hug Break - Action 1",
+            img: require('../assets/manuals/fronthugdefense1.png'),
+            desc: "Your attacker grasps you tightly from the front and locks your arms to your sides. Place your hands flat against his thighs, forcing him to back away from you or bite his ear to cause him to bend forward.",
           },
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Action 2",
+            img: require('../assets/manuals/fronthugdefense2.png'),
+            desc: "You can also grasp his groin, forcing him to step back, and then with your left hand reach up and over in a circular movement forcing his right arm against your neck and shoulder. Now, push down hard on his arm causing considerable pain, or break.",
+          },
+          {
+            title:"Finish",
+            img: require('../assets/manuals/fronthugdefense3.png'),
+            desc: "when the attacker lowers his head, slash with your right hand against the back of his neck, or kick with your knee into his chin. ",
           }
         ]
       },
       {
-        title: '', 
+        title: 'Back Hug Defense With Foot Grab', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
-          },
-          {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"break For Back Hug Under The Arms Foot Grab",
+            img: require('../assets/manuals/backhugdefensefootgrab1.png'),
+            desc: "The attacker grasps you around your waist from behind, holding you tightly. Attempt to grab his hair, then suddenly bend forward grasping his foot with both your hands. Then pull forward and lean back, causing yourself to fall back on him and if your fall is hard, you will injure him severely. Practice with caution.",
           }
         ]
       },
       {
-        title: '', 
+        title: 'Knife Defense using Slash At Throat And Back Kick', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Knife Defense using Slash At Throat And Back Kick",
+            img: require('../assets/manuals/knifedefensethroatslash1.png'),
+            desc: "When attacked by an enemy with a knife in his right hand, step to his left and slash your left hand into his windpipe. Grab his left hand and at the same time place your left foot behind his left foot and pull on his arm towards your right. Then push back hard on his neck causing him to take a violent back fall. Kick into his heart when he is down on the ground. Either hand may be used. Use caution in practice.",
           },
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Knife Defense using Slash At Throat And Back Kick",
+            img: require('../assets/manuals/knifedefensethroatslash2.png'),
+            desc: "Knife Defense using Slash At Throat And Back Kick viewed from another angle.",
           }
         ]
       },
       {
-        title: '', 
+        title: 'Shoulder Break Against Knife Defense Using Shoulder Break', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Shoulder Break Against Knife Attack - Start",
+            img: require('../assets/manuals/knifedefenseshoulderbreak1.png'),
+            desc: "The enemy attempts to attack you from the side with a knife in his right hand. Grasp his right wrist with your right hand, thumbs down and push down on his arm with your left hand thumbs down. Now you can push down on his arm then suddenly pull his arm upwards.",
           },
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Shoulder Break Against Knife Attack - Finish",
+            img: require('../assets/manuals/knifedefenseshoulderbreak2.png'),
+            desc: "Bring your right foot behind you, bending down slightly which forces you into the same position as your attacker then force your left shoulder under his raised right arm, then rotate his arm so that his palm is up. Now pull down hard on his arm, pushing up on his shoulder. This will break and dislocate his arm and shoulder.",
           }
         ]
       },
       {
-        title: '', 
+        title: 'Club Defense Using Chin Jab And Kick Back', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
+            title:"Club Defense Using Chin Jab And Kick Back",
             img: require('../assets/manuals/.png'),
-            desc: "",
-          },
-          {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            desc: "The attacker attempts to strike you with a club in his right hand. Step to his right side while blocking the blow with your left hand at the same time. Then place your right foot behind his right foot and at he same time kick back and jab hard into his chin with your open palm. This will dislocate his neck and throw him backward violently. ",
           }
         ]
       },
       {
-        title: '', 
+        title: 'Defense Against Right Hand Strike', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Break Against Elbow",
+            img: require('../assets/manuals/righthandstrikedefense1.png'),
+            desc: "The attacker attempts to strike you with his right hand. Grasp his right hand with your right hand. With your thumb up pull him towards you slightly, then rotate his arm palm up and at the same time step behind him towards your left. You will then be facing the same way.",
           },
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Break Against Elbow",
+            img: require('../assets/manuals/righthandstrikedefense2.png'),
+            desc: "Wrap your left arm around his right arm muscle tightly and grab your own coat lapel to your right. Push your hip into his and force his captured arm down with your right hand, causing severe pain or breaking of the arm. ",
           }
         ]
       },
       {
-        title: '', 
+        title: 'Marching Prisoner Hold', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Arm Break And Marching Prisoner Hold - Action 1",
+            img: require('../assets/manuals/marchingprisonerhold1.png'),
+            desc: "The attaker attempts to stab you with an upward motion. Grasp his right wrist with your right hand, thumb to your left, and at the same time pull his arm down and towards you keeping him off balance.",
           },
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Action 2",
+            img: require('../assets/manuals/marchingprisonerhold2.png'),
+            desc: "While continuing to hold his arm step back so that you are then facing in the same direction as he. At the same time slash with your left hand into his windpipe.",
+          },
+          {
+            title:"Finish",
+            img: require('../assets/manuals/marchingprisonerhold3.png'),
+            desc: "Wrap your left arm around his right arm close to his shoulder. Grasp your own coat near the right collar. Lean back slightly applying pressure against his shoulder and pull down on his captured arm causing terrific pain and make him drop his weapon. You can march your attacker by holding his arm in this position.",
           }
         ]
       },
       {
-        title: '', 
+        title: 'Break For Full Nelson', 
         desc: "",
         style: "Jiu Jitsu",
         conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
-          },
-          {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Break For Full Nelson",
+            img: require('../assets/manuals/fullnelsondefense1.png'),
+            desc: "You attacker puts a full nelson on you from the back. This will force your neck down slightly and your arms up. Step to your right with your right foot and suddenly place your left foot behind your attacker's right foot. Bend back from the hip at the same time forcing your right arm against your attacker's face. If he holds on tightly he will cause you to fall backward on top of him. This is very dangerous, as you may fall hard into his stomach or chest and either knock him out or break his ribs.",
           }
         ]
       },
