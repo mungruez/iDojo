@@ -281,23 +281,5 @@ export const manuals = [
             desc: "You attacker puts a full nelson on you from the back. This will force your neck down slightly and your arms up. Step to your right with your right foot and suddenly place your left foot behind your attacker's right foot. Bend back from the hip at the same time forcing your right arm against your attacker's face. If he holds on tightly he will cause you to fall backward on top of him. This is very dangerous, as you may fall hard into his stomach or chest and either knock him out or break his ribs.",
           }
         ]
-      },
-      {
-        title: '', 
-        desc: "",
-        style: "Jiu Jitsu",
-        conc: "",
-        steps:[
-          {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
-          },
-          {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
-          }
-        ]
-      },
+      }
 ]

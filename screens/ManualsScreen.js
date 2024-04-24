@@ -22,7 +22,7 @@ export default function ManualsScreen() {
                 contentContainerStyle={{ paddingBottom: 57 }}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item, index }) => (
-                  <View
+                  item.title.length<1 ? <></> : <View
                     key={item.title}
                     style={{
                       alignItems: "center",
@@ -30,7 +30,7 @@ export default function ManualsScreen() {
                       justifyContent: "space-between",
                       flexDirection: "column",
                       alignItems: "top",
-                      marginTop:7,
+                      marginTop:2,
                       marginLeft:"1",
                       marginRight:"1",
                       width:"100%",
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         minHeight: '100%',
         height: Dimensions.get('window').height,
         flex: 1,
-        opacity: .9, 
+        opacity: 1, 
       },
       icon: {
         height: 57,
@@ -130,13 +130,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
       },
       body: {
-        padding: 30,
+        padding: 5,
         backgroundColor: '#E6E6FA',
       },
       box: {
         padding: 5,
-        marginTop: 2,
-        marginBottom: 2,
+        marginTop: 1,
+        marginBottom: 1,
         backgroundColor: '#FFFFFF',
         flexDirection: 'row',
         shadowColor: 'black',
@@ -149,12 +149,13 @@ const styles = StyleSheet.create({
         flexWrap:'wrap'
       },
       username: {
-        color: '#20B2AA',
-        fontSize: 19,
+        color: 'darkgreen',
+        fontSize: 16,
         alignSelf: 'center',
         marginLeft: 4,
         flexWrap: 'wrap',
         flex:1,
-        flexShrink:1
+        flexShrink:1,
+        fontWeight:"500"
       },
 })

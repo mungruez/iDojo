@@ -115,10 +115,10 @@ const styles = StyleSheet.create({
       backgroundColor:"transparent"
     },
     imgBackground: {
-      maxHeight: "95%",
+      maxHeight: "93%",
       minWidth: "100%",
       flex: 1,
-      opacity: .8,
+      opacity: .9,
       marginTop:"7%" 
     },
     icon: {

@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         minHeight: '100%',
         height: Dimensions.get('window').height,
         flex: 1,
-        opacity: .8, 
+        opacity: 1, 
       },
       icon: {
         height: 57,
