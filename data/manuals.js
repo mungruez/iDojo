@@ -281,5 +281,62 @@ export const manuals = [
             desc: "You attacker puts a full nelson on you from the back. This will force your neck down slightly and your arms up. Step to your right with your right foot and suddenly place your left foot behind your attacker's right foot. Bend back from the hip at the same time forcing your right arm against your attacker's face. If he holds on tightly he will cause you to fall backward on top of him. This is very dangerous, as you may fall hard into his stomach or chest and either knock him out or break his ribs.",
           }
         ]
-      }
+      },
+      {
+        title: 'Punch Defense Trip Arm Break', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Front Trip And Arm Break - Action 1",
+            img: require('../assets/manuals/punchdefensetrip1.png'),
+            desc: "The attacker attempts to strikes you with his right fist. Grasp his fist with your right hand, thumbs down and pull him towards you then pivot towards your right so you are facing the same way he is. Insert your foot in front of him with your left toe pointing towards your right. Then force his shoulder down with your left hand and continue pulling with your right.",
+          },
+          {
+            title:"Front Trip And Arm Break - Action 1",
+            img: require('../assets/manuals/punchdefensetrip2.png'),
+            desc: "While your attacker is falling over your left leg, continue holding his right hand. When he is flat on the ground, force your knee against his right shoulder with your left legthen pull his extended arm towards you which may cause dislocation. Now, for additional punishment grab his chin with you left hand and pull up violently. use caution in pactice.",
+          }
+        ]
+      },
+      {
+        title: 'Counter Arm Break', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Shoulder Pressure Arm Break",
+            img: require('../assets/manuals/counterarmbreak1.png'),
+            desc: "If you can trap your attackers right hand under your left armpit, then capture it and break it bt twisting your left arm around the outside of his, while your right arm rests on his shoulder. Grasp your own right arm with your left hand and pull up with your left hand and lean back slightly. This will cause considerable pain or break his arm. this hold can be applied with either hand.",
+          }
+        ]
+      },
+      {
+        title: 'Punch Defense Against Arm And Shoulder', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Punch Defense Action Against Arm And Shoulder",
+            img: require('../assets/manuals/punchdefenseshoulder1.png'),
+            desc: "Your attacker is in front of you and attempts to strike a low blow with his right hand. So then, block his right arm with your left hand slightly bent and at the same time grasp his sleeve at the muscle with your right hand. Now, force his arm back with your left hand, rotating at the same time so that it is in the crotch of your arm and your left hand is now on his right muscle. Then force his bent arm up and across his back and lean towards him forcing him to bend forward with upwards pressure of your left arm. To secure him grasp his collar witth your right hand.",
+          }
+        ]
+      },
+      {
+        title: 'Arm Hold And Chin Blow', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Crossed Arm Hold And Chin Blow",
+            img: require('../assets/manuals/armholdchinblow1.png'),
+            desc: "The attacker attempts to strike you with his left hand. Step to your right and clasp his wrist with your left hand, thumbs down and pulling him towards you slightly. Step forward with your right foot simultaneously wrapping your right arm around his left arm. Rotate his arm upwards and backwards as you clasp your own wrist with the thumb down. Now you can force your hard into his face and step behind him with a kickback.",
+          }
+        ]
+      },
 ]
