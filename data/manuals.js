@@ -493,9 +493,48 @@ export const manuals = [
         conc: "",
         steps:[
           {
-            title:"",
+            title:"Choke break Clasped Hand Thrust With Knee Thrust",
             img: require('../assets/manuals/chokebreakhandclasp1.png'),
             desc: "Clasp your hands forming a V and thrust up hard against the arms to break the choke hold. Then grasp him by the shoulders pulling him towards you and drive your knee into his testicles.",
+          }
+        ]
+      },
+      {
+        title: 'Choke Break Index Finger', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Choke Break Using The index Finger",
+            img: require('../assets/manuals/chokebreakfinger1.png'),
+            desc: "If the attacker attempts to choke or grab you from the front, force your forefinger into his windpipe and push in with a rotating motion to force him to back away.",
+          }
+        ]
+      },
+      {
+        title: 'Choke Break With Arm Slash', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Choke Break With Arm Slash",
+            img: require('../assets/manuals/chokebreakarmslash1.png'),
+            desc: "If the attacker attempts to choke you from the front with both hands, slash to the right side of his throat with your right hand. Your palm should be turned down. Either hand can be used . Use caution in practice.",
+          }
+        ]
+      },
+      {
+        title: 'Choke break With Jab Into The Heart', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Choke break With Jab Into The Heart",
+            img: require('../assets/manuals/chokebreakheartjab1.png'),
+            desc: "If the attacker attempts to choke you from the back or the side with both hands. Clasp both of your hands together forming a pivot then bend down slightly and jab your elbow into his heart, stomach or groin.",
           }
         ]
       },
