@@ -22,7 +22,7 @@ export default function ManualsScreen() {
                 contentContainerStyle={{ paddingBottom: 57 }}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item, index }) => (
-                  item.title.length<1 ? <></> : <View
+                  <View
                     key={item.title}
                     style={{
                       alignItems: "center",

@@ -339,7 +339,6 @@ export const manuals = [
           }
         ]
       },
-      ,
       {
         title: 'Hip Throw', 
         desc: "",
@@ -448,4 +447,93 @@ export const manuals = [
           }
         ]
       },
+      {
+        title: 'Front Grab Defense With Slash And Throw', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Front Grab For Back Throw With Throat Slash",
+            img: require('../assets/manuals/frontgrabdefense1.png'),
+            desc: "If the attacker attempts to grab you, bend down quickly towards his right with your right foot extended then slash at his throat with your left hand, which will cause him to bend backwards, at the same time insert your right hand between his legs trying to grab his belt from the back or the seat of his trousers. Pull forward with your right hand, forcing him backwards with your left hand slash and causing him to fall backwards. This may severly injure or kill your attacker use caution in practice. The reverse action is used for a front throw.",
+          }
+        ]
+      },
+      {
+        title: 'Knife Defense Crab Claw Throw', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"crab Claw Throw",
+            img: require('../assets/manuals/crabclawthrow1.png'),
+            desc: "This move is used for disarming against a knife. The action is done by first grasping the attacker's right wrist with your left hand then resting your right on the ground while jumping against his body with your feet spread apart, placing your left foot high against his waist and your right against the back of his ankles. Twist towards the left to cause your attacker to take a violent fall.",
+          }
+        ]
+      },
+      {
+        title: 'Choke Break', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Choke Break - Finger Jab In The Throat",
+            img: require('../assets/manuals/chokebreak1.png'),
+            desc: "If the attacker attempts to choke you from the front Jab your hand into the attacker's windpipe. Either hand may be used. next you can step forward and thrust your knee into his groin.",
+          }
+        ]
+      },
+      {
+        title: 'Choke Break Clasped Hand Thrust', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/chokebreakhandclasp1.png'),
+            desc: "Clasp your hands forming a V and thrust up hard against the arms to break the choke hold. Then grasp him by the shoulders pulling him towards you and drive your knee into his testicles.",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      },
+      {
+        title: '', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          },
+          {
+            title:"",
+            img: require('../assets/manuals/.png'),
+            desc: "",
+          }
+        ]
+      }
+
 ]

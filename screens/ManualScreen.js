@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ManualScreen({ route, navigation }) {
     const { manual } = route.params;
-    const bgColor = ['palegoldenrod','palegoldenrod', 'khaki','goldenrod','orange', 'gold','cornflowerblue','peru','darkgoldenrod','darkorange ','tan','chocolate', 'brown']
+    const bgColor = ['palegoldenrod', 'khaki','goldenrod','orange', 'gold','cornflowerblue','peru','darkgoldenrod','darkorange ','tan','chocolate', 'brown']
 
   return (
     <SafeAreaView style={{ backgroundColor:'black', flex:1}}>
@@ -13,12 +13,13 @@ export default function ManualScreen({ route, navigation }) {
           {manual.title}
       </Text>
 
-      <ScrollView>
-      {manual.steps.map((step, index) => {
-            return (
-              <View style={{backgroundColor:"black", marginBottom:19}}>
+      <View style={{backgroundColor:"black", paddingBottom:19, flex:1}}>
+        <ScrollView>
+          {manual.steps.map((step, index) => {
+            
+            return ( <View style={{backgroundColor:"black", marginBottom:19}}>
               
-              <View key={step.title} style={{backgroundColor: bgColor[index], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+              <View key={step.title} style={{backgroundColor: bgColor[(index%12)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
                 <Text style={styles.titletext}>{step.title}</Text>
               </View>
 
@@ -37,22 +38,24 @@ export default function ManualScreen({ route, navigation }) {
                   }}
                 />
 
-                <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:38, borderColor:"silver", borderWidth:1, borderRadius:5}}>
-                <ScrollView>
-                  <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/greentextbackground.png')}>
-                    <View style={{backgroundColor: "#2f4f4f",  borderColor:"silver", borderWidth:1, borderRadius:5}}>
-                      <Text style={styles.desctext}>{step.desc}</Text>
-                    </View>
-                  </ImageBackground>
-                </ScrollView>
+                <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:38, flex:1,paddingBottom:7, borderColor:"silver", borderWidth:1, borderRadius:5}}>
+                  <ScrollView>
+                    <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/greentextbackground.png')}>
+                      
+                      <View style={{backgroundColor: "#2f4f4f",  borderColor:"silver", borderWidth:1, borderRadius:5}}>
+                        <Text style={styles.desctext}> {step.desc} </Text>
+                      </View>
+                    
+                    </ImageBackground>
+                  </ScrollView>
                 </View>
                 
               </View>
-              </View>
-            );
-    })}
+            </View>);
+          })}
     
-    </ScrollView>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }
