@@ -7,7 +7,7 @@ export default function ManualScreen({ route, navigation }) {
     const bgColor = ['palegoldenrod','palegoldenrod', 'khaki','goldenrod','orange', 'gold','cornflowerblue','peru','darkgoldenrod','darkorange ','tan','chocolate', 'brown']
 
   return (
-    <SafeAreaView style={{ backgroundColor:'black'}}>
+    <SafeAreaView style={{ backgroundColor:'black', flex:1}}>
 
       <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:19, marginTop:38 }}>
           {manual.title}
@@ -16,9 +16,9 @@ export default function ManualScreen({ route, navigation }) {
       <ScrollView>
       {manual.steps.map((step, index) => {
             return (
-              <View style={{backgroundColor:"black", marginBottom:12}}>
+              <View style={{backgroundColor:"black", marginBottom:19}}>
               
-              <View key={step.title} style={{backgroundColor: bgColor[index], fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+              <View key={step.title} style={{backgroundColor: bgColor[index], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
                 <Text style={styles.titletext}>{step.title}</Text>
               </View>
 
@@ -37,7 +37,7 @@ export default function ManualScreen({ route, navigation }) {
                   }}
                 />
 
-                <View>
+                <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:38, borderColor:"silver", borderWidth:1, borderRadius:5}}>
                 <ScrollView>
                   <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/greentextbackground.png')}>
                     <View style={{backgroundColor: "#2f4f4f",  borderColor:"silver", borderWidth:1, borderRadius:5}}>
@@ -69,11 +69,12 @@ const styles = StyleSheet.create({
     backgroundColor:"transparent"
   },
   imgBackground: {
-    maxHeight:380,
+    maxHeight:411,
     flex: 1,
     opacity: .6,
     margin:0,
-    padding:0 
+    padding:0,
+    borderRadius:5, 
   },
   desctext: {
     fontSize: 17,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     borderColor:"silver", 
     borderWidth:1, 
     borderRadius:5,
-    maxHeight:380,
+    maxHeight:411,
     opacity:1,
   },
 })

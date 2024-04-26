@@ -339,4 +339,113 @@ export const manuals = [
           }
         ]
       },
+      ,
+      {
+        title: 'Hip Throw', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Hip Throw And Fall - Action 1",
+            img: require('../assets/manuals/hipthrowand fall1.png'),
+            desc: "The attacker attempts to grapple with you. Step into him and throw your right arm around him, close to his shoulder. Then turn your body to your left so that you are facing the same direction as he is, at the same time grasp his right sleeve high up by his shoulder. Insert your hip hard into his stomach, bend down while pulling him towards you so that your hip throws him forward violently.",
+          },
+          {
+            title:"Hip Throw And Fall - Action 2",
+            img: require('../assets/manuals/1.png'),
+            desc: "The attacker will fall. If you are thrown with the same hold you must learn to fall bt keeping your left arm 45 degrees from your body and relaxing.",
+          },
+          {
+            title:"Hip Throw And Fall - Finish",
+            img: require('../assets/manuals/1.png'),
+            desc: "Your whole body should strike the ground at the same time. Your right leg is over your left in a bent position. ",
+          }
+        ]
+      },
+      {
+        title: 'Ankle Throw', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Ankle Throw",
+            img: require('../assets/manuals/anklethrow1.png'),
+            desc: "Grasp your attacker's right larpel with your left hand, thumbs up. At the same time grasp his left sleeve near the shoulder with your right hand. On your right foot, spring in towards him simultaneously laying your left ankle against his left ankle. Then force your hip into his stomach and in one motion pull up with your left hand and down with your right, while bending slightly towards your right and forcing your right ankle against his left ankle in a raising motion. Now pull down with both hands and at the same time raise him with your ankle, causing him to take a violent forward fall. This throw requires a lot of practice and it is very dangerous.",
+          }
+        ]
+      },
+      {
+        title: 'Circle Throw', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Circle Throw - Start",
+            img: require('../assets/manuals/circlethrow1.png'),
+            desc: "Grasp the attacker by the collar or at th back of his arms and force him backwards slightly. He will then push against you forcing you backwards. You will then lean back while kicking him in the stomach with either foot and pulling him towards your face. Now, while lying flat on your back with your leg bent, kick hard straight up to throw your attacker over your head.",
+          },
+          {
+            title:"Circle Throw - Finish",
+            img: require('../assets/manuals/circlethrow1.png'),
+            desc: "The picture shows how to break a fall when thrown by the 'Circle Throw' . The fist comes down first, then you roll on your arm, rolling across your shoulder and slapping the ground hard just before your back lands.",
+          }
+        ]
+      },
+      {
+        title: 'Choke Defense Shoulder Throw', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Over Shoulder Throw",
+            img: require('../assets/manuals/chokedefenseshoulderthrow1.png'),
+            desc: "If the attacker attempts to choke you from behind with his right arm around your neck, step forward slightly with your right foot and at the same time grasp his arm at the elbow with your left hand. Then reach up with your right hand grasping his clothes at his right shoulder. Stoop forward suddenly then by forcing your hips violently into his stomach, pull him over your shoulder.",
+          }
+        ]
+      },
+      {
+        title: 'Over Shoulder Throw And Fall', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Over Shoulder Throw And Fall - Action 1",
+            img: require('../assets/manuals/holddefenseshoulderthrow1.png'),
+            desc: "The attacker grasps you from behind locking your arms to your side. Clasp your hands together and at the same time take one step forward with your right foot.",
+          },
+          {
+            title:"Over Shoulder Throw And Fall - Action 2",
+            img: require('../assets/manuals/holddefenseshoulderthrow2.png'),
+            desc: "Force your clasped hands up suddenly and simultaneously bend forward slightly. Then reach up and grasp your attacker's right sleeve or arm with your right hand high up on his shoulder, and with your left hand grasp his sleeve or arm at the muscle.",
+          },
+          {
+            title:"Over Shoulder Throw And Fall - Action 3",
+            img: require('../assets/manuals/holddefenseshoulderthrow3.png'),
+            desc: "Pull him down and forward against your hip and shoulder and insert your hip hard into your attacker's stomach. This will violently throw him forward. If you are the one being thrown , while falling relax and slap the ground with your hand 45 degrees from your body.",
+          },
+          {
+            title:"Over Shoulder Throw And Fall - Action 1",
+            img: require('../assets/manuals/holddefenseshoulderthrow4.png'),
+            desc: "You can break your attacker's right arm while he is falling by anchoring his right arm under your left arm pit, and placing both of your arms at his elbow, leaning back at the same time. ",
+          }
+        ]
+      },
+      {
+        title: 'Choke Defense Straight Foot Throw', 
+        desc: "",
+        style: "Jiu Jitsu",
+        conc: "",
+        steps:[
+          {
+            title:"Straight Foot Throw",
+            img: require('../assets/manuals/straightfootthrow1.png'),
+            desc: "If the attacker is choking you from the front, grab his right arm at the muscle with your left hand, thumb up and with your right hand grab his left sleeve. Now, step back with your left foot his right foot will be forward. Put your weight on your left foot and extend your right foot to the outside of his right ankle. Then trip him with your right foot by pulling and leaning towards your left and push him backwards with your right hand to cause him to fall on his back.",
+          }
+        ]
+      },
 ]
