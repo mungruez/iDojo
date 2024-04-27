@@ -80,7 +80,7 @@ export const manuals = [
         ]
       },
       {
-        title: 'Back Hold under Arms Defense',
+        title: 'Back Hold Under Arms Defense',
         style: "Jiu Jitsu",
         steps:[
           {
@@ -433,7 +433,7 @@ export const manuals = [
         style: "Jiu Jitsu",
         steps:[
           {
-            title:"Choke break Clasped Hand Thrust With Knee Thrust",
+            title:"Choke Break Clasped Hand Thrust With Knee Thrust",
             img: require('../assets/manuals/chokebreakhandclasp1.png'),
             desc: "Clasp your hands forming a V and thrust up hard against the arms to break the choke hold. Then grasp him by the shoulders pulling him towards you and drive your knee into his testicles.",
           }
@@ -462,18 +462,18 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke break With Jab Into The Heart',
+        title: 'Choke Break With Jab Into The Heart',
         style: "Jiu Jitsu",
         steps:[
           {
-            title:"Choke break With Jab Into The Heart",
+            title:"Choke Break With Jab Into The Heart",
             img: require('../assets/manuals/chokebreakheartjab1.png'),
             desc: "If the attacker attempts to choke you from the back or the side with both hands. Clasp both of your hands together forming a pivot then bend down slightly and jab your elbow into his heart, stomach or groin.",
           }
         ]
       },
       {
-        title: 'Single Arm choke break',
+        title: 'Single Arm Choke break',
         style: "Jiu Jitsu",
         steps:[
           {
@@ -524,6 +524,79 @@ export const manuals = [
             desc: "Force the attacker downward until he is on his knee while rotating his arm so that his palm is facing upward and his thumb towards you. Pull up with your lleft hand and push down with your right. Then for a quick break force your knee hard against his elbow.",
           }
         ]
+      },
+      {
+        title: 'Choke Break With Knee Kick',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Choke Break With Knee Kick",
+            img: require('../assets/manuals/chokebreakkneekick1.png'),
+            desc: "The attacker attempts to choke you with both hands. While bearing down quickly, cross your hands over his and kicking your knee into his groin at the same time.",
+          }
+        ]
+      },
+      {
+        title: 'Choke Break With Jab Into Throat',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Choke break With Jab Into Throat",
+            img: require('../assets/manuals/chokebreakthroatjab1.png'),
+            desc: "The attacker attempts to choke you with both hands from the front. jab hard with either hand, fingers stiffened into your attacker's throat.",
+          }
+        ]
+      },
+      {
+        title: 'Arm Lever Back Strangle',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Arm Lever Back Strangle",
+            img: require('../assets/manuals/armleverbackstrangle1.png'),
+            desc: "The attacker attacks you with a knife in his right hand:  Seize his wrist with your right handwith your thumb to the left. turn so that you are behind the attacker. Extend your left leg behind him then wrap your left arm around his neck from the front , forcing his head back, and at the same time pulling on his right arm across your chest to strangle him.",
+          }
+        ]
+      },
+      {
+        title: 'Double Pressure Back Strangle',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Double Pressure Back Strangle - Start",
+            img: require('../assets/manuals/backstrangle1.png'),
+            desc: "Throw your right arm the attacker's neck from the back. Clasp your own right hand with your left, forcing your attacker's head against your shoulder and head.",
+          },
+          {
+            title:"Double Pressure Back Strangle - Finish",
+            img: require('../assets/manuals/backstrangle2.png'),
+            desc: "Force your attacker down into a sitting positionso that his back rests on your right knee. Pull back hard on your right arm and push forward with your head and right shoulder causing immediate strangulation.",
+          }
+        ]
+      },
+      {
+        title: 'Strangle With Knee',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Strangle With Knee",
+            img: require('../assets/manuals/stranglewithknee1.png'),
+            desc: "Get behind your attacker and clasp your right forearm against his windpipe pulling his head back slightly. Your left arm is extended over his left shoulder so grasp your left muscle with your right hand and push against the back of his head with the palm of your left hand. insert your right knee into his back and bring him back slowly to strangle him.",
+          }
+        ]
+      },
+      {
+        title: 'Wrap Around Choke',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Wrap Around Choke",
+            img: require('../assets/manuals/wraparoundchoke1.png'),
+            desc: "With the attacker directly in front of you reach out with your right hand and grasp his collar, behind the left ear and thumb down. Grab his right arm at the back of the muscleand pull him violently towards you and at the same time step directly behind him. Keep the grasp on his collar tight and your right forearm stiff against his windpipe. then bend him back and with your left hand grasp his left hand at the wrist so that his palm is facing out. Force his arm against your chest by pulling it backwards and pull hard with your right arm against his windpipe causing strangulation.",
+          }
+        ]
       }
 
 ]
+
+ 
