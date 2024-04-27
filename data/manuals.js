@@ -595,6 +595,44 @@ export const manuals = [
             desc: "With the attacker directly in front of you reach out with your right hand and grasp his collar, behind the left ear and thumb down. Grab his right arm at the back of the muscleand pull him violently towards you and at the same time step directly behind him. Keep the grasp on his collar tight and your right forearm stiff against his windpipe. then bend him back and with your left hand grasp his left hand at the wrist so that his palm is facing out. Force his arm against your chest by pulling it backwards and pull hard with your right arm against his windpipe causing strangulation.",
           }
         ]
+      },
+      {
+        title: 'Wrap Around Choke With Arm Break',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Wrap Around Choke With Arm Break - Start",
+            img: require('../assets/manuals/wraparoundchokearmbreak1.png'),
+            desc: "With the attacker directly in front of you, reach out with your right hand and grasp his collar behind the left ear, thumb down. Grab his right arm at the back of the muscle and pull him violently towards you and stepping directly behind him at the same time. Keep the grasp on his collar tight and your right forearm stiff against his windpipe. Then bend him back and insert your left arm between his back and left arm. Force your knuckles into his back.",
+          },
+          {
+            title:"Wrap Around Choke With Arm Break - Finish",
+            img: require('../assets/manuals/wraparoundchokearmbreak2.png'),
+            desc: "Pull back with your right arm at the same time forcing him to the ground, face downwards. Now grasp his left wrist and pull back hard with your left hand. Continue pulling upwards with your right hand to quickly strangle the attacker",
+          }
+        ]
+      },
+      {
+        title: 'Crossed Choke When Knocked Down',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Crossed Arm Choke When Knocked Down",
+            img: require('../assets/manuals/crosschokewhendown1.png'),
+            desc: "When you are knocked backwards or you miss a circle throw use a cross arm choke and push your feet into your attackers stomach, raising your attacker slightly from the ground. this will force his neck hard into your crossed arms. Pull and twist hard on your arms to cause immediate strangulation. To counter this choke, slash your extended fingers and hand into his exposed throat or grab for his groin. Use caution in practice.",
+          }
+        ]
+      },
+      {
+        title: 'Choke When Knocked Down',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Choking Attacker When Knocked Down",
+            img: require('../assets/manuals/chokewhendown1.png'),
+            desc: "When attempting to choke an attacker with the 'Crossed Arm Choke' when flat on your back, insert both your legs into your attacker's stomach, raising him off the ground. This will cause him to fall foward and strangle himself. To counter this choke, jab extended finger into throat.",
+          }
+        ]
       }
 
 ]
