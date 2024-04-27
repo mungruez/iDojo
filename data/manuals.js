@@ -1,9 +1,7 @@
 export const manuals = [
     {
-      title: 'Wrist Throw', 
-      desc: "",
+      title: 'Wrist Throw',
       style: "Jiu Jitsu",
-      conc: "",
       steps:[
         {
           title:"Action 1",
@@ -23,10 +21,8 @@ export const manuals = [
       ]
     },
     {
-        title: 'Double Wrist Hold break', 
-        desc: "",
+        title: 'Double Wrist Hold break',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Action",
@@ -36,10 +32,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Kidney Blow Against Boxer', 
-        desc: "",
+        title: 'Kidney Blow Against Boxer',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Action",
@@ -49,10 +43,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Edge Of Hand Slash', 
-        desc: "",
+        title: 'Edge Of Hand Slash',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Edge Of Hand Slash",
@@ -67,10 +59,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Kick Defense Against Sharp Weapons, Club or Blow', 
-        desc: "",
+        title: 'Kick Defense Against Sharp Weapons, Club or Blow',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Kick Defense Against Sharp Weapons",
@@ -90,10 +80,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Back Hold under Arms Defense', 
-        desc: "",
+        title: 'Back Hold under Arms Defense',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Break For Back Hug Under Arms",
@@ -103,10 +91,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Break For Back Hug Over Arms', 
-        desc: "",
+        title: 'Break For Back Hug Over Arms',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[  
           {
             title:"Action 1",
@@ -126,10 +112,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Back Hold Over Arms Defense', 
-        desc: "",
+        title: 'Back Hold Over Arms Defense',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Defense For Back Hold Over Arms",
@@ -144,10 +128,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Front Hug Defense', 
-        desc: "",
+        title: 'Front Hug Defense',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Front Hug Break - Action 1",
@@ -167,10 +149,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Back Hug Defense With Foot Grab', 
-        desc: "",
+        title: 'Back Hug Defense With Foot Grab',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"break For Back Hug Under The Arms Foot Grab",
@@ -180,10 +160,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Knife Defense using Slash At Throat And Back Kick', 
-        desc: "",
+        title: 'Knife Defense using Slash At Throat And Back Kick',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Knife Defense using Slash At Throat And Back Kick",
@@ -198,10 +176,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Shoulder Break Against Knife Defense Using Shoulder Break', 
-        desc: "",
+        title: 'Shoulder Break Against Knife Defense Using Shoulder Break',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Shoulder Break Against Knife Attack - Start",
@@ -216,10 +192,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Club Defense Using Chin Jab And Kick Back', 
-        desc: "",
+        title: 'Club Defense Using Chin Jab And Kick Back',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Club Defense Using Chin Jab And Kick Back",
@@ -229,10 +203,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Defense Against Right Hand Strike', 
-        desc: "",
+        title: 'Defense Against Right Hand Strike',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Break Against Elbow",
@@ -247,10 +219,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Marching Prisoner Hold', 
-        desc: "",
+        title: 'Marching Prisoner Hold',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Arm Break And Marching Prisoner Hold - Action 1",
@@ -270,10 +240,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Break For Full Nelson', 
-        desc: "",
+        title: 'Break For Full Nelson',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Break For Full Nelson",
@@ -283,10 +251,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Punch Defense Trip Arm Break', 
-        desc: "",
+        title: 'Punch Defense Trip Arm Break',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Front Trip And Arm Break - Action 1",
@@ -301,10 +267,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Counter Arm Break', 
-        desc: "",
+        title: 'Counter Arm Break',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Shoulder Pressure Arm Break",
@@ -314,10 +278,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Punch Defense Against Arm And Shoulder', 
-        desc: "",
+        title: 'Punch Defense Against Arm And Shoulder',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Punch Defense Action Against Arm And Shoulder",
@@ -327,10 +289,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Arm Hold And Chin Blow', 
-        desc: "",
+        title: 'Arm Hold And Chin Blow',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Crossed Arm Hold And Chin Blow",
@@ -340,33 +300,29 @@ export const manuals = [
         ]
       },
       {
-        title: 'Hip Throw', 
-        desc: "",
+        title: 'Hip Throw',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Hip Throw And Fall - Action 1",
-            img: require('../assets/manuals/hipthrowand fall1.png'),
+            img: require('../assets/manuals/hipthrow1.png'),
             desc: "The attacker attempts to grapple with you. Step into him and throw your right arm around him, close to his shoulder. Then turn your body to your left so that you are facing the same direction as he is, at the same time grasp his right sleeve high up by his shoulder. Insert your hip hard into his stomach, bend down while pulling him towards you so that your hip throws him forward violently.",
           },
           {
             title:"Hip Throw And Fall - Action 2",
-            img: require('../assets/manuals/1.png'),
+            img: require('../assets/manuals/hipthrow2.png'),
             desc: "The attacker will fall. If you are thrown with the same hold you must learn to fall bt keeping your left arm 45 degrees from your body and relaxing.",
           },
           {
             title:"Hip Throw And Fall - Finish",
-            img: require('../assets/manuals/1.png'),
+            img: require('../assets/manuals/hipthrow3.png'),
             desc: "Your whole body should strike the ground at the same time. Your right leg is over your left in a bent position. ",
           }
         ]
       },
       {
-        title: 'Ankle Throw', 
-        desc: "",
+        title: 'Ankle Throw',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Ankle Throw",
@@ -376,10 +332,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Circle Throw', 
-        desc: "",
+        title: 'Circle Throw',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Circle Throw - Start",
@@ -394,10 +348,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke Defense Shoulder Throw', 
-        desc: "",
+        title: 'Choke Defense Shoulder Throw',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Over Shoulder Throw",
@@ -407,10 +359,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Over Shoulder Throw And Fall', 
-        desc: "",
+        title: 'Over Shoulder Throw And Fall',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Over Shoulder Throw And Fall - Action 1",
@@ -435,10 +385,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke Defense Straight Foot Throw', 
-        desc: "",
+        title: 'Choke Defense Straight Foot Throw',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Straight Foot Throw",
@@ -448,10 +396,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Front Grab Defense With Slash And Throw', 
-        desc: "",
+        title: 'Front Grab Defense With Slash And Throw',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Front Grab For Back Throw With Throat Slash",
@@ -461,10 +407,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Knife Defense Crab Claw Throw', 
-        desc: "",
+        title: 'Knife Defense Crab Claw Throw',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"crab Claw Throw",
@@ -474,10 +418,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke Break', 
-        desc: "",
+        title: 'Choke Break',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Choke Break - Finger Jab In The Throat",
@@ -487,10 +429,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke Break Clasped Hand Thrust', 
-        desc: "",
+        title: 'Choke Break Clasped Hand Thrust',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Choke break Clasped Hand Thrust With Knee Thrust",
@@ -500,10 +440,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke Break Index Finger', 
-        desc: "",
+        title: 'Choke Break Index Finger',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Choke Break Using The index Finger",
@@ -513,10 +451,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke Break With Arm Slash', 
-        desc: "",
+        title: 'Choke Break With Arm Slash',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Choke Break With Arm Slash",
@@ -526,10 +462,8 @@ export const manuals = [
         ]
       },
       {
-        title: 'Choke break With Jab Into The Heart', 
-        desc: "",
+        title: 'Choke break With Jab Into The Heart',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
             title:"Choke break With Jab Into The Heart",
@@ -539,38 +473,55 @@ export const manuals = [
         ]
       },
       {
-        title: '', 
-        desc: "",
+        title: 'Single Arm choke break',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Single Arm Choke Break - Start",
+            img: require('../assets/manuals/singlearmchokebreak1.png'),
+            desc: "The attacker attempts to choke you with his right hand while standing directly in front of you. Grasp his wrist with your right hand, thumb down. Then turn and bring your right foot behind you so that you will be facing the same direction he is. Now, continue holding on to his right hand pulling forward and downward slightly.",
           },
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Single Arm Choke Break - Start",
+            img: require('../assets/manuals/singlearmchokebreak2.png'),
+            desc: "Next, pull his arm under your left arm pit. His hand must be rotated so his palm is up. lean back and down hard against his extended arm to cause it to break. ",
           }
         ]
       },
       {
-        title: '', 
-        desc: "",
+        title: 'Collar Grab Defense Arm Break',
         style: "Jiu Jitsu",
-        conc: "",
         steps:[
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Collar Grab Arm Break - Start",
+            img: require('../assets/manuals/collargrabdefense1.png'),
+            desc: "The attacker grabs your collar with his right hand. Grasp his right wrist with your right hand, thumb down. Then force his hand against your shoulder with your left hand also on his wrist, thumb down.",
           },
           {
-            title:"",
-            img: require('../assets/manuals/.png'),
-            desc: "",
+            title:"Collar Grab Arm Break - Finish",
+            img: require('../assets/manuals/collargrabdefense2.png'),
+            desc: "Turn and bring your right foot behind you so that you will be facing the same direction as he is.",
+          }
+        ]
+      },
+      {
+        title: 'Front Choke Break With Knee Pressure', 
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Front Choke Break With Knee Pressure - Start",
+            img: require('../assets/manuals/chokebreakknee1.png'),
+            desc: "The attacker attempts to choke you with both hands standing in front of you. To break the choke move your foot slightly towards the rear, then cros your left hand over his right and grab his left wrist with your thumb down.",
+          },
+          {
+            title:"Front Choke Break With Knee Pressure - Action 2",
+            img: require('../assets/manuals/chokebreakknee2.png'),
+            desc: "Force the palm of your right hand against the back of his left elbow. Pull his arm straight by stepping back slightly and continue downward pressure on his left elbow.",
+          },
+          {
+            title:"Front Choke Break With Knee Pressure - Finish",
+            img: require('../assets/manuals/chokebreakknee3.png'),
+            desc: "Force the attacker downward until he is on his knee while rotating his arm so that his palm is facing upward and his thumb towards you. Pull up with your lleft hand and push down with your right. Then for a quick break force your knee hard against his elbow.",
           }
         ]
       }
