@@ -657,7 +657,7 @@ export const manuals = [
         ]
       },
       {
-        title: 'Knife defense When Knocked Down',
+        title: 'Knife Defense When Knocked Down',
         style: "Jiu Jitsu",
         steps:[
           {
@@ -669,6 +669,22 @@ export const manuals = [
             title:"Knife defense When Knocked Down - Finish",
             img: require('../assets/manuals/knifedefensewhendown2.png'),
             desc: "Throw him to your left by raising your right leg and hip. Hold on to his right wrist and wrap your right arm over his right arm, then apply pressure by clasping your left wrist with your thumb down.",
+          }
+        ]
+      },
+      {
+        title: 'Choking With Collar And Arm Pressure',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Choking With Collar And Arm Pressure - Start",
+            img: require('../assets/manuals/collarchoke1.png'),
+            desc: "",
+          },
+          {
+            title:"Choking With Collar And Arm Pressure - Finish",
+            img: require('../assets/manuals/collarchoke2.png'),
+            desc: "",
           }
         ]
       }
