@@ -720,6 +720,22 @@ export const manuals = [
             desc: "You are facing in the same direction as your attacker, standing at his right. Insert your left arm between his right arm and right side and with your left hand raise his right hand towards your shoulder, his palm facing backwards. Now use both of your hands to apply downward pressure against the back of his hands.",
           }
         ]
+      },
+      {
+        title: 'Stick Defense',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Stick Defense - Start",
+            img: require('../assets/manuals/collarchoke1.png'),
+            desc: "When an attacker attempts to close in on you hold him back with your left hand and reach back with your right hand and grasp your stick as shown in the imaage.",
+          },
+          {
+            title:"Stick Defense - Finish",
+            img: require('../assets/manuals/collarchoke2.png'),
+            desc: "Jab hard into the attacker's stomach, heart, neck, mouth, eyes or windpipe. Slash against the back side of his neck, or against the wrist or jab the stick into his groin.",
+          }
+        ]
       }
 
 ]
