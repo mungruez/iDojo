@@ -628,9 +628,31 @@ export const manuals = [
         style: "Jiu Jitsu",
         steps:[
           {
-            title:"Choking Attacker When Knocked Down",
+            title:"Choke When Knocked Down",
             img: require('../assets/manuals/chokewhendown1.png'),
             desc: "When attempting to choke an attacker with the 'Crossed Arm Choke' when flat on your back, insert both your legs into your attacker's stomach, raising him off the ground. This will cause him to fall foward and strangle himself. To counter this choke, jab extended finger into throat.",
+          }
+        ]
+      },
+      {
+        title: 'Choking Attacker If You Miss A Circle Throw',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Choking Attacker If You Miss A Circle Throw",
+            img: require('../assets/manuals/circlethrowmiss1.png'),
+            desc: "When attempting the cross arm choke or circle throw and you miss the throw, let him fall between your legsand immediately apply a scissors hold and continue choking. Howvwer this choke is countered by brabing the groin or a rotating elbow to your thighs.",
+          }
+        ]
+      },
+      {
+        title: 'Spine Break Pressure Hold',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Spine Break Pressure Hold",
+            img: require('../assets/manuals/spinebreakhold1.png'),
+            desc: "To capture the attacker step in close facing him directly. Throw your right arm around his neck, step to the left with your right foot so that his body is directly behind yours. Slide him onto your back with a hip movement to your right, lowering your body at the same time. Wrap your left arm around his left leg. he is then directly across your back. grasp the inside of your thighs with both hands, thumbs up. Hold on to your thighs and bring your legs together to apply pressure. This will crush the attacker.",
           }
         ]
       },
