@@ -679,12 +679,45 @@ export const manuals = [
           {
             title:"Choking With Collar And Arm Pressure - Start",
             img: require('../assets/manuals/collarchoke1.png'),
-            desc: "",
+            desc: "Grasp your attacker's collar just behind the ear with your right hand and with your thumb on the outside. At the same time grasp his lapel with your left hand, then pull forward and down with your left hand, and pull back and up with your right hand.",
           },
           {
             title:"Choking With Collar And Arm Pressure - Finish",
             img: require('../assets/manuals/collarchoke2.png'),
-            desc: "",
+            desc: "At the same time step slightly towards your attacker's rear from his left side and insert your right foot behind his left. You can thus either continue choking him or throw him on his back. This is a very dangerous choke use caution in practise.",
+          }
+        ]
+      },
+      {
+        title: 'Choking With Collar And Thumb Pressure',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Choking With Collar And Thumb Pressure",
+            img: require('../assets/manuals/thumbchoke1.png'),
+            desc: "Graps your attacker's collar behind his ears with both hands, forcing your thumb behind his windpipe. Pull him forward and raise your knee into his groin or go into the circle throw. {'\n'} Alternate Action:  Force him backwards by stepping to his right side. Insert your right leg behind his right leg, forcing him to the ground. Then continue to strangle him.",
+          }
+        ]
+      },
+      {
+        title: 'Inward Twist Collar Choke',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Inward Twist Collar Choke",
+            img: require('../assets/manuals/inwardcollarchoke1.png'),
+            desc: "Grasp the attacker's collar behind the ears with both hands , thumbs inside of collar and twist the collar inside out while holding tightly. Your thumbs are now outside and your fingers are facing up. Now pull your hands together in a vise-like manner to cause immediate strangulation. For additional punishment kick with knee in the groin.",
+          }
+        ]
+      },
+      {
+        title: 'Arm Hold For Marching Prisioner',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Arm Hold For Marching Prisioner",
+            img: require('../assets/manuals/marchingprisonerhold1.png'),
+            desc: "You are facing in the same direction as your attacker, standing at his right. Insert your left arm between his right arm and right side and with your left hand raise his right hand towards your shoulder, his palm facing backwards. Now use both of your hands to apply downward pressure against the back of his hands.",
           }
         ]
       }
