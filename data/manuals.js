@@ -633,6 +633,22 @@ export const manuals = [
             desc: "When attempting to choke an attacker with the 'Crossed Arm Choke' when flat on your back, insert both your legs into your attacker's stomach, raising him off the ground. This will cause him to fall foward and strangle himself. To counter this choke, jab extended finger into throat.",
           }
         ]
+      },
+      {
+        title: 'Knife defense When Knocked Down',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Knife defense When Knocked Down - Start",
+            img: require('../assets/manuals/knifedefensewhendown1.png'),
+            desc: "You are knocked flat on your back. The attacker is holding you down with his left hand and with his right hand he is attempting to stab you. Slash your left hand against his arm at the same time grasping his wrist.",
+          },
+          {
+            title:"Knife defense When Knocked Down - Finish",
+            img: require('../assets/manuals/knifedefensewhendown2.png'),
+            desc: "Throw him to your left by raising your right leg and hip. Hold on to his right wrist and wrap your right arm over his right arm, then apply pressure by clasping your left wrist with your thumb down.",
+          }
+        ]
       }
 
 ]
