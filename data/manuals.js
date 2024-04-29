@@ -736,6 +736,28 @@ export const manuals = [
             desc: "Jab hard into the attacker's stomach, heart, neck, mouth, eyes or windpipe. Slash against the back side of his neck, or against the wrist or jab the stick into his groin.",
           }
         ]
+      },
+      {
+        title: 'Club Or Stick Defense Action Against Throat',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Club Or Stick Defense Action Against Throat",
+            img: require('../assets/manuals/stickdefensethroat1.png'),
+            desc: "Clasp the stick or club with both hands, thumbs up and strike your attacker in his neck. Follow up by kicking your knee into his groin. Very effective is blow across his nose bridge. It will instantly kill a man.",
+          }
+        ]
+      },
+      {
+        title: 'Club Or Stick Defense Action Against Head',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Club Or Stick Defense Action Against Throat",
+            img: require('../assets/manuals/knifedefensestick1.png'),
+            desc: "The attacker attempts to slash at you from the side with his right hand. hold the stick or club in your right hand alongside your forearm and drive it against the wrist.",
+          }
+        ]
       }
 
 ]
