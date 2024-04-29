@@ -822,7 +822,109 @@ export const manuals = [
             desc: "Pull back on the stick and violently push your knee into his back which could break his spine. Force his body to the ground slowly, holding tightly to the stick to strangle him.",
           }
         ]
+      },
+      {
+        title: 'Disarming Trick One',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Disarming Trick 1",
+            img: require('../assets/manuals/disarmingtrickone1.png'),
+            desc: "Your attacker attempts to use a weapon from his side:  Grasp his right wrist with your left hand. Step forward with your right foot while sliding your right arm between his arm and side. Cock your arm to form an 'L' clenching fist tightly. Strike the back of his elbow sharply with the center of your forearm. This will cause considerable pain forcing him to drop his weapon. If he attempts to throw his free hand around your neck then go into the 'Over The Shoulder Throw' .",
+          }
+        ]
+      },
+      {
+        title: 'Disarming Trick Two',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Disarming Trick 2",
+            img: require('../assets/manuals/disarmingtricktwo1.png'),
+            desc: "The attacker attempts to capture you by holding a weapon to your stomach:      Clasp his right hand at the wrist with your left hand and with your thumb facing down. At the same time step back with your right foot at 180 degrees. Hold his arm palm up towards your body and pull slightly while rotating and twisting it.",
+          },
+          {
+            title:"Disarming Trick 2",
+            img: require('../assets/manuals/disarmingtricktwo2.png'),
+            desc: " Lean back and down against his arm, holding it tightly to your side. Disarm by turning gun towards his face with your right hand. Strike him with the captured weapon on the back of his neck. Continue holding him by leaning back against his arm.",
+          }
+        ]
+      },
+      {
+        title: 'Disarming Trick Three',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Disarming Trick 3 - Start",
+            img: require('../assets/manuals/disarmingtrickthree3.png'),
+            desc: "Your attacker attempts to capture you by marching behind at you with a weapon in your side and he is one step behind you.",
+          },
+          {
+            title:"Disarming Trick 3 - Finish",
+            img: require('../assets/manuals/disarmingtrickthree3.png'),
+            desc: " Stop suddenly with right foot forward, sweeping your left hand down along your side and back over his arm in a rotating motion anchoring his hand against your shoulder and neck. Press down hard against his elbow and strike his face with your free hand or your knee.",
+          }
+        ]
+      },
+      {
+        title: 'Defense Against Machete, Club or Knife',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Defense Against Machete, Club or Knife - Start",
+            img: require('../assets/manuals/macheteknifedisarm1.png'),
+            desc: "Your attacker attempts to strike you across your head and shoulders with a weapon in his right hand:\n  Cross your hands above your head, with right hand in front of the left. Get close enough to receive the blow at his forearm, in the 'V' formed by your hands. Then grasp his wrist with your right rotating his arm towards you  so that his hand will face up.",
+          },
+          {
+            title:"Defense Against Machete, Club or Knife - Finish",
+            img: require('../assets/manuals/macheteknifedisarm2.png'),
+            desc: "At the same time slide your right foot back about 50 degrees and apply pressure downward on his elbow with your left forearm. To put the attacker out of action force him slowly to the ground while holding him firmly. Step over his right arm with your left foot and sit on his shoulder then break his arm by pulling up hard.",
+          },
+          {
+            title:"Another Illustration Of Defense Against Machete, Club or Knife - Start",
+            img: require('../assets/manuals/machetedisarm1.png'),
+            desc: "Your attacker attempts to strike you across your head and shoulders with a weapon in his right hand:\n  Cross your hands above your head, with right hand in front of the left. Get close enough to receive the blow at his forearm, in the 'V' formed by your hands. Then grasp his wrist with your right rotating his arm towards you  so that his hand will face up. At the same time slide your right foot back about 50 degrees and apply pressure downward on his elbow with your left forearm. To put the attacker out of action force him slowly to the ground while holding him firmly. Step over his right arm with your left foot and sit on his shoulder then break his arm by pulling up hard.Then grasp his wrist with your right rotating his arm towards you  so that his hand will face up.",
+          },
+          {
+            title:"Another Illustration Of Defense Against Machete, Club or Knife - Finish",
+            img: require('../assets/manuals/machetedisarm2.png'),
+            desc: "At the same time slide your right foot back about 50 degrees and apply pressure downward on his elbow with your left forearm. To put the attacker out of action force him slowly to the ground while holding him firmly. Step over his right arm with your left foot and sit on his shoulder then break his arm by pulling up hard.",
+          }
+        ]
+      },
+      {
+        title: 'Crossed Arm Block Against Downward Slash With arm Break',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Crossed Arm Block Against Downward Slash With arm Break - Start",
+            img: require('../assets/manuals/downwardslashblock1.png'),
+            desc: "Your attacker attempts to strike you with aknife in adownward motion. Cross your hands above your head with your right hand on top of the left.  Get close enough to receive the blow at his forearm, in the 'V' formed by your hands.",
+          },
+          {
+            title:"Crossed Arm Block Against Downward Slash With arm Break - Finish",
+            img: require('../assets/manuals/downwardslashblock2.png'),
+            desc: "Force his arm back with your right arm in an 'L' Remove your left hand and insert it into the crook of his right arm. Grasp your own forearm, pressing down with your right and pulling up with your left causing dislocation of his arm.",
+          }
+        ]
+      },
+      {
+        title: 'Weapon Disarm With Arm Break And Shoulder Throw',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Weapon Disarm With Arm Break And Shoulder Throw - Action 1",
+            img: require('../assets/manuals/downwardslashblock1.png'),
+            desc: "Your attacker attempts to use a weapon from his hip with his right hand. Step in with your left foot and grasp his wrist with your left hand and with your thumb on the inside. top of the left.",
+          },
+          {
+            title:"Weapon Disarm With Arm Break And Shoulder Throw - Action 2",
+            img: require('../assets/manuals/downwardslashblock2.png'),
+            desc: "Continue holding his right arm, pulling down slightly. Insert your right arm between his right arm and right side forming an 'L' with your right arm, forcing it hard against the crook of his arm to break it.",
+          }
+        ]
       }
+
 
 ]
 
