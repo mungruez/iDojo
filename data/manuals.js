@@ -753,9 +753,73 @@ export const manuals = [
         style: "Jiu Jitsu",
         steps:[
           {
-            title:"Club Or Stick Defense Action Against Throat",
+            title:"Club Or Stick Defense Action Against Head",
+            img: require('../assets/manuals/stickdefensehead1.png'),
+            desc: "Clasp the stick or club with both hands, thumbs up and strike your attacker against the forehead or in the mouth.",
+          }
+        ]
+      },
+      {
+        title: 'Club Or Stick Defense Action Against Knife Slash From The Side',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Club Or Stick Defense Action Against Knife Slash From The Side",
             img: require('../assets/manuals/knifedefensestick1.png'),
-            desc: "The attacker attempts to slash at you from the side with his right hand. hold the stick or club in your right hand alongside your forearm and drive it against the wrist.",
+            desc: "The attacker attempts to slash at you from the side with his right hand. Hold the stick or club in your right hand alongside your forearm and drive it against the wrist.",
+          }
+        ]
+      },
+      {
+        title: 'Stick Or Club Defense',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Stick Or Club Defense - Start",
+            img: require('../assets/manuals/knifedefensewithstick1.png'),
+            desc: "The attacker jabs a knife down at you. Cross your right hand over your left, while holding your stick or club with your right hand and receive the knife jab between your crossed hands. Then force the club over his forearm towards your crossed left hand while at the same time grabbing your club with your left hand.",
+          },
+          {
+            title:"Stick Or Club Defense - Finish",
+            img: require('../assets/manuals/knifedefensewithstick2.png'),
+            desc: "Force down on the stick or club which will bend him forward. Step into him and kick hard with your knee into his groin while at the same time pressing down on his forearm to break it.",
+          }
+        ]
+      },
+      {
+        title: 'Stick Or Club Defense Action Against Sharp Weapon',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Stick Or Club Defense Action Against Sharp Weapon - Action 1",
+            img: require('../assets/manuals/sharpweapondefensestick1.png'),
+            desc: "The attacker jabs a sharp weapon down at you. Do not step back.",
+          },
+          {
+            title:"Stick Or Club Defense Action Against Sharp Weapon - Action 2",
+            img: require('../assets/manuals/sharpweapondefensestick2.png'),
+            desc: "Step towards your attacker as you cross your right hand over your left holing your stick or club in your right hand. receive the knife jab between your crossed hands. Force the stick over his forearm towards your crossed left hand and grab the stick.",
+          },
+          {
+            title:"Stick Or Club Defense Action Against Sharp Weapon - Finish",
+            img: require('../assets/manuals/sharpweapondefensestick3.png'),
+            desc: "Force down on the stick causing him to bend forward. Step towards him and kick hard with your knee in the chin or groin. Continue pressing down on the forearm causing it to break. ",
+          }
+        ]
+      },
+      {
+        title: 'Disarming A Sentry With A Stick Or Club',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Disarming A Sentry With A Stick Or Club - Start",
+            img: require('../assets/manuals/watchmandisarm1.png'),
+            desc: "Silencing and Disarming a Sentry:  Approach silently then quickly cross your left over your right hand which is holding the stick. Force the stick around his throat and grasp it quickly with your left hand. Force it against his windpipe to crush it.",
+          },
+          {
+            title:"Disarming A Sentry With A Stick Or Club - Finish",
+            img: require('../assets/manuals/watchmandisarm2.png'),
+            desc: "Pull back on the stick and violently push your knee into his back which could break his spine. Force his body to the ground slowly, holding tightly to the stick to strangle him.",
           }
         ]
       }
