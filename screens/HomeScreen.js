@@ -37,6 +37,11 @@ export default function HomeScreen() {
             </TouchableOpacity>
             
             <TouchableOpacity
+              onPress={()=> navigation.navigate('FeaturedList')}>
+              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillfeatured.png')} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
               style={styles.buttonimage}
               onPress={()=> navigation.navigate('Res')}>
               <ImageBackground style={ styles.buttonres } resizeMode='contain' source={require('../assets/bluepillresources.png')} />

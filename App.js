@@ -9,6 +9,8 @@ import FightersList from './screens/FightersList';
 import Fighter from './screens/Fighter';
 import ManualsScreen from './screens/ManualsScreen';
 import ManualScreen from './screens/ManualScreen';
+import FeaturedMoveList from './screens/FeaturedMoveList';
+import FeaturedMove from './screens/FeaturedMove';
 
 
 const Stack = createNativeStackNavigator();
@@ -26,6 +28,8 @@ export default function App() {
         <Stack.Screen name="Manuals" component={ManualsScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="Manual" component={ManualScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
         <Stack.Screen name="FightersList" component={FightersList} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="FeaturedList" component={FeaturedMoveList} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Featured"     component={FeaturedMove} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
         <Stack.Screen name="FighterScreen" component={Fighter} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
         <Stack.Screen name="Res"     component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
       </Stack.Navigator>

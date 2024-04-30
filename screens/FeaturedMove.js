@@ -101,7 +101,7 @@ const FeaturedMove = ({ route, navigation }) => {
             <Video
               ref={videoRef}
               source={{
-                uri: video?.moveUrl,
+                uri: video?.link,
               }}
               rate={playbackSpeed}
               isMuted={isMuted}

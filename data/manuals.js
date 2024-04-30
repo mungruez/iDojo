@@ -981,6 +981,28 @@ export const manuals = [
             desc: "By twisting to your left you will cause him to let go of the rifle. Now reverse the rifle and attack him.",
           }
         ]
+      },
+      {
+        title: 'Bayonet Defense On The Ground',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Bayonet Defense On The Ground",
+            img: require('../assets/manuals/grounddefense1.png'),
+            desc: "If you are knocked to the ground and attacked hook your right foot around your attacker's ankle with your toe in. Pull towards you and push with your other foot against the inside of his knee joint. Parry the rifle and thrust to disarm.",
+          }
+        ]
+      },
+      {
+        title: 'Fox Hole Trick',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Disarming Trick 1",
+            img: require('../assets/manuals/foxholetrick1.png'),
+            desc: "Coming out of a foxhole, clasp the attacker's leading foot, using hand on the same side. Thrust hard with your forearm against the inside of his knee joint, pushing out and back. climb across the attacker using your knee in his groin and choke. This can be performed with either hand.",
+          }
+        ]
       }
 
 
