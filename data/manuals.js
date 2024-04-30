@@ -914,13 +914,71 @@ export const manuals = [
         steps:[
           {
             title:"Weapon Disarm With Arm Break And Shoulder Throw - Action 1",
-            img: require('../assets/manuals/downwardslashblock1.png'),
+            img: require('../assets/manuals/weapondisarm1.png'),
             desc: "Your attacker attempts to use a weapon from his hip with his right hand. Step in with your left foot and grasp his wrist with your left hand and with your thumb on the inside. top of the left.",
           },
           {
             title:"Weapon Disarm With Arm Break And Shoulder Throw - Action 2",
-            img: require('../assets/manuals/downwardslashblock2.png'),
+            img: require('../assets/manuals/weapondisarm2.png'),
             desc: "Continue holding his right arm, pulling down slightly. Insert your right arm between his right arm and right side forming an 'L' with your right arm, forcing it hard against the crook of his arm to break it.",
+          },
+          {
+            title:"Weapon Disarm With Arm Break And Shoulder Throw - Finish",
+            img: require('../assets/manuals/weapondisarm3.png'),
+            desc: "The attacker may attempt to throw his left arm around your neck. Continue holding his right arm and go into an over the shoulder throw.",
+          }
+        ]
+      },
+      {
+        title: 'Bayonet Disarm',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Disarming Trick 1",
+            img: require('../assets/manuals/bayonetdisarm1.png'),
+            desc: "The attacker is armed with a bayonet and he is aiming it for your body:  Grais right wrist with your left hand. Step forward with your right foot while sliding your right arm between his arm and side. Cock your arm to form an 'L' clenching fist tightly. Strike the back of his elbow sharply with the center of your forearm. This will cause considerable pain forcing him to drop his weapon. If he attempts to throw his free hand around your neck then go into the 'Over The Shoulder Throw' .",
+          }
+        ]
+      },
+      {
+        title: 'Rifle Or Bayonet Disarm',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Rifle Or Bayonet Disarm - Action 1",
+            img: require('../assets/manuals/rifledisarm1.png'),
+            desc: "The attacker is armed with a bayonet and he is aiming it for your body:",
+          },
+          {
+            title:"Rifle Or Bayonet Disarm - Action 2",
+            img: require('../assets/manuals/rifledisarm2.png'),
+            desc: "Step or pivot towards your leeft and grasp the rifle at the back of the bayonet with your left hand pulling up while pulling down with your right hand grasped to the back of the balance of the rifle.",
+          },
+          {
+            title:"Rifle Or Bayonet Disarm - Action 3",
+            img: require('../assets/manuals/rifledisarm3.png'),
+            desc: "Take one step back which will force his arm and rifle to point backwards and downwards.",
+          },
+          {
+            title:"Rifle Or Bayonet Disarm - Finish",
+            img: require('../assets/manuals/rifledisarm4.png'),
+            desc: "Your attacker's forward momentum will force him to let go of the rifle. Reverse the rifle the same way and slash the back of his neck.",
+          }
+        ]
+      },
+      {
+        title: 'Rifle Or Bayonet Disarming',
+        style: "Jiu Jitsu",
+        steps:[
+          {
+            title:"Rifle Or Bayonet Disarming - Action 1",
+            img: require('../assets/manuals/rifledisarming1.png'),
+            desc: "At close quarters the attacker attempts to drive his rifle into your face or torso. cross your arms and twist to your left. ",
+          },
+          {
+            title:"Rifle Or Bayonet Disarming - Action 2",
+            img: require('../assets/manuals/rifledisarming2.png'),
+            desc: "By twisting to your left you will cause him to let go of the rifle. Now reverse the rifle and attack him.",
           }
         ]
       }
