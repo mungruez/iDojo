@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     marginLeft: 7,
     color: 'black',
-    opacity:3,
+    opacity:1,
     backgroundColor:"transparent"
   },
   imgBackground: {

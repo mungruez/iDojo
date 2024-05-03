@@ -11,7 +11,7 @@ export default function FeatureMoveList() {
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
-      <View style={{backgroundColor: '#323232', color:"#dc143c", marginBottom:20, paddingBottom:10, opacity: .7}}>
+      <View style={{backgroundColor: 'silver', marginBottom:20, paddingBottom:10, opacity: .7}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/featuredtitle.png')} />
       </View>
 
@@ -22,8 +22,8 @@ export default function FeatureMoveList() {
           contentContainerStyle={{ paddingBottom: 57 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, findex }) => ( <View> 
-              <View key={item.source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
-                <Text style={styles.text}>{item.source}</Text>
+              <View key={item.source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,fontWeight:400}}>
+                <Text style={styles.titletext}>{item.source}</Text>
               </View> 
 
               <View style={{flex:1}}>
@@ -126,6 +126,16 @@ const styles = StyleSheet.create({
         backgroundColor:'#acd4c4',
         marginRight: 3,
         marginTop: 3
+    },
+    titletext: {
+      fontSize: 17,
+      lineHeight: 21,
+      fontWeight: '600',
+      letterSpacing: 0.25,
+      marginLeft: 7,
+      color: 'black',
+      opacity:1,
+      backgroundColor:"transparent"
     },
     title: {
         fontSize: 30, 
