@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import HomeScreen from './screens/HomeScreen';
 import MoveListScreen from './screens/MoveListScreen'
 import MoveScreen from './screens/MoveScreen';
@@ -18,7 +19,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
   
-    
+
      <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator initialRouteName="Home">
@@ -34,7 +35,7 @@ export default function App() {
         <Stack.Screen name="Res"     component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
       </Stack.Navigator>
      </NavigationContainer>
-  
+
   );
 }
 

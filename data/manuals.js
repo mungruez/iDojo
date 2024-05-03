@@ -856,12 +856,12 @@ export const manuals = [
         steps:[
           {
             title:"Disarming Trick 3 - Start",
-            img: require('../assets/manuals/disarmingtrickthree3.png'),
+            img: require('../assets/manuals/disarmingtrickthree1.png'),
             desc: "Your attacker attempts to capture you by marching behind at you with a weapon in your side and he is one step behind you.",
           },
           {
             title:"Disarming Trick 3 - Finish",
-            img: require('../assets/manuals/disarmingtrickthree3.png'),
+            img: require('../assets/manuals/disarmingtrickthree2.png'),
             desc: " Stop suddenly with right foot forward, sweeping your left hand down along your side and back over his arm in a rotating motion anchoring his hand against your shoulder and neck. Press down hard against his elbow and strike his face with your free hand or your knee.",
           }
         ]
@@ -898,12 +898,12 @@ export const manuals = [
         steps:[
           {
             title:"Crossed Arm Block Against Downward Slash With arm Break - Start",
-            img: require('../assets/manuals/downwardslashblock1.png'),
+            img: require('../assets/manuals/downwardslasharmblock1.png'),
             desc: "Your attacker attempts to strike you with aknife in adownward motion. Cross your hands above your head with your right hand on top of the left.  Get close enough to receive the blow at his forearm, in the 'V' formed by your hands.",
           },
           {
             title:"Crossed Arm Block Against Downward Slash With arm Break - Finish",
-            img: require('../assets/manuals/downwardslashblock2.png'),
+            img: require('../assets/manuals/downwardslasharmblock2.png'),
             desc: "Force his arm back with your right arm in an 'L' Remove your left hand and insert it into the crook of his right arm. Grasp your own forearm, pressing down with your right and pulling up with your left causing dislocation of his arm.",
           }
         ]

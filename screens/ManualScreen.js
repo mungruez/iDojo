@@ -38,11 +38,11 @@ export default function ManualScreen({ route, navigation }) {
                   }}
                 />
 
-                <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:38, flex:1,paddingBottom:7, borderColor:"silver", borderWidth:1, borderRadius:5}}>
+                <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:8, flex:1,padding:0, borderColor:"silver", borderWidth:1, borderRadius:5, borderBottomWidth:2}}>
                   <ScrollView>
-                    <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/greentextbackground.png')}>
+                    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/greentextbackground.png')}>
                       
-                      <View style={{backgroundColor: "#2f4f4f",  borderColor:"silver", borderWidth:1, borderRadius:5}}>
+                      <View style={{backgroundColor: "#2f4f4f",  borderColor:"silver", borderWidth:0, borderRadius:5}}>
                         <Text style={styles.desctext}> {step.desc} </Text>
                       </View>
                     
@@ -72,12 +72,18 @@ const styles = StyleSheet.create({
     backgroundColor:"transparent"
   },
   imgBackground: {
-    maxHeight:411,
+    
+    minWidth:"100%",
     flex: 1,
-    opacity: .6,
+    opacity: .8,
     margin:0,
     padding:0,
     borderRadius:5, 
+    borderColor: 'silver',
+    borderWidth:1,
+    borderBottomWidth:0,
+    borderBottomRightRadius:0,
+    borderBottomLeftRadius:0
   },
   desctext: {
     fontSize: 17,
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
     padding:1, 
     backgroundColor:"transparent",
     borderColor:"silver", 
-    borderWidth:1, 
+    borderWidth:0, 
     borderRadius:5,
     maxHeight:411,
     opacity:1,

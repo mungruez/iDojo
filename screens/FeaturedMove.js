@@ -4,6 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Video, ResizeMode } from "expo-av";
 import VideoControls from "./VideoControls";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { WebView } from 'react-native-webview';
+import YoutubePlayer from 'react-native-youtube-iframe';
+
 
 const playbackSpeedOptions = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -95,53 +98,18 @@ const FeaturedMove = ({ route, navigation }) => {
      <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:9 }}>
       {video.title}
      </Text>
-      {video.title && (
-        <View style={{flex:1, padding:0,backgroundColor:'#323232',marginLeft:0,marginTop:5, marginBottom:0, width:"100%", maxHeight:"38%" }}>
+       {video.title && (
+        <View style={{flex:1, padding:0,backgroundColor:'#323232',marginLeft:0,marginTop:5, marginBottom:0, width:"100%" }}>
             
-            <Video
-              ref={videoRef}
-              source={{
-                uri: video?.link,
-              }}
-              rate={playbackSpeed}
-              isMuted={isMuted}
-              shouldPlay={isPlaying}
-              resizeMode={ResizeMode.CONTAIN}
-              width={"100%"}
-              height={"100%"}
-              style={{ flex: 1,marginBottom:5, marginLeft:1, marginRight:3, padding:0,borderColor:'#9a9aa1',borderWidth:2, width:"100%" }}
-            />
-          
-          {showControls && (
-          <View style={{ marginLeft:1, marginRight:3, marginTop:0, width:"99%", paddingTop:0,borderColor:'#9a9aa1',borderWidth:2,marginBottom:0,padding:7, backgroundColor:"#323232" }}>
-            <VideoControls
-              onTogglePlayPause={togglePlayPause}
-              onToggleMute={toggleMute}
-              onTogglePlaybackSpeed={togglePlaybackSpeed}
-              onToggleFullscreen={toggleFullscreen}
-              rate={playbackSpeed}
-              isMuted={isMuted}
-              shouldPlay={isPlaying}
-              fullScreenValue={isFullscreen}
-            />
-          </View>
-
-          
-          )}
-        </View>
-      )}
-
-      <View style={{maxHeight:"33%"}}>
-        <ScrollView>
-          <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft:12, marginRight:7, marginBottom:19,padding:9, width:"96%"}}>
-              {video.desc}
-          </Text>
-        </ScrollView>
-      </View>
-
-      {orientation == 1 && (
-        <View>
+            
+            
+            <YoutubePlayer
     
+        height={500}
+       
+        videoId={video.link}
+      />
+
         </View>
       )}
 

@@ -8,14 +8,14 @@ export default function ManualsScreen() {
   const navigation = useNavigation();
 
   return (
-    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
+    <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
-        <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
+        <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0,borderRadius:7}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/manualstitle.png')} /> 
         </View>    
         
-            <View style={{flexDirection:'row' ,flex:1, padding: 19, backgroundColor:'transparent'}}>
+            <View style={{flexDirection:'row' ,flex:1, padding: 1, backgroundColor:'transparent'}}>
               <FlatList
                 data={manuals}
                 numColumns={1}
@@ -72,10 +72,9 @@ export default function ManualsScreen() {
 const styles = StyleSheet.create({
       imgBackground: {
         minWidth: '100%',
-        minHeight: '100%',
-        height: Dimensions.get('window').height,
+        height: '100%',
         flex: 1,
-        opacity: 1, 
+        opacity: 1,
       },
       icon: {
         height: 57,

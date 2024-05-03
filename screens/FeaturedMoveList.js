@@ -1,12 +1,9 @@
 import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
-import featured from '../data/featured'
+import {featured} from '../data/featured'
 import { useNavigation } from '@react-navigation/native'
 
-const images = require.context('../assets/thumbnails', true, /\.png$/);
-// Create an array of image sources
-const imageSources = images.keys().map((key) => images(key));
 
 export default function FeatureMoveList() {
   const navigation = useNavigation();
@@ -18,16 +15,27 @@ export default function FeatureMoveList() {
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/featuredtitle.png')} />
       </View>
 
-      <View style={{flex:1}}>
-          <FlatList
-            data={featured}
-            numColumns={2}
-            contentContainerStyle={{ paddingBottom: 57 }}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <View
-                key={item.source}
-                style={{
+      <View style={{backgroundColor:"black", marginBottom:19, flex:1}}>
+        <FlatList
+          data={featured}
+          numColumns={1}
+          contentContainerStyle={{ paddingBottom: 57 }}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, findex }) => ( <View> 
+              <View key={item.source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+                <Text style={styles.text}>{item.source}</Text>
+              </View> 
+
+              <View style={{flex:1}}>
+                <FlatList
+                  data={item.videos}
+                  numColumns={2}
+                  contentContainerStyle={{ paddingBottom: 57 }}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item, index }) => (
+                <View
+                  key={item.title}
+                  style={{
                   alignItems: "center",
                   justifyContent: "space-between",
                   flexDirection: "column",
@@ -36,7 +44,6 @@ export default function FeatureMoveList() {
                   marginLeft:"1",
                   marginRight:"1",
                   width:"50%",
-                  height:"auto",
                   borderColor:"transparent",
                   borderWidth:0,
                   backgroundColor:'#2f4f4f'
@@ -49,7 +56,7 @@ export default function FeatureMoveList() {
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
                              <View style={styles.subCardView}>
                                 <Image
-                                  source={item.thumb}
+                                  source={{uri: item.thumb}}
                                   resizeMode="cover"
                                   style={{
                                     borderRadius: 12,
@@ -70,7 +77,7 @@ export default function FeatureMoveList() {
                                 fontWeight: 'bold',
                                 textTransform: 'capitalize',
                               }}>
-                                {item.source}
+                                {item.title}
                             </Text>
                             
                             <View
@@ -94,7 +101,7 @@ export default function FeatureMoveList() {
                                        color: '#fff',
                                        fontSize: 12,
                                     }}>
-                                    {item.type}
+                                    iDojo
                                 </Text>
                             </View>
                             </View>
@@ -102,11 +109,12 @@ export default function FeatureMoveList() {
                     </View>
                 </View>
             </Pressable>
-    </View>)}
-  />
-
-  </View>
-</SafeAreaView>
+          </View>)}
+          />
+        </View> 
+      </View>)} />
+    </View>  
+  </SafeAreaView>
 </ImageBackground>
 
 )}
