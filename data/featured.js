@@ -8,7 +8,7 @@ export const featured = [
           link: 'yuH_4JBVHek',
           thumb: 'https://i.ytimg.com/vi/yuH_4JBVHek/maxresdefault.jpg',
           type:"Head Defense",
-          desc: "0:00 - Tip 1 - 80% footwork 20% head movement\n1:02 - Tip 2 - Look at opponent's chest to control distance\n 1:29 - Tip 3 - Use a bladed stance\n 1:59 - Tip 4 - Slip into the pocket or tie up when you can't control distance\n3:56 - Tip 5 - Mix your head movement with blocking\n5:03 - Tip 6 - Use head movement as a second line of defense \n5:48 - Tip 7 - Take head off centreline when punching \n6:51 - Tip 8 - Train with the right sparring partners ",
+          desc: "0:00 - Tip 1 - 80% footwork 20% head movement\n1:02 - Tip 2 - Look at opponent's chest to control distance\n 1:29 - Tip 3 - Use a bladed stance\n 1:59 - Tip 4 - Slip into the pocket or tie up when you can't control distance\n3:56 - Tip 5 - Mix your head movement with blocking\n5:03 - Tip 6 - Use head movement as a second line of defense \n5:48 - Tip 7 - Take head off centreline when punching \n6:51 - Tip 8 - Train with the right sparring partners",
         },
         {
           title: "Jeff Chan's Top 7 Moves/Combos",
@@ -22,7 +22,7 @@ export const featured = [
           link: 'aH0uEkkd8R0&t=64s&pp=ygUJamVmZiBjaGFu',
           thumb: 'https://i.ytimg.com/vi/aH0uEkkd8R0/maxresdefault.jpg',
           type:"Defense And Counters",
-          desc: "0:00 - Start\n1:29 - What not to do!\n2:37 - Be ready to pull back\n2:52 - Hit & don't get hit \n3:45 - Punch & counter the counter kick with punches\n4:02 - Punch & counter the counter kick with kicks\n5:58 - Punch & counter the counter punch with punches \n8:47 - Creating space after kicking\n9:10 - Kick & counter the counter punch with punches\n10:05 - Kick & counter the counter punch with kicks\n10:56 - Kick & counter the counter kick with punches ",
+          desc: "0:00 - Start\n1:29 - What not to do!\n2:37 - Be ready to pull back\n2:52 - Hit & don't get hit \n3:45 - Punch & counter the counter kick with punches\n4:02 - Punch & counter the counter kick with kicks\n5:58 - Punch & counter the counter punch with punches \n8:47 - Creating space after kicking\n9:10 - Kick & counter the counter punch with punches\n10:05 - Kick & counter the counter punch with kicks\n10:56 - Kick & counter the counter kick with punches",
         }
       ]
     },
@@ -48,8 +48,8 @@ export const featured = [
             title: "Gun Self-Defense Trick",
             link: 'https://www.youtube.com/watch?v=3Zl7ckX3-lc',
             thumb:'https://i.ytimg.com/vi/3Zl7ckX3-lc/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB5SObZpQvGLtsYVuP6ByrRVhB-WA',
-            type:"Pistol Disarm ",
-            desc: "gun self-defense don't skip the amazing trick hi guys welcome to new video this video is also going to be very interesting technique.",
+            type:"Pistol Disarm",
+            desc: "Gun self-defense don't skip the amazing trick hi guys welcome to new video this video is also going to be very interesting technique.",
           }
         ]
       },
@@ -88,7 +88,7 @@ export const featured = [
         ]
       },
       {
-        source: 'Scenarios',
+        source: 'Real Life Scenarios',
         style: "Active Self Protection",
         videos:[
           {

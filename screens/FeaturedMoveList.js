@@ -1,40 +1,61 @@
-import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React from 'react'
-import {featured} from '../data/featured'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 
 export default function FeatureMoveList() {
+  let [isloading, setIsLoading] = useState(true);
+  let [error, setError] = useState();
+  let [fvideos, setFvideos] = useState();
   const navigation = useNavigation();
 
-  return (
-    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+  useEffect(() => {
+    fetch("https://script.googleusercontent.com/macros/echo?user_content_key=h17wGYNWM9KKfADqWDa_SYohG08YLUXcEJVg-wnxD70B3KeTdDHuGw83ancf81ghHsu6wZ2vPQuwnyg8xTwvSr0KqJIwhII3m5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnJcAMwdM-zcpsUHiRhta9qM-RUOceBJ8Deajjl6dAYwT0MmjOWY_HEZknf-8YmS5hyL4i3BJmcor_LR9Oe_yUGGmXCLnBkiU8Q&lib=M1Nc9Bj5vOnzWF3IYezrkOgIuWYsX8I9x")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setFvideos(result);       
+        setIsLoading(false);
+      },
+      (error) => {
+        setIsLoading(false);
+        setError(error);
+      }
+    )
+  }, []);
+
+  const getVideos = () => {
+    if (isloading) {
+      return <ActivityIndicator size="large" />
+    }
+
+    if (error) {
+      return <Text> {error} </Text>
+    }
+  }
+   
+return (
+  <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+      
       <View style={{backgroundColor: 'silver', marginBottom:20, paddingBottom:10, opacity: .7}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/featuredtitle.png')} />
+        <StatusBar style='light' />
+        {getVideos()}
       </View>
 
       <View style={{backgroundColor:"black", marginBottom:19, flex:1}}>
-        <FlatList
-          data={featured}
-          numColumns={1}
-          contentContainerStyle={{ paddingBottom: 57 }}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, findex }) => ( <View> 
-              <View key={item.source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,fontWeight:400}}>
-                <Text style={styles.titletext}>{item.source}</Text>
-              </View> 
-
-              <View style={{flex:1}}>
-                <FlatList
-                  data={item.videos}
-                  numColumns={2}
-                  contentContainerStyle={{ paddingBottom: 57 }}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({ item, index }) => (
+         <View style={{flex:1}}>
+            <FlatList
+              data={fvideos}
+              numColumns={2}
+              contentContainerStyle={{ paddingBottom: 57 }}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item, index }) => (
                 <View
-                  key={item.title}
+                  key={item.Title}
                   style={{
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -47,76 +68,72 @@ export default function FeatureMoveList() {
                   borderColor:"transparent",
                   borderWidth:0,
                   backgroundColor:'#2f4f4f'
-                }}
-              >
+                }}>
               
                 <Pressable
                   onPress={() => {navigation.navigate('Featured', {video: item});}}>
-                    <View style={styles.mainCardView}>
+                    <View> 
+                      { item.Vend > 0 && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,fontWeight:400, flexDirection:"column"}}>
+                        <Text style={styles.titletext}>{item.Source}</Text>
+                        <Text style={styles.titletext}>{item.Style}</Text>
+                    </View> } 
+
+                      <View style={styles.mainCardView}>
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
-                             <View style={styles.subCardView}>
-                                <Image
-                                  source={{uri: item.thumb}}
-                                  resizeMode="cover"
-                                  style={{
-                                    borderRadius: 12,
-                                    alignSelf: 'flex-start',
-                                    marginTop:0,
-                                    marginLeft:0,
-                                    height: 130,
-                                    width: 180,
-                                  }}
-                                />
+                          <View style={styles.subCardView}>
+                            <Image
+                              source={{uri: item.Thumb}}
+                              resizeMode="cover"
+                              style={{
+                                borderRadius: 12,
+                                alignSelf: 'flex-start',
+                                marginTop:0,
+                                marginLeft:0,
+                                height: 130,
+                                width: 180,
+                              }}
+                            />
                             
+                            <View style={{marginLeft: 12}}>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: "crimson",
+                                  fontWeight: 'bold',
+                                  textTransform: 'capitalize',
+                                }}>
+                                {item.Title}
+                              </Text>
+                            
+                              <View
+                                style={{
+                                  marginTop: 3,
+                                  borderWidth: .5,
+                                  borderColor:'#228b22',
+                                  flexDirection:'row',
+                                  backgroundColor:'#323232',
+                                  justifyContent:'space-between'
+                                }}>
+                                <Text style={{color: '#9a9aa1',fontSize: 12}}>
+                                    {item.Type}
+                                </Text>
 
-                        <View style={{marginLeft: 12}}>
-                            <Text
-                              style={{
-                                fontSize: 14,
-                                color: "crimson",
-                                fontWeight: 'bold',
-                                textTransform: 'capitalize',
-                              }}>
-                                {item.title}
-                            </Text>
-                            
-                            <View
-                              style={{
-                                marginTop: 3,
-                                borderWidth: .5,
-                                borderColor:'#228b22',
-                                flexDirection:'row',
-                                backgroundColor:'#323232',
-                                justifyContent:'space-between'
-                              }}>
-                                <Text
-                                    style={{
-                                       color: '#9a9aa1',
-                                       fontSize: 12,
-                                    }}>
-                                    {item.style}
+                                <Text style={{color: '#fff',fontSize: 12}}>
+                                    {item.Style}
                                 </Text>
-                                <Text
-                                    style={{
-                                       color: '#fff',
-                                       fontSize: 12,
-                                    }}>
-                                    iDojo
-                                </Text>
+                              </View>
                             </View>
-                            </View>
+                          </View>
                         </View>
+                      </View>
                     </View>
-                </View>
-            </Pressable>
-          </View>)}
-          />
+                </Pressable>
+              </View>)}
+            />
         </View> 
-      </View>)} />
-    </View>  
-  </SafeAreaView>
-</ImageBackground>
-
+      </View>  
+    </SafeAreaView>
+  </ImageBackground>
 )}
 
 const styles = StyleSheet.create({

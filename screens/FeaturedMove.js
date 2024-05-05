@@ -96,9 +96,9 @@ const FeaturedMove = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%', marginTop:38 }}>
      <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:9 }}>
-      {video.title}
+      {video.Title}
      </Text>
-       {video.title && (
+       {video.Title && (
         <View style={{flex:1, padding:0,backgroundColor:'#323232',marginLeft:0,marginTop:5, marginBottom:0, width:"100%" }}>
             
             
@@ -107,7 +107,7 @@ const FeaturedMove = ({ route, navigation }) => {
     
         height={500}
        
-        videoId={video.link}
+        videoId={video.Link}
       />
 
         </View>
