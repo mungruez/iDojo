@@ -10,10 +10,6 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 
 const playbackSpeedOptions = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
 
-const videos = require.context('../assets/videos', true, /\.mp4$/);
-
-const videoSources = videos.keys().map((key) => videos(key));
-
 
 const FeaturedMove = ({ route, navigation }) => {
   const { video } = route.params;
@@ -24,31 +20,6 @@ const FeaturedMove = ({ route, navigation }) => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
-  useEffect(() => {
-    // Simulate fetching lessons by course
-    const fakeLessons = [
-      {
-        lessonId: "1",
-        lessonVideoUrl: "https://example.com/video1.mp4",
-        lessonTitle: "Lesson 1",
-        lessonDescription: "Introduction to Self Defense",
-        videoTotalDuration: "600",
-        lessonThumbnailImageUrl: "https://example.com/thumbnail1.jpg",
-      },
-      {
-        lessonId: "2",
-        lessonVideoUrl: "https://example.com/video2.mp4",
-        lessonTitle: "Lesson 2",
-        lessonDescription: "Introduction to Self defense2",
-        videoTotalDuration: "800",
-        lessonThumbnailImageUrl: "https://example.com/thumbnail2.jpg",
-      },
-      // Add more lessons here
-    ];
-    //setLessons(fakeLessons);
-  }, []);
-
 
   const togglePlayPause = () => {
     if (isPlaying) {

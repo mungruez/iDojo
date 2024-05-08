@@ -37,5 +37,24 @@ export const fighters = [
           desc: "From a side facing stance, take a small lead with the front foot, using it to launch yourself toward the target. As you bring the rear foot toward the front foot, both feet momentarily leave the ground and the rear foot replaces where the front foot was. That's where the lunge happens (a side lunge in this case which becomes your kick). This gives you a deceptively fast approach to the target, and if you work on the timing a bit you can make it quite powerful as well. The difficult part is coordinating the chamber of the kick with the replacement step so that your kick lands as the rear foot makes the replacement. That lets you add the power of your rear leg to the momentum of the kick to make it particularly powerful. You don't see this lunging sidekick very often in the MMA because it's a high commitment move that requires a big opening, but you do sometimes see it as a followup.",
       }
       ]
+    },
+    {
+      name: 'Micheal Page', 
+      avatar: require('../assets/avatars/michealpage.png'),
+      desc: ["Micheal 'Venom' Page is known for his wild striking style, constantly spinning, jumping, and throwing highly unorthodox attacks. Always coming forward with his hands down, he will continuously switch stances and look to counter his opponent. Holding significant power in both his punches and kicks, predicting his next move is impossible. Page has arguably the most diverse kicking arsenal in the MMA, backed by phenomenal footwork and distance management. He has a reputation for walk-off knockouts, often putting his opponent out with one shot and casually walking away. Page has consistently proven to be one of the most entertaining fighters."],
+      style: "MMA",
+      conc: "",
+      moves:[
+        {
+          title:"Head Kick",
+          img: require('../assets/fighters/michealpagekick.png'),
+          desc: "In the bellator 216-2 fight Michel Page lands a high kick.",
+        },
+        {
+          title: "Flying Knee",
+          img: require('../assets/fighters/michealpageknee.png'),
+          desc: "Micheal Page fractures Sanchez skull with this flying knee.",
+        }
+      ]
     }
 ]

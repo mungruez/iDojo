@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 
 export default function FeatureMoveList() {
   let [isloading, setIsLoading] = useState(true);
-  let [error, setError] = useState();
+  let [error, setError] = useState(false);
   let [fvideos, setFvideos] = useState();
   const navigation = useNavigation();
 
@@ -18,6 +18,7 @@ export default function FeatureMoveList() {
       (result) => {
         setFvideos(result);       
         setIsLoading(false);
+        console.log((result));
       },
       (error) => {
         setIsLoading(false);
@@ -36,20 +37,19 @@ export default function FeatureMoveList() {
     }
   }
    
-return (
-  <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
-    <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
-      
-      <View style={{backgroundColor: 'silver', marginBottom:20, paddingBottom:10, opacity: .7}}>
+return (<ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+    {!isloading && <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+
+      <View style={{backgroundColor: 'transparent', marginBottom:20, paddingBottom:10, opacity: .7}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
-        {getVideos()}
+       
       </View>
 
-      <View style={{backgroundColor:"black", marginBottom:19, flex:1}}>
+      <View style={{backgroundColor:"transparent", marginBottom:19, flex:1}}>
          <View style={{flex:1}}>
             <FlatList
-              data={fvideos}
+              data={fvideos["data"]}
               numColumns={2}
               contentContainerStyle={{ paddingBottom: 57 }}
               showsVerticalScrollIndicator={false}
@@ -76,7 +76,7 @@ return (
                       { item.Vend > 0 && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,fontWeight:400, flexDirection:"column"}}>
                         <Text style={styles.titletext}>{item.Source}</Text>
                         <Text style={styles.titletext}>{item.Style}</Text>
-                    </View> } 
+                      </View> } 
 
                       <View style={styles.mainCardView}>
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
@@ -132,9 +132,10 @@ return (
             />
         </View> 
       </View>  
-    </SafeAreaView>
+</SafeAreaView>}
   </ImageBackground>
-)}
+)
+}
 
 const styles = StyleSheet.create({
     container: {
