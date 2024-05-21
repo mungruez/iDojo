@@ -73,7 +73,7 @@ return (<ImageBackground style={ styles.imgBackground } resizeMode='cover' sourc
                 <Pressable
                   onPress={() => {navigation.navigate('Featured', {video: item});}}>
                     <View> 
-                      { item.Vend > 0 && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,fontWeight:400, flexDirection:"column"}}>
+                      { item.Vend > 0 && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,fontWeight:400, flexDirection:"column", minWidth:320}}>
                         <Text style={styles.titletext}>{item.Source}</Text>
                         <Text style={styles.titletext}>{item.Style}</Text>
                       </View> } 
@@ -153,7 +153,8 @@ const styles = StyleSheet.create({
       marginLeft: 7,
       color: 'black',
       opacity:1,
-      backgroundColor:"transparent"
+      backgroundColor:"transparent",
+      minWidth:"100%"
     },
     title: {
         fontSize: 30, 

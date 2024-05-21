@@ -47,13 +47,32 @@ export const fighters = [
       moves:[
         {
           title:"Head Kick",
-          img: require('../assets/fighters/michealpagekick.png'),
-          desc: "In the bellator 216-2 fight Michel Page lands a high kick.",
+          img: require('../assets/fighters/michealpageheadkick.png'),
+          desc: "Michel Page lands a head kick on Paul Dailey at the bellator 216-2 fight.",
         },
         {
           title: "Flying Knee",
-          img: require('../assets/fighters/michealpageknee.png'),
-          desc: "Micheal Page fractures Sanchez skull with this flying knee.",
+          img: require('../assets/fighters/michealpageflyingknee.gif'),
+          desc: "Micheal Page fractures Evangelista Santos' skull with this flying knee in the second round.",
+        }
+      ]
+    },
+    {
+      name: 'Rodtang Jitmuangnon', 
+      avatar: require('../assets/avatars/rodtang.png'),
+      desc: ["Rodtang is one of the greatest strikers on the planet. At only 23 years of age, he has 267 Muay Thai victories and is currently One's flyweight champion. I think he could make a run in MMA as well. His fan-friendly fighting style is pure aggression complimented by insane durability. I'm a big fan, so I decided to write a brief rundown on some physical attributes Rodtang possesses that may help explain his combat success. Rodtang relies on unrelenting aggression to overwhelm his opponents, often delivering the finish when they are utterly exhausted. Such a fighting style requires elite cardiovascular fitness. Rodtang performs long distance roadwork to build his body's overall aerobic engine. But he also hits pads with the same ferocity he would display in a fight. This goes a long way in developing the power endurance needed to deliver KO shots even in the late rounds"],
+      style: "MMA",
+      conc: "",
+      moves:[
+        {
+          title:"Head Kick",
+          img: require('../assets/fighters/rodtangheadkick.png'),
+          desc: "All proper strikes start with the lower body generating force off the ground. Studies of elite boxers have shown that the most important action during the early phase of power development is rear leg push-off. In addition to strong glutes and hamstrings, Rodtang's well-developed calves possess a high percentage of type 2/fast twitch muscle fibers which will explosively drive this movement.",
+        },
+        {
+          title: "Punch",
+          img: require('../assets/fighters/rodtangpunch.png'),
+          desc: "Rodtang's narrow shoulders and short arms contrast with the physiques of rangier heavy hitters. But while those fighters tend to possess explosive straight punches, much of Rodtang's best work has been done with vicious hooks. His build could help him throw those shorter shots with more angular velocity. And his low center of gravity gives him the leverage needed to really drive his trademark liver shots. Rodtang's renowned durability may be partially explained by his anatomy as well. Thick skull bones absorb less impact energy and may be harder to deform. Skull deformation can cause brain contusions in trauma and is therefore one example of a major brain injury mechanism. Stabilizing this large head is a short, thick neck and well-developed traps. Rodtang is often able to predict his opponents' attacks and activate those muscles just prior to impact, potentially preventing concussions by limiting excessive head acceleration.",
         }
       ]
     }
