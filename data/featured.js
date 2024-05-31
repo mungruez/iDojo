@@ -1,5 +1,32 @@
 export const featured = [
-    {
+  {
+    source: 'Featured Moves',
+    style: "MMA",
+    videos:[
+      {
+        title:"",
+        link: 'yuH_4JBVHek',
+        thumb: 'https://i.ytimg.com/vi/yuH_4JBVHek/maxresdefault.jpg',
+        type:"Self Defense",
+        desc: "Hitting the pain points when defending will get you twice the result with half the effort",
+      },
+      {
+        title: "Jeff Chan's Top 7 Moves/Combos",
+        link: 'ndIa69fEgJY&t=88s',
+        thumb: 'https://i.ytimg.com/vi/ndIa69fEgJY/maxresdefault.jpg',
+        type:"Moves And Combos",
+        desc: "",
+      },
+      {
+        title: "Favorite Moves",
+        link: 'aH0uEkkd8R0&t=64s&pp=ygUJamVmZiBjaGFu',
+        thumb: 'https://i.ytimg.com/vi/aH0uEkkd8R0/maxresdefault.jpg',
+        type:"Defense And Counters",
+        desc: "",
+      }
+    ]
+  },
+  {
       source: 'Jeff Chan',
       style: "MMA",
       videos:[
