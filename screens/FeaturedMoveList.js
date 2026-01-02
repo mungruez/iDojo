@@ -104,8 +104,7 @@ export default function FeatureMoveList() {
 
   useEffect(() => {
     const savedfv=fetchFvideos();
-    if ( savedfv ) {
-      //setIsLoading(false); 
+    if ( savedfv ) { 
       //console.log("Saved Featured videos found! "+fvideos.length);
       return;
     }
