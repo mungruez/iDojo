@@ -1,21 +1,82 @@
-import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {manuals} from '../data/manuals'
-import React from 'react'
+import React, { useState, useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native'
+import { Audio } from 'expo-av';
 
 export default function ManualsScreen() {
-  const navigation = useNavigation();
+  const [sound, setSound] = useState();
+  const [isMuted, setIsMuted] = useState(false);
+  const navigation = useNavigation();  
+
+  useEffect(() => {
+    loadSound(); 
+      
+    return sound ? () => {
+      if (sound) {
+        sound.stopAsync();
+      }
+    }
+    : undefined;
+  }, []); 
+  
+  
+  async function loadSound() {
+    try {   
+      const { sound } = await Audio.Sound.createAsync(
+        require('../assets/woosh.mp3'),
+        { shouldPlay: true }
+      );
+      await sound.playAsync();
+
+    } catch (error) {
+      alert('Error loading and playing sound effect: '+error);
+    }
+  }
+    
+  
+  async function stopSound() {
+    try {
+      if (!isMuted) {
+        if (sound && sound != null) {
+          await sound.stopAsync();
+        }
+      } else {
+        loadSound();
+      }
+    } catch (error) {
+        alert('Error pausing or playing sound effect:'+error);
+    }
+    setIsMuted(!isMuted);
+  }
+  
+  
+  const navKSound = async (item) => {
+    if(!isMuted) {
+      loadSound();
+    }
+    navigation.navigate('Manual', {manual: item});
+  };
+
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
-        <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0,borderRadius:7}}>
-          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/manualstitle.png')} /> 
+        <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0,borderRadius:7,}}>
+          
+          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/manualstitle.png')} >
+            <View style={{flexDirection:"row", position: "relative", backgroundColor:"transparent", height: 47,}}>
+              
+              <TouchableOpacity onPress={stopSound} style={{position:"absolute", top: 38, right:9, zIndex:2, height: 42, width: 38, elevation:8, backgroundColor:"transparent",}}>
+                <ImageBackground style={ styles.imgSound } resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         
+              </TouchableOpacity>  
+            </View>
+          </ImageBackground> 
         </View>    
         
-            <View style={{flexDirection:'row' ,flex:1, padding: 1, backgroundColor:'transparent'}}>
+            <View style={{flexDirection:'row' ,flex:1, padding: 1, backgroundColor:'transparent',}}>
               <FlatList
                 data={manuals}
                 numColumns={1}
@@ -37,12 +98,12 @@ export default function ManualsScreen() {
                       height:"auto",
                       borderColor:"transparent",
                       borderWidth:0,
-                      backgroundColor:'#2f4f4f'
+                      backgroundColor:'#2f4f4f',
                     }}
                   >
               
                 <Pressable
-                  onPress={() => navigation.navigate('Manual', {manual: item})}>
+                  onPress={() => navKSound(item)}>
 
                     <View style={styles.box}>
                       <Image style={styles.image} source={item.steps[0].img} />
@@ -56,13 +117,10 @@ export default function ManualsScreen() {
                         }}>
                           {item.style}
                       </Text>
-                      
                     </View>
-
               </Pressable>
             </View>)}
           />
-
         </View> 
     </SafeAreaView>
   </ImageBackground>
@@ -157,4 +215,9 @@ const styles = StyleSheet.create({
         flexShrink:1,
         fontWeight:"500"
       },
+      imgSound: {
+      height: "undefined",
+      width: "undefined",
+      flex: 1, 
+    },
 })

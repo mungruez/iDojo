@@ -61,7 +61,7 @@ export const fighters = [
       name: 'Rodtang Jitmuangnon', 
       avatar: require('../assets/avatars/rodtang.png'),
       desc: ["Rodtang is one of the greatest strikers on the planet. At only 23 years of age, he has 267 Muay Thai victories and is currently One's flyweight champion. I think he could make a run in MMA as well. His fan-friendly fighting style is pure aggression complimented by insane durability. I'm a big fan, so I decided to write a brief rundown on some physical attributes Rodtang possesses that may help explain his combat success. Rodtang relies on unrelenting aggression to overwhelm his opponents, often delivering the finish when they are utterly exhausted. Such a fighting style requires elite cardiovascular fitness. Rodtang performs long distance roadwork to build his body's overall aerobic engine. But he also hits pads with the same ferocity he would display in a fight. This goes a long way in developing the power endurance needed to deliver KO shots even in the late rounds"],
-      style: "MMA",
+      style: "Muay Thai",
       conc: "",
       moves:[
         {
@@ -73,6 +73,112 @@ export const fighters = [
           title: "Punch",
           img: require('../assets/fighters/rodtangpunch.png'),
           desc: "Rodtang's narrow shoulders and short arms contrast with the physiques of rangier heavy hitters. But while those fighters tend to possess explosive straight punches, much of Rodtang's best work has been done with vicious hooks. His build could help him throw those shorter shots with more angular velocity. And his low center of gravity gives him the leverage needed to really drive his trademark liver shots. Rodtang's renowned durability may be partially explained by his anatomy as well. Thick skull bones absorb less impact energy and may be harder to deform. Skull deformation can cause brain contusions in trauma and is therefore one example of a major brain injury mechanism. Stabilizing this large head is a short, thick neck and well-developed traps. Rodtang is often able to predict his opponents' attacks and activate those muscles just prior to impact, potentially preventing concussions by limiting excessive head acceleration.",
+        }
+      ]
+    },
+    {
+      name: 'Buakaw Banchamek', 
+      avatar: require('../assets/avatars/buakawbanchamek.png'),
+      desc: ["From the retraction of punches to something as seemingly simple as maintaining stance while moving, Buakaw Banchamek has spent countless hours honing his skills to score a victory against his opponents. To work on your technique, start with the basics and slowly drill the movements from start to finish until they are ingrained in your muscle memory. Start with simple footwork in all directions, ensuring that you return to your exact stance between each step. Then slowly practice your basic punches and kicks. Pay close attention to the trajectories of each strike, making sure to intentionally control the extension and retraction manually. While doing this, be sure to maintain steady breathing and activate your core. Although his may seem tedious, working on the basics in this manner will elevate your skill level immensely. You will get far more out of your training if you spend time perfecting one or two techniques at a time, instead of practicing a new combo every day. Everyone’s body is different; the goal of improving your physical conditioning is not to be a clone of Buakaw but rather to realize your own individual physical potential. Some people have a propensity for strength and endurance. Others may find that training explosive power and cardio yields better results. Buakaw’s level of physical conditioning is insane, and it is one of his greatest advantages over his opponents. He is able to maintain a consistent output for the course of an entire fight, throwing sixty to seventy percent of his maximum power with each strike. Buakaw’s cardio allows him to apply pressure on his opponent and push the pace of the fight to his advantage. He also trains for strength endurance – that is, the ability to continuously output force over and over again. Without strength endurance, you would be able to throw many strikes before gassing out; however, only your first few strikes would land with any power. Strength endurance gives you the ability to throw continuously with power throughout multiple rounds. In addition, Buakaw also trains for explosive power – the ability to put maximum force in a single strike. This is what lets him capitalize on his opponent’s weaknesses, overwhelming them and knocking them out with a single blow."],
+      style: "Muay Thai",
+      conc: "",
+      moves:[
+        {
+          title:"Long Guard",
+          img: require('../assets/fighters/buakawlongguard.png'),
+          desc: "An underrated and often overlooked aspect of Buakaw’s success in the ring is his stellar defense. Buakaw forgoes many fancier, more advanced, defensive options in favor of a solid long guard. He most often holds his rear hand by his cheek, akin to a high guard, while his lead arm is extended in a classic Muay Thai long guard. The long guard effectively shuts down most attacks aimed at the head, while giving you control over your opponent’s posture and hand position. Buakaw will use the long guard to block and walk through heavy strikes, from punches to head kicks with knockout power. He will often use his extended lead arm to frame his opponent’s collarbone while hand-fighting with his rear hand. Once his opponent is off balance and exposed, Buakaw delivers devastating strikes. Buakaw also uses a tight high guard when his opponent can punch around his long guard. This seemingly small adjustment allows for better defense against punches and takes away his opponent’s biggest advantage. In the video above watch Buakaw adapt to his opponents’ looping punches by switching to a high guard.",
+        },
+        {
+          title: "Teep",
+          img: require('../assets/fighters/buakawteep.png'),
+          desc: "Buakaw has one of the best teeps in the MMA. He is able to use his lead teep as both a weapon and a tool to control distance. When an opponent rushes in, Buakaw will quickly lift his leg and teep from just outside punching range. With this type of teep, Buakaw adds just enough snap and hip drive to stop his opponent’s forward movement. This can be deceptively draining as Buakaw aims for his opponent’s solar plexus, making it more and more difficult to breathe with each landed teep. Buakaw can also teep from long range. He does this by throwing a hybrid side teep. Buakaw uses this to force his opponents back, knocking them off balance and leaving them open to follow-up strikes.",
+        },
+        {
+          title: "Long Teep",
+          img: require('../assets/fighters/buakawlongteep.png'),
+          desc: "Buakaw's long teep is a powerful weapon in his arsenal. He uses it to maintain distance, control the pace of the fight, and set up his other strikes. The long teep is thrown with the lead leg, extending fully to reach the opponent while keeping Buakaw's body balanced and ready to react. This technique not only disrupts the opponent's rhythm but also serves as a defensive tool, preventing them from closing the distance easily. Buakaw's mastery of the long teep showcases his strategic approach to Muay Thai, allowing him to dictate the terms of engagement in the ring.",
+        }
+      ]
+    },
+    {
+      name: 'Khamzat Chimaev', 
+      avatar: require('../assets/avatars/khamzatchimaev.png'),
+      desc: ["Khamzat Chimaev is a professional mixed martial artist and freestyle wrestler. He was born on May 1, 1994, in Chechnya, Russia. Chimaev began his wrestling career at a young age and quickly rose through the ranks, winning multiple national championships in Russia. In 2017, he transitioned to mixed martial arts (MMA) and made his professional debut later that year. Chimaev gained widespread attention in the MMA community for his dominant performances in the UFC, where he competes in both the welterweight and middleweight divisions. Known for his aggressive fighting style and relentless pressure, Chimaev has earned several impressive victories, often finishing his opponents in the first round. His combination of wrestling skills and striking ability has made him a formidable contender in the sport."],
+      style: "Freestyle Wrestling",
+      conc: "",
+      moves:[
+        {
+          title:"Dagestani Handcuff",
+          img: require('../assets/fighters/khamzatdagestanihandcuff.png'),
+          desc: "The Dagestani Handcuff is a wrestling technique that Khamzat Chimaev frequently employs to control his opponents on the ground. The move involves using one arm to trap the opponent's arm behind their back while simultaneously applying pressure with the other arm to maintain control. This position allows Chimaev to dictate the pace of the fight, limit his opponent's movement, and set up opportunities for ground-and-pound strikes or submissions. The Dagestani Handcuff is particularly effective in neutralizing an opponent's ability to defend themselves, making it a valuable tool in Chimaev's arsenal.",
+        },
+        {
+          title: "Hip Throw",
+          img: require('../assets/fighters/khamzatthrow.png'),
+          desc: "Khamzat Chimaev is known for his exceptional wrestling skills, and one of his signature techniques is the hip throw. This move involves using the hips as a fulcrum to lift and throw an opponent over the back. Chimaev's execution of the hip throw is characterized by its speed and precision, allowing him to take control of the fight quickly. By effectively utilizing his lower body strength and leverage, Chimaev can off-balance his opponents and bring them to the ground with authority. The hip throw is a fundamental technique in freestyle wrestling, and Chimaev's mastery of it has contributed significantly to his success in mixed martial arts.",
+        },
+        {
+          title: "Leg Ride",
+          img: require('../assets/fighters/khamzatlegride.png'),
+          desc: "Nicknamed the Leg Ride King, Khamzat Chimaev uses this technique to control his opponents on the ground and set up ground-and-pound strikes. By threading his legs around his opponent's body, he can maintain a dominant position and limit their movement. This allows him to deliver powerful punches and elbows from the top position, often leading to a tap out victory.",
+        }
+      ]
+    },
+    {
+      name: 'Francisco Filho', 
+      avatar: require('../assets/avatars/filho.png'),
+      desc: ["Filho is a Brazilian Kyokushin karateka and mixed martial artist. He is known for his powerful striking and has competed in various martial arts tournaments, including the K-1 World Grand Prix. Filho has also fought in the UFC and other MMA promotions, showcasing his skills in both stand-up and ground fighting. With a background in karate, he brings a unique style to the MMA world, combining traditional techniques with modern fighting strategies."],
+      style: "Freestyle Wrestling",
+      conc: "",
+      moves:[
+        {
+          title:"Karate Kick",
+          img: require('../assets/fighters/filhokaratekick.png'),
+          desc: "Fliho is known for his powerful and precise karate kicks. His kicks are characterized by their speed, accuracy, and ability to generate significant force. Filho utilizes a variety of kicks, including roundhouse kicks, front kicks, and side kicks, to keep his opponents at bay and deliver devastating strikes. His ability to seamlessly integrate his karate kicking techniques into his overall fighting style has made him a formidable opponent in the ring.",
+        },
+        {
+          title: "Kick",
+          img: require('../assets/fighters/filhofrontkick.png'),
+          desc: "Filho's powerful kicks are a testament to his Kyokushin karate background. His ability to generate power and precision with his kicks has earned him numerous knockouts throughout his career.",
+        }
+      ]
+    },
+    {
+      name: 'Pacquiao', 
+      avatar: require('../assets/avatars/pacquiao.png'),
+      desc: ["Manny 'Pac Man' Pacquiao was a Filipino professional boxer, and is widely considered one of the greatest boxers in history. Pacquiao is the only boxer in history to win world titles in eight different weight divisions. iDojo has identified and displayed four of Pac Man`s signature moves. He was named Fighter of the Decade for the 2000s."],
+      style: "Professional Boxing",
+      conc: "",
+      moves:[
+        {
+          title:"Fight Back Counter Punch",
+          img: require('../assets/fighters/fightbackcounterpunch.png'),
+          desc: "Pacquiao's counterpunching ability is one of his most dangerous weapons in the ring. He has a keen sense of timing and distance, allowing him to anticipate his opponent's attacks and respond with precise counterpunches. Pacquiao often uses his speed and agility to slip punches and create openings for his own counterattacks. His counterpunches are delivered with power and accuracy, often catching his opponents off guard and leading to significant damage or knockdowns.",
+        },
+        {
+          title: "Pacman Countwr Punch - Part 1",
+          img: require('../assets/fighters/pacmancounterpunch1.png'),
+          desc: "Pacquiao utilizes a combination of head movement, footwork, and blocking techniques to avoid incoming punches. Pacquiao's ability to slip punches and counterattack has frustrated many of his opponents, allowing him to maintain control of the fight. Here he uses a parry to knock the opponents incomming punch down and immmediately prepare for a counter punch. His defensive prowess, combined with his offensive capabilities, has made him a well-rounded and formidable boxer. By placing his lead foot infront of and between his opponent's feet, Pac Man is able to create better angles for defense and for punches and hooks.",
+        },
+        {
+          title: "Pacman Countwr Punch - Part 2",
+          img: require('../assets/fighters/pacmancounterpunch2.png'),
+          desc: "After successfully parrying his opponent's punch, Pacquiao quickly shifts his weight and rotates his hips to generate power for his counterpunch. This movement allows him to deliver a strong and accurate punch while maintaining his balance and positioning in the ring. Pacquiao's ability to seamlessly transition from defense to offense is a testament to his skill and experience as a boxer.",
+        },
+        {
+          title: "Pacman Signature Punch Combo - Part 1",
+          img: require('../assets/fighters/pacmanpunchcombo1.jpg'),
+          desc: "A Blinding Right Jab. Pacquiao is known for his fast and powerful punch combinations. His ability to throw multiple punches in quick succession has overwhelmed many of his opponents. Pac Mans signature combinations often include a mix of jabs, crosses, hooks, and uppercuts, delivered with exceptional speed and accuracy. His footwork and head movement also allow him to create openings for his combinations, making him a highly effective offensive fighter. Pacman has a keen sense of timing and distance, allowing him to anticipate his opponent's attacks and respond with this three hit signature combo. Pacquiao often uses his speed and agility to slip punches and create openings for this blinding jab counterattack. His combo will then immmediately be delivered with power and accuracy, often catching his opponents off guard and leading to significant damage or knockdowns.",
+        },
+        {
+          title: "Pacman Signature Punch Combo - Part 2",
+          img: require('../assets/fighters/pacmanpunchcombo2.jpg'),
+          desc: "Left Hook to the Body. The second move in Pacquiao's Signature Combination uses this left hook to the body in order to keep the opponent defensive during the combo. Experience, Speed and Timing allows pacman to combo with deadly precision.",
+        },
+        {
+          title: "Pacman Signature Punch Combo - Part 3",
+          img: require('../assets/fighters/pacmanpunchcombo3.jpg'),
+          desc: "Pacquiao finishes his signature combination with a powerful right cross to the head. This punch is delivered with maximum force, utilizing Pacquiao's exceptional speed and technique to generate significant impact. The right cross is often the finishing blow in his combinations, capable of stunning or knocking down opponents. Pacquiao's ability to seamlessly integrate this punch into his combinations has made him one of the most feared punchers in boxing history.",
         }
       ]
     }

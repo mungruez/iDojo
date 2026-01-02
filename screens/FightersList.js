@@ -1,10 +1,62 @@
 import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, SafeAreaView, Dimensions } from 'react-native'
 import {fighters} from '../data/fighters'
-import React from 'react'
+import React, { useState, useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native'
+import { Audio } from 'expo-av';
 
 export default function FightersList() {
+  const [ksound, setKSound] = useState();
   const navigation = useNavigation();
+  
+  useEffect(() => {
+    loadKSound(); 
+    
+    return () => {
+      if (ksound) {
+        ksound.stopAsync();
+      }
+    };
+  }, []); 
+  
+  
+  async function loadKSound() {
+    try {
+      await Audio.setAudioModeAsync({
+        allowsRecording: false,
+        //interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
+        shouldDuckAndroid: true,
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
+        //interruptionModeIOS: Audio.InterruptionModeIOS.MixWithOthers,
+        playThroughEarpieceAndroid: false,
+      });
+        
+      const { sound } = await Audio.Sound.createAsync(
+          require('../assets/woosh.mp3'),
+          { shouldPlay: true }
+      );
+      setKSound(sound);
+
+    } catch (error) {
+      alert('Error loading or playing sound effect: '+error);
+    }
+  }
+
+
+  const navKSound = async (item) => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(require('../assets/woosh.mp3'),
+        { shouldPlay: true }
+      );
+      if(sound) {
+        await sound.playAsync();
+      }
+    } catch (error) {
+        alert('Error playing sound effect:'+error);
+    }
+    navigation.navigate('FighterScreen', {fighter: item, offset: 0});
+  };
+
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
@@ -40,7 +92,7 @@ export default function FightersList() {
                   >
               
                 <Pressable
-                  onPress={() => navigation.navigate('FighterScreen', {fighter: item, offset: 0})}>
+                  onPress={() => navKSound(item)}>
                     <View style={styles.mainCardView}>
                         <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
                           <Text>{item.name}</Text>
@@ -57,7 +109,6 @@ export default function FightersList() {
                                     width: 180,
                                   }}
                                 />
-                            
 
                         <View style={{marginLeft: 12}}>
                             <Text

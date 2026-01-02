@@ -17,9 +17,9 @@ export default function ManualScreen({ route, navigation }) {
         <ScrollView>
           {manual.steps.map((step, index) => {
             
-            return ( <View style={{backgroundColor:"black", marginBottom:19}}>
+            return ( <View key={index} style={{backgroundColor:"black", marginBottom:19}}>
               
-              <View key={step.title} style={{backgroundColor: bgColor[(index%12)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+              <View style={{backgroundColor: bgColor[(index%12)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
                 <Text style={styles.titletext}>{step.title}</Text>
               </View>
 

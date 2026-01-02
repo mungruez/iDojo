@@ -11,7 +11,7 @@ export default function Fighter({ route, navigation }) {
   const bgColor = ['khaki','palegoldenrod','goldenrod','orange','gold','sandybrown','peru','darkgoldenrod','darkorange ','tan','chocolate', 'sienna']
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'khaki',width:'100%', height:'100%' }}>
         <ScrollView>
           <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:19, marginTop:38 }}>
             {fighter.name}

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Dimensions, View, ScrollView, Text } from "react-native";
+import { View, ScrollView, Text } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Video, ResizeMode } from "expo-av";
 import VideoControls from "./VideoControls";
@@ -21,30 +21,6 @@ const MoveScreen = ({ route, navigation }) => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
-  useEffect(() => {
-    // Simulate fetching lessons by course
-    const fakeLessons = [
-      {
-        lessonId: "1",
-        lessonVideoUrl: "https://example.com/video1.mp4",
-        lessonTitle: "Lesson 1",
-        lessonDescription: "Introduction to React Native 1",
-        videoTotalDuration: "600",
-        lessonThumbnailImageUrl: "https://example.com/thumbnail1.jpg",
-      },
-      {
-        lessonId: "2",
-        lessonVideoUrl: "https://example.com/video2.mp4",
-        lessonTitle: "Lesson 2",
-        lessonDescription: "Introduction to React Native 2",
-        videoTotalDuration: "800",
-        lessonThumbnailImageUrl: "https://example.com/thumbnail2.jpg",
-      },
-      // Add more lessons here
-    ];
-    //setLessons(fakeLessons);
-  }, []);
 
 
   const togglePlayPause = () => {
