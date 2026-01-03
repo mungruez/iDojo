@@ -215,7 +215,17 @@ export default function FeatureMoveList() {
                                 </Text>
                               </View>
                             </View>
-
+                                <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail'
+                                style={{
+                                  fontSize: 11,
+                                  color: "#cfcfafff",
+                                  fontWeight: 'medium',
+                                  overflow:"scroll",
+                                }}>
+                                  {item.Desc}
+                              </Text>
                             
                           </View>
                         </View>
@@ -241,17 +251,16 @@ export default function FeatureMoveList() {
                                 borderRadius: 12,
                                 alignSelf: 'flex-start',
                                 marginTop:0,
-                                marginLeft:0,
-                                height: 145,
+                                marginLeft:3,
+                                height: 190,
                                 width: (Dimensions.get('window').width/100)*45,
                               }}
                             />
                             </View>
                             
-                            <View style={{marginLeft: 12, marginTop:5,}}>
+                            <View style={{marginLeft: 4, marginTop:1,}}>
                               <View
                                 style={{
-                                  marginTop: 3,
                                   borderWidth: .5,
                                   borderColor:'#228b22',
                                   flexDirection:'row',
@@ -308,14 +317,13 @@ const styles = StyleSheet.create({
       flex: 1, 
   },  
   image: {
-      maxHeight: 145,
-      height: "100%",
+      height: 190,
       flex: 1,
       borderRadius: 12,
       alignSelf: 'flex-start',
       marginTop:0,
-      marginLeft:0,
-      width: "100%",
+      marginLeft:3,
+      width:(Dimensions.get('window').width/100)*46,
   },
   sourcetext: {
       fontSize: 12,
@@ -330,7 +338,7 @@ const styles = StyleSheet.create({
       color: 'black',
     },
       mainCardView: {
-        height: 246,
+        height: 256,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: "#2f4f4f",
