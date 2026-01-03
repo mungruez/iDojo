@@ -31,7 +31,7 @@ export default function FeatureMoveList() {
           const currentDate = new Date();
           const savedDateObj = new Date(savedDate);
           const differenceInMs = currentDate - savedDateObj;
-          //console.log(`Difference in days: ${differenceInMs/ 86400000.0}`);
+          console.log(`Difference in days: ${differenceInMs/ 86400000.0}`);
           if( (differenceInMs / 86400000.0) > 2.28) {
             console.log(`Difference in days: ${differenceInMs}`);
             //await AsyncStorage.clear();
@@ -104,11 +104,11 @@ export default function FeatureMoveList() {
 
   useEffect(() => {
     const savedfv=fetchFvideos();
-    if ( savedfv ) { 
-      //console.log("Saved Featured videos found! "+fvideos.length);
+    if ( savedfv && savedfv > 38 && fvideos.length > 38 ) { 
+      console.log("Saved Featured videos found! "+fvideos.length);
       return;
     }
-
+    console.log("ZERO Saved Featured videos found! ");
     try { 
     fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
     .then(res => res.json())
