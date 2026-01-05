@@ -68,7 +68,7 @@ export default function PasswordManager() {
                     ans += str.charAt(i);
                 }
             }
-            console.log("x in replaceChar ANS :"+ans+" so far placed is:"+placed);
+            //console.log("x in replaceChar ANS :"+ans+" so far placed is:"+placed);
             if(placed==index) {
                 return {ans: ans, placed: index}
             }
@@ -86,7 +86,7 @@ export default function PasswordManager() {
                     ans+=str.charAt(i);
                 }
             }   
-            console.log("o in replaceChar ANS :"+ans+" so far placed is:"+placed);
+            //console.log("o in replaceChar ANS :"+ans+" so far placed is:"+placed);
             if(placed==index) {
                 return {ans: ans, placed: index}
             }
@@ -102,43 +102,7 @@ export default function PasswordManager() {
     //useEffect Hook: initializes password list when component mounts
     useEffect(() => {
         //AsyncStorage.clear();
-        let TLM=-1;
-        for(let i =0; i < encArr.length; i++) {
-            for(let j =0; j < encArr.length; j++) {
-                if(i!=j && encArr[i].encLetter==encArr[j].encLetter) {
-                    console.log("1_Duplicate encLetter at :"+i+" and j :"+j+" encLetter :"+encArr[i].encLetter)
-                }
-
-                if(i!=j && encArr[i].letter==encArr[j].letter) {
-                    console.log("2_Duplicate letter at i:"+i+" and j :"+j+" letter :"+encArr[i].letter)
-                }
-            }
-            if(TLM<0 && encArr[i].encLetter.length>1) {
-                TLM=i;
-                console.log("First 2 letter encArr[TLM].letter :"+encArr[i].letter);
-            } else if(TLM>0 && encArr[i].encLetter.length<2) {
-                console.log("Error in encArr structure :"+encArr[i].letter+" (is wrongly placed single encArr.letter)");
-            }
-        }
-        console.log("TLM :"+TLM);
-        let pCount =[];
-        for(let i =0; i < 6000; i++) {
-            pCount.push(-1);
-        }
-        for(let i =0; i < primes.length; i++) {
-            if(primes[i]<pCount.length) {
-                if(pCount[primes[i]] > -1) {
-                    console.log("Duplicate prime found with prime :"+primes[i]+" in primes at :"+pCount[primes[i]]+" and "+i)
-                }
-                pCount[primes[i]]=i;
-            } else {
-                console.log("Prime above 6000 :"+primes[i])
-            }
-        }
-
-        console.log("encArr.length :"+encArr.length);
-        console.log("primes.length :"+primes.length);
-        //TLM=52 primes.length: 777 encArr.length: 91
+        //TwoLetterDecStartIndex=52 primes.length: 777 encArr.length: 91
         fetchPasswords();
         showPasswords();
     }, []);
@@ -184,7 +148,7 @@ export default function PasswordManager() {
                 primesI++;
             }
         }
-        console.log('***Password Encryption as :'+enc);
+        //console.log('***Password Encryption as :'+enc);
         await AsyncStorage.setItem('xx7771xxiDojoPassword'+passwordNum, ""+enc);
         return enc;
     };
@@ -249,7 +213,7 @@ export default function PasswordManager() {
             }
         }
 
-        console.log('Password Decrypted as: '+dec);
+        //console.log('Password Decrypted as: '+dec);
         return dec+"";
     };
 
@@ -333,7 +297,7 @@ export default function PasswordManager() {
                 }
 
                 await AsyncStorage.setItem('xx7771xxiDojoAESpassKey',passKey+"");
-                console.log("Updated passKey:"+passKey+" for passwordNum:"+passwordNum+" placed :"+placed+" Next passNum :"+passNum+" newpassNum :"+newPassNum);
+                //console.log("Updated passKey:"+passKey+" for passwordNum:"+passwordNum+" placed :"+placed+" Next passNum :"+passNum+" newpassNum :"+newPassNum);
                 
             } catch(error) {
                 alert("Unable to Save Passwords !"+error);
@@ -352,11 +316,7 @@ export default function PasswordManager() {
 
         setWebsite(""); // Reset website input
         setUsername(""); // Reset username input
-        setPassword(""); 
-        for(i=0; i<passwords.length; i++) {
-            console.log("Updated Passwords["+i+"] :"+passwords[i].passwordNum);
-        }
-        
+        setPassword("");
     };
 
 
@@ -457,14 +417,6 @@ export default function PasswordManager() {
     };
 
     
-    const stringInt = (rawString) => {
-        const cleanString = rawString.trim();
-        const numericString = cleanString.replace(/[^0-9.]/g, '');
-        const valueInt = rawString ? parseInt(numericString, 10) : 0;
-        return valueInt;
-    };
-
-    
     const maskPassword = (pass) => {
         let str = "";
         if(pass) {
@@ -516,7 +468,7 @@ export default function PasswordManager() {
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
-
+                    
                     <TouchableOpacity onPress={() => showConfirmDialog(item.passwordNum)} style={ styles.deleteButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
                     </TouchableOpacity>
@@ -576,14 +528,6 @@ export default function PasswordManager() {
                 }
                 setPasswordNum(pNum);
             }
-
-            console.log("Length of pwds :"+pwds.length+" Length of passKey :"+passKey.length);
-            for(let pkI=0; pkI < passKey.length; pkI++) {
-                if(passKey.charAt(pkI) =='x' ) {
-                    console.log("passwords[i].passwordNum :"+pwds[pkI].passwordNum+" pkI=x at :"+pkI);
-                }
-            }
-
 
         } catch(error) {
             if(errorFlag>1) {
