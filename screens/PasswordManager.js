@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, StyleSheet, ImageBackground, Image, Alert} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, StyleSheet, ImageBackground, Image, Alert, TouchableWithoutFeedback} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -10,6 +10,7 @@ export default function PasswordManager() {
     const [password, setPassword] = useState(""); 
     const [passwordNum, setPasswordNum] = useState(0);
     const [passwordNumTemp, setPasswordNumTemp] = useState(0);
+    const [isOverlayVisible, setOverlayVisible] = useState(false);
     const [passwords, setPasswords] = useState([]); 
     const [editing, setEditing] = useState(false);    //State for tracking if editing mode is active
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
@@ -107,6 +108,19 @@ export default function PasswordManager() {
         showPasswords();
     }, []);
 
+
+    const closeOverlay = () => {
+        setOverlayVisible(false);
+    };
+
+    const openOverlay = () => {
+        setOverlayVisible(true);
+    };
+
+    const resetPin = async () => {
+        await AsyncStorage.removeItem('xx7771xxiDojoPIN');
+        navigation.goBack();
+    };
 
 
     const encryptPassword = async (pass, passNum) => {
@@ -334,19 +348,19 @@ export default function PasswordManager() {
 
 
 
-    const showConfirmDialog = (passNum) => {
+    const showConfirmDialog = () => {
         Alert.alert(
-          "Confirm Delete!",
-          "Are you sure you want to: Delete This Password?",
+          "Confirm PIN Reset!",
+          "Are you sure you want to: Reset Your PIN?",
           [
             {
-              text: "Cancel",
+              text: "CANCEL",
               onPress: () => setPasswordNumTemp(passwordNum),
               style: "cancel" // Applies 'cancel' style for iOS (places it correctly)
             },
             {
-              text: "OK",
-              onPress: () => deletePassword(passNum)
+              text: "CONFIRM",
+              onPress: () => resetPin()
             }
           ],
           { cancelable: false } // Prevents closing the alert by tapping outside
@@ -468,10 +482,30 @@ export default function PasswordManager() {
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
-                    
-                    <TouchableOpacity onPress={() => showConfirmDialog(item.passwordNum)} style={ styles.deleteButton }>
-                        <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
-                    </TouchableOpacity>
+
+                    {isOverlayVisible ? (
+        
+                        <TouchableWithoutFeedback onPress={closeOverlay}>
+                            <View style={styles.overlay}>
+                                <TouchableWithoutFeedback>
+
+                                    <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
+                                        <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.cancelButton }>
+                                        <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
+                                    </TouchableOpacity>
+
+                                </TouchableWithoutFeedback>
+                            </View>
+                        </TouchableWithoutFeedback>
+
+                    ) : (
+                        <TouchableOpacity onPress={() => openOverlay()} style={ styles.deleteButton }>
+                            <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
         ));
@@ -556,6 +590,9 @@ export default function PasswordManager() {
             <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
                 <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
             </TouchableOpacity> 
+            <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.backButton }>
+                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
+            </TouchableOpacity>
         </View>
 
         <View style={{ flexDirection:'row', alignItems:'center', marginBottom: -19, padding: 0, marginLeft: 12,}}> 
@@ -635,6 +672,17 @@ const styles = StyleSheet.create({
     content: {
         margin: 5, // Add margin inside the content
     },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Translucent background
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection:"column",
+  },
     // Style for the main heading
     heading: {
         fontSize: 17, // Large font size
@@ -740,6 +788,18 @@ const styles = StyleSheet.create({
         elevation: 2,
         height: 49,
         width: 49,
+    },
+    // Style for the delete button
+    cancelButton: {
+        backgroundColor: "transparent", // Red background
+        borderRadius: 9, // Slightly rounded corners
+        padding: 0, // Add padding inside the button
+        marginLeft: 19, // Space to the left of the button
+        borderWidth: 0, 
+        elevation: 2,
+        height: 22,
+        width: 52,
+        marginBottom: 7,
     },
     // Style for the edit button
     editButton: {
