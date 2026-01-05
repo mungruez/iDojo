@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, TouchableWithoutFeedback } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, {useState,useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,8 @@ export default function LoginScreen() {
   const [pin, setPin] = useState(""); 
   const [pinConfirm, setPinConfirm] = useState("");
   const [hasPasswords, setHasPasswords] = useState(false);
+  const [isOverlayVisible, setOverlayVisible] = useState(false);
+  const [hasPasswordList, setHasPasswordList] = useState(false);
   const navigation = useNavigation();
 
 
@@ -15,15 +17,57 @@ export default function LoginScreen() {
     try {
       const savedPIN = await AsyncStorage.getItem('xx7771xxiDojoPIN');
       if(savedPIN==null) {
-        alert("Welcome to iDojo's Passwords Manager. No Saved PIN found. please enter a PIN or Password as your Master Password for all your saved passwords.");
+
+        let passKey = await AsyncStorage.getItem('xx7771xxiDojoAESpassKey');
+        if(passKey==null) {
+          setHasPasswordList(false);
+          await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
+          alert("Welcome to iDojo's Passwords Manager. No Saved PIN or passwords found. please enter a PIN or Password as your Master Password for all your saved passwords. PINs or Passwords should be at least 4 characters long with no slashes.");
+          return;
+        }
+                    
+        if(passKey == 'o') {
+          setHasPasswordList(false);
+          return;
+        }
+        
+        for(let pkI=0; pkI < passKey.length; pkI++) {
+          if(passKey.charAt(pkI) =='x' ) {
+            setHasPasswordList(true);
+            alert("Welcome to iDojo's Passwords Manager. No PIN found. Please enter a PIN or Password as your Master Password for all your saved passwords.");
+            return;
+          }
+        }
+
+        alert("Welcome to iDojo's Passwords Manager. No Saved PIN or Passwords found. please enter a PIN or Password as your Master Password for all your saved passwords.");
         return;
       } else {
         setHasPasswords(true);
-        alert("Welcome to iDojo's Passwords Manager. Please enter your PIN/Password to view all your saved passwords.");
+
+        let passKey = await AsyncStorage.getItem('xx7771xxiDojoAESpassKey');
+        if(passKey==null) {
+          setHasPasswordList(false);
+          await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
+          return;
+        }
+                    
+        if(passKey == 'o') {
+          setHasPasswordList(false);
+          return;
+        }
+        
+        for(let pkI=0; pkI < passKey.length; pkI++) {
+          if(passKey.charAt(pkI) =='x' ) {
+            setHasPasswordList(true);
+            return;
+          }
+        }
+
+        alert("Welcome to iDojo's Passwords Manager. Please enter your PIN/Password to proceed.");
         return;
       }
     } catch(error) {
-      alert("error trying to find PIN!!!");
+      alert("Error trying to find PIN!!!"+error);
       return; 
     }
   }
@@ -52,6 +96,15 @@ export default function LoginScreen() {
       ],
       { cancelable: false } // Prevents closing the alert by tapping outside
     );
+  };
+
+
+  const closeOverlay = () => {
+    setOverlayVisible(false);
+  };
+  
+  const openOverlay = () => {
+    setOverlayVisible(true);
   };
 
 
@@ -237,11 +290,26 @@ export default function LoginScreen() {
               />
             </View> 
         
-            <TouchableOpacity
-              style={{height:43, width:"61%", alignSelf:"center", backgroundColor:"transparent",}}
-              onPress={showConfirmDialog}>
-                <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
-            </TouchableOpacity>
+            { hasPasswordList && !isOverlayVisible ? ( <TouchableOpacity
+                style={{height:43, width:"61%", alignSelf:"center", backgroundColor:"transparent",}}
+                onPress={openOverlay}>
+                  <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
+              </TouchableOpacity> 
+              ) : isOverlayVisible && (
+                <View  style={{flex:1, flexDirection:"row"}}>
+                  <TouchableOpacity
+                    style={{height:27, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
+                    onPress={resetPasswords}>
+                      <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/confirmbutton.png')} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{height:27, width:"34%", alignSelf:"center", backgroundColor:"transparent",}}
+                    onPress={closeOverlay}>
+                      <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/cancelbutton.png')} />
+                  </TouchableOpacity>
+                </View> )
+            }
 
             <TouchableOpacity
               style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
