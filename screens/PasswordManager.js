@@ -797,9 +797,9 @@ const styles = StyleSheet.create({
         marginLeft: 19, // Space to the left of the button
         borderWidth: 0, 
         elevation: 2,
-        height: 22,
-        width: 52,
-        marginBottom: 7,
+        height: 29,
+        width: 57,
+        marginTop: 7,
     },
     // Style for the edit button
     editButton: {
