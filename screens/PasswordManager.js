@@ -10,7 +10,7 @@ export default function PasswordManager() {
     const [password, setPassword] = useState(""); 
     const [passwordNum, setPasswordNum] = useState(0);
     const [passwordNumTemp, setPasswordNumTemp] = useState(0);
-    const [isOverlayVisible, setOverlayVisible] = useState(false);
+    const [isOverlayVisible, setOverlayVisible] = useState(-1);
     const [passwords, setPasswords] = useState([]); 
     const [editing, setEditing] = useState(false);    //State for tracking if editing mode is active
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
@@ -110,16 +110,16 @@ export default function PasswordManager() {
 
 
     const closeOverlay = () => {
-        setOverlayVisible(false);
+        setOverlayVisible(-1);
     };
 
-    const openOverlay = () => {
-        setOverlayVisible(true);
+    const openOverlay = (passNum) => {
+        setOverlayVisible(passNum);
     };
 
     const resetPin = async () => {
         await AsyncStorage.removeItem('xx7771xxiDojoPIN');
-        navigation.goBack();
+        navigation.navigate('LoginScreen');
     };
 
 
@@ -483,26 +483,26 @@ export default function PasswordManager() {
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
 
-                    {isOverlayVisible ? (
+                    { isOverlayVisible===item.passwordNum ? (
         
                         <TouchableWithoutFeedback onPress={closeOverlay}>
                             <View style={styles.overlay}>
                                 <TouchableWithoutFeedback>
-
                                     <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
                                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
                                     </TouchableOpacity>
+                                </TouchableWithoutFeedback>
 
+                                <TouchableWithoutFeedback>
                                     <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.cancelButton }>
                                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
                                     </TouchableOpacity>
-
                                 </TouchableWithoutFeedback>
                             </View>
                         </TouchableWithoutFeedback>
 
                     ) : (
-                        <TouchableOpacity onPress={() => openOverlay()} style={ styles.deleteButton }>
+                        <TouchableOpacity onPress={() => openOverlay(item.passwordNum)} style={ styles.deleteButton }>
                             <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
                         </TouchableOpacity>
                     )}
