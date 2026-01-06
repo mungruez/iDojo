@@ -486,7 +486,8 @@ export default function PasswordManager() {
                     { isOverlayVisible===item.passwordNum ? (
         
                         <TouchableWithoutFeedback onPress={closeOverlay}>
-                            <View style={styles.overlay}>
+                            <View style={styles.overlay} />
+                            <View style={{flexDirection:'row', justifyContent:'center',}}>
                                 <TouchableWithoutFeedback>
                                     <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.cancelButton }>
                                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
