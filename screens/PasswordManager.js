@@ -488,13 +488,13 @@ export default function PasswordManager() {
                         <TouchableWithoutFeedback onPress={closeOverlay}>
                             <View style={styles.overlay}>
                                 <TouchableWithoutFeedback>
-                                    <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
+                                    <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.cancelButton }>
                                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
                                     </TouchableOpacity>
                                 </TouchableWithoutFeedback>
 
                                 <TouchableWithoutFeedback>
-                                    <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.cancelButton }>
+                                    <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
                                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
                                     </TouchableOpacity>
                                 </TouchableWithoutFeedback>
