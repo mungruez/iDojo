@@ -296,7 +296,7 @@ export default function LoginScreen() {
                   <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
               </TouchableOpacity> 
               ) : isOverlayVisible && (
-                <View  style={{flex:1, flexDirection:"row"}}>
+                <View style={{flex:1, flexDirection:"row"}}>
                   <TouchableOpacity
                     style={{height:27, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
                     onPress={resetPasswords}>
