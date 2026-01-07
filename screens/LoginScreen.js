@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, Pressable,  UIManager, findNodeHandle} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, {useState,useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,8 @@ export default function LoginScreen() {
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [hasPasswordList, setHasPasswordList] = useState(false);
   const navigation = useNavigation();
+
+  insideViewRef = React.createRef();
 
 
   const fetchPasswords = async () => {
@@ -99,6 +101,22 @@ export default function LoginScreen() {
   };
 
 
+  handleGlobalTouch = (event) => {
+    // UIManager and findNodeHandle are used to get native tags from refs
+    const insideViewNode = findNodeHandle(insideViewRef.current);
+    const touchedNode = event.nativeEvent.target;
+
+    // Check if the touched node is the inside view itself or a descendant
+    if (insideViewNode && touchedNode !== insideViewNode && !UIManager.viewIsDescendantOf(touchedNode, insideViewNode, (isAncestor) => {
+      if (isAncestor) {
+        return;
+      }
+    })) {
+      closeOverlay();
+    }
+  };
+
+
   const closeOverlay = () => {
     setOverlayVisible(false);
   };
@@ -172,26 +190,30 @@ export default function LoginScreen() {
         //const cleanPIN = cleanString.replace(/[^0-9.]/g, '');
         //console.log("Your PIN :"+cleanPIN);
         if(pin.length != cleanPIN.length) {
-          alert("PIN entered does not match with what is saved. Try Again!");
+          alert("PIN entered does not match with what is saved. Please try again.");
           setPin("");
           return;
         }
 
         for (let index = 0; index < pin.length; index++) {
           if(pin[index] != cleanPIN[index]) {
-            setPin("    ")
-            alert("PIN entered does not match with what is saved. Try Again");
-            setPin("");
+            setPin("")
+            alert("PIN entered does not match with what is saved. Please try again.");
             return;
           }
         }
         
         setPin("");
+        setPinConfirm("");
+        setHasPasswords(true);
         navigation.navigate('PasswordManager');
 
       } else {
-        alert("Please submit a PIN as a Master Passord for the Password Manager.");
+        alert("Please enter your PIN to use the Password Manager.");
         setPin("");
+        if(savedPIN) {
+          return;
+        }
         setHasPasswords(false);
         return;
       }
@@ -224,7 +246,6 @@ export default function LoginScreen() {
       }
 
       await AsyncStorage.setItem('xx7771xxiDojoPIN', pin);
-      await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
       setPin("");
       setPinConfirm("");
       setHasPasswords(true);
@@ -251,6 +272,7 @@ export default function LoginScreen() {
               placeholder="Enter PIN/Password"
               placeholderTextColor= "#003f5c"
               securetextEntry={true}
+              value={pin}
               onChangeText= {(pin)=>setPin(pin)}
             />
           </View>
@@ -261,6 +283,7 @@ export default function LoginScreen() {
               placeholder="Confirm PIN/Password"
               placeholderTextColor= "#003f5c"
               securetextEntry={true}
+              value={pinConfirm}
               onChangeText= {(pinConfirm)=>setPinConfirm(pinConfirm)}
             />
           </View>  
@@ -276,7 +299,8 @@ export default function LoginScreen() {
             </TouchableOpacity>
         </View> ) 
 
-        :  ( <View style={styles.container}>
+        : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={this.handleGlobalTouch}> 
+          <View style={styles.container}>
             <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
             <StatusBar style='light' />
 
@@ -286,17 +310,12 @@ export default function LoginScreen() {
                 placeholder="Enter PIN/Password"
                 placeholderTextColor= "#003f5c"
                 securetextEntry={true}
+                value={pin}
                 onChangeText= {(pin)=>setPin(pin)}
               />
             </View> 
-        
-            { hasPasswordList && !isOverlayVisible ? ( <TouchableOpacity
-                style={{height:43, width:"61%", alignSelf:"center", backgroundColor:"transparent",}}
-                onPress={openOverlay}>
-                  <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
-              </TouchableOpacity> 
-              ) : isOverlayVisible && (
-                <View style={{flex:1, flexDirection:"row"}}>
+
+                <View ref={insideViewRef} style={{flexDirection:"row", maxHeight:57, padding:0, width:"77%", marginTop:16,}}>
                   <TouchableOpacity
                     style={{height:27, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
                     onPress={resetPasswords}>
@@ -308,15 +327,44 @@ export default function LoginScreen() {
                     onPress={closeOverlay}>
                       <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/cancelbutton.png')} />
                   </TouchableOpacity>
-                </View> )
-            }
-
+                </View> 
+            
             <TouchableOpacity
               style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
               onPress={checkPin}>
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
-          </View> )
+          </View> 
+        </Pressable> )
+
+        : ( <View style={styles.container}>
+            <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
+            <StatusBar style='light' />
+
+            <View style={styles.inputview} > 
+              <TextInput
+                style={styles.textinput} 
+                placeholder="Enter PIN/Password"
+                placeholderTextColor= "#003f5c"
+                securetextEntry={true}
+                value={pin}
+                onChangeText= {(pin)=>setPin(pin)}
+              />
+            </View> 
+
+            <TouchableOpacity
+              style={{height:43, width:"61%", alignSelf:"center", backgroundColor:"transparent",}}
+              onPress={openOverlay}>
+                <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
+            </TouchableOpacity> 
+            
+            <TouchableOpacity
+              style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
+              onPress={checkPin}>
+                <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
+            </TouchableOpacity>
+          </View> 
+         )
       }
     </SafeAreaView>
   )}

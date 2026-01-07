@@ -14,7 +14,8 @@ export default function PasswordManager() {
     const [passwords, setPasswords] = useState([]); 
     const [editing, setEditing] = useState(false);    //State for tracking if editing mode is active
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
-    
+    ref = React.createRef();
+
     const encArr = [{letter: 'a', encLetter: '*'}, {letter: 'b', encLetter: '9'}, {letter: 'c', encLetter: 's'},{letter: 'd',  encLetter: '$'},{letter: 'e',  encLetter: 'G'},{letter: 'f',  encLetter: 'o'},{letter: 'g',  encLetter: '6'},
         {letter: 'h', encLetter: '#'},{letter: 'i',  encLetter: '!'},{letter: 'j',  encLetter: '7'},{letter: 'k',  encLetter: '5'},{letter: 'l',  encLetter: 'y'},{letter: 'm',  encLetter: '2'},{letter: 'n',  encLetter: '4'},
         {letter: ' ', encLetter: ','},{letter: ',',  encLetter: ':'},{letter: ';',  encLetter: '"'},{letter: ':',  encLetter: '{'},{letter: '[',  encLetter: '|'},{letter: ']',  encLetter: '('},{letter: 'o',  encLetter: '1'},
@@ -119,7 +120,7 @@ export default function PasswordManager() {
 
     const resetPin = async () => {
         await AsyncStorage.removeItem('xx7771xxiDojoPIN');
-        navigation.navigate('LoginScreen');
+        navigation.popToTop();
     };
 
 
@@ -478,7 +479,16 @@ export default function PasswordManager() {
                     </Text>
                 </View>
 
-                <View style={styles.buttonsContainer}>
+                <View style={styles.buttonsContainer}
+                  onStartShouldSetResponder={(evt) => {
+                    evt.persist()
+                    if (this.childrenIds && this.childrenIds.length) {
+                        if (this.childrenIds.includes(evt.target)) {
+                            return
+                        }
+                        console.log("Tapped outside")
+                    }
+                }}>
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
@@ -486,19 +496,17 @@ export default function PasswordManager() {
                     { isOverlayVisible===item.passwordNum ? (
         
                         <TouchableWithoutFeedback onPress={closeOverlay}>
-                            <View style={styles.overlay} />
-                            <View style={{flexDirection:'row', justifyContent:'center',}}>
-                                <TouchableWithoutFeedback>
-                                    <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.cancelButton }>
+                            
+                            <View style={{flexDirection:'column', margin:0, padding:0,}}>
+                                
+                                    <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.confirmButton }>
                                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
                                     </TouchableOpacity>
-                                </TouchableWithoutFeedback>
-
-                                <TouchableWithoutFeedback>
+                            
                                     <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
-                                        <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
+                                        <ImageBackground style={{ flex:1, height:34, width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
                                     </TouchableOpacity>
-                                </TouchableWithoutFeedback>
+                
                             </View>
                         </TouchableWithoutFeedback>
 
@@ -591,16 +599,16 @@ export default function PasswordManager() {
             <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
                 <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
             </TouchableOpacity> 
-            <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.backButton }>
+            <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.resetpinButton }>
                 <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
             </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection:'row', alignItems:'center', marginBottom: -19, padding: 0, marginLeft: 12,}}> 
+        <View style={{ flexDirection:'row', alignItems:'center', marginTop: -27, padding: 0, marginLeft: 12,}}> 
             { passwords.length > 0 ? 
                 ( <Image
                     resizeMode="contain"
-                    style={{ flex:1, maxHeight:42, maxWidth:190, padding:0,}}
+                    style={{ flex:1, maxHeight:42, maxWidth:190, padding:0, marginBottom:0,}}
                     source={require('../assets/yourpwrds.png')}
                 /> ) : (
             <></> )}
@@ -728,7 +736,7 @@ const styles = StyleSheet.create({
         backgroundColor: "transparent", // White background
         borderRadius: 12, // Rounded corners
         elevation: 4, // Add shadow for Android
-        marginBottom: 5, // Space below the table
+        marginBottom: 7, // Space below the table
         shadowColor: "grey", // Shadow color for iOS
         shadowOffset: { width: 0, height: 0 }, // Shadow offset for iOS
         shadowRadius: 5, // Shadow radius for iOS
@@ -790,17 +798,29 @@ const styles = StyleSheet.create({
         height: 49,
         width: 49,
     },
+    confirmButton: {
+        backgroundColor: "transparent", // Red background
+        borderRadius: 9, // Slightly rounded corners
+        padding: 0, // Add padding inside the button
+        marginLeft: 12, // Space to the left of the button
+        borderWidth: 0, 
+        elevation: 0,
+        minHeight: 48,
+        minWidth: 67,
+        marginTop:-16,
+    },
     // Style for the delete button
     cancelButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 9, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 19, // Space to the left of the button
+        marginLeft: 12, // Space to the left of the button
         borderWidth: 0, 
-        elevation: 2,
-        height: 29,
-        width: 57,
-        marginTop: 7,
+        elevation: 0,
+        minHeight: 48,
+        minWidth: 67,
+        marginTop: -7,
+        marginBottom: -22,
     },
     // Style for the edit button
     editButton: {
@@ -808,6 +828,7 @@ const styles = StyleSheet.create({
         borderRadius: 5, // Slightly rounded corners
         padding: 0, // Add padding inside the button
         marginLeft: 1, // Space to the right of the button
+        marginRight: 19,
         borderWidth: 0, // Border width
         elevation: 0,
         height: 52,
@@ -819,11 +840,22 @@ const styles = StyleSheet.create({
         borderRadius: 9, // Slightly rounded corners
         padding: 2, // Add padding inside the button
         marginLeft: 57, // Space to the left of the button
-        borderWidth: .2, 
-        borderColor: "grey",
+        borderWidth: 0, 
         elevation: 0,
         height: 61,
         width: 67,
+    },
+    // Style for the back button
+    resetpinButton: {
+        backgroundColor: "transparent", // Red background
+        borderRadius: 4, // Slightly rounded corners
+        padding: 0, // Add padding inside the button
+        marginLeft: 40, // Space to the left of the button
+        borderWidth: 0,
+        elevation: 0,
+        minHeight: 152,
+        minWidth: 76,
+        marginTop: -48,
     },
     // Style for the container holding the edit and delete buttons
     buttonsContainer: {
