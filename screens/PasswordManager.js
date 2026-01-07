@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, StyleSheet, ImageBackground, Image, Alert, TouchableWithoutFeedback} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function PasswordManager() {
-    const navigation = useNavigation();
     const [website, setWebsite] = useState(""); 
     const [username, setUsername] = useState(""); 
     const [password, setPassword] = useState(""); 
@@ -14,7 +13,7 @@ export default function PasswordManager() {
     const [passwords, setPasswords] = useState([]); 
     const [editing, setEditing] = useState(false);    //State for tracking if editing mode is active
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
-    
+    const navigation = useNavigation();
     const insideViewRef = React.useRef(null);
 
     const encArr = [{letter: 'a', encLetter: '*'}, {letter: 'b', encLetter: '9'}, {letter: 'c', encLetter: 's'},{letter: 'd',  encLetter: '$'},{letter: 'e',  encLetter: 'G'},{letter: 'f',  encLetter: 'o'},{letter: 'g',  encLetter: '6'},
@@ -128,11 +127,11 @@ export default function PasswordManager() {
     
     
     const closeOverlay = () => {
-        setOverlayVisible(false);
+        setOverlayVisible(-1);
     };
       
-    const openOverlay = () => {
-        setOverlayVisible(true);
+    const openOverlay = (passNum) => {
+        setOverlayVisible(passNum);
     };
 
     const resetPin = async () => {
