@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,10 +13,19 @@ export default function PasswordManager() {
     const [passwords, setPasswords] = useState([]); 
     const [editing, setEditing] = useState(false);    //State for tracking if editing mode is active
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
-    const navigation = useNavigation();
+    const [targetX, setTargetX] = useState(0);
+    const [itemX, setItemX] = useState(0);
+    const [isReady, setIsReady] = useState(false);
+
     const insideViewRef = React.useRef(null);
-    const scrollViewRef = React.useRef(null);
+
     const itemRef = React.useRef(null);
+    const scrollRef = React.useRef(null);
+
+    const navigation = useNavigation();
+    
+   
+
 
     const encArr = [{letter: 'a', encLetter: '*'}, {letter: 'b', encLetter: '9'}, {letter: 'c', encLetter: 's'},{letter: 'd',  encLetter: '$'},{letter: 'e',  encLetter: 'G'},{letter: 'f',  encLetter: 'o'},{letter: 'g',  encLetter: '6'},
         {letter: 'h', encLetter: '#'},{letter: 'i',  encLetter: '!'},{letter: 'j',  encLetter: '7'},{letter: 'k',  encLetter: '5'},{letter: 'l',  encLetter: 'y'},{letter: 'm',  encLetter: '2'},{letter: 'n',  encLetter: '4'},
@@ -111,15 +120,19 @@ export default function PasswordManager() {
         showPasswords();
     }, []);
 
-    useEffect(() => {
-        // A timeout might be necessary to ensure all elements are rendered
-        const timer = setTimeout(scrollToItem, 100); 
-        return () => clearTimeout(timer);
-    }, []);
+    const handleAutoScroll = () => {
+    // 1. Wait for layout interactions to finish (crucial for Android)
+    let mv = 380*isOverlayVisible;
+    InteractionManager.runAfterInteractions(() => {
+        if (scrollRef.current && isReady) {
+            scrollRef.current.scrollTo({ x: mv, animated: true });
+        }
+        });
+    };
 
     const handleGlobalTouch = (event) => {
         // UIManager and findNodeHandle are used to get native tags from refs
-        const insideViewNode = findNodeHandle(insideViewRef.current);
+        const insideViewNode = findNodeHandle(scrollRef.current);
         const touchedNode = event?.nativeEvent?.target;
     
         // Check if the touched node is the inside view itself or a descendant
@@ -132,33 +145,31 @@ export default function PasswordManager() {
         }
     };
     
-    
+    const performScroll = () => {
+    if (insideViewRef.current!==null && scrollRef.current!==null) {
 
+    // Use measure instead of measureLayout to avoid findNodeHandle issues
+    insideViewRef.current.measure((x, y, width, height, pageX, pageY) => {
+      // We must get the coordinate relative to the ScrollView container
+      // If measure gives pageX, we subtract the container's pageX
+      scrollRef.current.scrollTo({ x: pageX, animated: true });
+    });
+    }
+  };
 
-    const scrollToItem = () => {
-        if (scrollViewRef.current && itemRef.current) {
-            itemRef.current.measureLayout(
-                scrollViewRef.current,
-                (x, y, width, height) => {
-                // x is the horizontal offset (position) of the item relative to the scroll view
-                // For horizontal scroll, we use 'x'
-                    scrollViewRef.current.scrollTo({ x: x, y: 0, animated: true });
-                },
-                () => {
-                    console.log('Measurement failed');
-                }
-            );
-        }
-    };
-
-
+console.log("targetX: "+targetX);
+console.log("itemX: "+itemX);
 
     const closeOverlay = () => {
         setOverlayVisible(-1);
+        //handleAutoScroll();
+        //performScroll();
     };
       
     const openOverlay = (passNum) => {
         setOverlayVisible(passNum);
+        //handleAutoScroll();
+        //performScroll();
     };
 
     const resetPin = async () => {
@@ -166,6 +177,18 @@ export default function PasswordManager() {
         navigation.popToTop();
     };
 
+    useEffect(() => {
+        // A timeout might be necessary to ensure all elements are rendered
+        //const timer = setTimeout(handleAutoScroll, 100); 
+        //performScroll();
+        handleAutoScroll()
+        console.log("useEffect->isoverlayVisible: "+isOverlayVisible);
+        //return () => clearTimeout(timer);
+
+    }, [isOverlayVisible]);
+
+
+    
 
     const encryptPassword = async (pass, passNum) => {
         if(!pass || pass.length < 4) {
@@ -489,10 +512,30 @@ export default function PasswordManager() {
     };
 
 
+    const truncText = (txt) => {
+        let str = "";
+        if(txt) {
+          let end = txt.length;
+          
+          if(end > 19) {
+            end = 19;
+          
+            for(let index=0; index < end-4; index++) {
+              str+=txt[index];
+            }
+            str+="...";
+            return str;
+          }
+          return txt; 
+        } 
+        return str;
+    };
+
+
     const renderPasswordList = () => {
         return passwords.map((item, index) => (
             <View key={index}
-              ref={item === isOverlayVisible ? itemRef : null}
+              ref={item.passwordNum === isOverlayVisible ? insideViewRef : null}
               style={styles.passwordItem}>
                 
                 <View style={styles.listItem}>
@@ -500,7 +543,7 @@ export default function PasswordManager() {
                         Website:
                     </Text>
                     <Text style={styles.listValue}>
-                        {item.website + " "}
+                        {truncText(item.website +"")}
                     </Text>
                 </View>
 
@@ -509,7 +552,7 @@ export default function PasswordManager() {
                         Username:
                     </Text>
                     <Text style={styles.listValue}>
-                        {item.username + " "}
+                        {truncText(item.username +"")}
                     </Text>
                 </View>
 
@@ -522,14 +565,14 @@ export default function PasswordManager() {
                     </Text>
                 </View>
 
-                <View style={styles.buttonsContainer}>
+                <View onLayout={(event) => setItemX(event.nativeEvent.layout.x*index)} style={styles.buttonsContainer}>
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
 
-                    { isOverlayVisible===item.passwordNum ? (
+                    { isOverlayVisible===index ? (
                         <TouchableWithoutFeedback onPress={closeOverlay}>
-                            <View ref={insideViewRef} style={{flexDirection:'column', margin:0, padding:0,}}>  
+                            <View style={{flexDirection:'column', margin:0, padding:0,}}>  
                                 <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.confirmButton }>
                                     <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
                                 </TouchableOpacity>
@@ -540,7 +583,7 @@ export default function PasswordManager() {
                             </View>
                         </TouchableWithoutFeedback> ) 
                         : (
-                            <TouchableOpacity onPress={() => openOverlay(item.passwordNum)} style={ styles.deleteButton }>
+                            <TouchableOpacity onPress={() => openOverlay(index)} style={ styles.deleteButton }>
                                 <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
                             </TouchableOpacity> )
                     }
@@ -653,9 +696,9 @@ export default function PasswordManager() {
                     </Text> )
                   : (
                     <ScrollView 
-                      ref={scrollViewRef} 
+                      ref={scrollRef} 
                       horizontal
-                      showsHorizontalScrollIndicator={false}>
+                      onContentSizeChange={() => setIsReady(true)}>
                         <View style={styles.table}>
                             {renderPasswordList()}
                         </View>
