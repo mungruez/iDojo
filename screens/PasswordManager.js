@@ -164,7 +164,7 @@ export default function PasswordManager() {
         // A timeout might be necessary to ensure all elements are rendered
         //const timer = setTimeout(handleAutoScroll, 100); 
         handleAutoScroll()
-        console.log("useEffect->isoverlayVisible: "+isOverlayVisible);
+        //console.log("useEffect->isoverlayVisible: "+isOverlayVisible);
         //return () => clearTimeout(timer);
 
     }, [isOverlayVisible]);
