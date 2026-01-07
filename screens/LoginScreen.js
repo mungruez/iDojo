@@ -24,25 +24,22 @@ export default function LoginScreen() {
         if(passKey==null) {
           setHasPasswordList(false);
           await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
-          alert("Welcome to iDojo's Passwords Manager. No Saved PIN or passwords found. please enter a PIN or Password as your Master Password for all your saved passwords. PINs or Passwords should be at least 4 characters long with no slashes.");
+          alert("Welcome to iDojo's Passwords Manager. No Saved PIN or passwords found. Please enter a PIN or Password as your Master Password for all your saved passwords. PINs or Passwords should be at least 4 characters long with no slashes. PIN can only be changed after login.");
           return;
         }
                     
-        if(passKey == 'o') {
-          setHasPasswordList(false);
-          return;
-        }
-        
         for(let pkI=0; pkI < passKey.length; pkI++) {
           if(passKey.charAt(pkI) =='x' ) {
             setHasPasswordList(true);
-            alert("Welcome to iDojo's Passwords Manager. No PIN found. Please enter a PIN or Password as your Master Password for all your saved passwords.");
+            alert("Welcome to iDojo's Passwords Manager. Passwords found! No PIN found. Please enter a PIN or Password as your Master Password to view your saved passwords.");
             return;
           }
         }
 
         alert("Welcome to iDojo's Passwords Manager. No Saved PIN or Passwords found. please enter a PIN or Password as your Master Password for all your saved passwords.");
+        setHasPasswordList(false);
         return;
+
       } else {
         setHasPasswords(true);
 
