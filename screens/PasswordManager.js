@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -23,9 +23,6 @@ export default function PasswordManager() {
     const scrollRef = React.useRef(null);
 
     const navigation = useNavigation();
-    
-   
-
 
     const encArr = [{letter: 'a', encLetter: '*'}, {letter: 'b', encLetter: '9'}, {letter: 'c', encLetter: 's'},{letter: 'd',  encLetter: '$'},{letter: 'e',  encLetter: 'G'},{letter: 'f',  encLetter: 'o'},{letter: 'g',  encLetter: '6'},
         {letter: 'h', encLetter: '#'},{letter: 'i',  encLetter: '!'},{letter: 'j',  encLetter: '7'},{letter: 'k',  encLetter: '5'},{letter: 'l',  encLetter: 'y'},{letter: 'm',  encLetter: '2'},{letter: 'n',  encLetter: '4'},
@@ -120,15 +117,19 @@ export default function PasswordManager() {
         showPasswords();
     }, []);
 
+
+
     const handleAutoScroll = () => {
-    // 1. Wait for layout interactions to finish (crucial for Android)
-    let mv = 380*isOverlayVisible;
-    InteractionManager.runAfterInteractions(() => {
-        if (scrollRef.current && isReady) {
-            scrollRef.current.scrollTo({ x: mv, animated: true });
-        }
+        //Wait for layout interactions to finish (crucial for Android)
+        const deviceWidth = (Dimensions.get('window').width / 100)*71;
+        let mv = isOverlayVisible*(deviceWidth);
+        InteractionManager.runAfterInteractions(() => {
+            if (scrollRef.current && isReady) {
+                scrollRef.current.scrollTo({ x: mv, animated: false });
+            }
         });
     };
+
 
     const handleGlobalTouch = (event) => {
         // UIManager and findNodeHandle are used to get native tags from refs
@@ -144,32 +145,14 @@ export default function PasswordManager() {
           });
         }
     };
-    
-    const performScroll = () => {
-    if (insideViewRef.current!==null && scrollRef.current!==null) {
 
-    // Use measure instead of measureLayout to avoid findNodeHandle issues
-    insideViewRef.current.measure((x, y, width, height, pageX, pageY) => {
-      // We must get the coordinate relative to the ScrollView container
-      // If measure gives pageX, we subtract the container's pageX
-      scrollRef.current.scrollTo({ x: pageX, animated: true });
-    });
-    }
-  };
-
-console.log("targetX: "+targetX);
-console.log("itemX: "+itemX);
 
     const closeOverlay = () => {
         setOverlayVisible(-1);
-        //handleAutoScroll();
-        //performScroll();
     };
       
     const openOverlay = (passNum) => {
         setOverlayVisible(passNum);
-        //handleAutoScroll();
-        //performScroll();
     };
 
     const resetPin = async () => {
@@ -180,7 +163,6 @@ console.log("itemX: "+itemX);
     useEffect(() => {
         // A timeout might be necessary to ensure all elements are rendered
         //const timer = setTimeout(handleAutoScroll, 100); 
-        //performScroll();
         handleAutoScroll()
         console.log("useEffect->isoverlayVisible: "+isOverlayVisible);
         //return () => clearTimeout(timer);
@@ -565,7 +547,7 @@ console.log("itemX: "+itemX);
                     </Text>
                 </View>
 
-                <View onLayout={(event) => setItemX(event.nativeEvent.layout.x*index)} style={styles.buttonsContainer}>
+                <View style={styles.buttonsContainer}>
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
