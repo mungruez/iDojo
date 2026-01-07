@@ -258,21 +258,22 @@ export default function LoginScreen() {
         <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
         <StatusBar style='light' />
       </View>
-          <View style={styles.container}>
-          <Image style={styles.image} resizeMode='contain' source={require('../assets/icon.png')}/>
+      
+      <View style={styles.container}>
+        <Image style={styles.image} resizeMode='contain' source={require('../assets/icon.png')}/>
 
-          <View style={styles.inputview} > 
-            <TextInput
-              style={styles.textinput} 
+        <View style={styles.inputview} > 
+          <TextInput
+            style={styles.textinput} 
               placeholder="Enter PIN/Password"
               placeholderTextColor= "#003f5c"
               secureTextEntry={true}
               value={pin}
               onChangeText= {(pin)=>setPin(pin)}
-            />
-          </View> 
+          />
+        </View> 
 
-          <View style={styles.inputview} > 
+        <View style={styles.inputview} > 
             <TextInput
               style={styles.textinput} 
               placeholder="Confirm PIN/Password"
@@ -281,7 +282,7 @@ export default function LoginScreen() {
               value={pinConfirm}
               onChangeText= {(pinConfirm)=>setPinConfirm(pinConfirm)}
             />
-          </View>  
+        </View>  
         
           <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
             <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
@@ -292,10 +293,10 @@ export default function LoginScreen() {
               onPress={savePin}>
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
-        </View> 
-       </SafeAreaView>) 
+      </View> 
+    </SafeAreaView>) 
 
-       : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}> 
+    : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}> 
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
           <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
