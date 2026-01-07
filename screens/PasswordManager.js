@@ -15,6 +15,8 @@ export default function PasswordManager() {
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
     const navigation = useNavigation();
     const insideViewRef = React.useRef(null);
+    const scrollViewRef = React.useRef(null);
+    const itemRef = React.useRef(null);
 
     const encArr = [{letter: 'a', encLetter: '*'}, {letter: 'b', encLetter: '9'}, {letter: 'c', encLetter: 's'},{letter: 'd',  encLetter: '$'},{letter: 'e',  encLetter: 'G'},{letter: 'f',  encLetter: 'o'},{letter: 'g',  encLetter: '6'},
         {letter: 'h', encLetter: '#'},{letter: 'i',  encLetter: '!'},{letter: 'j',  encLetter: '7'},{letter: 'k',  encLetter: '5'},{letter: 'l',  encLetter: 'y'},{letter: 'm',  encLetter: '2'},{letter: 'n',  encLetter: '4'},
@@ -109,6 +111,11 @@ export default function PasswordManager() {
         showPasswords();
     }, []);
 
+    useEffect(() => {
+        // A timeout might be necessary to ensure all elements are rendered
+        const timer = setTimeout(scrollToItem, 100); 
+        return () => clearTimeout(timer);
+    }, []);
 
     const handleGlobalTouch = (event) => {
         // UIManager and findNodeHandle are used to get native tags from refs
@@ -126,6 +133,26 @@ export default function PasswordManager() {
     };
     
     
+
+
+    const scrollToItem = () => {
+        if (scrollViewRef.current && itemRef.current) {
+            itemRef.current.measureLayout(
+                scrollViewRef.current,
+                (x, y, width, height) => {
+                // x is the horizontal offset (position) of the item relative to the scroll view
+                // For horizontal scroll, we use 'x'
+                    scrollViewRef.current.scrollTo({ x: x, y: 0, animated: true });
+                },
+                () => {
+                    console.log('Measurement failed');
+                }
+            );
+        }
+    };
+
+
+
     const closeOverlay = () => {
         setOverlayVisible(-1);
     };
@@ -464,7 +491,10 @@ export default function PasswordManager() {
 
     const renderPasswordList = () => {
         return passwords.map((item, index) => (
-            <View style={styles.passwordItem} key={index}>
+            <View key={index}
+              ref={item === isOverlayVisible ? itemRef : null}
+              style={styles.passwordItem}>
+                
                 <View style={styles.listItem}>
                     <Text style={styles.listLabel}>
                         Website:
@@ -588,7 +618,7 @@ export default function PasswordManager() {
     }
 
 
-    return isOverlayVisible > 0 ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}>      
+    return isOverlayVisible > -1 ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}>      
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
         
         <View style={{backgroundColor: 'transparent', marginBottom:7, paddingLeft:1, paddingRight:1,}}>
@@ -620,14 +650,17 @@ export default function PasswordManager() {
                 {passwords.length === 0 ? (
                     <Text style={styles.noData}>
                         No Passwords To Show
-                    </Text>
-                ) : (
-                    <ScrollView horizontal>
+                    </Text> )
+                  : (
+                    <ScrollView 
+                      ref={scrollViewRef} 
+                      horizontal
+                      showsHorizontalScrollIndicator={false}>
                         <View style={styles.table}>
                             {renderPasswordList()}
                         </View>
-                    </ScrollView>
-                )}
+                    </ScrollView> )
+                }
 
                 <Text style={styles.subHeading}>
                     {editing
