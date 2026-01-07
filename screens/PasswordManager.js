@@ -111,12 +111,28 @@ export default function PasswordManager() {
     }, []);
 
 
-    const closeOverlay = () => {
-        setOverlayVisible(-1);
+    const handleGlobalTouch = (event) => {
+        // UIManager and findNodeHandle are used to get native tags from refs
+        const insideViewNode = findNodeHandle(insideViewRef.current);
+        const touchedNode = event?.nativeEvent?.target;
+    
+        // Check if the touched node is the inside view itself or a descendant
+        if (insideViewNode && touchedNode !== insideViewNode) {
+          UIManager.viewIsDescendantOf(touchedNode, insideViewNode, (isAncestor) => {
+            if (!isAncestor) {
+              closeOverlay();
+            }
+          });
+        }
     };
-
-    const openOverlay = (passNum) => {
-        setOverlayVisible(passNum);
+    
+    
+    const closeOverlay = () => {
+        setOverlayVisible(false);
+    };
+      
+    const openOverlay = () => {
+        setOverlayVisible(true);
     };
 
     const resetPin = async () => {
@@ -164,7 +180,7 @@ export default function PasswordManager() {
                 primesI++;
             }
         }
-        //console.log('***Password Encryption as :'+enc);
+        
         await AsyncStorage.setItem('xx7771xxiDojoPassword'+passwordNum, ""+enc);
         return enc;
     };
@@ -214,7 +230,6 @@ export default function PasswordManager() {
                             encPrime+=91;
                         }
                         dec+=encArr[encPrime].letter;
-                        //console.log('Decrypting letter:'+encpass[i]+' Prime:'+primes[primesI]+' To decLetter:'+encArr[encPrime].letter+" encPrime: "+encPrime);
                         count[i+1]++;
                         count[i]++;
                         i++;
@@ -223,13 +238,11 @@ export default function PasswordManager() {
                 }
             } 
 
-            //console.log("Current Decrypted password :"+dec);
             if(i < count.length && count[i] == 0) {
                 dec += encpass[i];
             }
         }
 
-        //console.log('Password Decrypted as: '+dec);
         return dec+"";
     };
 
@@ -480,14 +493,14 @@ export default function PasswordManager() {
                     </Text>
                 </View>
 
-                <View ref={insideViewRef} style={styles.buttonsContainer}>
+                <View style={styles.buttonsContainer}>
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
 
                     { isOverlayVisible===item.passwordNum ? (
                         <TouchableWithoutFeedback onPress={closeOverlay}>
-                            <View style={{flexDirection:'column', margin:0, padding:0,}}>  
+                            <View ref={insideViewRef} style={{flexDirection:'column', margin:0, padding:0,}}>  
                                 <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.confirmButton }>
                                     <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
                                 </TouchableOpacity>
@@ -496,13 +509,12 @@ export default function PasswordManager() {
                                      <ImageBackground style={{ flex:1, height:34, width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
                                 </TouchableOpacity>
                             </View>
-                        </TouchableWithoutFeedback>
-
-                        ) : (
-                        <TouchableOpacity onPress={() => openOverlay(item.passwordNum)} style={ styles.deleteButton }>
-                            <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
-                        </TouchableOpacity>
-                    )}
+                        </TouchableWithoutFeedback> ) 
+                        : (
+                            <TouchableOpacity onPress={() => openOverlay(item.passwordNum)} style={ styles.deleteButton }>
+                                <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
+                            </TouchableOpacity> )
+                    }
                 </View>
             </View>
         ));
@@ -577,8 +589,9 @@ export default function PasswordManager() {
     }
 
 
-    return (
+    return isOverlayVisible > 0 ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}>      
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+        
         <View style={{backgroundColor: 'transparent', marginBottom:7, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>
@@ -655,7 +668,87 @@ export default function PasswordManager() {
             </View>
         </ScrollView>
       </ImageBackground>
-    );
+    </Pressable> ) 
+    : ( 
+      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+        
+        <View style={{backgroundColor: 'transparent', marginBottom:7, paddingLeft:1, paddingRight:1,}}>
+          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
+        </View>
+        
+        <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
+            <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
+                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
+            </TouchableOpacity> 
+            <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.resetpinButton }>
+                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
+            </TouchableOpacity>
+        </View>
+
+        <View style={{ flexDirection:'row', alignItems:'center', marginTop: -27, padding: 0, marginLeft: 12,}}> 
+            { passwords.length > 0 ? 
+                ( <Image
+                    resizeMode="contain"
+                    style={{ flex:1, maxHeight:42, maxWidth:190, padding:0, marginBottom:0,}}
+                    source={require('../assets/yourpwrds.png')}
+                /> ) : (
+            <></> )}
+        </View>
+        
+        <ScrollView style={styles.container}>
+            <View style={styles.content}>
+
+                {passwords.length === 0 ? (
+                    <Text style={styles.noData}>
+                        No Passwords To Show
+                    </Text>
+                ) : (
+                    <ScrollView horizontal>
+                        <View style={styles.table}>
+                            {renderPasswordList()}
+                        </View>
+                    </ScrollView>
+                )}
+
+                <Text style={styles.subHeading}>
+                    {editing
+                        ? "Edit Password"
+                        : "Add a Password"}
+                </Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Website"
+                    value={website}
+                    onChangeText={(text) => setWebsite(text)} />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Username"
+                    value={username}
+                    onChangeText={(text) => setUsername(text)} />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    secureTextEntry={false}
+                    value={password}
+                    onChangeText={(text) => setPassword(text)} />
+
+                <TouchableOpacity
+                    style={{height:95, width:"99%", alignSelf:"center",}}
+                    onPress={savePassword}>
+                    <ImageBackground style={{flex:1, height:"auto", width:"98.5%",}} resizeMode='contain' source={require('../assets/pwrdbackground.png')}>
+                        <Image
+                            resizeMode="contain"
+                            style={{ flex:1, height:"auto", width:"83%", alignSelf:"center",}}
+                            source={editing ? require('../assets/editpwrd.png') : require('../assets/addpwrd.png')}
+                        />
+                    </ImageBackground>
+                </TouchableOpacity>
+            </View>
+        </ScrollView>
+      </ImageBackground> 
+    )
 };
 
 // Defining styles for the password manager using StyleSheet
