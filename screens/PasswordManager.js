@@ -14,7 +14,8 @@ export default function PasswordManager() {
     const [passwords, setPasswords] = useState([]); 
     const [editing, setEditing] = useState(false);    //State for tracking if editing mode is active
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
-    ref = React.createRef();
+    
+    const insideViewRef = React.useRef(null);
 
     const encArr = [{letter: 'a', encLetter: '*'}, {letter: 'b', encLetter: '9'}, {letter: 'c', encLetter: 's'},{letter: 'd',  encLetter: '$'},{letter: 'e',  encLetter: 'G'},{letter: 'f',  encLetter: 'o'},{letter: 'g',  encLetter: '6'},
         {letter: 'h', encLetter: '#'},{letter: 'i',  encLetter: '!'},{letter: 'j',  encLetter: '7'},{letter: 'k',  encLetter: '5'},{letter: 'l',  encLetter: 'y'},{letter: 'm',  encLetter: '2'},{letter: 'n',  encLetter: '4'},
@@ -479,38 +480,25 @@ export default function PasswordManager() {
                     </Text>
                 </View>
 
-                <View style={styles.buttonsContainer}
-                  onStartShouldSetResponder={(evt) => {
-                    evt.persist()
-                    if (this.childrenIds && this.childrenIds.length) {
-                        if (this.childrenIds.includes(evt.target)) {
-                            return
-                        }
-                        console.log("Tapped outside")
-                    }
-                }}>
+                <View ref={insideViewRef} style={styles.buttonsContainer}>
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
                         <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
 
                     { isOverlayVisible===item.passwordNum ? (
-        
                         <TouchableWithoutFeedback onPress={closeOverlay}>
+                            <View style={{flexDirection:'column', margin:0, padding:0,}}>  
+                                <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.confirmButton }>
+                                    <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
+                                </TouchableOpacity>
                             
-                            <View style={{flexDirection:'column', margin:0, padding:0,}}>
-                                
-                                    <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.confirmButton }>
-                                        <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
-                                    </TouchableOpacity>
-                            
-                                    <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
-                                        <ImageBackground style={{ flex:1, height:34, width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
-                                    </TouchableOpacity>
-                
+                                <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
+                                     <ImageBackground style={{ flex:1, height:34, width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
+                                </TouchableOpacity>
                             </View>
                         </TouchableWithoutFeedback>
 
-                    ) : (
+                        ) : (
                         <TouchableOpacity onPress={() => openOverlay(item.passwordNum)} style={ styles.deleteButton }>
                             <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
                         </TouchableOpacity>

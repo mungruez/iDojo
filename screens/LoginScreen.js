@@ -12,7 +12,7 @@ export default function LoginScreen() {
   const [hasPasswordList, setHasPasswordList] = useState(false);
   const navigation = useNavigation();
 
-  insideViewRef = React.createRef();
+  const insideViewRef = React.useRef(null);
 
 
   const fetchPasswords = async () => {
@@ -101,18 +101,18 @@ export default function LoginScreen() {
   };
 
 
-  handleGlobalTouch = (event) => {
+  const handleGlobalTouch = (event) => {
     // UIManager and findNodeHandle are used to get native tags from refs
     const insideViewNode = findNodeHandle(insideViewRef.current);
-    const touchedNode = event.nativeEvent.target;
+    const touchedNode = event?.nativeEvent?.target;
 
     // Check if the touched node is the inside view itself or a descendant
-    if (insideViewNode && touchedNode !== insideViewNode && !UIManager.viewIsDescendantOf(touchedNode, insideViewNode, (isAncestor) => {
-      if (isAncestor) {
-        return;
-      }
-    })) {
-      closeOverlay();
+    if (insideViewNode && touchedNode !== insideViewNode) {
+      UIManager.viewIsDescendantOf(touchedNode, insideViewNode, (isAncestor) => {
+        if (!isAncestor) {
+          closeOverlay();
+        }
+      });
     }
   };
 
@@ -255,15 +255,13 @@ export default function LoginScreen() {
 
 
 
-  return (
+  return ( !hasPasswords ? ( 
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
       <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
         <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
         <StatusBar style='light' />
       </View>
-
-      {!hasPasswords ? 
-        ( <View style={styles.container}>
+          <View style={styles.container}>
           <Image style={styles.image} resizeMode='contain' source={require('../assets/icon.png')}/>
 
           <View style={styles.inputview} > 
@@ -271,18 +269,18 @@ export default function LoginScreen() {
               style={styles.textinput} 
               placeholder="Enter PIN/Password"
               placeholderTextColor= "#003f5c"
-              securetextEntry={true}
+              secureTextEntry={true}
               value={pin}
               onChangeText= {(pin)=>setPin(pin)}
             />
-          </View>
+          </View> 
 
           <View style={styles.inputview} > 
             <TextInput
               style={styles.textinput} 
               placeholder="Confirm PIN/Password"
               placeholderTextColor= "#003f5c"
-              securetextEntry={true}
+              secureTextEntry={true}
               value={pinConfirm}
               onChangeText= {(pinConfirm)=>setPinConfirm(pinConfirm)}
             />
@@ -297,9 +295,15 @@ export default function LoginScreen() {
               onPress={savePin}>
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
-        </View> ) 
+        </View> 
+       </SafeAreaView>) 
 
-        : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={this.handleGlobalTouch}> 
+       : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}> 
+        <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
+          <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
+            <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
+            <StatusBar style='light' />
+          </View>
           <View style={styles.container}>
             <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
             <StatusBar style='light' />
@@ -309,7 +313,7 @@ export default function LoginScreen() {
                 style={styles.textinput} 
                 placeholder="Enter PIN/Password"
                 placeholderTextColor= "#003f5c"
-                securetextEntry={true}
+                secureTextEntry={true}
                 value={pin}
                 onChangeText= {(pin)=>setPin(pin)}
               />
@@ -335,22 +339,28 @@ export default function LoginScreen() {
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
           </View> 
-        </Pressable> )
+        </SafeAreaView>
+        </Pressable>)
 
-        : ( <View style={styles.container}>
-            <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
+        : ( <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
+          <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
+            <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
             <StatusBar style='light' />
+          </View>
+            <View style={styles.container}>
+              <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
+              <StatusBar style='light' />
 
-            <View style={styles.inputview} > 
-              <TextInput
-                style={styles.textinput} 
-                placeholder="Enter PIN/Password"
-                placeholderTextColor= "#003f5c"
-                securetextEntry={true}
-                value={pin}
-                onChangeText= {(pin)=>setPin(pin)}
-              />
-            </View> 
+              <View style={styles.inputview}> 
+                <TextInput
+                  style={styles.textinput} 
+                  placeholder="Enter PIN/Password"
+                  placeholderTextColor= "#003f5c"
+                  secureTextEntry={true}
+                  value={pin}
+                  onChangeText= {(pin)=>setPin(pin)}
+                />
+              </View> 
 
             <TouchableOpacity
               style={{height:43, width:"61%", alignSelf:"center", backgroundColor:"transparent",}}
@@ -363,10 +373,9 @@ export default function LoginScreen() {
               onPress={checkPin}>
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
-          </View> 
-         )
-      }
-    </SafeAreaView>
+            </View>
+          </SafeAreaView>
+        )
   )}
 
   const styles = StyleSheet.create({
