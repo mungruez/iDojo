@@ -96,16 +96,17 @@ export default function FeatureMoveList() {
     let hstyle = "";
     let hsource ="";
     for (let fvNum = 0; fvNum < vds.length; fvNum++) {
-      if(vds.vend === -1) {
+      if(vds[fvNum].Vend < 0 || fvNum == (vds.length -1) ) {
         if(hlist.length > 0) {
           hVideos.push({
             Style: hstyle,
             Source: hsource,
             data: hlist,
           });
-        }
+        } 
         hlist=[];
-        htitle=vds[fvNum].Style;
+        hlist.push(vds[fvNum]);
+        hstyle=vds[fvNum].Style;
         hsource=vds[fvNum].Source;
 
       } else {
@@ -113,6 +114,7 @@ export default function FeatureMoveList() {
       }
     }
     setHfvideos(hVideos);
+    console.log("hvideos: "+hVideos[0].data.length);
 
     try {
       await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
@@ -354,12 +356,11 @@ export default function FeatureMoveList() {
           <Text style={{color: '#0e2a35ff', fontSize:21, fontStyle: "italic", fontWeight:"bold", textAlign:"center",}}> Loading...</Text> 
         </View> )
     }
-    <View>
+    <View style={styles.imgBackground}>
       <FlatList
         data={hfvideos}
         renderItem={renderVerticalItem}
         keyExtractor={(item) => item.Source}
-        numColumns={2}
         contentContainerStyle={{ paddingBottom: 57 }}
         showsVerticalScrollIndicator={false}
       />
