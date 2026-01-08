@@ -15,7 +15,7 @@ export default function PasswordManager() {
     const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
     const [targetX, setTargetX] = useState(0);
     const [itemX, setItemX] = useState(0);
-    const [isReady, setIsReady] = useState(false);
+    const [isReady, setIsReady] = useState(true);
 
     const insideViewRef = React.useRef(null);
 
@@ -164,7 +164,7 @@ export default function PasswordManager() {
         // A timeout might be necessary to ensure all elements are rendered
         //const timer = setTimeout(handleAutoScroll, 100); 
         handleAutoScroll()
-        //console.log("useEffect->isoverlayVisible: "+isOverlayVisible);
+        console.log("useEffect->isoverlayVisible: "+isOverlayVisible);
         //return () => clearTimeout(timer);
 
     }, [isOverlayVisible]);

@@ -9,6 +9,7 @@ export default function FeatureMoveList() {
   const [isloading, setIsLoading] = useState(true);
   const [errormsg, setError] = useState(false);
   const [fvideos, setFvideos] = useState([]);
+  const [hfvideos, setHfvideos] = useState([]);
   const navigation = useNavigation();
 
   const deviceWidth = (Dimensions.get('window').width / 100)*46;
@@ -90,6 +91,29 @@ export default function FeatureMoveList() {
     setFvideos(vds);
     setIsLoading(false);
 
+    let hVideos = [];
+    let hlist = [];
+    let hstyle = "";
+    let hsource ="";
+    for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+      if(vds.vend === -1) {
+        if(hlist.length > 0) {
+          hVideos.push({
+            Style: hstyle,
+            Source: hsource,
+            data: hlist,
+          });
+        }
+        hlist=[];
+        htitle=vds[fvNum].Style;
+        hsource=vds[fvNum].Source;
+
+      } else {
+        hlist.push(vds[fvNum]);
+      }
+    }
+    setHfvideos(hVideos);
+
     try {
       await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
       //Save Date Stamp as ISO string
@@ -105,10 +129,10 @@ export default function FeatureMoveList() {
   useEffect(() => {
     const savedfv=fetchFvideos();
     if ( savedfv && savedfv > 38 && fvideos.length > 38 ) { 
-      console.log("Saved Featured videos found! "+fvideos.length);
+      //console.log("Saved Featured videos found! "+fvideos.length);
       return;
     }
-    console.log("ZERO Saved Featured videos found! ");
+    //console.log("ZERO Saved Featured videos found! ");
     try { 
     fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
     .then(res => res.json())
@@ -135,7 +159,33 @@ export default function FeatureMoveList() {
   }, []);
 
 
-   
+  const HorizontalList = ({ data }) => {
+    const renderHorizontalItem = ({ item }) => (
+      <View>
+        <Text>{item.Style}</Text>
+      </View>
+    );
+
+    return (
+      <FlatList
+        horizontal={true} // Key prop for horizontal scrolling
+        data={data}
+        keyExtractor={(item) => item.Title}
+        showsHorizontalScrollIndicator={false} // Optional: hide the scroll bar
+        renderItem={renderHorizontalItem}
+      />
+  );
+};
+
+  const renderVerticalItem = ({ item }) => (
+    <View >
+      <Text style={styles.sourcetext}>{item.Source}</Text>
+      {/* The nested horizontal FlatList goes here */}
+      <HorizontalList data={item.data} />
+    </View>
+  );
+
+
 
   return (<ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     {!isloading ? <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
@@ -157,18 +207,16 @@ export default function FeatureMoveList() {
                 <View
                   key={item.Title}
                   style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  alignItems: "top",
-                  marginTop:7,
-                  marginLeft:"1",
-                  marginRight:"1",
-                  width:"50%",
-                  borderColor:"transparent",
-                  borderWidth:0,
-                  backgroundColor:'#2f4f4f',
-                }}>
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    alignItems: "top",
+                    marginTop:7,
+                    width:"50%",
+                    borderColor:"transparent",
+                    borderWidth:0,
+                    backgroundColor:'#2f4f4f',
+                  }}>
               
                 { item.Vend < 0 ? <Pressable
                   onPress={() => {navigation.navigate('Featured', {video: item});}}>
@@ -306,6 +354,16 @@ export default function FeatureMoveList() {
           <Text style={{color: '#0e2a35ff', fontSize:21, fontStyle: "italic", fontWeight:"bold", textAlign:"center",}}> Loading...</Text> 
         </View> )
     }
+    <View>
+      <FlatList
+        data={hfvideos}
+        renderItem={renderVerticalItem}
+        keyExtractor={(item) => item.Source}
+        numColumns={2}
+        contentContainerStyle={{ paddingBottom: 57 }}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   </ImageBackground>)
 }
 
