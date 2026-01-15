@@ -96,7 +96,8 @@ export default function FeatureMoveList() {
     let hstyle = "";
     let hsource ="";
     for (let fvNum = 0; fvNum < vds.length; fvNum++) {
-      if(vds[fvNum].Vend < 0 || fvNum == (vds.length -1) ) {
+      if(vds[fvNum].Vend < 0 || fvNum == (vds.length -1) || vds[fvNum].Vend == 7777777) {
+
         if(hlist.length > 0) {
           hVideos.push({
             Style: hstyle,
@@ -111,6 +112,10 @@ export default function FeatureMoveList() {
 
       } else {
         hlist.push(vds[fvNum]);
+      }
+
+      if(vds[fvNum].Vend == 7777777) {
+        break;
       }
     }
     setHfvideos(hVideos);
@@ -162,19 +167,156 @@ export default function FeatureMoveList() {
 
 
   const HorizontalList = ({ data }) => {
-    const renderHorizontalItem = ({ item }) => (
-      <View>
-        <Text>{item.Style}</Text>
-      </View>
-    );
-
     return (
       <FlatList
         horizontal={true} // Key prop for horizontal scrolling
         data={data}
         keyExtractor={(item) => item.Title}
         showsHorizontalScrollIndicator={false} // Optional: hide the scroll bar
-        renderItem={renderHorizontalItem}
+        numColumns={2}
+        contentContainerStyle={{ paddingBottom: 7 }}
+        renderItem={({ item, index }) => (
+                <View
+                  key={item.Title}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    alignItems: "top",
+                    marginTop:7,
+                    width:"50%",
+                    borderColor:"transparent",
+                    borderWidth:0,
+                    backgroundColor:'#2f4f4f',
+                  }}>
+              
+                { item.Vend < 0 ? <Pressable
+                  onPress={() => {navigation.navigate('Featured', {video: item});}}>
+                    <View key={index} > 
+                      { item.Vend < 0 && <View style={{ marginTop:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column",  minHeight:38,}}>
+                        <Text style={styles.sourcetext}> {item.Source}</Text>
+                      </View>} 
+
+                      <View style={styles.mainCardView}>
+                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0,}}>
+                          <View style={styles.subCardView}>
+                            <Image
+                              source={{uri: item.Thumb}}
+                              resizeMode="cover"
+                              style={styles.image}
+                            />
+                            
+                            <View style={{marginLeft: 12,}}>
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: "crimson",
+                                  fontWeight: 'bold',
+                                  textTransform: 'capitalize',
+                                }}>
+                                {item.Title}
+                              </Text>
+                              
+                              <View
+                                style={{
+                                  marginTop: 3,
+                                  borderWidth: .5,
+                                  borderColor:'#228b22',
+                                  flexDirection:'row',
+                                  backgroundColor:'#323232',
+                                  justifyContent:'space-between',
+                                }}>
+                                <Text style={{color: '#9a9aa1',fontSize: 11, }}>
+                                    {item.Type}
+                                </Text>
+
+                                <Text style={{color: '#fff',fontSize: 11,}}>
+                                    {item.Style}
+                                </Text>
+                              </View>
+                            </View>
+                                <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail'
+                                style={{
+                                  fontSize: 11,
+                                  color: "#cfcfafff",
+                                  fontWeight: 'medium',
+                                  overflow:"scroll",
+                                }}>
+                                  {item.Desc}
+                              </Text>
+                            
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                </Pressable> 
+
+                : <Pressable
+                  onPress={() => {navigation.navigate('Featured', {video: item});}}>
+                    <View key={index}> 
+                      { item.Vend >= 0 && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:29, width: (Dimensions.get('window').width*0.47),}}>
+                        <Text style={styles.titletext}>{item.Title}</Text>
+                      </View> } 
+
+                      <View style={styles.mainCardView}>
+                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0,}}>
+                          <View style={styles.subCardView}>
+                            <View>
+                            <Image
+                              source={{uri: item.Thumb}}
+                              resizeMode="cover"
+                              style={{
+                                borderRadius: 12,
+                                alignSelf: 'flex-start',
+                                marginTop:0,
+                                marginLeft:3,
+                                height: 190,
+                                width: (Dimensions.get('window').width/100)*45,
+                              }}
+                            />
+                            </View>
+                            
+                            <View style={{marginLeft: 4, marginTop:1,}}>
+                              <View
+                                style={{
+                                  borderWidth: .5,
+                                  borderColor:'#228b22',
+                                  flexDirection:'row',
+                                  backgroundColor:'#323232',
+                                  justifyContent:'space-between',
+                                }}>
+                                <Text style={{color: '#9a9aa1',fontSize: 11,}}>
+                                    {item.Type}
+                                </Text>
+
+                                <Text style={{color: '#fff',fontSize: 11,}}>
+                                    {item.Style}
+                                </Text>
+                              </View>
+                            </View>
+
+                            
+                              <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail'
+                                style={{
+                                  fontSize: 11,
+                                  color: "#cfcfafff",
+                                  fontWeight: 'medium',
+                                  overflow:"scroll",
+                                }}>
+                                  {item.Desc}
+                              </Text>
+                            
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                </Pressable>}
+
+              </View>)}
       />
   );
 };

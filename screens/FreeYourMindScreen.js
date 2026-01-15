@@ -4,7 +4,6 @@ import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ScrollView, 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
-//import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function FreeYourMindScreen() {
     const [musicFiles, setMusicFiles] = useState([]);
@@ -15,79 +14,80 @@ export default function FreeYourMindScreen() {
     const fetchMusicFiles = async () => {
         const mhaudio = [
         {
-          filename: 'Shaolin-Free Your Mind-(Part 1)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part1).mp3',
+          filename: 'Free Your Mind - (Part 1)', 
+          uri: '../assets/freeyourmind/freeyourmind(part1).mp3',
           duration: "2:36",
           id: 0,
         },
         {
-          filename: 'Shaolin-Free Your Mind- (Part 2)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part2).mp3',
+          filename: 'Free Your Mind - (Part 2)', 
+          uri: '../assets/freeyourmind/freeyourmind(part2).mp3',
           duration: "2:46",
           id: 1,
         },
         {
-          filename: 'Shaolin-Free Your Mind-(Part 3)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part3).mp3',
+          filename: 'Free Your Mind - (Part 3)', 
+          uri: '../assets/freeyourmind/freeyourmind(part3).mp3',
           duration: "3:41",
           id: 2,
         },
         {
-          filename: 'Shaolin-Free Your Mind-(Part 4)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part4).mp3',
+          filename: 'Free Your Mind - (Part 4)', 
+          uri: '../assets/freeyourmind/freeyourmind(part4).mp3',
           duration: "1:05",
           id: 3,
         },
         {
-          filename: 'Shaolin-Free Your Mind-(Part 5)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part5).mp3',
+          filename: 'Free Your Mind - (Part 5)', 
+          uri: '../assets/freeyourmind/freeyourmind(part5).mp3',
           duration: "3:37",
           id: 4,
         },
         {
-          filename: 'Shaolin-Free Your Mind-(Part 6)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part6).mp3',
+          filename: 'Free Your Mind - (Part 6)', 
+          uri: '../assets/freeyourmind/freeyourmind(part6).mp3',
           duration: "3:37",
           id: 5,
         },
         {
-          filename: 'Shaolin-Free Your Mind-(Part 7)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part7).mp3',
+          filename: 'Free Your Mind - (Part 7)', 
+          uri: '../assets/freeyourmind/freeyourmind(part7).mp3',
           duration: "3:37",
           id: 6,
         },
         {
-          filename: 'Shaolin-Free Your Mind-(Part 8)', 
-          uri: '../assets/freeyourmind/shaolinfreeyourmind(part8).mp3',
+          filename: 'Free Your Mind - (Part 8)', 
+          uri: '../assets/freeyourmind/freeyourmind(part8).mp3',
           duration: "3:53",
           id: 7,
+        },
+        {
+          filename: 'Free Your Mind - (Part 9)', 
+          uri: '../assets/freeyourmind/freeyourmind(part9).mp3',
+          duration: "19:41",
+          id: 8,
         },
         {
           filename: 'The Universe Forces You To Let Go- (Part 1)', 
           uri: '../assets/freeyourmind/theuniverseforcesyoutoletgo(part1).mp3',
           duration: "14:38",
-          id: 8,
+          id: 9,
         },
         {
           filename: 'The Universe Forces You To Let Go- (Part 2)', 
           uri: '../assets/freeyourmind/theuniverseforcesyoutoletgo(part2).mp3',
           duration: "7:45",
-          id: 9,
+          id: 10,
         },
         {
           filename: 'The Universe Forces You To Let Go- (Part 3)', 
           uri: '../assets/freeyourmind/theuniverseforcesyoutoletgo(part3).mp3',
           duration: "2:53",
-          id: 10,
-        },
-        {
-          filename: 'The Universe Forces You To Let Go- (Part 4)', 
-          uri: '../assets/freeyourmind/theuniverseforcesyoutoletgo(part4).mp3',
-          duration: "2:53",
           id: 11,
         }]
         setMusicFiles(mhaudio);
     }
+
 
     const playMusic = async (fileID) => {
       try {
@@ -205,6 +205,8 @@ export default function FreeYourMindScreen() {
       }
     }
 
+
+
     const pauseMusic = async () => {
       try {
         if(fymsound) {
@@ -215,6 +217,7 @@ export default function FreeYourMindScreen() {
           alert("error in pauseMusic: "+error);
       }
     }
+
 
 
     useEffect(() => {
@@ -243,6 +246,8 @@ export default function FreeYourMindScreen() {
     }, [fymsound])
 
     
+    
+
     useEffect(() => {
       fetchMusicFiles();
       //Unload sound when component unmounts to prevent memory leaks
@@ -252,10 +257,12 @@ export default function FreeYourMindScreen() {
     }, [])
     
 
+
     return (
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fymbackground.png')}>
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, backgroundColor: 'transparent',}}>
           <View style={styles.container}>
+
             <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
                 <ImageBackground style={ styles.title } resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
                 <StatusBar style='light' />
