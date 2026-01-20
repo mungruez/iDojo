@@ -808,6 +808,9 @@ export default function PasswordManager() {
     )
 };
 
+
+
+
 // Defining styles for the password manager using StyleSheet
 const styles = StyleSheet.create({
     // Style for the main container
