@@ -302,7 +302,7 @@ export default function FreeYourMindScreen() {
                                     <ImageBackground 
                                         style={ styles.imgSound } 
                                         resizeMode='contain' 
-                                        source={playing !== file.id ? require('../assets/fymplaybutton.png') : require('../assets/fympausebutton.png')}>
+                                        source={playing !== file.id || isPaused ? require('../assets/fymplaybutton.png') : require('../assets/fympausebutton.png')}>
 
                                         <Text style={styles.fileName}> {file.filename} </Text>
                                     </ImageBackground>        
