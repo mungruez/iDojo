@@ -172,92 +172,29 @@ export default function FeatureMoveList() {
         horizontal={true} // Key prop for horizontal scrolling
         data={data}
         keyExtractor={(item) => item.Title}
-        showsHorizontalScrollIndicator={false} // Optional: hide the scroll bar
-        numColumns={2}
-        contentContainerStyle={{ paddingBottom: 7 }}
+        showsHorizontalScrollIndicator={true}
+        contentContainerStyle={{ minWidth: (Dimensions.get('window').width*data.length)/2, paddingRight: 5, height: 313, flexGrow: 1, }}
         renderItem={({ item, index }) => (
                 <View
-                  key={item.Title}
                   style={{
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexDirection: "column",
                     alignItems: "top",
+                    marginLeft:5,
                     marginTop:7,
-                    width:"50%",
+                    width: (Dimensions.get('window').width*0.47),
                     borderColor:"transparent",
                     borderWidth:0,
+                    borderRadius:38,
                     backgroundColor:'#2f4f4f',
                   }}>
               
-                { item.Vend < 0 ? <Pressable
-                  onPress={() => {navigation.navigate('Featured', {video: item});}}>
-                    <View key={index} > 
-                      { item.Vend < 0 && <View style={{ marginTop:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column",  minHeight:38,}}>
-                        <Text style={styles.sourcetext}> {item.Source}</Text>
-                      </View>} 
-
-                      <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0,}}>
-                          <View style={styles.subCardView}>
-                            <Image
-                              source={{uri: item.Thumb}}
-                              resizeMode="cover"
-                              style={styles.image}
-                            />
-                            
-                            <View style={{marginLeft: 12,}}>
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  color: "crimson",
-                                  fontWeight: 'bold',
-                                  textTransform: 'capitalize',
-                                }}>
-                                {item.Title}
-                              </Text>
-                              
-                              <View
-                                style={{
-                                  marginTop: 3,
-                                  borderWidth: .5,
-                                  borderColor:'#228b22',
-                                  flexDirection:'row',
-                                  backgroundColor:'#323232',
-                                  justifyContent:'space-between',
-                                }}>
-                                <Text style={{color: '#9a9aa1',fontSize: 11, }}>
-                                    {item.Type}
-                                </Text>
-
-                                <Text style={{color: '#fff',fontSize: 11,}}>
-                                    {item.Style}
-                                </Text>
-                              </View>
-                            </View>
-                                <Text
-                                numberOfLines={3}
-                                ellipsizeMode='tail'
-                                style={{
-                                  fontSize: 11,
-                                  color: "#cfcfafff",
-                                  fontWeight: 'medium',
-                                  overflow:"scroll",
-                                }}>
-                                  {item.Desc}
-                              </Text>
-                            
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                </Pressable> 
-
-                : <Pressable
+                { item.Title && <Pressable
                   onPress={() => {navigation.navigate('Featured', {video: item});}}>
                     <View key={index}> 
-                      { item.Vend >= 0 && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:29, width: (Dimensions.get('window').width*0.47),}}>
-                        <Text style={styles.titletext}>{item.Title}</Text>
+                      { item.Title && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:38, width: (Dimensions.get('window').width*0.47),}}>
+                        <Text numberOfLines={2} style={styles.titletext}>{item.Title}</Text>
                       </View> } 
 
                       <View style={styles.mainCardView}>
@@ -287,17 +224,16 @@ export default function FeatureMoveList() {
                                   backgroundColor:'#323232',
                                   justifyContent:'space-between',
                                 }}>
-                                <Text style={{color: '#9a9aa1',fontSize: 11,}}>
+                                <Text style={{color: '#9a9aa1',fontSize: 11, marginLeft: 2,}}>
                                     {item.Type}
                                 </Text>
 
-                                <Text style={{color: '#fff',fontSize: 11,}}>
+                                <Text style={{color: '#fff',fontSize: 11, marginRight: 3,}}>
                                     {item.Style}
                                 </Text>
                               </View>
                             </View>
 
-                            
                               <Text
                                 numberOfLines={3}
                                 ellipsizeMode='tail'
@@ -322,7 +258,7 @@ export default function FeatureMoveList() {
 };
 
   const renderVerticalItem = ({ item }) => (
-    <View >
+    <View>
       <Text style={styles.sourcetext}>{item.Source}</Text>
       {/* The nested horizontal FlatList goes here */}
       <HorizontalList data={item.data} />
@@ -331,182 +267,29 @@ export default function FeatureMoveList() {
 
 
 
-  return (<ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
-    {!isloading ? <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+  return ( <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+    <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
       <View style={{backgroundColor: 'transparent', marginBottom:20, paddingBottom:10, opacity: .7,}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
-       
       </View>
-
-      <View style={{backgroundColor:"transparent", marginBottom:19, flex:1}}>
-         <View style={{flex:1}}>
-            <FlatList
-              data={fvideos}
-              numColumns={2}
-              contentContainerStyle={{ paddingBottom: 57 }}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => (
-                <View
-                  key={item.Title}
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexDirection: "column",
-                    alignItems: "top",
-                    marginTop:7,
-                    width:"50%",
-                    borderColor:"transparent",
-                    borderWidth:0,
-                    backgroundColor:'#2f4f4f',
-                  }}>
-              
-                { item.Vend < 0 ? <Pressable
-                  onPress={() => {navigation.navigate('Featured', {video: item});}}>
-                    <View key={index} > 
-                      { item.Vend < 0 && <View style={{ marginTop:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column",  minHeight:38,}}>
-                        <Text style={styles.sourcetext}> {item.Source}</Text>
-                      </View>} 
-
-                      <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0,}}>
-                          <View style={styles.subCardView}>
-                            <Image
-                              source={{uri: item.Thumb}}
-                              resizeMode="cover"
-                              style={styles.image}
-                            />
-                            
-                            <View style={{marginLeft: 12,}}>
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  color: "crimson",
-                                  fontWeight: 'bold',
-                                  textTransform: 'capitalize',
-                                }}>
-                                {item.Title}
-                              </Text>
-                              
-                              <View
-                                style={{
-                                  marginTop: 3,
-                                  borderWidth: .5,
-                                  borderColor:'#228b22',
-                                  flexDirection:'row',
-                                  backgroundColor:'#323232',
-                                  justifyContent:'space-between',
-                                }}>
-                                <Text style={{color: '#9a9aa1',fontSize: 11, }}>
-                                    {item.Type}
-                                </Text>
-
-                                <Text style={{color: '#fff',fontSize: 11,}}>
-                                    {item.Style}
-                                </Text>
-                              </View>
-                            </View>
-                                <Text
-                                numberOfLines={3}
-                                ellipsizeMode='tail'
-                                style={{
-                                  fontSize: 11,
-                                  color: "#cfcfafff",
-                                  fontWeight: 'medium',
-                                  overflow:"scroll",
-                                }}>
-                                  {item.Desc}
-                              </Text>
-                            
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                </Pressable> 
-
-                : <Pressable
-                  onPress={() => {navigation.navigate('Featured', {video: item});}}>
-                    <View key={index}> 
-                      { item.Vend >= 0 && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:29, width: (Dimensions.get('window').width*0.47),}}>
-                        <Text style={styles.titletext}>{item.Title}</Text>
-                      </View> } 
-
-                      <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0,}}>
-                          <View style={styles.subCardView}>
-                            <View>
-                            <Image
-                              source={{uri: item.Thumb}}
-                              resizeMode="cover"
-                              style={{
-                                borderRadius: 12,
-                                alignSelf: 'flex-start',
-                                marginTop:0,
-                                marginLeft:3,
-                                height: 190,
-                                width: (Dimensions.get('window').width/100)*45,
-                              }}
-                            />
-                            </View>
-                            
-                            <View style={{marginLeft: 4, marginTop:1,}}>
-                              <View
-                                style={{
-                                  borderWidth: .5,
-                                  borderColor:'#228b22',
-                                  flexDirection:'row',
-                                  backgroundColor:'#323232',
-                                  justifyContent:'space-between',
-                                }}>
-                                <Text style={{color: '#9a9aa1',fontSize: 11,}}>
-                                    {item.Type}
-                                </Text>
-
-                                <Text style={{color: '#fff',fontSize: 11,}}>
-                                    {item.Style}
-                                </Text>
-                              </View>
-                            </View>
-
-                            
-                              <Text
-                                numberOfLines={3}
-                                ellipsizeMode='tail'
-                                style={{
-                                  fontSize: 11,
-                                  color: "#cfcfafff",
-                                  fontWeight: 'medium',
-                                  overflow:"scroll",
-                                }}>
-                                  {item.Desc}
-                              </Text>
-                            
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                </Pressable>}
-
-              </View>)}
+      
+      {!isloading ? ( <View style={styles.imgBackground}>
+          <FlatList
+            data={hfvideos}
+            renderItem={renderVerticalItem}
+            keyExtractor={(item) => item.Source}
+            contentContainerStyle={{ flex :1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop:40, }}
+            showsVerticalScrollIndicator={false}
             />
-          </View> 
-        </View>  
-      </SafeAreaView> : 
-        ( <View style ={{flex:1, justifyContent:'center', alignItems:'center',}}> 
+        </View> )
+        : ( <View style ={{flex:1, justifyContent:'center', alignItems:'center',}}> 
           <ActivityIndicator style={{marginTop: 114, textAlign: 'center'}} size="95" color="#0e2a35ff"/> 
           <Text style={{color: '#0e2a35ff', fontSize:21, fontStyle: "italic", fontWeight:"bold", textAlign:"center",}}> Loading...</Text> 
         </View> )
-    }
-    <View style={styles.imgBackground}>
-      <FlatList
-        data={hfvideos}
-        renderItem={renderVerticalItem}
-        keyExtractor={(item) => item.Source}
-        contentContainerStyle={{ paddingBottom: 57 }}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+      }
+    </SafeAreaView>
   </ImageBackground>)
 }
 

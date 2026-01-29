@@ -9,6 +9,7 @@ export default function FreeYourMindScreen() {
     const [musicFiles, setMusicFiles] = useState([]);
     const [playing, setPlaying] = useState(-1);
     const [fymsound, setSound] = useState(null);
+    const [isPaused, setIsPaused] = useState(false);
     const [progressDuration, setProgressDuration] = useState("0:00");
 
     const fetchMusicFiles = async () => {
@@ -64,7 +65,7 @@ export default function FreeYourMindScreen() {
         {
           filename: 'Free Your Mind - (Part 9)', 
           uri: '../assets/freeyourmind/freeyourmind(part9).mp3',
-          duration: "19:41",
+          duration: "19:47",
           id: 8,
         },
         {
@@ -115,21 +116,21 @@ export default function FreeYourMindScreen() {
 
         if(fileID==0) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part1).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part1).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
             //setPlaying(fileID);
         } else if(fileID==1) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part2).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part2).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
             //setPlaying(fileID);
         } else if(fileID==2) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part3).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part3).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
@@ -137,69 +138,67 @@ export default function FreeYourMindScreen() {
             console.log("playing part 3  fileID:"+fileID);
         } else if(fileID==3) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part4).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part4).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
             //setPlaying(fileID);
         } else if(fileID==4) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part5).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part5).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
             //setPlaying(fileID);
         } else if(fileID==5) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part6).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part6).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
             
         } else if(fileID==6) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part7).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part7).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
             
         } else if(fileID==7) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/shaolinfreeyourmind(part8).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part8).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
           
         } else if(fileID==8) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part1).mp3'),
+                require('../assets/freeyourmind/freeyourmind(part9).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
-            
+    
         } else if(fileID==9) {
             const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part2).mp3'),
+                require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part1).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
             
         } else if(fileID==10) {
             const { sound } = await Audio.Sound.createAsync(
+                require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part2).mp3'),
+                { shouldPlay: true }
+            ); 
+            setSound(sound);
+            
+        } else if(fileID==11) {
+            const { sound } = await Audio.Sound.createAsync(
                 require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part3).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
-        
-        } else if(fileID==11) {
-            const { sound } = await Audio.Sound.createAsync(
-                require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part4).mp3'),
-                { shouldPlay: true }
-            ); 
-            setSound(sound);
-    
         }
-
       } catch(error) {
         alert(error+" .Error in playMusic  track#: "+playing);
       }
@@ -210,9 +209,14 @@ export default function FreeYourMindScreen() {
     const pauseMusic = async () => {
       try {
         if(fymsound) {
-          await fymsound.stopAsync();
-          setPlaying(-1);
-        }
+          if(isPaused) {
+            await fymsound.playAsync();
+            setIsPaused(false);
+          } else {
+            await fymsound.pauseAsync();
+            setIsPaused(true);
+          }
+        } 
       } catch(error) {
           alert("error in pauseMusic: "+error);
       }
