@@ -1,29 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator, ScrollView  } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function FeatureMoveList() {
   const [isloading, setIsLoading] = useState(true);
-  const [errormsg, setError] = useState(false);
-  const [fvideos, setFvideos] = useState([]);
   const [hfvideos, setHfvideos] = useState([]);
   const navigation = useNavigation();
 
-  const deviceWidth = (Dimensions.get('window').width / 100)*46;
-  const deviceHeight = Dimensions.get('window').height;
-
-  const stringInt = (rawString) => {
-    const cleanString = rawString.trim();
-    const numericString = cleanString.replace(/[^0-9.]/g, '');
-    const valueInt = rawString ? parseInt(numericString, 10) : 0;
-    return valueInt;
-  };
 
   const fetchFvideos = async () => {
-    //await AsyncStorage.clear();
+    //test await AsyncStorage.clear();
     let errorFlag = 0;
     try {
     //Memory cleared if Diff in current and last updated dates > 2.28 days
@@ -32,10 +22,9 @@ export default function FeatureMoveList() {
           const currentDate = new Date();
           const savedDateObj = new Date(savedDate);
           const differenceInMs = currentDate - savedDateObj;
-          console.log(`Difference in days: ${differenceInMs/ 86400000.0}`);
-          if( (differenceInMs / 86400000.0) > 2.28) {
-            console.log(`Difference in days: ${differenceInMs}`);
-            //await AsyncStorage.clear();
+          //console.log(`Difference in days: ${differenceInMs/ 86400000.0}`);
+          if( (differenceInMs / 86400000.0) > 5.70) {
+            //console.log(`Difference in days: ${differenceInMs}`);
             alert("Featured Videos not Updated in a few days. Trying to update .....");
             const currentDate = new Date().toISOString(); 
             await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
@@ -54,13 +43,42 @@ export default function FeatureMoveList() {
         AsyncStorage.getItem('xx7771xxiDojoFvideos').then((fvalue) => {
           if (fvalue != null) {
             vds = JSON.parse(fvalue);
-            setFvideos(vds);
+            //console.log("Saved Videos found: "+vds.length); 
+            let hVideos = [];
+            let hlist = [];
+            let hstyle = "";
+            let hsource ="";
+            for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+              if(vds[fvNum].Type == "Audio" || vds[fvNum].Vend == 1111111) {
+    
+                if(hlist.length > 0) {
+                  if(vds[fvNum].Vend ==  7777777) {
+                    hlist.push(vds[fvNum]);
+                  }
+                  hVideos.push({
+                    Style: hstyle,
+                    Source: hsource,
+                    data: hlist,
+                  });
+                } 
+                hlist=[];
+                hlist.push(vds[fvNum]);
+                hstyle=vds[fvNum].Style;
+                hsource=vds[fvNum].Source;
+    
+              } else {
+                hlist.push(vds[fvNum]);
+              }
+    
+              if(vds[fvNum].Vend == 7777777) {
+                break;
+              }
+            }
+            setHfvideos(hVideos);
             setIsLoading(false);
-            console.log("Saved Videos found: "+vds.length); // Outputs the actual string value
             return vds.length;
           }
         }).catch((error) => {
-          console.error(error);
           return errorFlag;
         });
 
@@ -88,17 +106,17 @@ export default function FeatureMoveList() {
       vds.push(fVideo);
     }
 
-    setFvideos(vds);
-    setIsLoading(false);
-
     let hVideos = [];
     let hlist = [];
     let hstyle = "";
     let hsource ="";
     for (let fvNum = 0; fvNum < vds.length; fvNum++) {
-      if(vds[fvNum].Vend < 0 || fvNum == (vds.length -1) || vds[fvNum].Vend == 7777777) {
+      if(vds[fvNum].Vend < 0 || vds[fvNum].Vend == 7777777) {
 
         if(hlist.length > 0) {
+          if(vds[fvNum].Vend ==  7777777) {
+            hlist.push(vds[fvNum]);
+          }
           hVideos.push({
             Style: hstyle,
             Source: hsource,
@@ -119,14 +137,15 @@ export default function FeatureMoveList() {
       }
     }
     setHfvideos(hVideos);
-    console.log("hvideos: "+hVideos[0].data.length);
+    setIsLoading(false);
+    //console.log("hvideos: "+hVideos[0].data.length);
 
     try {
       await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
       //Save Date Stamp as ISO string
       const currentDate = new Date().toISOString();
       await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
-      console.log('Fvideoes DateStamp :'+currentDate+' Saved successfully! with: '+vds.length+' videos.');
+      alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
     } catch (error) {
       alert("Unable to Store Featured List. Featured List only available when online. !");
     } 
@@ -135,7 +154,7 @@ export default function FeatureMoveList() {
 
   useEffect(() => {
     const savedfv=fetchFvideos();
-    if ( savedfv && savedfv > 38 && fvideos.length > 38 ) { 
+    if ( savedfv && savedfv > 38 && hfvideos.length > 38 ) { 
       //console.log("Saved Featured videos found! "+fvideos.length);
       return;
     }
@@ -150,16 +169,15 @@ export default function FeatureMoveList() {
       },
       (error) => {
         setIsLoading(false);
-        setError(error);
       }
     )
     } catch (error) {
     // This catches network errors and the custom HTTP error above
         if (error.message === 'Network request failed') {
-          alert('No internet connection detected. Wifi is required for featured content!');
+          alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing all featured content!');
          // Display a message to the user or use cached data
         } else {
-          alert('An unexpected error occurred: ', error);
+          alert('An unexpected error occurred while updating featured content: ', error);
           //throw error, Rethrow other errors if needed
         }
     } 

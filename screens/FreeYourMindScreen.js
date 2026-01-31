@@ -2,6 +2,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
 
@@ -10,6 +11,8 @@ export default function FreeYourMindScreen() {
     const [playing, setPlaying] = useState(-1);
     const [fymsound, setSound] = useState(null);
     const [isPaused, setIsPaused] = useState(false);
+    const [fvideos, setFvideos] = useState([]);
+    const [faudio, setFaudio] = useState([]);
     const [progressDuration, setProgressDuration] = useState("0:00");
 
     const fetchMusicFiles = async () => {
@@ -86,6 +89,17 @@ export default function FreeYourMindScreen() {
           duration: "2:53",
           id: 11,
         }]
+
+        fetchFeaturedAudio();
+        for(let faNum=0; faNum<faudio.length; faNum++) {
+          mhaudio.push({
+            filename: faudio[faNum].filename,
+            uri: faudio[faNum].uri,
+            duration: faudio[faNum].duration,
+            id: faudio[faNum].id,
+          });
+        }
+
         setMusicFiles(mhaudio);
     }
 
@@ -260,6 +274,144 @@ export default function FreeYourMindScreen() {
       };
     }, [])
     
+
+    const fetchFvideos = async () => {
+        //await AsyncStorage.clear();
+        let errorFlag = 0;
+        try {
+        //Memory cleared if Diff in current and last updated dates > 2.28 days
+          const savedDate = await AsyncStorage.getItem('xx7771xxiDojoFvideosDateStamp');
+          if (savedDate) {
+              const currentDate = new Date();
+              const savedDateObj = new Date(savedDate);
+              const differenceInMs = currentDate - savedDateObj;
+              //console.log(`Difference in days: ${differenceInMs/ 86400000.0}`);
+              if( (differenceInMs / 86400000.0) > 5.70) {
+                //console.log(`Difference in days: ${differenceInMs}`);
+                //await AsyncStorage.clear();
+                alert("Featured Content not Updated in a few days. Trying to update .....");
+                const currentDate = new Date().toISOString(); 
+                await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+                return errorFlag;
+              }  
+          }
+        } catch (error) {
+          alert("Featured Content not visited for some time. Updating List...");
+          const currentDate = new Date().toISOString(); 
+          await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+          return errorFlag;
+        }
+    
+          let vds = [];
+          try {
+            AsyncStorage.getItem('xx7771xxiDojoFvideos').then((fvalue) => {
+              if (fvalue != null) {
+                vds = JSON.parse(fvalue);
+                let hAudio = [];
+                let hid = 11;
+
+                for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+                  if(vds[fvNum].Type == "Audio" || vds[fvNum].Vend == 1111111) {
+                    hid++;
+                    hAudio.push({
+                      filename: vds[fvNum].Title,
+                      uri: vds[fvNum].Link,
+                      duration: vds[fvNum].Desc,
+                      id: hid,
+                    });
+                  } 
+                }
+                setFaudio(hAudio);
+                //console.log("Saved Audio found: "+hAudio.length);
+                return vds.length;
+              }
+            }).catch((error) => {
+              //console.error(error);
+              return errorFlag;
+            });
+    
+          } catch (error) {
+            alert("Featured Content not visited for some time. Updating Videos and Audio files...");
+          }
+    
+        return errorFlag;
+      }
+      
+    
+      const parseFvideos = async (vidArr) => {
+        let vds =[];
+        for (let fvNum = 1; fvNum < vidArr.length; fvNum++) {
+          let fVideo = {
+            Title:  vidArr[fvNum][0],
+            Link:   vidArr[fvNum][1],
+            Type:   vidArr[fvNum][2],
+            Thumb:  vidArr[fvNum][3],
+            Desc:   vidArr[fvNum][4],
+            Source: vidArr[fvNum][5],
+            Style:  vidArr[fvNum][6],
+            Vend:   vidArr[fvNum][7],  
+          }
+          vds.push(fVideo);
+        }
+  
+        let hAudio = [];
+        let hid = 11;
+        for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+          if(vds[fvNum].Type == "Audio" || vds[fvNum].Vend == 1111111) {
+            hid++;
+            hAudio.push({
+              filename: vds[fvNum].Title,
+              uri: vds[fvNum].Link,
+              duration: vds[fvNum].Desc,
+              id: hid,
+            });
+          } 
+        }
+        setFaudio(hAudio);
+    
+        try {
+          await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
+          //Save Date Stamp as ISO string
+          const currentDate = new Date().toISOString();
+          await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+          alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
+        } catch (error) {
+          alert("Unable to Store Featured List. Featured List only available when online. !");
+        } 
+      };
+    
+    
+      const fetchFeaturedAudio = () => {
+        const savedfv=fetchFvideos();
+        if ( savedfv && savedfv > 38 && fvideos.length > 38 ) { 
+          //console.log("Saved Featured videos found! "+fvideos.length);
+          return;
+        }
+        //console.log("ZERO Saved Featured videos found! ");
+        try { 
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
+        .then(res => res.json())
+        .then(
+          (result) => {
+            parseFvideos(result.values); 
+            return;     
+          },
+          (error) => {
+            alert('An unexpected error occurred while updating featured content: ', error);
+          }
+        )
+        } catch (error) {
+        // This catches network errors and the custom HTTP error above
+            if (error.message === 'Network request failed') {
+              alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing all featured content!');
+             // Display a message to the user or use cached data
+            } else {
+              alert('An unexpected error occurred while updating featured content: ', error);
+              //throw error, Rethrow other errors if needed
+            }
+        } 
+      };
+
 
 
     return (
