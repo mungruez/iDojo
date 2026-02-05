@@ -652,7 +652,7 @@ export default function PasswordManager() {
         
         <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
             <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
+                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backiconvault.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.resetpinButton }>
                 <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
@@ -735,7 +735,7 @@ export default function PasswordManager() {
         
         <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
             <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
+                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backiconvault.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.resetpinButton }>
                 <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
@@ -979,24 +979,26 @@ const styles = StyleSheet.create({
     backButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 9, // Slightly rounded corners
-        padding: 2, // Add padding inside the button
-        marginLeft: 57, // Space to the left of the button
+        padding: 0, // Add padding inside the button
+        marginLeft: 38, // Space to the left of the button
         borderWidth: 0, 
         elevation: 0,
-        height: 61,
-        width: 67,
+        height: 70,
+        width: 61,
+        marginTop: -10,
+        marginRight: 57,
     },
-    // Style for the back button
+    // Style for the resetPin button
     resetpinButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 4, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 40, // Space to the left of the button
+        marginLeft: 38, // Space to the left of the button
         borderWidth: 0,
         elevation: 0,
-        minHeight: 152,
+        minHeight: 172,
         minWidth: 76,
-        marginTop: -48,
+        marginTop: -67,
     },
     // Style for the container holding the edit and delete buttons
     buttonsContainer: {

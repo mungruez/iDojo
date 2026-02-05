@@ -504,13 +504,13 @@ export default function LoginScreen() {
     backButton: {
         backgroundColor: "transparent", // Blue background
         borderRadius: 7, // Slightly rounded corners
-        padding: 2, // Add padding inside the button
+        padding: 1, // Add padding inside the button
         marginLeftt: 10, // Space to the right of the button
         borderWidth: 2, // Border width
         borderColor: "goldenrod",
-        elevation: 7,
-        height: 47,
-        width:45,
+        elevation: 0,
+        height: 76,
+        width: 57,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: 1,

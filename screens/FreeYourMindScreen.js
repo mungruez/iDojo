@@ -16,7 +16,7 @@ export default function FreeYourMindScreen() {
     const [progressDuration, setProgressDuration] = useState("0:00");
 
     const fetchMusicFiles = async () => {
-        const mhaudio = [
+        let mhaudio = [
         {
           filename: 'Free Your Mind - (Part 1)', 
           uri: '../assets/freeyourmind/freeyourmind(part1).mp3',
@@ -90,7 +90,6 @@ export default function FreeYourMindScreen() {
           id: 11,
         }]
 
-        fetchFeaturedAudio();
         for(let faNum=0; faNum<faudio.length; faNum++) {
           mhaudio.push({
             filename: faudio[faNum].filename,
@@ -101,6 +100,7 @@ export default function FreeYourMindScreen() {
         }
 
         setMusicFiles(mhaudio);
+        console.log("Total Free Your Mind Audio files: "+mhaudio.length);
     }
 
 
@@ -212,9 +212,16 @@ export default function FreeYourMindScreen() {
                 { shouldPlay: true }
             ); 
             setSound(sound);
+        } else if(fileID>11) {
+            const { sound } = await Audio.Sound.createAsync(
+                {uri: musicFiles[fileID]?.uri},
+                { shouldPlay: true }
+            ); 
+            //await sound.playAsync();
+            setSound(sound);  
         }
       } catch(error) {
-        alert(error+" .Error in playMusic  track#: "+playing);
+        alert(error+" .Error in playMusic track: "+musicFiles[fileID]?.uri);
       }
     }
 
@@ -267,12 +274,13 @@ export default function FreeYourMindScreen() {
     
 
     useEffect(() => {
+      fetchFeaturedAudio();
       fetchMusicFiles();
       //Unload sound when component unmounts to prevent memory leaks
       return () => {
         pauseMusic();
       };
-    }, [])
+    }, [faudio.length])
     
 
     const fetchFvideos = async () => {
@@ -322,8 +330,8 @@ export default function FreeYourMindScreen() {
                   } 
                 }
                 setFaudio(hAudio);
-                //console.log("Saved Audio found: "+hAudio.length);
-                return vds.length;
+                console.log("Saved Audio found: "+hAudio.length);
+                return hAudio.length;
               }
             }).catch((error) => {
               //console.error(error);
@@ -357,7 +365,7 @@ export default function FreeYourMindScreen() {
         let hAudio = [];
         let hid = 11;
         for (let fvNum = 0; fvNum < vds.length; fvNum++) {
-          if(vds[fvNum].Type == "Audio" || vds[fvNum].Vend == 1111111) {
+          if(vds[fvNum].Type == "Audio" && vds[fvNum].Vend == 1111111) {
             hid++;
             hAudio.push({
               filename: vds[fvNum].Title,
@@ -368,6 +376,7 @@ export default function FreeYourMindScreen() {
           } 
         }
         setFaudio(hAudio);
+        console.log("Parsed Featured Audio files: "+hAudio.length);
     
         try {
           await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
@@ -383,11 +392,11 @@ export default function FreeYourMindScreen() {
     
       const fetchFeaturedAudio = () => {
         const savedfv=fetchFvideos();
-        if ( savedfv && savedfv > 38 && fvideos.length > 38 ) { 
-          //console.log("Saved Featured videos found! "+fvideos.length);
+        if ( faudio && faudio.length > 3) { 
+          console.log("Saved Featured audio found! "+faudio.length);
           return;
         }
-        //console.log("ZERO Saved Featured videos found! ");
+        console.log("ZERO Saved Featured audio found! ");
         try { 
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
         .then(res => res.json())
