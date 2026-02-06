@@ -1,6 +1,6 @@
 
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ScrollView, ActivityIndicator, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
@@ -11,7 +11,6 @@ export default function FreeYourMindScreen() {
     const [playing, setPlaying] = useState(-1);
     const [fymsound, setSound] = useState(null);
     const [isPaused, setIsPaused] = useState(false);
-    const [fvideos, setFvideos] = useState([]);
     const [faudio, setFaudio] = useState([]);
     const [progressDuration, setProgressDuration] = useState("0:00");
 
@@ -282,6 +281,28 @@ export default function FreeYourMindScreen() {
       };
     }, [faudio.length])
     
+
+
+    useEffect(( ) => {
+      const backAction = () => {
+        //Stop audio playback here
+        if(fymsound) {
+          fymsound.stopAsync();
+          fymsound.unloadAsync(); 
+        }
+        // Return false to allow default back button behavior after stopping audio
+        return false; 
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction
+      );
+
+      return () => backHandler.remove();
+    }, [])
+
+
 
     const fetchFvideos = async () => {
         //await AsyncStorage.clear();
