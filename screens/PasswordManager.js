@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -109,13 +109,44 @@ export default function PasswordManager() {
     }
     
 
-    //useEffect Hook: initializes password list when component mounts
+
+
+    //useEffect Hook: Fetches stored passwords[] when component mounts
     useEffect(() => {
         //AsyncStorage.clear();
         //TwoLetterDecStartIndex=52 primes.length: 777 encArr.length: 91
         fetchPasswords();
         showPasswords();
+        const onBackPress = () => {
+	        if(password && password.length>3) {
+                Alert.alert('You have an unsaved Password.','Are you sure you want to exit?',
+                  [
+                    {
+                        text: 'Cancel',
+                        onPress: () => {
+                          // Do nothing
+                        },
+                        style: 'cancel',
+                    },
+                    { text: 'YES', onPress: () => {navigation.popToTop()}, style:'destructive', },
+                  ],
+                  { cancelable: false }
+                );
+            } else {
+		        navigation.popToTop();
+            }
+            return true;
+        };
+
+
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            onBackPress
+        );
+
+        return () => backHandler.remove();
     }, []);
+
 
 
 

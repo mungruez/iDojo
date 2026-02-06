@@ -19,29 +19,46 @@ export default function HomeScreen() {
 
   
   useEffect(() => {
-    loadAndPlaySound(); //Load and Play sound when component mounts
-    
+    loadAndPlaySound(); 
+
+    const backAction = () => {
+      if(bgsound) {
+        bgsound.stopAsync();
+        bgsound.unloadAsync(); 
+      }
+        
+      return false; 
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
     return () => {
-      //Unload sound when component unmounts to prevent memory leaks
+  
+      backHandler.remove();
+
       if (bgsound) {
          bgsound.stopAsync();
          bgsound.unloadAsync();
       }
     };
-  }, []); //Empty dependency array ensures this runs once on mount and cleanup on unmount
+  }, []); 
 
 
+
+  
   async function loadAndPlaySound() {
     try {
       if (bgsound) {
         const status = await bgsound.getStatusAsync();
         if (status.isLoaded) {
           
-          //await AsyncStorage.removeItem('xx7771xxiDojoMutedByUs');
           if(status.isPlaying===true) {
-            //console.log('Is audio playing?'+status.isPlaying);
             return;
           }
+
           await bgsound.playAsync();
           return;
         }  
@@ -65,7 +82,6 @@ export default function HomeScreen() {
       
       if(bgsound) {
         await bgsound.playAsync();
-        //await AsyncStorage.removeItem('xx7771xxiDojoMutedByUs');
       }
       
     } catch (error) {
@@ -91,6 +107,7 @@ export default function HomeScreen() {
   }
 
 
+
   const stopSoundN = async (sname) => {
     try {
       if(!isMuted) {
@@ -100,7 +117,7 @@ export default function HomeScreen() {
         }
       }
 
-      if (bgsound && sname !== "Res" && sname !== "Manuals" && sname !== "FightersList") {
+      if (!isMuted && bgsound && sname !== "Res" && sname !== "Manuals" && sname !== "FightersList") {
         await bgsound.stopAsync();
         await bgsound.unloadAsync();
         setSound();
@@ -115,41 +132,6 @@ export default function HomeScreen() {
   };
 
 
-  //Check to unpause sound after navigating back
-  const checkMutedByUs = async () => {
-    //AsyncStorage.clear();
-    if(isMuted) {
-      return;
-    }
-
-    try {
-      const isByUs = await AsyncStorage.getItem('xx7771xxiDojoMutedByUs');
-      if(isByUs) {
-        console.log("isMutedByUs was Set to idojotrue: "+isByUs);
-        if (bgsound) {
-          const status = await bgsound.getStatusAsync();
-          if (status.isLoaded) {
-            console.log('Is audio playing?'+status.isPlaying);
-            if( status.isPlaying ) {
-              await AsyncStorage.removeItem('xx7771xxiDojoMutedByUs');
-              return;
-            } else {
-              await bgsound.playAsync();
-              await AsyncStorage.removeItem('xx7771xxiDojoMutedByUs');
-              return;
-            }
-          }
-          
-        } else {
-          loadAndPlaySound();
-        }
-      }
-    } catch (error) {
-      alert('Unable to unpause background sound: '+error);
-    }
-  };
-
-  //checkMutedByUs();
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
@@ -287,14 +269,6 @@ const styles = StyleSheet.create({
       height: 57,
       width: 76,
       elevation: 4,
-
       marginRight:1,
-    },
-    checkMuted: {
-      height: 1,
-      width: 2,
-      backgroundColor:"transparent",
-      border: "none",
-      visibility: "hidden",
     },
   });
