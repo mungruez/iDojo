@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ImageBackground} from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ImageBackground, BackHandler} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useLayoutEffect, useState, useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -120,7 +120,6 @@ export default function HomeScreen() {
       if (!isMuted && bgsound && sname !== "Res" && sname !== "Manuals" && sname !== "FightersList") {
         await bgsound.stopAsync();
         await bgsound.unloadAsync();
-        setSound();
         setIsMuted(true);
       }
 

@@ -8,6 +8,7 @@ export default function FightersList() {
   const [ksound, setKSound] = useState();
   const navigation = useNavigation();
   
+
   useEffect(() => {
     loadKSound(); 
     
@@ -18,6 +19,7 @@ export default function FightersList() {
     };
   }, []); 
   
+
   
   async function loadKSound() {
     try {
@@ -41,6 +43,7 @@ export default function FightersList() {
       alert('Error loading or playing sound effect: '+error);
     }
   }
+
 
 
   const navKSound = async (item) => {
@@ -71,7 +74,7 @@ export default function FightersList() {
                 numColumns={2}
                 contentContainerStyle={{ paddingBottom: 57 }}
                 showsVerticalScrollIndicator={false}
-                renderItem={({ item, index }) => (
+                renderItem={({ item }) => (
                   <View
                     key={item.name}
                     style={{

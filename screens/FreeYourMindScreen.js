@@ -103,6 +103,7 @@ export default function FreeYourMindScreen() {
     }
 
 
+
     const playMusic = async (fileID) => {
       try {
         if(fymsound && playing !== fileID && playing > -1) {
@@ -133,21 +134,18 @@ export default function FreeYourMindScreen() {
                 { shouldPlay: true }
             ); 
             setSound(sound);
-            //setPlaying(fileID);
         } else if(fileID==1) {
             const { sound } = await Audio.Sound.createAsync(
                 require('../assets/freeyourmind/freeyourmind(part2).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
-            //setPlaying(fileID);
         } else if(fileID==2) {
             const { sound } = await Audio.Sound.createAsync(
                 require('../assets/freeyourmind/freeyourmind(part3).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
-            //setPlaying(fileID);
             console.log("playing part 3  fileID:"+fileID);
         } else if(fileID==3) {
             const { sound } = await Audio.Sound.createAsync(
@@ -155,14 +153,12 @@ export default function FreeYourMindScreen() {
                 { shouldPlay: true }
             ); 
             setSound(sound);
-            //setPlaying(fileID);
         } else if(fileID==4) {
             const { sound } = await Audio.Sound.createAsync(
                 require('../assets/freeyourmind/freeyourmind(part5).mp3'),
                 { shouldPlay: true }
             ); 
             setSound(sound);
-            //setPlaying(fileID);
         } else if(fileID==5) {
             const { sound } = await Audio.Sound.createAsync(
                 require('../assets/freeyourmind/freeyourmind(part6).mp3'),
@@ -216,7 +212,6 @@ export default function FreeYourMindScreen() {
                 {uri: musicFiles[fileID]?.uri},
                 { shouldPlay: true }
             ); 
-            //await sound.playAsync();
             setSound(sound);  
         }
       } catch(error) {
@@ -285,12 +280,12 @@ export default function FreeYourMindScreen() {
 
     useEffect(( ) => {
       const backAction = () => {
-        //Stop audio playback here
+
         if(fymsound) {
           fymsound.stopAsync();
           fymsound.unloadAsync(); 
         }
-        // Return false to allow default back button behavior after stopping audio
+       
         return false; 
       };
 
@@ -355,7 +350,6 @@ export default function FreeYourMindScreen() {
                 return hAudio.length;
               }
             }).catch((error) => {
-              //console.error(error);
               return errorFlag;
             });
     
@@ -411,6 +405,7 @@ export default function FreeYourMindScreen() {
       };
     
     
+
       const fetchFeaturedAudio = () => {
         const savedfv=fetchFvideos();
         if ( faudio && faudio.length > 3) { 
@@ -431,13 +426,10 @@ export default function FreeYourMindScreen() {
           }
         )
         } catch (error) {
-        // This catches network errors and the custom HTTP error above
             if (error.message === 'Network request failed') {
               alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing all featured content!');
-             // Display a message to the user or use cached data
             } else {
               alert('An unexpected error occurred while updating featured content: ', error);
-              //throw error, Rethrow other errors if needed
             }
         } 
       };
@@ -524,7 +516,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly",
     },
     container: {
-        //backgroundColor: "#2f4f4f",
         backgroundColor: "transparent",
         height: "100%",
         marginTop: 7,
@@ -538,7 +529,6 @@ const styles = StyleSheet.create({
     list: {
         marginTop: 4,
         flex: 1,
-        //backgroundColor: '#2f4f4f',
         backgroundColor: "transparent",
         flexDirection: "column",
          
@@ -561,7 +551,6 @@ const styles = StyleSheet.create({
     },
     playButton: {
         backgroundColor: '#C0C0C0',
-        //backgroundColor:"transparent",
         borderRadius: 50,
         padding: 5,
         marginLeft: 16,
@@ -573,7 +562,6 @@ const styles = StyleSheet.create({
         boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
     },
     imgSound: {
-      //backgroundColor: "#2f4f4f",
       backgroundColor: "transparent",
       height: 47,
       width: 47,
