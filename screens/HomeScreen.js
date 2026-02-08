@@ -21,9 +21,8 @@ export default function HomeScreen() {
   useEffect(() => {
 
     const backAction = () => {
-      if(bgsound) {
-        bgsound.stopAsync();
-        bgsound.unloadAsync(); 
+      if(!isMuted) {
+        stopSound();
       }
         
       return false; 
@@ -35,12 +34,6 @@ export default function HomeScreen() {
     );
 
     return () => {
-  
-      if (bgsound) {
-         bgsound.stopAsync();
-         bgsound.unloadAsync();
-      }
-
       backHandler.remove();
     };
 
@@ -52,9 +45,8 @@ export default function HomeScreen() {
     loadAndPlaySound(); 
 
     return () => {
-      if (bgsound) {
-         bgsound.stopAsync();
-         bgsound.unloadAsync();
+      if(!isMuted) {
+        stopSound();
       }
     };
   }, []);

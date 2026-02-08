@@ -10,18 +10,20 @@ export default function ManualsScreen() {
   const [isMuted, setIsMuted] = useState(false);
   const navigation = useNavigation();  
 
+
   useEffect(() => {
     loadSound(); 
       
-    return sound ? () => {
-      if (sound) {
-        sound.stopAsync();
+    return () => {
+      if(!isMuted) {
+        stopSound();
       }
-    }
-    : undefined;
+    };
+
   }, []); 
   
   
+
   async function loadSound() {
     try {   
       const { sound } = await Audio.Sound.createAsync(
@@ -35,6 +37,7 @@ export default function ManualsScreen() {
     }
   }
     
+  
   
   async function stopSound() {
     try {
@@ -58,6 +61,7 @@ export default function ManualsScreen() {
     }
     navigation.navigate('Manual', {manual: item});
   };
+
 
 
   return (
@@ -126,6 +130,7 @@ export default function ManualsScreen() {
   </ImageBackground>
   )
 }
+
 
 const styles = StyleSheet.create({
       imgBackground: {

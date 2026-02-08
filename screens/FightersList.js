@@ -9,14 +9,26 @@ export default function FightersList() {
   const navigation = useNavigation();
   
 
+  async function stopSound() {
+    try {
+      if (ksound) {
+        await ksound.stopAsync();
+      }
+      
+    } catch (error) {
+        alert('Error pausing or playing sound effect:'+error);
+    }
+  }
+
+
+
   useEffect(() => {
     loadKSound(); 
     
     return () => {
-      if (ksound) {
-        ksound.stopAsync();
-      }
+      stopSound();
     };
+    
   }, []); 
   
 
