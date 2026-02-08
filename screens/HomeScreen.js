@@ -2,7 +2,6 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ImageBackground, 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useLayoutEffect, useState, useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 
 export default function HomeScreen() {
@@ -17,9 +16,9 @@ export default function HomeScreen() {
     });
   }, []);
 
+
   
   useEffect(() => {
-    loadAndPlaySound(); 
 
     const backAction = () => {
       if(bgsound) {
@@ -37,18 +36,31 @@ export default function HomeScreen() {
 
     return () => {
   
-      backHandler.remove();
+      if (bgsound) {
+         bgsound.stopAsync();
+         bgsound.unloadAsync();
+      }
 
+      backHandler.remove();
+    };
+
+  }, [bgsound]); 
+
+
+
+  useEffect(() => {
+    loadAndPlaySound(); 
+
+    return () => {
       if (bgsound) {
          bgsound.stopAsync();
          bgsound.unloadAsync();
       }
     };
-  }, []); 
-
-
+  }, []);
 
   
+
   async function loadAndPlaySound() {
     try {
       if (bgsound) {
