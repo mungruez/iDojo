@@ -1,4 +1,3 @@
-
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ScrollView, ActivityIndicator, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -97,9 +96,7 @@ export default function FreeYourMindScreen() {
             id: faudio[faNum].id,
           });
         }
-
         setMusicFiles(mhaudio);
-        console.log("Total Free Your Mind Audio files: "+mhaudio.length);
     }
 
 
@@ -265,12 +262,11 @@ export default function FreeYourMindScreen() {
     }, [fymsound])
 
     
-    
 
     useEffect(() => {
       fetchFeaturedAudio();
       fetchMusicFiles();
-      //Unload sound when component unmounts to prevent memory leaks
+    
       return () => {
         pauseMusic();
       };
@@ -280,12 +276,7 @@ export default function FreeYourMindScreen() {
 
     useEffect(( ) => {
       const backAction = () => {
-
-        if(fymsound) {
-          fymsound.stopAsync();
-          fymsound.unloadAsync(); 
-        }
-       
+        pauseMusic();
         return false; 
       };
 
@@ -295,12 +286,11 @@ export default function FreeYourMindScreen() {
       );
 
       return () => backHandler.remove();
-    }, [])
+    }, [fymsound])
 
 
 
     const fetchFvideos = async () => {
-        //await AsyncStorage.clear();
         let errorFlag = 0;
         try {
         //Memory cleared if Diff in current and last updated dates > 2.28 days
@@ -309,10 +299,8 @@ export default function FreeYourMindScreen() {
               const currentDate = new Date();
               const savedDateObj = new Date(savedDate);
               const differenceInMs = currentDate - savedDateObj;
-              //console.log(`Difference in days: ${differenceInMs/ 86400000.0}`);
               if( (differenceInMs / 86400000.0) > 5.70) {
                 //console.log(`Difference in days: ${differenceInMs}`);
-                //await AsyncStorage.clear();
                 alert("Featured Content not Updated in a few days. Trying to update .....");
                 const currentDate = new Date().toISOString(); 
                 await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
@@ -346,7 +334,6 @@ export default function FreeYourMindScreen() {
                   } 
                 }
                 setFaudio(hAudio);
-                console.log("Saved Audio found: "+hAudio.length);
                 return hAudio.length;
               }
             }).catch((error) => {
@@ -361,6 +348,7 @@ export default function FreeYourMindScreen() {
       }
       
     
+      
       const parseFvideos = async (vidArr) => {
         let vds =[];
         for (let fvNum = 1; fvNum < vidArr.length; fvNum++) {
@@ -391,11 +379,9 @@ export default function FreeYourMindScreen() {
           } 
         }
         setFaudio(hAudio);
-        console.log("Parsed Featured Audio files: "+hAudio.length);
     
         try {
           await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
-          //Save Date Stamp as ISO string
           const currentDate = new Date().toISOString();
           await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
           alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
@@ -409,10 +395,9 @@ export default function FreeYourMindScreen() {
       const fetchFeaturedAudio = () => {
         const savedfv=fetchFvideos();
         if ( faudio && faudio.length > 3) { 
-          console.log("Saved Featured audio found! "+faudio.length);
           return;
         }
-        console.log("ZERO Saved Featured audio found! ");
+        
         try { 
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
         .then(res => res.json())

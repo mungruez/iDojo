@@ -110,19 +110,23 @@ export default function PasswordManager() {
     
 
 
-
     //useEffect Hook: Fetches stored passwords[] when component mounts
     useEffect(() => {
         //AsyncStorage.clear();
         //TwoLetterDecStartIndex=52 primes.length: 777 encArr.length: 91
         fetchPasswords();
         showPasswords();
+    }, []);
+
+
+    //useEffect Hook: overirde back button Android
+    useEffect(() => {
         const onBackPress = () => {
-	        if(password && password.length>3) {
-                Alert.alert('You have an unsaved Password.','Are you sure you want to exit?',
+	        if(password || username || website || editing) {
+                Alert.alert('You have an unsaved Password !','Are you sure you want to Exit?',
                   [
                     {
-                        text: 'Cancel',
+                        text: 'NO',
                         onPress: () => {
                           // Do nothing
                         },
@@ -145,7 +149,7 @@ export default function PasswordManager() {
         );
 
         return () => backHandler.remove();
-    }, []);
+    }, [password]);
 
 
 
@@ -727,20 +731,20 @@ export default function PasswordManager() {
                     style={styles.input}
                     placeholder="Website"
                     value={website}
-                    onChangeText={(text) => setWebsite(text)} />
+                    onChangeText={(website) => setWebsite(website)} />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Username"
                     value={username}
-                    onChangeText={(text) => setUsername(text)} />
+                    onChangeText={(username) => setUsername(username)} />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
                     secureTextEntry={false}
                     value={password}
-                    onChangeText={(text) => setPassword(text)} />
+                    onChangeText={(password) => setPassword(password)} />
 
                 <TouchableOpacity
                     style={{height:95, width:"99%", alignSelf:"center",}}
@@ -807,20 +811,20 @@ export default function PasswordManager() {
                     style={styles.input}
                     placeholder="Website"
                     value={website}
-                    onChangeText={(text) => setWebsite(text)} />
+                    onChangeText={(website) => setWebsite(website)} />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Username"
                     value={username}
-                    onChangeText={(text) => setUsername(text)} />
+                    onChangeText={(username) => setUsername(username)} />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
                     secureTextEntry={false}
                     value={password}
-                    onChangeText={(text) => setPassword(text)} />
+                    onChangeText={(password) => setPassword(password)} />
 
                 <TouchableOpacity
                     style={{height:95, width:"99%", alignSelf:"center",}}
