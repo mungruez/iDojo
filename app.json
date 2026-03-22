@@ -29,7 +29,11 @@
         "backgroundColor": "#ffffff"
       },
       "package": "DojoSoft.ZaakirMungrue.iDojo",
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,6 +42,11 @@
       "expo-video",
       "expo-audio",
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "38556ed3-11ef-493c-bb72-8f497678fd25"
+      }
+    }
   }
 }
