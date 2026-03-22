@@ -128,14 +128,14 @@ export default function MyDojo({route}) {
       onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : navigation.navigate('Move', { video: item })}
       style={[styles.itemContainer, selectedIds.includes(item.id) && styles.selectedItem]}
     >
-      <View style={styles.cardInternal}>
+      <View style={styles.card}>
         <View style={styles.titleBanner}>
           <Text numberOfLines={1} style={styles.titleText}>{item.title}</Text>
         </View>
         <Image source={{ uri: item.Thumb || 'https://via.placeholder.com' }} style={styles.thumbImage} />
         <View style={styles.pillRow}>
           <Text style={styles.typePill}>{item.type}</Text>
-          <TouchableOpacity onPress={() => {navigation.navigate('AddMove', {move: item, onComplete: handleUpdate})}} style={styles.plusIconGreen}>
+          <TouchableOpacity onPress={() => {navigation.navigate('AddMove', {move: item, onComplete: handleUpdate})}} style={styles.plusIcon}>
             <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : require('../assets/editmoveicon.png') }/>         
           </TouchableOpacity>             
         </View>
@@ -143,8 +143,8 @@ export default function MyDojo({route}) {
     </TouchableOpacity>
   );
 
-  if (loading && ftype=== 'video') return <ActivityIndicator size="large" color="#f30707" style={{flex:1, transform: [{scale: 2.0}]}} />;
-  if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{flex:1, transform: [{scale: 2.0}]}} />;
+  if (loading && ftype=== 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+  if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
   
   return (
    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
@@ -176,7 +176,7 @@ export default function MyDojo({route}) {
                   data={item.data}
                   keyExtractor={m => m.id}
                   renderItem={({ item }) => <MoveCard item={item} />}
-                  contentContainerStyle={{ paddingRight: 20 }}
+                  contentContainerStyle={{ paddingRight: 19 }}
                   showsHorizontalScrollIndicator={false}
                 />
             </View>
@@ -205,19 +205,21 @@ export default function MyDojo({route}) {
 
 const styles = StyleSheet.create({
   imgBackground: { flex: 1, width: '100%', height: '100%' },
+  icon: { height: 60, width: '90%', alignSelf: 'center' },
   btnGroup: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   container: { flex: 1 },
+  card: {flex:1, height:76, width:76, backgroundColor: 'rgba(0, 255, 65, 0.1)', borderRadius: 9, borderWidth: 1, borderColor: '#117a2c', alignItems: 'center', justifyContent: 'center' },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.5)' },
   title: { color: '#00FF41', fontSize: 12, flex: 1, textTransform: 'uppercase' },
-  sectionContainer: { marginBottom: 25, paddingLeft: 10 },
+  sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)' },
   sectionHeader: { color: '#00FF41', fontSize: 18, fontWeight: 'bold', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 },
   itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden' },
   verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
-  selectedItem: { borderColor: '#00FF41', borderWidth: 2, backgroundColor: 'rgba(0, 255, 65, 0.1)' },
-  titleBanner: { backgroundColor: 'silver', width: '100%', padding: 6 },
+  selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
+  titleBanner: { backgroundColor: 'silver', width: '90%', padding: 5, borderRadius: 5, marginTop: 3 },
   titleText: { textAlign: 'center', fontSize: 11, fontWeight: 'bold', color: '#000' },
   thumbImage: { width: '100%', height: 150, backgroundColor: '#1a1a1a' },
-  pillRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, marginTop: 8 },
+  pillRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8 },
   typePill: { backgroundColor: '#323232', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
   editIcon: { fontSize: 16 },
   batchBar: { position: 'absolute', bottom: 30, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#00FF41', elevation: 10 },
@@ -225,4 +227,7 @@ const styles = StyleSheet.create({
   batchIcon: { fontSize: 22, color: '#fff' },
   plusIcon:{height: 38, width: 38, borderRadius: 9, marginLeft:5},
   importIcon: {height: 38,width: 38,borderRadius: 9, marginLeft: 5 },
+  shareIcon: {height: 38, width: 38, borderRadius: 9, backgroundColor: '#bbebbf', alignItems: 'center', justifyContent: 'center' },
+  deleteIcon: {height: 38, width: 38, borderRadius: 9, backgroundColor: '#f3aaaa', alignItems: 'center', justifyContent: 'center' },
+  discardIcon: {height: 38, width: 38, borderRadius: 9, backgroundColor: '#756a6a', alignItems: 'center', justifyContent: 'center' },
 });

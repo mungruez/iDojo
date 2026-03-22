@@ -77,7 +77,7 @@ const AddMove = ({ route }) => {
 
   return (
    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
-    <ScrollView style={styles.container} contentContainerStyle={{padding: 20}}>
+    <ScrollView style={styles.container}>
       <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
       </View>
@@ -104,12 +104,12 @@ const AddMove = ({ route }) => {
       {type === 'video' ? (
         <View>
           <TextInput placeholder="Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />
-            <TouchableOpacity onPress={() => pickMedia()} style={styles.videoIcon}>
-              { vid || videoUrl ? 
+          <TouchableOpacity onPress={() => pickMedia()} style={styles.videoIcon}>
+            { vid || videoUrl ? 
               ( <ImageBackground style={{ alignSelf:'center', height:50, width:50, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
-              :( <Text style={styles.videoIconText}>UPLOAD MP4 FILE</Text> ) 
-              }
-            </TouchableOpacity>
+              : ( <Text style={styles.videoIconText}>UPLOAD MP4 FILE</Text> ) 
+            }
+          </TouchableOpacity>
         </View>
       ) : (
         <View style={{ marginTop: 10 }}>
@@ -166,34 +166,33 @@ const AddMove = ({ route }) => {
 }
 
 const styles = StyleSheet.create({
-  imgBackground: { flex: 1, width: '100%', height: '100%' },
+  imgBackground: { flex: 1, width: '100%', height: '100%', opacity: .8 },
   icon: { height: 60, width: '90%', alignSelf: 'center' },
-  videoIcon: { height: 60, backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: 10,marginTop: 15,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},
+  videoIcon: { height: 60, width:60, backgroundColor: 'rgba(235, 30, 30, 0.3)', borderRadius: 10,marginTop: 15,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},
   videoIconText: { color: '#e43c3c', fontWeight: 'bold', fontSize: 12 },
   removeStepIcon: { height: 30, width: 100, marginTop: 5, flexDirection: 'row', alignItems: 'center' },
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
-  container: { flex: 1, backgroundColor: '#e7e1ee', paddingHorizontal: 20 },
+  container: { flex: 1, backgroundColor: 'transparent', paddingBottom: 2 },
   headerTitle: { fontSize: 22, fontWeight: 'bold', color: '#5b12a5', marginTop: 40, marginBottom: 10 },
-  label: { fontWeight: 'bold', color: '#362a64', marginTop: 15, fontSize: 13 },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginTop: 5, backgroundColor: '#fff' },
+  label: { fontWeight: 'bold', color: '#1c1535', marginTop: 15, fontSize: 13 },
+  input: { borderWidth: 1, borderColor: '#9e9797', borderRadius: 8, padding: 12, marginTop: 5, backgroundColor: 'rgba(212, 29, 54, 0.1)', },
   modeToggle: { flexDirection: 'row', marginTop: 20, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
   tab: { flex: 1, padding: 12, alignItems: 'center', backgroundColor: '#f3bebe' },
   activeTab: { backgroundColor: '#5b12a5' },
   tabText: { color: '#3e1c5f', fontWeight: 'bold' },
-  activeTabText: { color: '#fff' },
-  stepRow: { flexDirection: 'row', marginTop: 20, alignItems: 'center', backgroundColor: '#fff', padding: 10, borderRadius: 10, elevation: 1 },
-  stepImg: { width: '100%', height: '100%' },
-  plusIcon: { height: 50, width: 50, marginTop: 10, },
-  stepInput: { marginLeft: 10, borderBottomWidth: 1, borderColor: '#13bd5a', padding: 5, fontSize: 14 },
+  activeTabText: { color: '#e6c8c8' },
+  stepRow: { flexDirection: 'row', marginTop: 20, alignItems: 'center', backgroundColor: 'rgba(93, 231, 167, 0.5)', padding: 10, borderRadius: 10, elevation: 1 },
+  stepImg: { flex:1, width: '100%', height: '100%' },
+  stepInput: { marginLeft: 10, borderBottomWidth: 1, borderColor: '#0f6131', padding: 5, fontSize: 14 },
   removeText: { color: 'red', fontSize: 10, marginLeft: 10, marginTop: 5, fontWeight: 'bold' },
   mediaBtn: { backgroundColor: '#f0eaff', padding: 20, borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
   addStepBtn: { padding: 15, alignItems: 'center', marginTop: 5,height: 40, width: 40, },
   addStepText: { color: '#12a568', fontWeight: 'bold' },
-  saveBtn: { backgroundColor: '#2f67a8', padding: 18, borderRadius: 30, marginTop: 30, alignItems: 'center', elevation: 3 },
+  saveBtn: { backgroundColor: 'transparent', width:"27%", height:95, padding: 18, borderRadius: 30, marginTop: 30, alignItems: 'center', elevation: 3 },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
-  discardBtn: { marginTop: 20, padding: 10 },
-  discardText: { textAlign: 'center', color: '#cc2138', fontWeight: 'bold' },
+  discardBtn: { marginTop: 20, padding: 0, height: 57, width: 40, alignSelf: 'right', borderRadius: 20, backgroundColor: 'rgba(204, 33, 56, 0.1)', },
+  discardText: { textAlign: 'center', color: '#d40a25', fontWeight: 'bold' },
   stepImgContainer: { width: 75, height: 75, backgroundColor: 'rgba(255, 255, 255, 0.1)', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)', overflow: 'hidden',marginRight: 12},
 });
 
