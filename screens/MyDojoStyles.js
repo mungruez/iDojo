@@ -167,7 +167,7 @@ export default function MyDojoStyles() {
         </View>
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO FIGHTING STYLES LIST</Text>
-            <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
+            <View style={{ flex:1, flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'video', mstyle: null, onSync: handleSave })} style={styles.plusIcon}>
                 <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
@@ -236,10 +236,11 @@ export default function MyDojoStyles() {
 }
 
 const styles = StyleSheet.create({
+imgBackground: { flex: 1, width: '100%', height: '100%' },
 container: { flex: 1, backgroundColor: '#f8f9fa' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: { flexDirection: 'row', justifyContent: 'space-between', padding: 16, backgroundColor: '#fff', borderBottomWidth: 1, borderColor: '#eee' },
-title: { fontSize: 18, fontWeight: 'bold', color: '#5b12a5' },
+header: { flex:1, flexDirection: 'column', width:"98%", padding: 1, backgroundColor: '#fff', borderBottomWidth: 1, borderColor: '#eee' },
+title: { fontSize: 18, fontWeight: 'bold', color: '#420105' },
 topBtn: { marginLeft: 15 },
 icon: { fontSize: 22 },
 card: { backgroundColor: 'transparent', marginHorizontal: 10, marginVertical: 5,alignItems: 'center'},
@@ -249,8 +250,6 @@ greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,s
 redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,},
 smallGap: {height: 12,},
 cardInternal: { padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10 },
-plusIconGreen: { height: 30, width: 30, marginTop: 5 },
-shareIcon: { height: 35, width: 35 },
 deleteIcon: { height: 35, width: 35 },
 discardIcon: { height: 35, width: 35 },
 redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#ff4444',},
