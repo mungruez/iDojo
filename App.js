@@ -1,20 +1,53 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import HomeScreen from './screens/HomeScreen';
+import MoveListScreen from './screens/MoveListScreen'
+import MoveScreen from './screens/MoveScreen';
+import Resources from './screens/Resources';
+import FightersList from './screens/FightersList';
+import Fighter from './screens/Fighter';
+import ManualsScreen from './screens/ManualsScreen';
+import ManualScreen from './screens/ManualScreen';
+import FeaturedMoveList from './screens/FeaturedMoveList';
+import FeaturedMove from './screens/FeaturedMove';
+import FreeYourMindScreen from './screens/FreeYourMindScreen';
+import LoginScreen from './screens/LoginScreen';
+import PasswordManager from './screens/PasswordManager';
+import MyDojoStyles from './screens/MyDojoStyles';
+import MyDojo from './screens/MyDojo';
+import AddMove from './screens/AddMove';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+  
+
+     <NavigationContainer>
+      <StatusBar style="dark" />
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home"     component={HomeScreen} options={{headerShown:false, gestureEnabled: false, animation: 'slide_from_left'}}/>
+        <Stack.Screen name="MoveList" component={MoveListScreen} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Move"     component={MoveScreen} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="Manuals"  component={ManualsScreen} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Manual"   component={ManualScreen} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="FightersList"  component={FightersList} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="FeaturedList"  component={FeaturedMoveList} options={{headerShown:false, gestureEnabled: true,animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Featured"      component={FeaturedMove} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="FighterScreen" component={Fighter} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="FreeYourMind"  component={FreeYourMindScreen} options={{headerShown:false, gestureEnabled: false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="LoginScreen"   component={LoginScreen} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="PasswordManager" component={PasswordManager} options={{headerShown:false, gestureEnabled: false, animation: 'fade'}}/>
+        <Stack.Screen name="Res"  component={Resources} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="MyDojoStyles" component={MyDojoStyles} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="MyDojo" component={MyDojo} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="AddMove" component={AddMove} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_bottom'}}/>
+      </Stack.Navigator>
+     </NavigationContainer>
+
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+

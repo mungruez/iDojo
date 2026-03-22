@@ -1,0 +1,435 @@
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ActivityIndicator, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNetInfo } from "@react-native-community/netinfo";
+import React, { useEffect, useState } from 'react';
+import TrackPlayer from './TrackPlayer';
+
+export default function FreeYourMindScreen() {
+  const [musicFiles, setMusicFiles] = useState([]);
+  const [faudio, setFaudio] = useState([]);
+  const [playingId, setPlayingId] = useState(-1);
+  const [loading, setLoading] = useState(true);
+  const isOffline = useNetInfo().isConnected === false;
+
+  const fetchMusicFiles = async () => {
+        let mhaudio = [
+        {
+          filename: 'Free Your Mind - (Part 1)', 
+          uri: '../assets/freeyourmind/freeyourmind(part1).mp3',
+          duration: "2:36",
+          ispaused: false,
+          stopped: false,
+          id: 0,
+        },
+        {
+          filename: 'Free Your Mind - (Part 2)', 
+          uri: '../assets/freeyourmind/freeyourmind(part2).mp3',
+          duration: "2:46",
+          ispaused: false,
+          stopped: false,
+          id: 1,
+        },
+        {
+          filename: 'Free Your Mind - (Part 3)', 
+          uri: '../assets/freeyourmind/freeyourmind(part3).mp3',
+          duration: "3:41",
+          ispaused: false,
+          stopped: false,
+          id: 2,
+        },
+        {
+          filename: 'Free Your Mind - (Part 4)', 
+          uri: '../assets/freeyourmind/freeyourmind(part4).mp3',
+          duration: "1:05",
+          ispaused: false,
+          stopped: false,
+          id: 3,
+        },
+        {
+          filename: 'Free Your Mind - (Part 5)', 
+          uri: '../assets/freeyourmind/freeyourmind(part5).mp3',
+          duration: "3:37",
+          ispaused: false,
+          stopped: false,
+          id: 4,
+        },
+        {
+          filename: 'Free Your Mind - (Part 6)', 
+          uri: '../assets/freeyourmind/freeyourmind(part6).mp3',
+          duration: "3:37",
+          ispaused: false,
+          stopped: false,
+          id: 5,
+        },
+        {
+          filename: 'Free Your Mind - (Part 7)', 
+          uri: '../assets/freeyourmind/freeyourmind(part7).mp3',
+          duration: "3:37",
+          ispaused: false,
+          stopped: false,
+          id: 6,
+        },
+        {
+          filename: 'Free Your Mind - (Part 8)', 
+          uri: '../assets/freeyourmind/freeyourmind(part8).mp3',
+          duration: "3:53",
+          ispaused: false,
+          stopped: false,
+          id: 7,
+        },
+        {
+          filename: 'Free Your Mind - (Part 9)', 
+          uri: '../assets/freeyourmind/freeyourmind(part9).mp3',
+          duration: "19:47",
+          ispaused: false,
+          stopped: false,
+          id: 8,
+        },
+        {
+          filename: 'The Universe Forces You To Let Go- (Part 1)', 
+          uri: '../assets/freeyourmind/theuniverseforcesyoutoletgo(part1).mp3',
+          duration: "14:38",
+          ispaused: false,
+          stopped: false,
+          id: 9,
+        },
+        {
+          filename: 'The Universe Forces You To Let Go- (Part 2)', 
+          uri: '../assets/freeyourmind/theuniverseforcesyoutoletgo(part2).mp3',
+          duration: "7:45",
+          ispaused: false,
+          stopped: false,
+          id: 10,
+        },
+        {
+          filename: 'The Universe Forces You To Let Go- (Part 3)', 
+          uri: '../assets/freeyourmind/theuniverseforcesyoutoletgo(part3).mp3',
+          duration: "2:53",
+          ispaused: false,
+          stopped: false,
+          id: 11,
+        }]
+
+        if (isOffline) {
+          Alert.alert("Offline", "Internet required for some audio.");
+          setMusicFiles(mhaudio);
+          return;
+        } 
+        
+        for(let faNum=0; faNum<faudio.length; faNum++) {
+          mhaudio.push({
+            filename: faudio[faNum].filename,
+            uri: faudio[faNum].uri,
+            duration: faudio[faNum].duration,
+            ispaused: false,
+            stopped: false,
+            id: faudio[faNum].id,
+          });
+        }
+        setMusicFiles(mhaudio);
+    }
+
+
+    const handleTrackFinished = () => {
+      // Simply reset the ID. This unmounts the player and stops the music.
+      setPlayingId(-1); 
+    };
+
+
+    const pausePlayMusic = (fileId) => {
+      setMusicFiles(prevFiles => prevFiles.map(file => {
+      if (file.id === fileId) {
+        // Toggle pause if it's the current track, otherwise ensure it starts unpaused
+        const isCurrentlyActive = playingId === fileId;
+          return { ...file, ispaused: isCurrentlyActive ? !file.ispaused : false };
+        }
+        // Reset pause state for all other tracks
+        return { ...file, ispaused: false };
+      }));
+
+      setPlayingId(fileId);
+    };
+
+    useEffect(() => {
+      fetchFeaturedAudio();
+      fetchMusicFiles();
+      setLoading(false);
+    
+      return () => {
+        if (playingId !== -1) {
+          pausePlayMusic(playingId);
+        }
+      };
+    }, [faudio.length])
+
+
+    const fetchFvideos = async () => {
+        let errorFlag = 0;
+        try {
+        //Memory cleared if Diff in current and last updated dates > 2.28 days
+          const savedDate = await AsyncStorage.getItem('xx7771xxiDojoFvideosDateStamp');
+          if (savedDate) {
+              const currentDate = new Date();
+              const savedDateObj = new Date(savedDate);
+              const differenceInMs = currentDate - savedDateObj;
+              if( (differenceInMs / 86400000.0) > 5.70) {
+                //console.log(`Difference in days: ${differenceInMs}`);
+                alert("Featured Content not Updated in a few days. Trying to update .....");
+                const currentDate = new Date().toISOString(); 
+                await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+                return errorFlag;
+              }  
+          }
+        } catch (error) {
+          alert("Featured Content not visited for some time. Updating List...");
+          const currentDate = new Date().toISOString(); 
+          await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+          return errorFlag;
+        }
+    
+          let vds = [];
+          try {
+            AsyncStorage.getItem('xx7771xxiDojoFvideos').then((fvalue) => {
+              if (fvalue != null) {
+                vds = JSON.parse(fvalue);
+                let hAudio = [];
+                let hid = 11;
+
+                for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+                  if(vds[fvNum].Type == "Audio" || vds[fvNum].Vend == 1111111) {
+                    hid++;
+                    hAudio.push({
+                      filename: vds[fvNum].Title,
+                      uri: vds[fvNum].Link,
+                      duration: vds[fvNum].Desc,
+                      id: hid,
+                    });
+                  } 
+                }
+                setFaudio(hAudio);
+                return hAudio.length;
+              }
+            }).catch((error) => {
+              return errorFlag;
+            });
+    
+          } catch (error) {
+            alert("Featured Content not visited for some time. Updating Videos and Audio files...");
+          }
+    
+        return errorFlag;
+      }
+      
+    
+      
+      const parseFvideos = async (vidArr) => {
+        let vds =[];
+        for (let fvNum = 1; fvNum < vidArr.length; fvNum++) {
+          let fVideo = {
+            Title:  vidArr[fvNum][0],
+            Link:   vidArr[fvNum][1],
+            Type:   vidArr[fvNum][2],
+            Thumb:  vidArr[fvNum][3],
+            Desc:   vidArr[fvNum][4],
+            Source: vidArr[fvNum][5],
+            Style:  vidArr[fvNum][6],
+            Vend:   vidArr[fvNum][7],  
+          }
+          vds.push(fVideo);
+        }
+  
+        let hAudio = [];
+        let hid = 11;
+        for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+          if(vds[fvNum].Type == "Audio" && vds[fvNum].Vend == 1111111) {
+            hid++;
+            hAudio.push({
+              filename: vds[fvNum].Title,
+              uri: vds[fvNum].Link,
+              duration: vds[fvNum].Desc,
+              id: hid,
+            });
+          } 
+        }
+        setFaudio(hAudio);
+    
+        try {
+          await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
+          const currentDate = new Date().toISOString();
+          await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+          alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
+        } catch (error) {
+          alert("Unable to Store Featured List. Featured List only available when online. !");
+        } 
+      };
+    
+    
+
+      const fetchFeaturedAudio = () => {
+        const savedfv=fetchFvideos();
+        if ( faudio && faudio.length > 3) { 
+          return;
+        }
+        
+        try { 
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
+        .then(res => res.json())
+        .then(
+          (result) => {
+            parseFvideos(result.values); 
+            return;     
+          },
+          (error) => {
+            alert('A Connection error occurred while updating featured content: ', error);
+          }
+        )
+        } catch (error) {
+            if (error.message === 'Network request failed') {
+              alert('No Internet connection detected. Due to copyright laws, Wifi is required for viewing all featured content!');
+            } else {
+              alert('A Connection error occurred while updating featured content: ', error);
+            }
+        } 
+      };
+
+    if (loading) return <ActivityIndicator size="large" color="#430d79" style={{flex:1, transform: [{scale: 2.0}]}} />;
+
+    return (
+      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fymbackground.png')}>
+        <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, backgroundColor: 'transparent',}}>
+          <View style={styles.container}>
+
+            <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
+                <ImageBackground style={ styles.title } resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
+                <StatusBar style='light' />
+            </View>
+
+            <Text style={styles.heading}>
+                iDojo's best mind mastering audio. 
+            </Text>
+
+            <FlatList
+              data={musicFiles} 
+              style={{flex: 1,}}
+              keyExtractor={(item) => item.id.toString()} 
+              extraData={playingId} 
+              renderItem={({ item: file }) => (
+                <View style={styles.list}>
+                  <TouchableOpacity 
+                    onPress={() => (pausePlayMusic(file.id))}                              
+                    style={styles.playButton}>
+                                  
+                      <View style={{
+                        flexDirection: "row",
+                        backgroundColor: "transparent",
+                        alignItems:"flex-start",
+                        height: 47,
+                        width: "94%",}}>
+                                  
+                          <ImageBackground 
+                            style={ styles.imgSound } 
+                            resizeMode='contain' 
+                            source={playingId === file.id && !file.ispaused ? require('../assets/fympausebutton.png') : require('../assets/fymplaybutton.png')}>
+              
+                          </ImageBackground>
+                          <Text style={styles.fileName} numberOfLines={1} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"&nbsp"} </Text>        
+                      </View>
+                  </TouchableOpacity>
+
+                  { playingId == file.id && (
+                    <TrackPlayer track={file} onFinished={handleTrackFinished} />
+                  )}
+                </View>
+              )}
+
+              ListFooterComponent={() => (
+                <View style={{ width: "100%", height: 7, justifyContent: "center", alignItems: "center", marginBottom: 38, marginTop: 12 }}>
+                  <Text style={{ textAlign: "center", color: "rgb(130, 32, 228)", fontSize: 15, borderColor: '#5f239bff', borderWidth: 2, borderRadius: 2, padding: 0 }}>
+                        _________________
+                  </Text>
+                </View>
+              )} 
+            />
+          </View >
+        </SafeAreaView>
+      </ImageBackground>
+    );
+}
+
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "transparent",
+        height: "100%",
+        flex: 1,
+        marginTop: 7,
+    },
+    heading: {
+        color: "#b18bd6ff",
+        fontSize: 16,
+        textAlign: "center",
+        fontWeight: "bold",
+    },
+    list: {
+      marginTop: 22,
+      height: 81,
+      width:"94%",
+      backgroundColor: "transparent",
+      borderRadius: 50,
+      padding: 0,
+      borderWidth: 0,    
+    },
+    fileName: {
+      fontSize: 12,
+      color: "#5b12a5ff",
+      fontWeight: 'bold',
+      maxHeight: 27,
+      backgroundColor: "transparent",
+      maxWidth:"83%",
+      minWidth:"83%",
+      marginLeft: 57,
+      marginTop: 7,
+      overflow: "hidden",
+    },
+    playButton: {
+      backgroundColor: '#C0C0C0',
+      borderRadius: 50,
+      width:"94%",
+      height: 81,
+      padding: 5,
+      marginLeft: 12,
+      marginBottom: 5,
+      marginRight: 10,
+      marginTop: 0,
+      borderColor: '#5f239bff',
+      borderWidth: 5,
+     // Unified Shadow for React Native
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 4.65,
+      elevation: 8, // Required for Android shadow
+      },
+    imgSound: {
+      backgroundColor: "transparent",
+      height: 47,
+      width: 47,
+      flex:1,
+      marginTop: 7,
+    },
+      title: {
+        height: 57,
+        opacity: 1,
+        marginTop:38,
+        textAlign: "center", 
+      },
+    imgBackground: {
+      height: "100%",
+      width: "100%",
+      flex: 1,
+      opacity: .9, 
+      borderRadius: 50,
+    },
+});
