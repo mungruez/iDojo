@@ -158,7 +158,7 @@ export default function FreeYourMindScreen() {
       setLoading(false);
     
       return () => {
-        if (playingId !== -1) {
+        if (playingId > -1) {
           pausePlayMusic(playingId);
         }
       };

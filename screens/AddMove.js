@@ -27,6 +27,7 @@ const AddMove = ({ route }) => {
   };
 
   const save = () => {
+    let validatedSteps = []; 
     if (!title.trim()) {
       Alert.alert("Required", "Please enter a Move Title.");
       return;
@@ -34,16 +35,15 @@ const AddMove = ({ route }) => {
 
     if (type === "steps") {
       if (steps.some(s => !s.img)) {
-        Alert.alert("Missing Image", "Every step must have an image. Check your steps!");
+        Alert.alert("Missing Image", "Every step must have an image!");
         return;
       }
-
       if (steps.some(s => !s.desc || !s.desc.trim())) {
         Alert.alert("Missing Description", "Every step must have a description.");
         return;
       }
 
-      const validatedSteps = steps.map((s, i) => ({
+      validatedSteps = steps.map((s, i) => ({
         ...s,
         title: s.title.trim() || `Step ${i + 1}`
       }));
@@ -61,12 +61,14 @@ const AddMove = ({ route }) => {
       title: title.trim(),
       type,
       style: fstyle.trim() || 'Self-Defence',
+      // 3. Now this works perfectly!
       steps: type === 'steps' ? validatedSteps : [],
       vid: type === 'video' ? vid : null,
       videoUrl: type === 'video' ? videoUrl : '',
-      Thumb: type === 'video' ? (vid || videoUrl) : steps[0].img 
+      Thumb: type === 'video' ? (vid || videoUrl) : steps[0]?.img 
     };
 
+    // 4. Double check if you passed 'onSync' or 'onComplete' from the previous screen
     if (onComplete) {
       onComplete(finalData);
       navigation.goBack();
@@ -75,13 +77,17 @@ const AddMove = ({ route }) => {
     }
   };
 
+
   return (
-   <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/addmovebg.jpg')}>
-    <ScrollView contentContainerStyle={[styles.container, { paddingBottom: 80 }]}>
+   <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
       </View>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}><Text style={styles.discardText}>CANCEL</Text></TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
+        <ImageBackground style={{ alignSelf:'center', height:70, width:"100%", }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/>
+        <Text style={styles.discardText}>CANCEL</Text>
+      </TouchableOpacity>
 
       <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
@@ -115,13 +121,14 @@ const AddMove = ({ route }) => {
         <View style={{ marginTop: 10 }}>
           {steps.map((s, i) => (
             <View key={s.id} style={styles.stepRow}>
-              <TextInput style={styles.input} placeholder={`Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
+              <TextInput style={styles.stepInput} placeholder={`Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
               <TouchableOpacity onPress={() => pickMedia(i)} style={styles.stepImgContainer}>
                 {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <Text style={styles.plusIcon}>+</Text>}
               </TouchableOpacity>
-              <View style={{ flex: 1 }}>
+              <View style={{ width: '100%', marginTop: 10 }}>
                 <TextInput 
                   style={styles.stepInput} 
+                  multiline={true}
                   placeholder={`Step ${i+1} description...`}
                   value={s.desc} 
                   onChangeText={(t) => {
@@ -130,10 +137,10 @@ const AddMove = ({ route }) => {
                     setSteps(ns);
                   }} 
                 />
-                {steps.length > 0 && (
+                {steps.length > 1 && (
                   <TouchableOpacity onPress={() => setSteps(steps.filter(st => st.id !== s.id))} style={styles.removeStepIcon}>
-                    <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/removeimgicon.png')}/>
-                    <Text style={styles.videoIconText}>✕ REMOVE STEP</Text>
+                    <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/removeimgicon.png')}/>
+                    <Text style={styles.removeText}>✕ REMOVE STEP</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -152,7 +159,7 @@ const AddMove = ({ route }) => {
       )}
 
       <TouchableOpacity style={styles.saveBtn} onPress={() => save()}>
-        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center'}} resizeMode='contain' source={require('../assets/greenbtnbg.png')}>
+        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center'}} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : require('../assets/redbtnbg.png')}>
           <Image
             resizeMode="contain"
             style={{height:34, width:161, alignSelf:"center",}}
@@ -166,14 +173,14 @@ const AddMove = ({ route }) => {
 }
 
 const styles = StyleSheet.create({
-  imgBackground: {  ...StyleSheet.absoluteFillObject, opacity: .8 },
+  imgBackground: {  ...StyleSheet.absoluteFillObject, opacity: .7 },
   icon: { height: 57, width: '90%', alignSelf: 'center' },
   videoIcon: { height: 76, width:76, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},
   videoIconUploaded: { height: 76, width:76, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},
   videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
   container: { flex: 1, backgroundColor: 'transparent', },
-  headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:5, marginBottom: 15, marginLeft: 19, },
+  headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:5, marginBottom: 15, marginLeft: 19, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid',},
   label: { fontWeight: 'bold', color: '#420105', marginTop: 7, fontSize: 13 },
   input: { borderWidth: 1, borderColor: '#9e9797', borderRadius: 8, padding: 12, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', },
   modeToggle: { flexDirection: 'row', marginTop: 7, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
@@ -181,20 +188,20 @@ const styles = StyleSheet.create({
   activeTab: { backgroundColor: '#5b12a5' },
   tabText: { color: '#3e1c5f', fontWeight: 'bold' },
   activeTabText: { color: '#e6c8c8' },
-  stepRow: { flexDirection: 'column', marginTop: 12, alignItems: 'center', backgroundColor: 'rgba(93, 231, 167, 0.5)', padding: 10, borderRadius: 10, elevation: 1 },
+  stepRow: { flexDirection: 'column', marginTop: 12, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
   stepImg: { flex:1, width: '100%', height: '100%' },
-  stepInput: { marginLeft: 10, borderBottomWidth: 1, borderColor: '#083a1d', padding: 5, fontSize: 14 },
-  removeText: { color: 'red', fontSize: 10, marginLeft: 10, marginTop: 5, fontWeight: 'bold' },
-  removeStepIcon:{alignItems: 'center', marginTop: 5,height: 40, width: 95, flexDirection: 'row', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d'},
+  stepInput: { marginLeft: 10, borderBottomWidth: 1, borderColor: '#083a1d', padding: 5, fontSize: 14, width:"100%", minHeight:43, backgroundColor: 'rgba(93, 231, 167, 0.5)',},
+  removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:3, fontWeight: 'bold' },
+  removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, minHeight:95, minWidth:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d',},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
   addStepBtn: {marginTop:5, height:45 ,width: 170, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   addStepText: { color: '#0b5737', fontWeight: 'bold' },
   saveBtn: { backgroundColor:'transparent', width:190, height:50, borderRadius: 12, marginTop:7,alignSelf:'center',alignItems: 'center', justifyContent:'center', elevation: 3 },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
-  discardBtn: { marginTop: 4, height: 85, width: 76, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', },
-  discardText: { textAlign: 'center', color: '#d40a25', fontWeight: 'bold' },
-  stepImgContainer: { width: 75, height: 75, backgroundColor: 'rgba(255, 255, 255, 0.1)', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)', overflow: 'hidden',marginRight: 12},
+  discardBtn: { marginTop: 4, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
+  discardText: { textAlign: 'center', color: '#d40a25', fontWeight: 'bold', fontSize:12, marginTop: 3, height: 22, width: '100%' },
+  stepImgContainer: { width: 75, height: 75, backgroundColor: 'rgba(93, 231, 167, 0.5)', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)', overflow: 'hidden',marginRight: 12},
 });
 
 export default AddMove;

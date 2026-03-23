@@ -31,7 +31,7 @@ export default function TrackPlayer({ track, onFinished }) {
 
   //Initial Play & Auto-Unload/Cleanup
   useEffect(() => {
-    player.play();
+    if(player) player.play();
     
     return () => {
       if(player) player.pause();
@@ -40,7 +40,7 @@ export default function TrackPlayer({ track, onFinished }) {
 
   //Sync with Pause/Play Button from Parent
   useEffect(() => {
-    if (!player) return;
+    if (!player || !status || !track) return;
 
     if (track.ispaused && status.playing) {
       player.pause();
@@ -50,7 +50,7 @@ export default function TrackPlayer({ track, onFinished }) {
   }, [track.ispaused, status.playing]);
 
   useEffect(() => {
-    if (status.didJustFinish) {
+    if (status && status.didJustFinish) {
       onFinished();
     }
   }, [status.didJustFinish]);
