@@ -167,15 +167,15 @@ export default function MyDojoStyles() {
         </View>
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO FIGHTING STYLES LIST</Text>
-            <View style={{ flex:1, flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
+            <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'video', mstyle: null, onSync: handleSave })} style={styles.plusIcon}>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
+                <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'steps', mstyle: null, onSync: handleSave })} style={styles.plusIcon}>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/addmanualicon.png')}/>         
+                <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmanualicon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
-                <ImageBackground style={{ flex:1,}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
+                <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
               </TouchableOpacity>
             </View>
         </View>
@@ -194,39 +194,37 @@ export default function MyDojoStyles() {
           }}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <View style={styles.btnGroup}>
-                {item.type === 'video' ? 
-                  ( <TouchableOpacity
-                  style={styles.card}
+              {item.type === 'video' ? 
+                ( <TouchableOpacity
+                  style={{ width: '76%', height: 43 }}
                   onPress={() => navigation.navigate('MyDojo', { rmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, onSync: handleSave, onDelete: handleDelete, isOffline: isOffline, 
                   })}>
-                  <ImageBackground style={{flex:1, height:"auto", width:"98.5%",}} resizeMode='contain' source={require('../assets/redbtnbg.png')}>
+                  <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/redbtnbg.png')}>
                     {item.style === 'allstyles' ? 
                       ( <Image
                           resizeMode="contain"
-                          style={{ flex:1, height:"auto", width:"83%", alignSelf:"center",}}
+                          style={{ height:"64%", width:"80%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
-                          <Text style={styles.cardText}>{item.style}</Text> 
+                          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
                       )}
                   </ImageBackground>
                   </TouchableOpacity>) 
                   : ( <TouchableOpacity
-                    style={styles.card}
+                    style={{ width: '76%', height: 43 }}
                     onPress={() => navigation.navigate('MyDojo', { rmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, onSync: handleSave, onDelete: handleDelete, isOffline: isOffline})}>
-                    <ImageBackground style={{flex:1, height:"auto", width:"98.5%",}} resizeMode='contain' source={require('../assets/greenbtnbg.png')}>
+                    <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/greenbtnbg.png')}>
                       {item.style === 'allstyles' ? 
                         ( <Image
                           resizeMode="contain"
-                          style={{ flex:1, height:"auto", width:"83%", alignSelf:"center",}}
+                          style={{height:"64%", width:"80%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
-                          <Text style={styles.cardText}>{item.style}</Text> 
+                          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
                       )}
                     </ImageBackground>
                   </TouchableOpacity> )
                 }
-              </View>
             </View>
           )}
         />
@@ -236,16 +234,14 @@ export default function MyDojoStyles() {
 }
 
 const styles = StyleSheet.create({
-imgBackground: { flex: 1, width: '100%', height: '100%' },
+imgBackground: { flex: 1, width: '100%', height: '100%', opacity:.9 },
 container: { flex: 1, backgroundColor: '#f8f9fa' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: { flex:1, flexDirection: 'column', width:"98%", padding: 1, backgroundColor: '#fff', borderBottomWidth: 1, borderColor: '#eee' },
-title: { fontSize: 18, fontWeight: 'bold', color: '#420105' },
-topBtn: { marginLeft: 15 },
+header: {flexDirection: 'column', width:"90%", minHeight:86, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderBottomWidth: 1, borderColor: '#eee',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 2, },
+title: { fontSize: 18, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 5 },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { backgroundColor: 'transparent', marginHorizontal: 10, marginVertical: 5,alignItems: 'center'},
-cardText: { fontSize: 18, fontWeight: 'bold', color: '#fff',},
-divider: {width: '90%', height: 50, alignSelf: 'center', marginVertical: 20 },
+cardText: { fontSize: 18, fontWeight: 'bold', color: '#fff', paddingHorizontal: 5,},
 greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,},
 redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,},
 smallGap: {height: 12,},
@@ -254,8 +250,8 @@ deleteIcon: { height: 35, width: 35 },
 discardIcon: { height: 35, width: 35 },
 redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#ff4444',},
 bluePill: {backgroundColor: 'rgba(25, 118, 210, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#44aaff',},
-plusIcon:{height:38, width:38, borderRadius:9, marginLeft:5},
-importIcon:{height:38, width:38, borderRadius:9, marginLeft:5},
+plusIcon:{height:38, width:38, borderRadius:9, marginLeft:7},
+importIcon:{height:45, width:40, borderRadius:9, marginLeft:5},
 pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
   shadowColor: '#000', shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.8,shadowRadius: 2,},
 });
