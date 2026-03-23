@@ -4,18 +4,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
 import { File, Directory, Paths } from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
-import React, { useState, useCallback  } from 'react';
+import React, { useState, useCallback, useEffect  } from 'react';
 import { unzip } from 'react-native-zip-archive';
-//Code for a screen whith one list, A list all moves grouped first by move.type=(video or steps) then grouped by move.style(user entered or Self-Defence by default) 
+//Code for parent screen whith one list, A list all moves grouped first by move.type=(video or steps) then grouped by move.style(user entered or Self-Defence by default) 
 //depending on which group (a specific moves style button or all styles button) is clicked on navigate and show list of moves filtered by type and style clicked on all style button but no all types button 
-//this means no screen will show all video and steps moves in one list. So the MyDojo screen will only have lists with either (1) a type with all styles, OR (2) a type and one style    
+//this means no screen will show all video and steps moves in one list. So the child MyDojo screen will only have lists with either (1) a type with all styles, OR (2) a type and one style    
 //only when rendering moves with all styles from a type MyDojo will need to render a vertical list (for each style) and horizontal list(for each move with same style) in the manager, instead of one vertical list that will be rendered when hmoves=one type and one style. 
 // A horizontal divider needed in flatList when type changes to type=='steps',
 //use matrix dojo in bg, try use red/blue pills buttons (each style,allstyles) , 
 // Added Move title - subtitle add,share,import moves, Edit Move title, My Dojo Move Styles, MyDojo
 //Added-> share btn, import btn, plus btn, edit btn, del btn, add step btn, save move btn, info btn 
 // added cool fonts, and a prieview for the video(or Thumbnail) and images in the steps, and an import/share many option.    
-export default function MyDojoStyles() {
+export default function MyDojoStyles({route}) {
     const [moves, setMoves] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [smoves, setSMoves] = useState([]);
@@ -118,7 +118,7 @@ export default function MyDojoStyles() {
         const currentStyle = m.style || 'Self-Defence';
         if (m.type === 'video' && !videoStyles.includes(currentStyle)) {
           videoStyles.push(currentStyle); 
-          sMoves.push({ ...m, style: currentStyle }); // Ensure it has the default style
+          sMoves.push({ ...m, style: currentStyle }); 
         } else if (m.type === 'steps' && !stepStyles.includes(currentStyle)) {
           stepStyles.push(currentStyle); 
           bMoves.push({ ...m, style: currentStyle });
@@ -157,6 +157,19 @@ export default function MyDojoStyles() {
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
 
+    useEffect(() => {
+      if (route.params?.savedMove) {
+        handleSave(route.params.savedMove);
+        navigation.setParams({ savedMove: undefined });
+      }
+
+      if (route.params?.deletedId) {
+        handleDelete(route.params.deletedId);
+        navigation.setParams({ deletedId: undefined });
+      }
+    }, [route.params?.savedMove, route.params?.deletedId]);
+
+
     if (loading) return <ActivityIndicator size="large" color="#f30707" style={{flex:1, transform: [{scale: 2.0}]}} />;
 
     return (
@@ -168,10 +181,10 @@ export default function MyDojoStyles() {
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO FIGHTING STYLES LIST</Text>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'video', mstyle: null, onSync: handleSave })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'video', mstyle: null, })} style={styles.plusIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'steps', mstyle: null, onSync: handleSave })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'steps', mstyle: null })} style={styles.plusIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmanualicon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
@@ -197,8 +210,7 @@ export default function MyDojoStyles() {
               {item.type === 'video' ? 
                 ( <TouchableOpacity
                   style={{ width: '76%', height: 43 }}
-                  onPress={() => navigation.navigate('MyDojo', { rmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, onSync: handleSave, onDelete: handleDelete, isOffline: isOffline, 
-                  })}>
+                  onPress={() => navigation.navigate('MyDojo', { hmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, isOffline: isOffline})}>
                   <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/redbtnbg.png')}>
                     {item.style === 'allstyles' ? 
                       ( <Image
@@ -212,7 +224,7 @@ export default function MyDojoStyles() {
                   </TouchableOpacity>) 
                   : ( <TouchableOpacity
                     style={{ width: '76%', height: 43 }}
-                    onPress={() => navigation.navigate('MyDojo', { rmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, onSync: handleSave, onDelete: handleDelete, isOffline: isOffline})}>
+                    onPress={() => navigation.navigate('MyDojo', { hmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, isOffline: isOffline})}>
                     <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/greenbtnbg.png')}>
                       {item.style === 'allstyles' ? 
                         ( <Image
@@ -235,13 +247,13 @@ export default function MyDojoStyles() {
 
 const styles = StyleSheet.create({
 imgBackground: { flex: 1, width: '100%', height: '100%', opacity:.9 },
-container: { flex: 1, backgroundColor: '#f8f9fa' },
+container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: {flexDirection: 'column', width:"90%", minHeight:86, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderBottomWidth: 1, borderColor: '#eee',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 2, },
+header: {flexDirection: 'column', width:"90%", minHeight:86, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 2, },
 title: { fontSize: 18, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 5 },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { backgroundColor: 'transparent', marginHorizontal: 10, marginVertical: 5,alignItems: 'center'},
-cardText: { fontSize: 18, fontWeight: 'bold', color: '#fff', paddingHorizontal: 5,},
+cardText: { fontSize: 18, fontWeight: 'bold', color: '#c2cdd4', paddingHorizontal: 5,},
 greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,},
 redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,},
 smallGap: {height: 12,},
@@ -250,8 +262,8 @@ deleteIcon: { height: 35, width: 35 },
 discardIcon: { height: 35, width: 35 },
 redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#ff4444',},
 bluePill: {backgroundColor: 'rgba(25, 118, 210, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#44aaff',},
-plusIcon:{height:38, width:38, borderRadius:9, marginLeft:7},
-importIcon:{height:45, width:40, borderRadius:9, marginLeft:5},
+plusIcon:{height:38, width:38, borderRadius:9, marginLeft:19, backgroundColor: '#c2cdd4'},
+importIcon:{height:57, width:45, borderRadius:9, marginLeft:19},
 pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
   shadowColor: '#000', shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.8,shadowRadius: 2,},
 });

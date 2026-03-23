@@ -3,16 +3,14 @@ import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet , Dimensions,
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { File, Directory, Paths } from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native'
-import * as DocumentPicker from 'expo-document-picker';
-import { zip, unzip } from 'react-native-zip-archive';
+import { zip } from 'react-native-zip-archive';
 import * as Sharing from 'expo-sharing';
 
 const { width } = Dimensions.get('window');
 
 export default function MyDojo({route}) { 
   const navigation = useNavigation();
-  const { rmoves, ftype, fstyle, onSync, onDelete, isOffline } = route.params;
-  const [hmoves, setHMoves] = useState(rmoves || []);
+  const { hmoves, ftype, fstyle, isOffline } = route.params;
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -33,64 +31,26 @@ export default function MyDojo({route}) {
       if (index > -1) newList[index] = updatedMove;
       else newList.push(updatedMove);
     }
-    setHMoves(newList);
-    if (onSync) onSync(updatedMove);
-    setLoading(false);
+    navigation.navigate('MyDojoStyles', { savedMove: finalData });
   };
 
   const handleDelete = () => {
     Alert.alert("Delete Moves", `Remove ${selectedIds.length} selected moves?`, [
       { text: "Cancel" },
       { text: "Delete", style: 'destructive', onPress: () => {
-        let newList = [...hmoves];
-        setLoading(true);
-        if (fstyle === "allstyles") {
-          newList = newList.map(g => ({ ...g, data: g.data.filter(m => !selectedIds.includes(m.id)) }))
-            .filter(g => g.data.length > 0);
-        } else {
-          newList = newList.filter(m => !selectedIds.includes(m.id));
-        }
-        setHMoves(newList);
-        selectedIds.forEach(id => onDelete?.(id));
-        setSelectedIds([]);
-        setLoading(false);
+          navigation.navigate('MyDojoStyles', { deletedIds: selectedIds });
+          setSelectedIds([]); 
       }}
     ]);
-  };
-    
-  const handleImport = async () => {
-    try {
-      if (isOffline) return Alert.alert("Offline", "No Wifi detected to import moves...");
-      const res = await DocumentPicker.getDocumentAsync({ type: 'application/zip' });
-      if (res.canceled) return;
-      setLoading(true);
-      const tempDir = new Directory(Paths.document, 'import_temp');
-      if (!tempDir.exists) tempDir.create();
-      await unzip(res.assets[0].uri, tempDir.uri);
-      const dataFile = new File(tempDir, 'data.json');
-      if (dataFile.exists) {
-        const json = await dataFile.text(); 
-        const importedData = JSON.parse(json);
-        const movesToSave = Array.isArray(importedData) ? importedData : [importedData];
-        movesToSave.forEach(move => {
-          const uniqueId = `${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-          handleUpdate({ ...move, id: uniqueId });
-        });
-        Alert.alert("Success", "Moves imported successfully!");
-      }
-      tempDir.delete(); 
-    } catch (e) {
-      console.error(e);
-      Alert.alert("Error", "Invalid iDojo ZIP or corrupted data.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handleShare = async () => {
     try {
-      if (isOffline) return Alert.alert("Offline", "No Wifi detected to share moves...");
+      if (isOffline) {
+        return Alert.alert("Offline", "No Wifi detected to share moves...");
+      }
       if (selectedIds.length === 0) return;
+
       let selectedMoves = [];
       if (fstyle === "allstyles") {
         hmoves.forEach(group => {
@@ -101,22 +61,38 @@ export default function MyDojo({route}) {
         selectedMoves = hmoves.filter(m => selectedIds.includes(m.id));
       }
 
+      setLoading(true);
       const shareDir = new Directory(Paths.document, 'batch_share');
-      if (shareDir.exists) shareDir.delete();
-      shareDir.create();
+      if (shareDir.exists) {
+        await shareDir.delete(); 
+      }
+      await shareDir.create();
       const dataFile = new File(shareDir, 'data.json');
-      await dataFile.write(JSON.stringify(selectedMoves)); // Replaces writeAsStringAsync
+      if (!dataFile.exists) {
+        await dataFile.create();
+      }
+      await dataFile.write(JSON.stringify(selectedMoves)); 
       const zipFileName = `Dojo_Batch_${Date.now()}.zip`;
-      const zipPath = `${Paths.document}/${zipFileName}`;
+      const zipPath = `${Paths.document.uri}/${zipFileName}`;
       await zip(shareDir.uri, zipPath);
-      await Sharing.shareAsync(zipPath);
-      shareDir.delete();
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(zipPath, {
+          mimeType: 'application/zip',
+          dialogTitle: 'Share your Dojo Moves',
+        });
+      } else {
+        Alert.alert("Error", "Sharing is not available on this device.");
+      }
+      await shareDir.delete();
       setSelectedIds([]); 
     } catch (e) {
-      console.error(e);
-      Alert.alert("Error", "Sharing failed.");
+      console.error("Batch share error:", e);
+      Alert.alert("Error", "Sharing failed. Check storage permissions.");
+    } finally {
+      setLoading(false);
     }
   };
+
 
   const toggleSelect = (id) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -135,7 +111,7 @@ export default function MyDojo({route}) {
         <Image source={{ uri: item.Thumb || 'https://via.placeholder.com' }} style={styles.thumbImage} />
         <View style={styles.pillRow}>
           <Text style={styles.typePill}>{item.type}</Text>
-          <TouchableOpacity onPress={() => {navigation.navigate('AddMove', {move: item, onComplete: handleUpdate})}} style={styles.plusIcon}>
+          <TouchableOpacity onPress={() => {navigation.navigate('AddMove', {move: item})}} style={styles.plusIcon}>
             <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : require('../assets/editmoveicon.png') }/>         
           </TouchableOpacity>             
         </View>
@@ -149,17 +125,14 @@ export default function MyDojo({route}) {
   return (
    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
     <SafeAreaView style={styles.container}>
-      <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
+      <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== 'video' ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
       </View>
       <View style={styles.header}>
         <Text style={styles.title}>{fstyle === 'allstyles' ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle}</Text>
         <View style={{flexDirection:'row'}}>
-          <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle, onComplete: handleUpdate })} style={styles.plusIcon}>
+          <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle })} style={styles.plusIcon}>
             <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/addmanualicon.png') : require('../assets/addmoveicon.png') }/>         
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
-            <ImageBackground style={{ flex:1,}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
           </TouchableOpacity>
         </View>
       </View>

@@ -15,7 +15,7 @@ export default function Resources() {
     });
   
   
-    const navKSound = (item) => {
+    const navKSound = () => {
       try {
         if(kplayer) {
           kplayer.play();
@@ -59,14 +59,14 @@ export default function Resources() {
           </Text>
         </View>
       </ScrollView>
-
+    </SafeAreaView>
     <TouchableOpacity
-        style={styles.invisiblebtn}
-        onLongPress={() => navKSound()}>
+      style={styles.invisiblebtn}
+      onLongPress={navKSound}
+      delayLongPress={771}
+      activeOpacity={1}>
         <View style={styles.buttonArea} />                     
     </TouchableOpacity>
-
-    </SafeAreaView>
     </ImageBackground>
   )
 }
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
   },
   invisiblebtn: {
     background: "transparent",
+    backgroundColor: "transparent",
     border: "none",
     width: 43,   
     height: 43,
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 19,
     right: 19,
+    zIndex:10,
   },
   buttonArea: {
     flex: 1,
