@@ -74,15 +74,15 @@ const AddMove = ({ route }) => {
 
   return (
    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
-      <View style={{backgroundColor: 'transparent', marginBottom:12, paddingLeft:5, paddingRight:5}}>
-        <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
-      </View>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
-        <ImageBackground style={{ alignSelf:'center', height:70, width:"100%", }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
-        <Text style={styles.discardText}>CANCEL</Text>
-      </TouchableOpacity>
+    <View style={{backgroundColor: 'transparent', marginBottom:12, paddingLeft:5, paddingRight:5, marginTop:25}}>
+      <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
+    </View>
+    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
+      <ImageBackground style={{ alignSelf:'center', height:70, width:"100%", }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
+      <Text style={styles.discardText}>CANCEL</Text>
+    </TouchableOpacity>
 
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
       <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Move Title" value={title} onChangeText={setTitle} />
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   addStepText: { color: '#0b5737', fontWeight: 'bold' },
   saveBtn: { backgroundColor:'transparent', width:190, height:50, borderRadius: 12, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
-  discardBtn: { marginBottom: 5, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
+  discardBtn: { marginBottom: 7, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
   discardText: { textAlign: 'center', color: '#d40a25', fontWeight: 'bold', fontSize:10, marginTop: 3, height: 19, width: '100%' },
   stepImgContainer: { width: 75, height: 75, backgroundColor: 'rgba(93, 231, 167, 0.5)', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)', overflow: 'hidden',},
 });

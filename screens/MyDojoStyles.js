@@ -174,7 +174,7 @@ export default function MyDojoStyles({route}) {
 
     return (
      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
-      <SafeAreaView style={{flex:1}}>
+      <SafeAreaView style={{flex:1, marginTop:25}}>
         <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
@@ -209,13 +209,13 @@ export default function MyDojoStyles({route}) {
             <View style={styles.card}>
               {item.type === 'video' ? 
                 ( <TouchableOpacity
-                  style={{ width: '76%', height: 43 }}
+                  style={{ width: '79%', height: 43 }}
                   onPress={() => navigation.navigate('MyDojo', { hmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, isOffline: isOffline})}>
                   <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/redbtnbg.png')}>
                     {item.style === 'allstyles' ? 
                       ( <Image
-                          resizeMode="contain"
-                          style={{ height:"64%", width:"80%", alignSelf:"center",}}
+                          resizeMode="stretch"
+                          style={{ height:"45%", width:"57%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
@@ -223,13 +223,13 @@ export default function MyDojoStyles({route}) {
                   </ImageBackground>
                   </TouchableOpacity>) 
                   : ( <TouchableOpacity
-                    style={{ width: '76%', height: 43 }}
+                    style={{ width: '79%', height: 43 }}
                     onPress={() => navigation.navigate('MyDojo', { hmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, isOffline: isOffline})}>
                     <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/greenbtnbg.png')}>
                       {item.style === 'allstyles' ? 
                         ( <Image
-                          resizeMode="contain"
-                          style={{height:"64%", width:"80%", alignSelf:"center",}}
+                          resizeMode="stretch"
+                          style={{height:"45%", width:"57%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
 imgBackground: { flex: 1, width: '100%', height: '100%', opacity:.9 },
 container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: {flexDirection: 'column', width:"90%", minHeight:86, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 2, },
+header: {flexDirection: 'column', width:"90%", minHeight:86, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 25, },
 title: { fontSize: 18, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 5 },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { backgroundColor: 'transparent', marginHorizontal: 10, marginVertical: 5,alignItems: 'center'},

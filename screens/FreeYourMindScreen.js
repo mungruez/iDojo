@@ -3,6 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ActivityIndi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from "@react-native-community/netinfo";
+import { DeviceEventEmitter } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import TrackPlayer from './TrackPlayer';
 
@@ -12,6 +14,7 @@ export default function FreeYourMindScreen() {
   const [playingId, setPlayingId] = useState(-1);
   const [loading, setLoading] = useState(true);
   const isOffline = useNetInfo().isConnected === false;
+  const navigation = useNavigation();
 
   const fetchMusicFiles = async () => {
         let mhaudio = [
@@ -131,38 +134,48 @@ export default function FreeYourMindScreen() {
         setMusicFiles(mhaudio);
     }
 
-
     const handleTrackFinished = () => {
-      // Simply reset the ID. This unmounts the player and stops the music.
       setPlayingId(-1); 
     };
 
 
     const pausePlayMusic = (fileId) => {
+      if (playingId !== fileId) {
+        setPlayingId(-1); 
+        setTimeout(() => {
+          setPlayingId(fileId);
+        }, 50);
+        return;
+      }
+      
       setMusicFiles(prevFiles => prevFiles.map(file => {
       if (file.id === fileId) {
-        // Toggle pause if it's the current track, otherwise ensure it starts unpaused
         const isCurrentlyActive = playingId === fileId;
           return { ...file, ispaused: isCurrentlyActive ? !file.ispaused : false };
         }
-        // Reset pause state for all other tracks
         return { ...file, ispaused: false };
       }));
-
       setPlayingId(fileId);
     };
 
     useEffect(() => {
+      const subscription = DeviceEventEmitter.addListener('TRACK_FINISHED', () => {
+      setPlayingId(-1);
+      });
+
+      const unsubscribeNav = navigation.addListener('beforeRemove', () => {
+        setPlayingId(-1);
+      });
+
       fetchFeaturedAudio();
       fetchMusicFiles();
       setLoading(false);
     
       return () => {
-        if (playingId > -1) {
-          pausePlayMusic(playingId);
-        }
+        subscription.remove(); 
+        unsubscribeNav();
       };
-    }, [faudio.length])
+    }, [faudio.length, navigation])
 
 
     const fetchFvideos = async () => {
@@ -339,7 +352,7 @@ export default function FreeYourMindScreen() {
                   </TouchableOpacity>
 
                   { playingId == file.id && (
-                    <TrackPlayer track={file} onFinished={handleTrackFinished} />
+                    <TrackPlayer track={file} />
                   )}
                 </View>
               )}

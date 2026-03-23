@@ -1,6 +1,8 @@
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import React, { useEffect, } from 'react';
+import { DeviceEventEmitter } from 'react-native'; 
+import React, { useEffect, useRef } from 'react';
+
 
 const LOCAL_AUDIO_MAP = {
   0: require('../assets/freeyourmind/freeyourmind(part1).mp3'),
@@ -17,7 +19,8 @@ const LOCAL_AUDIO_MAP = {
   11: require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part3).mp3'),
 };
 
-export default function TrackPlayer({ track, onFinished }) {
+export default function TrackPlayer({ track }) {
+   const isMounted = useRef(true);
   const source = track.id <= 11 ? LOCAL_AUDIO_MAP[track.id] : track.uri;
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
@@ -29,16 +32,26 @@ export default function TrackPlayer({ track, onFinished }) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  //Initial Play & Auto-Unload/Cleanup
   useEffect(() => {
-    if(player) player.play();
-    
+    if(player) {
+      player.play();
+    }
     return () => {
-      if(player) player.pause();
+      if (player) {
+      player.pause();
+      player.replace(null); 
+    }
     };
   }, [player]);
 
-  //Sync with Pause/Play Button from Parent
+  //This the old invis button changec it to lonpress title <TouchableOpacity
+        //style={styles.invisiblebtn}
+        //onPress={navKSound}
+        ///activeOpacity={1}>
+          //<View style={styles.buttonArea} />                     
+      //</TouchableOpacity>
+
+  //Sync with Pause/Play Button from Parent    
   useEffect(() => {
     if (!player || !status || !track) return;
 
@@ -50,17 +63,16 @@ export default function TrackPlayer({ track, onFinished }) {
   }, [track.ispaused, status.playing]);
 
   useEffect(() => {
-    if (status && status.didJustFinish) {
-      onFinished();
+    if (status?.didJustFinish && isMounted.current) {
+      DeviceEventEmitter.emit('TRACK_FINISHED');
     }
-  }, [status.didJustFinish]);
+  }, [status?.didJustFinish]);
 
   useEffect(() => {
-    if (status.error) {
-      alert(`Connection issue with "${track.filename}". Please check your WiFi...`);
-      onFinished(); 
+    if (status?.error && isMounted.current) {
+      DeviceEventEmitter.emit('TRACK_FINISHED');
     }
-  }, [status.error]);
+  }, [status?.error]);
 
   return (
     <View style={styles.row}>
