@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, StyleSheet, ImageBackground, DeviceEventEmitter } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
@@ -16,12 +16,10 @@ const AddMove = ({ route }) => {
   const pickMedia = async (index = null) => {
     const isVideo = (type === 'video' && index === null);
     const res = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: isVideo 
-        ? ImagePicker.MediaTypeOptions.Videos 
-        : ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1.0,
-    });
+        mediaTypes: isVideo ? ['video'] : ['image'], 
+        allowsEditing: false,
+        quality: 1.0,
+      });
 
     if (!res.canceled) {
       const pickedUri = res.assets[0].uri;
