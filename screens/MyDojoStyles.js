@@ -127,8 +127,6 @@ export default function MyDojoStyles({route}) {
       }
     };
 
-
-    
     const parseStyles = (list) => {
       if (!Array.isArray(list)) {
         alert("Data is not an array, skipping parse.");
@@ -159,7 +157,6 @@ export default function MyDojoStyles({route}) {
       }
     };
     
-
     const parseHMoves = (movesList) => {
       let hMoves = [];
       let stylesSeen = [];
