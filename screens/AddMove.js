@@ -14,25 +14,37 @@ const AddMove = ({ route }) => {
   const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:'', img: null, desc: '' }]);
   
   const pickMedia = async (index = null) => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert("Permission Denied", "We need gallery access to add moves!");
+      return;
+    }
+
     const isVideo = (type === 'video' && index === null);
-    const res = await ImagePicker.launchImageLibraryAsync({
+    
+    try {
+      const res = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: isVideo ? ['video'] : ['image'], 
-        allowsEditing: false,
+        allowsEditing: false, 
         quality: 1.0,
       });
 
-    if (!res.canceled) {
-      const pickedUri = res.assets[0].uri;
+      if (!res.canceled && res.assets && res.assets.length > 0) {
+        const pickedUri = res.assets[0].uri; 
 
-      if (isVideo) {
-        setVid(pickedUri);
-      } else {
-        const s = [...steps];
-        s[index].img = pickedUri;
-        setSteps(s);
+        if (isVideo) {
+          setVid(pickedUri);
+        } else {
+          const s = [...steps];
+          s[index].img = pickedUri;
+          setSteps(s);
+        }
       }
+    } catch (err) {
+      Alert.alert("Picker Error", "Could not open gallery.");
     }
   };
+
 
   const save = () => {
     let validatedSteps = []; 

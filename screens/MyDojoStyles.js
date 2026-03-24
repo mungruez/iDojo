@@ -101,35 +101,36 @@ export default function MyDojoStyles({route}) {
 
     const handleImport = async () => {
       try {
-        if (isOffline) {
-          Alert.alert("Offline", "Internet required.");
-          return;
-        }
+        if (isOffline) return Alert.alert("Offline", "Internet required.");
+        const res = await DocumentPicker.getDocumentAsync({ 
+          type: ['application/zip', 'application/x-zip-compressed', '*/*'], 
+          copyToCacheDirectory: true 
+        });
 
-        const res = await DocumentPicker.getDocumentAsync({ type: 'application/zip' });
-        if (res.canceled) return;
+        if (res.canceled || !res.assets || res.assets.length === 0) return;
         setLoading(true);
+        const zipUri = res.assets[0].uri;
         const tempDir = new Directory(Paths.document, 'temp_import');
-        if (!tempDir.exists) {
-          tempDir.create();
-        }
+        
+        if (!tempDir.exists) tempDir.create();
 
-        await unzip(res.assets[0].uri, tempDir.uri);
+        await unzip(zipUri, tempDir.uri);
+        
         const dataFile = new File(tempDir, 'data.json');
         if (dataFile.exists) {
           const content = await dataFile.text();
-          const parsedData = JSON.parse(content);
-          handleSave(parsedData);
+          handleSave(JSON.parse(content));
         }
+        
         tempDir.delete();
-
       } catch (e) {
-        console.error(e);
-        Alert.alert("Error", "Import failed.");
+        console.error("Import error:", e);
+        Alert.alert("Error", "The picker failed to open or the ZIP is invalid.");
       } finally {
         setLoading(false);
       }
     };
+
 
     
     const parseStyles = (list) => {
