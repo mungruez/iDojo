@@ -111,17 +111,13 @@ export default function MyDojoStyles({route}) {
         setLoading(true);
         const zipUri = res.assets[0].uri;
         const tempDir = new Directory(Paths.document, 'temp_import');
-        
         if (!tempDir.exists) tempDir.create();
-
         await unzip(zipUri, tempDir.uri);
-        
         const dataFile = new File(tempDir, 'data.json');
         if (dataFile.exists) {
           const content = await dataFile.text();
           handleSave(JSON.parse(content));
         }
-        
         tempDir.delete();
       } catch (e) {
         console.error("Import error:", e);

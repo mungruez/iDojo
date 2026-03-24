@@ -15,17 +15,16 @@ const AddMove = ({ route }) => {
   
   const pickMedia = async (index = null) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
+    if (status !== "granted") {
       Alert.alert("Permission Denied", "We need gallery access to add moves!");
       return;
     }
-
-    const isVideo = (type === 'video' && index === null);
     
+    const isVideo = (type === "video" && index === null);
     try {
       const res = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: isVideo ? ['video'] : ['image'], 
-        allowsEditing: false, 
+        mediaTypes: isVideo ? ImagePicker.MediaTypeOptions.Videos : ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
         quality: 1.0,
       });
 
@@ -165,10 +164,10 @@ const AddMove = ({ route }) => {
             </View>
           ))}
           <TouchableOpacity style={styles.addStepBtn} onPress={() => setSteps([...steps, { id: Date.now().toString(), title: '',img: null, desc: '' }])}>
-            <ImageBackground style={{width: '100%', height: 43, justifyContent: 'center'}} resizeMode='contain' source={require('../assets/greenbtnbg.png')}>
+            <ImageBackground style={{width: '100%', height: 43, justifyContent: 'center'}} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
               <Image
                 resizeMode="contain"
-                style={{ height:34, width: 152, alignSelf:"center",}}
+                style={{ height:34, width: 172, alignSelf:"center",}}
                 source={require('../assets/addstep.png')}
               />
             </ImageBackground>
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:114, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d',},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
-  addStepBtn: {marginTop:5, height:45 ,width: 170, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
+  addStepBtn: {marginTop:5, height:50 ,width: 190, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   addStepText: { color: '#0b5737', fontWeight: 'bold' },
   saveBtn: { backgroundColor:'transparent', width:190, height:50, borderRadius: 12, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
