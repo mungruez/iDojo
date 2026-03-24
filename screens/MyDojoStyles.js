@@ -87,9 +87,7 @@ export default function MyDojoStyles({route}) {
             const file = new File(Paths.document, 'moves.json');
             await file.write(JSON.stringify(updatedList));
             setMoves(updatedList);
-            if (listmode) {
-              setHMoves(prev => prev.filter(m => !idsToDelete.includes(m.id)));
-            }
+            setHMoves(prev => prev.filter(m => !idsToDelete.includes(m.id)));
             parseStyles(updatedList);
             setSelectedIds([]); 
           } catch (e) {
@@ -335,6 +333,7 @@ export default function MyDojoStyles({route}) {
                     <FlatList
                        horizontal
                        data={item.data}
+                       extraData={moves}
                        keyExtractor={m => m.id.toString()}
                        renderItem={({ item }) => <MoveCard item={item} />}
                        contentContainerStyle={{ paddingRight: 50, paddingLeft: 12 }}
