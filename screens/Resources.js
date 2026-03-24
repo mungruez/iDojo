@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, TouchableWithoutFeedback , ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect} from 'react';
@@ -31,9 +31,9 @@ export default function Resources() {
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
-      <TouchableOpacity  onLongPress={() => navKSound()} delayLongPress={1900} style={{backgroundColor: 'transparent', marginBottom:19, paddingTop:1, paddingBottom:7, height:76 ,width: '90%',alignSelf: 'center',zIndex: 19,elevation: 19}}>
+      <TouchableWithoutFeedback  activeOpacity={1} onLongPress={() => navKSound()} delayLongPress={1900} style={{backgroundColor: 'transparent', marginBottom:19, paddingTop:1, paddingBottom:7, height:76 ,width: '90%',alignSelf: 'center',zIndex: 19}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/resourcestitle.png')} /> 
-      </TouchableOpacity> 
+      </TouchableWithoutFeedback > 
 
       <ScrollView style={{ flexDirection:"column", marginTop:5, marginBottom:19, }}>
         <View style={{marginTop:2, borderColor:'silver', borderWidth:1, borderRadius:7, marginBotton:19}}>

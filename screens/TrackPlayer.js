@@ -20,7 +20,7 @@ const LOCAL_AUDIO_MAP = {
 };
 
 export default function TrackPlayer({ track }) {
-   const isMounted = useRef(true);
+  const isMounted = useRef(true);
   const source = track.id <= 11 ? LOCAL_AUDIO_MAP[track.id] : track.uri;
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
@@ -37,10 +37,14 @@ export default function TrackPlayer({ track }) {
       player.play();
     }
     return () => {
-      if (player) {
-      player.pause();
-      player.replace(null); 
-    }
+      try {
+        if (player) {
+          player.pause();
+          player.replace(null); 
+        }
+      } catch (e) {
+        // Silently fail so the app doesn't die
+      }
     };
   }, [player]);
 
@@ -63,13 +67,19 @@ export default function TrackPlayer({ track }) {
   }, [track.ispaused, status.playing]);
 
   useEffect(() => {
-    if (status?.didJustFinish && isMounted.current) {
-      DeviceEventEmitter.emit('TRACK_FINISHED');
+    if (status && status.didJustFinish) {
+      if (isMounted.current) {
+        try {
+          DeviceEventEmitter.emit('TRACK_FINISHED');
+        } catch (e) {
+          // Silently fail if emitting fails during unmount
+        }
+      }
     }
   }, [status?.didJustFinish]);
 
   useEffect(() => {
-    if (status?.error && isMounted.current) {
+    if (status && status.error && isMounted.current) {
       DeviceEventEmitter.emit('TRACK_FINISHED');
     }
   }, [status?.error]);
@@ -96,7 +106,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent', 
     borderRadius: 7,
     borderWidth: 0, 
-    width:"fit-content",
+    alignSelf: 'center',
     alignItems: "center",
     borderRadius: 50,
   }, 

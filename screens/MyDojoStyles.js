@@ -134,6 +134,8 @@ export default function MyDojoStyles({route}) {
         setSMoves([sMoves]);
       } else if (bMoves.length>1) {
         setSMoves([bMoves]);
+      } else {
+        setSMoves([]);
       }
     };
     
@@ -143,7 +145,7 @@ export default function MyDojoStyles({route}) {
       let stylesSeen = [];
       for (let mNum = 0; mNum < movesList.length; mNum++) {
         const move = movesList[mNum];
-        const currentStyle = move.style || 'Self-Defence'; // Match your parseStyles logic
+        const currentStyle = move.style || 'Self-Defence'; 
         let mIndex = stylesSeen.indexOf(currentStyle);
 
         if (mIndex < 0) {
@@ -206,6 +208,7 @@ export default function MyDojoStyles({route}) {
         {smoves.length > 0 ? (
           <FlatList
            data={smoves}
+           extraData={moves}
            keyExtractor={item => item.id}
            ItemSeparatorComponent={({ leadingItem }) => {
             const index = smoves.findIndex(m => m.id === leadingItem.id);
@@ -222,10 +225,10 @@ export default function MyDojoStyles({route}) {
                 ( <TouchableOpacity
                   style={{ width: '79%', height: 43 }}
                   onPress={() => navigation.navigate('MyDojo', { hmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, isOffline: isOffline})}>
-                  <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/redbtnbg.png')}>
-                    {item.td === 'v-all' ? 
+                  <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/redbtnbg.png')}>
+                    {item.id === 'v-all' ? 
                       ( <Image
-                          resizeMode="stretch"
+                          resizeMode="contain"
                           style={{ height:"45%", width:"57%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
@@ -236,10 +239,10 @@ export default function MyDojoStyles({route}) {
                   : ( <TouchableOpacity
                     style={{ width: '79%', height: 43 }}
                     onPress={() => navigation.navigate('MyDojo', { hmoves: getMoves(item.style, item.type), fstyle: item.style, ftype: item.type, isOffline: isOffline})}>
-                    <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/greenbtnbg.png')}>
-                      {item.style === 'allstyles' ? 
+                    <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/greenbtnbg.png')}>
+                      {item.id === 's-all' ? 
                         ( <Image
-                          resizeMode="stretch"
+                          resizeMode="contain"
                           style={{height:"45%", width:"57%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
@@ -251,7 +254,9 @@ export default function MyDojoStyles({route}) {
             </View>
            )}
          />) : (
-          <Text style={styles.infoText}>Click the + icons to adds moves or use the import icon to import moves. You can share the moves after.</Text>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.infoText}>Click the + icons to adds moves or use the import icon to import moves. You can share the moves after.</Text>
+          </View>
         )}
       </SafeAreaView>
      </ImageBackground>

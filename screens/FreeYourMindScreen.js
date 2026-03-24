@@ -140,11 +140,11 @@ export default function FreeYourMindScreen() {
 
 
     const pausePlayMusic = (fileId) => {
-      if (playingId !== fileId) {
+      if (playingId !== -1 && playingId !== fileId) {
         setPlayingId(-1); 
         setTimeout(() => {
           setPlayingId(fileId);
-        }, 50);
+        }, 190);
         return;
       }
       
@@ -347,7 +347,7 @@ export default function FreeYourMindScreen() {
                             source={playingId === file.id && !file.ispaused ? require('../assets/fympausebutton.png') : require('../assets/fymplaybutton.png')}>
               
                           </ImageBackground>
-                          <Text style={styles.fileName} numberOfLines={1} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"     "} </Text>        
+                          <Text style={styles.fileName} numberOfLines={1} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"\u00A0\u00A0\u00A0\u00A0"} </Text>        
                       </View>
                   </TouchableOpacity>
 
