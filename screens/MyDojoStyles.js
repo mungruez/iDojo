@@ -77,10 +77,11 @@ export default function MyDojoStyles({route}) {
     };
 
     const myDojoHandleDelete = (id = null) => {
-      const idsToDelete = id ? [id] : selectedIds;
+      const actualId = (id && typeof id === 'object' && id.nativeEvent) ? null : id;
+      const idsToDelete = actualId ? [actualId] : selectedIds;
       if (idsToDelete.length === 0) return;
       Alert.alert("Delete Moves", `Remove ${idsToDelete.length} selected move(s)?`, [
-        { text: "Cancel" },
+        { text: "Cancel", style:"cancel" },
         { text: "Delete", style: 'destructive', onPress: async () => {
           const updatedList = moves.filter(m => !idsToDelete.includes(m.id));
           try {
@@ -350,7 +351,7 @@ export default function MyDojoStyles({route}) {
                <TouchableOpacity onPress={handleShare} style={styles.shareIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
-               <TouchableOpacity onPress={myDojoHandleDelete} style={styles.myDojoDeleteIcon}>
+               <TouchableOpacity onPress={() => myDojoHandleDelete()} style={styles.myDojoDeleteIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDiscardIcon}>
