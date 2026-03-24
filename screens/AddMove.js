@@ -14,14 +14,24 @@ const AddMove = ({ route }) => {
   const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:'', img: null, desc: '' }]);
   
   const pickMedia = async (index = null) => {
-    const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: 'All', quality: 1.0 });
+    const isVideo = (type === 'video' && index === null);
+    const res = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: isVideo 
+        ? ImagePicker.MediaTypeOptions.Videos 
+        : ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1.0,
+    });
+
     if (!res.canceled) {
-      if (type === 'video') {
-        setVid(res.assets[0].uri);
+      const pickedUri = res.assets[0].uri;
+
+      if (isVideo) {
+        setVid(pickedUri);
       } else {
-        const s = [...steps]; 
-        s[index].img = res.assets[0].uri; 
-        setSteps(s); 
+        const s = [...steps];
+        s[index].img = pickedUri;
+        setSteps(s);
       }
     }
   };
@@ -47,7 +57,6 @@ const AddMove = ({ route }) => {
         ...s,
         title: s.title.trim() || `Step ${i + 1}`
       }));
-      setSteps(validatedSteps);
 
     } else if (type === "video") {
       if (!vid && !videoUrl.trim()) {
@@ -61,11 +70,10 @@ const AddMove = ({ route }) => {
       title: title.trim(),
       type,
       style: fstyle.trim() || 'Self-Defence',
-      // 3. Now this works perfectly!
       steps: type === 'steps' ? validatedSteps : [],
       vid: type === 'video' ? vid : null,
       videoUrl: type === 'video' ? videoUrl : '',
-      Thumb: type === 'video' ? (vid || videoUrl) : steps[0]?.img 
+      Thumb: type === 'video' ? (vid || videoUrl) : validatedSteps[0]?.img 
     };
 
     navigation.navigate('MyDojoStyles', { savedMove: finalData });
@@ -85,10 +93,10 @@ const AddMove = ({ route }) => {
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Move Title" value={title} onChangeText={setTitle} />
+      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter ove Title" value={title} onChangeText={setTitle} />
       
       <Text style={styles.label}>Fighting Style</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Fighting Style" value={fstyle} onChangeText={setFStyle} />
+      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
 
       {!move && type !== 'video' && type!=='steps' && ( 
         <View style={styles.modeToggle}>
@@ -128,7 +136,7 @@ const AddMove = ({ route }) => {
                 <TextInput 
                   style={styles.stepInput} 
                   multiline={true}
-                  placeholder={`Step ${i+1} description...`}
+                  placeholder={`Enter Step ${i+1} description...`}
                   value={s.desc} 
                   onChangeText={(t) => {
                     const ns = [...steps];

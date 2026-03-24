@@ -347,7 +347,7 @@ export default function FreeYourMindScreen() {
                             source={playingId === file.id && !file.ispaused ? require('../assets/fympausebutton.png') : require('../assets/fymplaybutton.png')}>
               
                           </ImageBackground>
-                          <Text style={styles.fileName} numberOfLines={1} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"&nbsp"} </Text>        
+                          <Text style={styles.fileName} numberOfLines={1} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"     "} </Text>        
                       </View>
                   </TouchableOpacity>
 

@@ -131,7 +131,7 @@ export default function MyDojo({route}) {
       <View style={styles.header}>
         <Text style={styles.title}>{fstyle === 'allstyles' ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle}</Text>
         <View style={{flexDirection:'row'}}>
-          <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle })} style={styles.plusIcon}>
+          <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== 'allstyles' ? fstyle : 'Self Defense' })} style={styles.plusIcon}>
             <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/addmanualicon.png') : require('../assets/addmoveicon.png') }/>         
           </TouchableOpacity>
         </View>
