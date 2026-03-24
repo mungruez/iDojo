@@ -181,6 +181,19 @@ export default function MyDojoStyles({route}) {
       }
     }, [route.params?.savedMove, route.params?.deletedId]);
 
+    useEffect(() => {
+      const subscription = DeviceEventEmitter.addListener('SAVE_MOVE_EVENT', (newMove) => {
+        handleSave(newMove);
+      });
+      const unsubscribeNav = navigation.addListener('beforeRemove', () => {
+        // Any cleanup if needed
+      });
+
+      return () => {
+        subscription.remove();
+        unsubscribeNav();
+      };
+    }, [moves]);
 
     if (loading) return <ActivityIndicator size="large" color="#f30707" style={{flex:1, transform: [{scale: 2.0}]}} />;
 

@@ -31,6 +31,7 @@ export default function MyDojo({route}) {
       if (index > -1) newList[index] = updatedMove;
       else newList.push(updatedMove);
     }
+    setLoading(false);
     navigation.navigate('MyDojoStyles', { savedMove: finalData });
   };
 
@@ -97,6 +98,21 @@ export default function MyDojo({route}) {
   const toggleSelect = (id) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
+
+  useEffect(() => {
+    const subscription = DeviceEventEmitter.addListener('MOVE_SAVED_EVENT', (newMove) => {
+      // 1. Update the local list of moves for this specific style
+      setHMoves(prev => {
+        const exists = prev.find(m => m.id === newMove.id);
+        if (exists) {
+          return prev.map(m => m.id === newMove.id ? newMove : m);
+        }
+        return [newMove, ...prev];
+      });
+    });
+
+    return () => subscription.remove();
+  }, [hmoves]);
 
   const MoveCard = ({ item }) => (
     <TouchableOpacity 

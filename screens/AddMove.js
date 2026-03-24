@@ -76,7 +76,8 @@ const AddMove = ({ route }) => {
       Thumb: type === 'video' ? (vid || videoUrl) : validatedSteps[0]?.img 
     };
 
-    navigation.navigate('MyDojoStyles', { savedMove: finalData });
+    DeviceEventEmitter.emit('SAVE_MOVE_EVENT', finalData);
+    navigation.pop();
   };
 
 
