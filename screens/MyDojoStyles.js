@@ -42,6 +42,7 @@ export default function MyDojoStyles({route}) {
           const movesList = JSON.parse(content);
           setMoves(movesList);
           parseStyles(movesList);
+          setHMoves(getMoves(fstyle, ftype));
         } else {
           setMoves([]);
         }
@@ -99,34 +100,126 @@ export default function MyDojoStyles({route}) {
         ]);
     };
 
-
-    const handleImport = async () => {
+    const handleShare = async () => {
       try {
-        if (isOffline) return Alert.alert("Offline", "Internet required.");
-        const res = await DocumentPicker.getDocumentAsync({ 
-          type: ['application/zip', 'application/x-zip-compressed', '*/*'], 
-          copyToCacheDirectory: true 
-        });
-
-        if (res.canceled || !res.assets || res.assets.length === 0) return;
-        setLoading(true);
-        const zipUri = res.assets[0].uri;
-        const tempDir = new Directory(Paths.document, 'temp_import');
-        if (!tempDir.exists) tempDir.create();
-        await unzip(zipUri, tempDir.uri);
-        const dataFile = new File(tempDir, 'data.json');
-        if (dataFile.exists) {
-          const content = await dataFile.text();
-          handleSave(JSON.parse(content));
+        if (isOffline) {
+          return Alert.alert("Offline", "You need an internet connection to share.");
         }
-        tempDir.delete();
+        if (selectedIds.length === 0) return;
+        let selectedMoves = [];
+        if (fstyle === "allstyles") {
+          hmoves.forEach(group => {
+            const found = group.data.filter(m => selectedIds.includes(m.id));
+            selectedMoves = [...selectedMoves, ...found];
+          });
+        } else {
+          selectedMoves = hmoves.filter(m => selectedIds.includes(m.id));
+        }
+        setLoading(true);
+        const shareDir = `${FileSystem.documentDirectory}batch_share/`;
+        const shareInfo = await FileSystem.getInfoAsync(shareDir);
+        if (shareInfo.exists) {
+          await FileSystem.deleteAsync(shareDir);
+        }
+        await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
+        const processedMoves = await Promise.all(selectedMoves.map(async (move) => {
+          let updatedMove = { ...move };
+          if (move.type === 'video' && move.vid && move.vid.startsWith('file://')) {
+            const fileName = move.vid.split('/').pop();
+            const destPath = `${shareDir}${fileName}`;
+            await FileSystem.copyAsync({ from: move.vid, to: destPath });
+            updatedMove.vid = fileName; 
+          }
+          if (move.type === 'steps' && move.steps) {
+            updatedMove.steps = await Promise.all(move.steps.map(async (step) => {
+              if (step.img && step.img.startsWith('file://')) {
+                const fileName = step.img.split('/').pop();
+                const destPath = `${shareDir}${fileName}`;
+                await FileSystem.copyAsync({ from: step.img, to: destPath });
+                return { ...step, img: fileName };
+              }
+              return step;
+            }));
+          }
+          return updatedMove;
+        }));
+        const dataFilePath = `${shareDir}data.json`;
+        await FileSystem.writeAsStringAsync(dataFilePath, JSON.stringify(processedMoves));
+        const zipFileName = `Dojo_Batch_${Date.now()}.zip`;
+        const zipPath = `${FileSystem.documentDirectory}${zipFileName}`;
+        await zip(shareDir, zipPath);
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(zipPath, {
+            mimeType: 'application/zip',
+            dialogTitle: 'Share your Dojo Moves',
+            UTI: 'com.pkware.zip-archive', 
+          });
+        } else {
+          Alert.alert("Error", "Sharing is not available on this device.");
+        }
+        setSelectedIds([]); 
+        await FileSystem.deleteAsync(shareDir).catch(() => {});
+        setTimeout(async () => {
+          try {
+            const zipCheck = await FileSystem.getInfoAsync(zipPath);
+            if (zipCheck.exists) await FileSystem.deleteAsync(zipPath);
+          } catch (err) { console.log("Post-share cleanup failed", err); }
+        }, 15000);
+
       } catch (e) {
-        console.error("Import error:", e);
-        Alert.alert("Error", "The picker failed to open or the ZIP is invalid.");
+        console.error("Batch share error:", e);
+        Alert.alert("Error", "Sharing failed. Please check app storage permissions.");
       } finally {
         setLoading(false);
       }
     };
+
+    const handleImport = async () => {
+      try {
+        const res = await DocumentPicker.getDocumentAsync({ 
+          type: ['application/zip', 'application/x-zip-compressed'], 
+          copyToCacheDirectory: true 
+        });
+
+        if (res.canceled || !res.assets) return;
+        setLoading(true);
+        const zipUri = res.assets[0].uri;
+        const importId = Date.now().toString();
+        const permanentDir = `${Paths.document.uri}/imported_${importId}/`;
+        await FileSystem.makeDirectoryAsync(permanentDir, { intermediates: true });
+        await unzip(zipUri, permanentDir);
+        const dataFilePath = `${permanentDir}data.json`;
+        const content = await FileSystem.readAsStringAsync(dataFilePath);
+        const importedMoves = JSON.parse(content);
+        const finalMoves = importedMoves.map(move => {
+          let restored = { ...move, id: Date.now().toString() + Math.random() };
+
+          if (move.type === 'video' && move.vid && !move.vid.includes('://')) {
+            restored.vid = `${permanentDir}${move.vid}`;
+          }
+
+          if (move.type === 'steps') {
+            restored.steps = move.steps.map(step => ({
+              ...step,
+              img: (step.img && !step.img.includes('://')) 
+                  ? `${permanentDir}${step.img}` 
+                  : step.img
+            }));
+          }
+          restored.Thumb = restored.type === 'video' ? (restored.vid || restored.videoUrl) : restored.steps[0]?.img;
+          return restored;
+        });
+        handleSave(finalMoves);
+        await FileSystem.deleteAsync(dataFilePath).catch(() => {});
+        Alert.alert("Success", "Moves imported to your Dojo!");
+      } catch (e) {
+        console.error("Import error:", e);
+        Alert.alert("Error", "Invalid ZIP or import failed.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
 
     const parseStyles = (list) => {
       if (!Array.isArray(list)) {
@@ -215,65 +308,6 @@ export default function MyDojoStyles({route}) {
     }, [moves]);
 
     //From here added myDojo styles screen with list of styles grouped by type, and an all styles button for each types.
-      const handleShare = async () => {
-        try {
-          if (isOffline) {
-            return Alert.alert("Offline", "No Wifi detected to share moves...");
-          }
-          if (selectedIds.length === 0) return;
-
-          let selectedMoves = [];
-          if (fstyle === "allstyles") {
-            hmoves.forEach(group => {
-              const found = group.data.filter(m => selectedIds.includes(m.id));
-              selectedMoves = [...selectedMoves, ...found];
-            });
-          } else {
-            selectedMoves = hmoves.filter(m => selectedIds.includes(m.id));
-          }
-
-          setLoading(true);
-          const shareDir = new Directory(Paths.document,"batch_share");
-          if (shareDir.exists) {
-            await shareDir.delete(); 
-          }
-          await shareDir.create();
-          const dataFile = new File(shareDir,"data.json");
-          if (!dataFile.exists) {
-            await dataFile.create();
-          }
-          await dataFile.write(JSON.stringify(selectedMoves)); 
-          const zipFileName = `Dojo_Batch_${Date.now()}.zip`;
-          const zipPath = `${Paths.document.uri}/${zipFileName}`;
-          await zip(shareDir.uri, zipPath);
-          if (await Sharing.isAvailableAsync()) {
-            await Sharing.shareAsync(zipPath, {
-              mimeType: 'application/zip',
-              dialogTitle: 'Share your Dojo Moves',
-            });
-          } else {
-            Alert.alert("Error", "Sharing is not available on this device.");
-          }
-
-          setTimeout(async () => {
-            try {
-              const zipFile = new File(Paths.document, zipFileName);
-              if (zipFile.exists) await zipFile.delete();
-              if (shareDir.exists) await shareDir.delete();
-            } catch (cleanupError) {
-              alert("Cleanup failed, but share worked.");
-            }
-          }, 1000);
-
-          setSelectedIds([]); 
-        } catch (e) {
-          console.error("Batch share error:", e);
-          Alert.alert("Error", "Sharing failed. Check storage permissions.");
-        } finally {
-          setLoading(false);
-        }
-      };
-
     const toggleSelect = (id) => {
       setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };

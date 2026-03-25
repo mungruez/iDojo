@@ -31,7 +31,7 @@ export default function Resources() {
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
-      <TouchableWithoutFeedback  activeOpacity={1} onLongPress={() => navKSound()} delayLongPress={1900} style={{backgroundColor: 'transparent', marginBottom:19, paddingTop:1, paddingBottom:7, height:76 ,width: '90%',alignSelf: 'center',zIndex: 19}}>
+      <TouchableWithoutFeedback  activeOpacity={1} onLongPress={() => navKSound()} delayLongPress={1200} style={{backgroundColor: 'transparent', marginBottom:19, paddingTop:1, paddingBottom:7, height:76 ,width: '90%',alignSelf: 'center',zIndex: 19,elevation: 19,}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/resourcestitle.png')} /> 
       </TouchableWithoutFeedback > 
 
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     height: 76,
-    elevation: 4,
+    elevation: 3,
     marginTop:38,
     textAlign: "center",
     zIndex:3 
