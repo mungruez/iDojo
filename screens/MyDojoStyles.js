@@ -283,12 +283,12 @@ export default function MyDojoStyles({route}) {
         onLongPress={() => toggleSelect(item.id)}
         onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : navigation.navigate('Move', { video: item })}
         style={[styles.itemContainer, selectedIds.includes(item.id) && styles.selectedItem]}>
-          
+
         <View style={styles.card}>
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} style={styles.titleText}>{item.title}</Text>
           </View>
-          <Image source={{ uri: item.Thumb || 'https://via.placeholder.com' }} style={styles.thumbImage} />
+          <Image source={{ uri: item.Thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
           <View style={styles.pillRow}>
             <Text style={styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => {navigation.navigate('AddMove', {move: item})}} style={styles.plusIcon}>
@@ -303,7 +303,7 @@ export default function MyDojoStyles({route}) {
     if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (listmode) return (
       <ImageBackground style={{flex:1,width:'100%',height:'100%'}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
-        <SafeAreaView style={{ flex: 1, margingTop:25}}>
+        <SafeAreaView style={{ flex: 1, marginTop:25}}>
           <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
             <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== "video" ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
