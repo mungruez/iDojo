@@ -320,11 +320,11 @@ export default function MyDojoStyles({route}) {
 
         <View style={styles.card}>
           <View style={styles.titleBanner}>
-            <Text numberOfLines={1} style={styles.titleText}>{item.title}</Text>
+            <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : styles.titleText}>{item.title}</Text>
           </View>
           <Image source={{ uri: item.Thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
           <View style={styles.pillRow}>
-            <Text style={styles.typePill}>{item.type}</Text>
+            <Text style={ftype === 'video' ? styles.typePillVideo : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => {navigation.navigate('AddMove', {move: item})}} style={styles.plusIcon}>
               <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : require('../assets/editmoveicon.png') }/>         
             </TouchableOpacity>             
@@ -342,10 +342,11 @@ export default function MyDojoStyles({route}) {
             <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== "video" ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
           <View style={styles.myDojoHeader}>
-            <Text style={{ color: '#00FF41', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle}</Text>
+            {ftype === "video" ? ( <Text style={{ color: '#8d0a0a', fontSize: 11, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )
+              : ( <Text style={{ color: '#0a8d15', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )}
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity onPress={() => { setListMode(false); setSelectedIds([]); }}>
-                <Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 10}}>← BACK</Text>
+                {ftype === "video" ? (<Text style={{color: '#ac1212', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#0a8d15', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
               </TouchableOpacity>
     
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Self Defense' })} style={styles.plusIcon}>
@@ -478,11 +479,13 @@ verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d1deeb', alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
 titleBanner: {width: '90%', padding: 5, borderRadius: 5, marginTop: 3 },
-titleText: { textAlign: 'center', fontSize: 11, fontWeight: 'bold', color: '#00FF41' },
+titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#048119' },
+titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#ff5722' },
 thumbImage: { width: '100%', height: 150, backgroundColor: '#1a1a1a' },
 myDojoDeleteIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d9d6e4', alignItems: 'center', justifyContent: 'center' },
 pillRow: { backgroundColor: 'rgba(0, 255, 65, 0.3)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8 },
-typePill: { backgroundColor: 'rgba(0, 255, 65, 0.1)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
+typePill: { backgroundColor: 'rgba(5, 17, 8, 0.2)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
+typePillVideo: { backgroundColor: 'rgba(235, 77, 14, 0.2)', color: '#c21b29', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 editIcon: { fontSize: 16 },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#00FF41', elevation: 10 },
 batchText: { color: '#00FF41', fontWeight: 'bold' },
@@ -496,7 +499,7 @@ title: { fontSize: 18, fontWeight: 'bold', color: '#420105', height: 38, width: 
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#420105', minHeight: 76, width: '100%', textAlign: 'center', marginTop: 19 },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { backgroundColor: 'transparent', marginHorizontal: 12, marginVertical: 5, alignItems: 'center'},
-cardText: { fontSize: 15, fontWeight: 'bold', color: '#88949b', paddingHorizontal: 5,},
+cardText: { fontSize: 16, fontWeight: 'bold', color: '#bddff3', paddingHorizontal: 5,},
 greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)'},
 redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)'},
 smallGap: {height: 12,},

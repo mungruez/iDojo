@@ -93,7 +93,7 @@ const AddMove = ({ route }) => {
   return (
    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
     <View style={{backgroundColor: 'transparent', marginBottom:12, paddingLeft:5, paddingRight:5, marginTop:25}}>
-      <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
+      <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.jpg') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
     </View>
     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
       <ImageBackground style={{ alignSelf:'center', height:70, width:"100%", }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
