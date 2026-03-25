@@ -70,6 +70,7 @@ export default function MyDojoStyles({route}) {
         
         setMoves(currentList);
         parseStyles(currentList);
+        setHMoves(getMoves(fstyle, ftype));
       } catch (e) {
         console.error("Save failed", e);
         Alert.alert("Error", "Could not save moves to storage.");
@@ -136,15 +137,15 @@ export default function MyDojoStyles({route}) {
         return;
       }
       let videoStyles = [], stepStyles = [];
-      let sMoves = [{ id: 'v-all', type: 'video', style: 'allstyles' }];
-      let bMoves = [{ id: 's-all', type: 'steps', style: 'allstyles' }];
+      let sMoves = [{ id: "v-all", type: "video", style: "allstyles" }];
+      let bMoves = [{ id: "s-all", type: "steps", style: "allstyles" }];
 
       list?.forEach(m => {
-        const currentStyle = m.style || 'Self-Defence';
-        if (m.type === 'video' && !videoStyles.includes(currentStyle)) {
+        const currentStyle = m.style || "Self-Defence";
+        if (m.type === "video" && !videoStyles.includes(currentStyle)) {
           videoStyles.push(currentStyle); 
           sMoves.push({ ...m, style: currentStyle }); 
-        } else if (m.type === 'steps' && !stepStyles.includes(currentStyle)) {
+        } else if (m.type === "steps" && !stepStyles.includes(currentStyle)) {
           stepStyles.push(currentStyle); 
           bMoves.push({ ...m, style: currentStyle });
         }
@@ -165,7 +166,7 @@ export default function MyDojoStyles({route}) {
       let stylesSeen = [];
       for (let mNum = 0; mNum < movesList.length; mNum++) {
         const move = movesList[mNum];
-        const currentStyle = move.style || 'Self-Defence'; 
+        const currentStyle = move.style || "Self-Defence"; 
         let mIndex = stylesSeen.indexOf(currentStyle);
 
         if (mIndex < 0) {
@@ -182,6 +183,7 @@ export default function MyDojoStyles({route}) {
     };
 
     const getMoves = (mstyle, type) => {
+      if(type !== "video" && type !== "steps") return [];
       let sMoves = moves.filter(m => m.type === type && (mstyle === "allstyles" || m.style === mstyle));
       if(mstyle=="allstyles") return parseHMoves(sMoves);
       return sMoves;
@@ -202,11 +204,10 @@ export default function MyDojoStyles({route}) {
     }, [route.params?.savedMove, route.params?.deletedId]);
 
     useEffect(() => {
-      const subscription = DeviceEventEmitter.addListener('SAVE_MOVE_EVENT', (newMove) => {
+      const subscription = DeviceEventEmitter.addListener("SAVE_MOVE_EVENT", (newMove) => {
         handleSave(newMove);
-        setHMoves(getMoves(fstyle, ftype));
       });
-      const unsubscribeNav = navigation.addListener('beforeRemove', () => {
+      const unsubscribeNav = navigation.addListener("beforeRemove", () => {
         // Any cleanup if needed
       });
 
@@ -235,12 +236,12 @@ export default function MyDojoStyles({route}) {
           }
 
           setLoading(true);
-          const shareDir = new Directory(Paths.document, 'batch_share');
+          const shareDir = new Directory(Paths.document,"batch_share");
           if (shareDir.exists) {
             await shareDir.delete(); 
           }
           await shareDir.create();
-          const dataFile = new File(shareDir, 'data.json');
+          const dataFile = new File(shareDir,"data.json");
           if (!dataFile.exists) {
             await dataFile.create();
           }
@@ -312,17 +313,17 @@ export default function MyDojoStyles({route}) {
       <ImageBackground style={{flex:1,width:'100%',height:'100%'}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <SafeAreaView style={{ flex: 1, margingTop:25}}>
           <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
-            <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== 'video' ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
+            <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== "video" ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
           <View style={styles.myDojoHeader}>
-            <Text style={{ color: '#00FF41', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === 'allstyles' ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle}</Text>
+            <Text style={{ color: '#00FF41', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle}</Text>
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity onPress={() => { setListMode(false); setSelectedIds([]); }}>
                 <Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 10}}>← BACK</Text>
               </TouchableOpacity>
     
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== 'allstyles' ? fstyle : 'Self Defense' })} style={styles.plusIcon}>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/addmanualicon.png') : require('../assets/addmoveicon.png') }/>         
+              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Self Defense' })} style={styles.plusIcon}>
+                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : require('../assets/addmoveicon.png') }/>         
               </TouchableOpacity>
             </View>
           </View>
@@ -353,10 +354,10 @@ export default function MyDojoStyles({route}) {
              <View style={styles.batchBar}>
                <Text style={styles.batchText}>{selectedIds.length} Selected</Text>
                <TouchableOpacity onPress={handleShare} style={styles.shareIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
+                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDeleteIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
+                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDiscardIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
@@ -377,10 +378,10 @@ export default function MyDojoStyles({route}) {
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO FIGHTING STYLES LIST</Text>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'video', mstyle: null, })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.plusIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: 'steps', mstyle: null })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"steps", mstyle: null })} style={styles.plusIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmanualicon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
@@ -405,7 +406,7 @@ export default function MyDojoStyles({route}) {
            }}
            renderItem={({ item }) => (
             <View style={styles.card}>
-              { item && item.style && item.type === 'video' ? 
+              { item && item.style && item.type === "video" ? 
                 ( <TouchableOpacity
                   style={{ width: '79%', height: 43 }}
                   onPress={() => { setHMoves(getMoves(item.style, item.type)); setFStyle(item.style); setType(item.type); setListMode(true);}}>
@@ -420,7 +421,7 @@ export default function MyDojoStyles({route}) {
                       )}
                   </ImageBackground>
                   </TouchableOpacity>) 
-                  : item && item.style && item.type==='steps' && ( <TouchableOpacity
+                  : item && item.style && item.type==="steps" && ( <TouchableOpacity
                     style={{ width: '79%', height: 43 }}
                     onPress={() => { setType(item.type); setFStyle(item.style); setHMoves(getMoves(item.style, item.type)); setListMode(true); }}>
                     <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/greenbtnbg.png')}>
