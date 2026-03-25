@@ -93,6 +93,7 @@ export default function MyDojoStyles({route}) {
               parseStyles(updatedListSnapshot);
               setHMoves(getMoves(fstyle, ftype));
               setSelectedIds([]);
+              setListMode(false);
               } catch (error) {
                 console.error("File write error:", error);
               }
@@ -220,7 +221,7 @@ export default function MyDojoStyles({route}) {
       }
     };
 
-
+    
     const parseStyles = (list) => {
       if (!Array.isArray(list)) {
         alert("Data is not an array, skipping parse.");
@@ -307,9 +308,18 @@ export default function MyDojoStyles({route}) {
       };
     }, [moves]);
 
-    //From here added myDojo styles screen with list of styles grouped by type, and an all styles button for each types.
     const toggleSelect = (id) => {
       setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    };
+
+    const toggleListMode = (mv) => {
+      if(mv===null) {
+        setListMode(false);
+        navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Self Defense' })
+      } else {
+        setListMode(false);
+        navigation.navigate('AddMove', {move: mv, });
+      }
     };
     
     const MoveCard = ({ item }) => (
@@ -325,7 +335,7 @@ export default function MyDojoStyles({route}) {
           <Image source={{ uri: item.Thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
           <View style={styles.pillRow}>
             <Text style={ftype === 'video' ? styles.typePillVideo : styles.typePill}>{item.type}</Text>
-            <TouchableOpacity onPress={() => {navigation.navigate('AddMove', {move: item})}} style={styles.plusIcon}>
+            <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.plusIcon}>
               <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : require('../assets/editmoveicon.png') }/>         
             </TouchableOpacity>             
           </View>
@@ -349,7 +359,7 @@ export default function MyDojoStyles({route}) {
                 {ftype === "video" ? (<Text style={{color: '#ac1212', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#0a8d15', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
               </TouchableOpacity>
     
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Self Defense' })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => toggleListMode(null)} style={styles.plusIcon}>
                 <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : require('../assets/addmoveicon.png') }/>         
               </TouchableOpacity>
             </View>
