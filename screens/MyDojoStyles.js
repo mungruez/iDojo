@@ -76,27 +76,31 @@ export default function MyDojoStyles({route}) {
       }
     };
 
-    const myDojoHandleDelete = (id = null) => {
-      const actualId = (id && typeof id === 'object' && id.nativeEvent) ? null : id;
-      const idsToDelete = actualId ? [actualId] : selectedIds;
-      if (idsToDelete.length === 0) return;
-      Alert.alert("Delete Moves", `Remove ${idsToDelete.length} selected move(s)?`, [
-        { text: "Cancel", style:"cancel" },
-        { text: "Delete", style: 'destructive', onPress: async () => {
-          const updatedList = moves.filter(m => !idsToDelete.includes(m.id));
-          try {
-            const file = new File(Paths.document, 'moves.json');
-            await file.write(JSON.stringify(updatedList));
-            setMoves(updatedList);
-            setHMoves(prev => prev.filter(m => !idsToDelete.includes(m.id)));
-            parseStyles(updatedList);
-            setSelectedIds([]); 
-          } catch (e) {
-            Alert.alert("Error", "Failed to delete.");
-          }
-        }}
-      ]);
+    const myDojoHandleDelete = (idsFromArg = []) => {
+      const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : selectedIds;
+      const cleanIdsToDelete = actualIds.map(id => String(id).trim());
+      if (cleanIdsToDelete.length === 0) return;
+      Alert.alert("Delete Moves",`Remove ${cleanIdsToDelete.length} selected move(s)?`,
+        [{ text: "Cancel", style: "cancel" },
+          {text: "Delete",style: "destructive",onPress: async () => {
+            try {
+              let updatedListSnapshot = [];
+              setMoves(currentMoves => {
+                updatedListSnapshot = currentMoves.filter(m => !cleanIdsToDelete.includes(String(m.id)));
+                return updatedListSnapshot;
+              });
+              const file = new File(Paths.document, "moves.json");
+              await file.write(JSON.stringify(updatedListSnapshot));
+              setHMoves(h => h.filter(m => !cleanIdsToDelete.includes(String(m.id))));
+              parseStyles(updatedListSnapshot);
+              setSelectedIds([]);
+              } catch (error) {
+                console.error("File write error:", error);
+              }
+          }}
+        ]);
     };
+
 
     const handleImport = async () => {
       try {
@@ -334,7 +338,7 @@ export default function MyDojoStyles({route}) {
                     <FlatList
                        horizontal
                        data={item.data}
-                       extraData={moves}
+                       extraData={[selectedIds, moves]}
                        keyExtractor={m => m.id.toString()}
                        renderItem={({ item }) => <MoveCard item={item} />}
                        contentContainerStyle={{ paddingRight: 50, paddingLeft: 12 }}
@@ -351,7 +355,7 @@ export default function MyDojoStyles({route}) {
                <TouchableOpacity onPress={handleShare} style={styles.shareIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
-               <TouchableOpacity onPress={() => myDojoHandleDelete()} style={styles.myDojoDeleteIcon}>
+               <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDeleteIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === 'steps' ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDiscardIcon}>
