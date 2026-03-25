@@ -6,12 +6,13 @@ import React, { useState } from 'react';
 const AddMove = ({ route }) => {
   const navigation = useNavigation();
   const { move, mtype, mstyle } = route.params;
-  const [title, setTitle] = useState(move?.title || '');
-  const [type, setType] = useState(move?.type || mtype || 'select mode');
-  const [fstyle, setFStyle] = useState(move?.style || mstyle || 'Self Defense');
+  const [title, setTitle] = useState(move?.title || "");
+  const [type, setType] = useState(move?.type || mtype || "select mode");
+  const [fstyle, setFStyle] = useState(move?.style || mstyle || "Self Defense");
   const [vid, setVid] = useState(move?.vid || null);
-  const [videoUrl, setVideoUrl] = useState(move?.videoUrl || '');
-  const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:'', img: null, desc: '' }]);
+  const [desc, setDesc] = useState(move?.desc || "");
+  const [videoUrl, setVideoUrl] = useState(move?.videoUrl || "");
+  const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
   
   const pickMedia = async (index = null) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -72,6 +73,10 @@ const AddMove = ({ route }) => {
         Alert.alert("Required", "Please upload a video or provide a link.");
         return;
       }
+      if(!desc) {
+        Alert.alert("Required", "Please provide a description.");
+        return;
+      }
     }
 
     const finalData = {
@@ -82,7 +87,8 @@ const AddMove = ({ route }) => {
       steps: type === 'steps' ? validatedSteps : [],
       vid: type === 'video' ? vid : null,
       videoUrl: type === 'video' ? videoUrl : '',
-      Thumb: type === 'video' ? (vid || videoUrl) : validatedSteps[0]?.img 
+      Thumb: type === 'video' ? (vid || videoUrl) : validatedSteps[0]?.img,
+      desc: desc 
     };
 
     DeviceEventEmitter.emit('SAVE_MOVE_EVENT', finalData);
@@ -103,7 +109,7 @@ const AddMove = ({ route }) => {
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter ove Title" value={title} onChangeText={setTitle} />
+      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter move Title" value={title} onChangeText={setTitle} />
       
       <Text style={styles.label}>Fighting Style</Text>
       <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
@@ -128,6 +134,8 @@ const AddMove = ({ route }) => {
               : ( <Text style={styles.videoIconText}>UPLOAD MP4 FILE</Text> ) 
             }
           </TouchableOpacity>
+          <Text style={styles.label}>Move Description</Text>
+          <TextInput style={styles.input} multiline={true} placeholder="Enter description" value={desc} onChangeText={setDesc} />
         </View>
       ) : (
         <View style={{ marginTop: 10 }}>

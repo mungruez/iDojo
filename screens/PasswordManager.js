@@ -11,8 +11,8 @@ export default function PasswordManager() {
     const [passwordNumTemp, setPasswordNumTemp] = useState(0);
     const [isOverlayVisible, setOverlayVisible] = useState(-1);
     const [passwords, setPasswords] = useState([]); 
-    const [editing, setEditing] = useState(false);    //State for tracking if editing mode is active
-    const [editIndex, setEditIndex] = useState(null); //State for tracking index of the password being edited
+    const [editing, setEditing] = useState(false);
+    const [editIndex, setEditIndex] = useState(null);
     const [isReady, setIsReady] = useState(true);
 
     const insideViewRef = React.useRef(null);
@@ -50,12 +50,6 @@ export default function PasswordManager() {
 
     
     const replaceCharAt = (str, index, replacement) => {
-        // Validate inputs
-        //if (typeof str !== 'string') throw new TypeError("First argument must be a string");
-        //if (!Number.isInteger(index) || index < 0 || index >= str.length) {
-            //throw new RangeError("Index out of range");
-        //}
-        //if (typeof replacement !== 'string') throw new TypeError("Replacement must be a string");
         if(index >= str.length && replacement =='o') {
             return {ans:str, placed: str.length};
         }
@@ -64,7 +58,6 @@ export default function PasswordManager() {
             return {ans: (str+"x"), placed: str.length};
         }
 
-        // Perform replacement
         let ans = "";
         let placed = -1;
         if(replacement =='x') {
@@ -76,7 +69,7 @@ export default function PasswordManager() {
                     ans += str.charAt(i);
                 }
             }
-            //console.log("x in replaceChar ANS :"+ans+" so far placed is:"+placed);
+            
             if(placed==index) {
                 return {ans: ans, placed: index}
             }
@@ -94,7 +87,7 @@ export default function PasswordManager() {
                     ans+=str.charAt(i);
                 }
             }   
-            //console.log("o in replaceChar ANS :"+ans+" so far placed is:"+placed);
+            
             if(placed==index) {
                 return {ans: ans, placed: index}
             }
@@ -107,17 +100,12 @@ export default function PasswordManager() {
     }
     
 
-
-    //useEffect Hook: Fetches stored passwords[] when component mounts
     useEffect(() => {
-        //AsyncStorage.clear();
-        //TwoLetterDecStartIndex=52 primes.length: 777 encArr.length: 91
         fetchPasswords();
         showPasswords();
     }, []);
 
 
-    //useEffect Hook: overirde back button Android
     useEffect(() => {
         const onBackPress = () => {
 	        if(password || username || website || editing) {
@@ -150,10 +138,7 @@ export default function PasswordManager() {
     }, [password]);
 
 
-
-
     const handleAutoScroll = () => {
-        //Wait for layout interactions to finish (crucial for Android)
         const deviceWidth = (Dimensions.get('window').width / 100)*71;
         let mv = isOverlayVisible*(deviceWidth);
         InteractionManager.runAfterInteractions(() => {
@@ -165,11 +150,8 @@ export default function PasswordManager() {
 
 
     const handleGlobalTouch = (event) => {
-        // UIManager and findNodeHandle are used to get native tags from refs
         const insideViewNode = findNodeHandle(scrollRef.current);
         const touchedNode = event?.nativeEvent?.target;
-    
-        // Check if the touched node is the inside view itself or a descendant
         if (insideViewNode && touchedNode !== insideViewNode) {
           UIManager.viewIsDescendantOf(touchedNode, insideViewNode, (isAncestor) => {
             if (!isAncestor) {
@@ -194,15 +176,11 @@ export default function PasswordManager() {
     };
 
     useEffect(() => {
-        // A timeout might be necessary to ensure all elements are rendered
-        //const timer = setTimeout(handleAutoScroll, 100); 
         handleAutoScroll()
-        //return () => clearTimeout(timer);
 
     }, [isOverlayVisible]);
 
 
-    
 
     const encryptPassword = async (pass, passNum) => {
         if(!pass || pass.length < 4) {
@@ -260,7 +238,6 @@ export default function PasswordManager() {
             count.push(0);
         }
 
-        //***Duplicate Letters Decrypted Above***
         let dec="";
         let primesI=passNum;
         for(let i = 0; i < encpass.length; i++) {
@@ -309,17 +286,13 @@ export default function PasswordManager() {
         return dec+"";
     };
 
-
-    // Function to save or update a password
     const savePassword = async () => {
-        // Check if any of the input fields is empty
         if (!website || !username || !password) {
-            alert("Please fill in all fields."); // Show alert if fields are empty
+            alert("Please fill in all fields."); 
             return;
         }
 
         if (editing && editIndex !== null) {
-            // If editing, update the existing password
             const updatedPasswords = [...passwords];
             updatedPasswords[editIndex] = {
                 website,
@@ -334,15 +307,15 @@ export default function PasswordManager() {
                 await AsyncStorage.removeItem('xx7771xxiDojoUsername'+passwordNum);
                 await AsyncStorage.setItem('xx7771xxiDojoWebsite' +passwordNum, website);
                 await AsyncStorage.setItem('xx7771xxiDojoUsername'+passwordNum, username);
-                encryptPassword(password, passwordNum);  //Encrypt and sync password
+                encryptPassword(password, passwordNum); 
             } catch(error) {
                 alert("Unable to Save Passwords !");
             }
 
             setPasswordNum(passwordNumTemp);
-            setPasswords(updatedPasswords); // Update the password list
-            setEditing(false); // Exit editing mode
-            setEditIndex(null); // Clear edit index
+            setPasswords(updatedPasswords); 
+            setEditing(false); 
+            setEditIndex(null); 
 
         } else {
             let passNum = passwordNum +1;
@@ -389,13 +362,11 @@ export default function PasswordManager() {
                 }
 
                 await AsyncStorage.setItem('xx7771xxiDojoAESpassKey',passKey+"");
-                //console.log("Updated passKey:"+passKey+" for passwordNum:"+passwordNum+" placed :"+placed+" Next passNum :"+passNum+" newpassNum :"+newPassNum);
                 
             } catch(error) {
                 alert("Unable to Save Passwords !"+error);
             }
             
-            //Not editing, add a new password
             const newPassword = {
                 website,
                 username,
@@ -406,25 +377,20 @@ export default function PasswordManager() {
             setPasswordNum(passNum); 
         }
 
-        setWebsite(""); // Reset website input
-        setUsername(""); // Reset username input
+        setWebsite(""); 
+        setUsername(""); 
         setPassword("");
     };
 
-
-
-    // Function to enable editing mode for a specific password
     const editPassword = (index) => {
-        setEditing(true); // Enable editing mode
-        setEditIndex(index); // Set the index of the password being edited
-        setWebsite(passwords[index].website); // Populate website input with existing value
-        setUsername(passwords[index].username); // Populate username input with existing value
-        setPassword(passwords[index].password); // Populate password input with existing value
+        setEditing(true);
+        setEditIndex(index); 
+        setWebsite(passwords[index].website); 
+        setUsername(passwords[index].username); 
+        setPassword(passwords[index].password);
         setPasswordNumTemp(passwordNum);
         setPasswordNum(passwords[index].passwordNum);
     };
-
-
 
     const showConfirmDialog = () => {
         Alert.alert(
@@ -434,18 +400,17 @@ export default function PasswordManager() {
             {
               text: "CANCEL",
               onPress: () => setPasswordNumTemp(passwordNum),
-              style: "cancel" // Applies 'cancel' style for iOS (places it correctly)
+              style: "cancel" 
             },
             {
               text: "CONFIRM",
               onPress: () => resetPin()
             }
           ],
-          { cancelable: false } // Prevents closing the alert by tapping outside
+          { cancelable: false } 
         );
       };
 
-    
     
     const showInstructions = () => {
         Alert.alert(
@@ -458,13 +423,10 @@ export default function PasswordManager() {
               style: "cancel" 
             }
           ],
-          { cancelable: false } // Prevents closing the alert by tapping outside
+          { cancelable: false } 
         );
     };
 
-
-
-    // Function to delete a password by passwordNum name
     const deletePassword = async (passNum) => {
         let webst = "";
         for( let upPn=0; upPn < passwords.length; upPn++) {
@@ -474,7 +436,7 @@ export default function PasswordManager() {
         }
 
         const updatedPasswords = passwords.filter(
-            (e) => e.passwordNum !== passNum // Filter out the password with the given website
+            (e) => e.passwordNum !== passNum
         );
 
         let numPasswords = passNum;
@@ -507,22 +469,21 @@ export default function PasswordManager() {
             alert("Error Deleting the Password: "+error); 
         }
 
-        setPasswords(updatedPasswords); //Update the password list
+        setPasswords(updatedPasswords);
         setPasswordNum(numPasswords);
-        alert("Deleted password for Website: "+webst); //Show success message
+        alert("Deleted password for Website: "+webst);
     };
 
 
-    // Function to reset the password list and input fields
     const showPasswords = () => {
-        setPasswords([]); // Update the password list
-        setWebsite(""); // Reset website input
-        setUsername(""); // Reset username input
+        setPasswords([]); 
+        setWebsite(""); 
+        setUsername(""); 
         setPassword(""); 
         setPasswordNumTemp(passwordNum);
         setPasswordNum(passwordNum);
-        setEditing(false); // Exit editing mode
-        setEditIndex(null); // Clear edit index
+        setEditing(false); 
+        setEditIndex(null);
     };
 
     
@@ -865,18 +826,13 @@ export default function PasswordManager() {
 };
 
 
-
-
-// Defining styles for the password manager using StyleSheet
 const styles = StyleSheet.create({
-    // Style for the main container
     container: {
         flex: 1, // Take up the full height of the screen
         margin: 4, // Add margin around the container
     },
-    // Style for the content inside the container
     content: {
-        margin: 5, // Add margin inside the content
+        margin: 5, 
     },
   overlay: {
     position: 'absolute',
@@ -884,74 +840,66 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Translucent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection:"column",
   },
-    // Style for the main heading
+    
     heading: {
-        fontSize: 17, // Large font size
-        fontWeight: "medium", // Bold text
-        marginBottom: 1, // Space below the heading
+        fontSize: 17, 
+        fontWeight: "medium", 
+        marginBottom: 1, 
         color: "goldenrod",
         fontStyle:"italic", 
     },
-    // Style for subheadings
     headingPart: {
-        fontSize: 29, // Slightly smaller font size than the main heading
-        fontWeight: "bold", // Bold text
-        color: "#333", // Dark gray color 
+        fontSize: 29, 
+        fontWeight: "bold", 
+        color: "#333", 
     },
-    // Style for subheadings
     subHeading: {
-        fontSize: 19, // Slightly smaller font size than the main heading
-        fontWeight: "bold", // Bold text
-        marginBottom: 2, // Space below the subheading
-        color: "#333", // Dark gray color
-        //color:"red",
+        fontSize: 19, 
+        fontWeight: "bold", 
+        marginBottom: 2, 
+        color: "#333", 
     },
-    // Style for subheadings
     subHeadingPart: {
-        fontSize: 12, // Slightly smaller font size than the main heading
-        fontWeight: "bold", // Bold text
-        marginBottom: 2, // Space below the subheading
-        color: "goldenrod", // Dark gray color
+        fontSize: 12, 
+        fontWeight: "bold", 
+        marginBottom: 2, 
+        color: "goldenrod",
         fontStyle: "italic",
         lineHeight: 1,
     },
-    // Style for the "No Data" message
     noData: {
-        fontSize: 17, // Medium font size
-        fontStyle: "italic", // Italic text
-        marginBottom: 19, // Space below the message
-        color: "#5e5c5cff", // Light gray color
+        fontSize: 17,
+        fontStyle: "italic",
+        marginBottom: 19, 
+        color: "#5e5c5cff",
     },
-    // Style for the table containing password items
     table: {
-        flexDirection: "row", // Arrange items in a row
-        backgroundColor: "transparent", // White background
-        borderRadius: 12, // Rounded corners
-        elevation: 4, // Add shadow for Android
-        marginBottom: 7, // Space below the table
-        shadowColor: "grey", // Shadow color for iOS
-        shadowOffset: { width: 0, height: 0 }, // Shadow offset for iOS
-        shadowRadius: 5, // Shadow radius for iOS
-        shadowOpacity: 1, // Shadow opacity for iOS
+        flexDirection: "row", 
+        backgroundColor: "transparent", 
+        borderRadius: 12, 
+        elevation: 4, 
+        marginBottom: 7, 
+        shadowColor: "grey", 
+        shadowOffset: { width: 0, height: 0 }, 
+        shadowRadius: 5, 
+        shadowOpacity: 1, 
         borderColor:"#d8aa6aff",
         borderWidth: 2.5,
     },
-    // Style for each password item
     passwordItem: {
-        flexDirection: "column", // Arrange items in a column
-        alignItems: "center", // Center align items
-        borderRightWidth: .2, // Add a bottom border
-        borderRightColor: "#f5c684ff", // Light gray border color
-        padding: 12, // Add padding inside the item
+        flexDirection: "column", 
+        alignItems: "center", 
+        borderRightWidth: .2, 
+        borderRightColor: "#f5c684ff", 
+        padding: 12, 
     },
-    // Style for each list item (e.g., website, username, password)
     listItem: {
-        flexDirection: "row", // Arrange items in a row
+        flexDirection: "row", 
         justifyContent: "space-between", // Space out items evenly
         alignItems: "center", // Center align items vertically
         marginRight: 10, // Space to the right of the item
@@ -1081,17 +1029,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15, // Horizontal padding inside the input
         marginBottom: 12, // Space below the input
         fontSize: 16, // Medium font size
-        borderRadius: 10, // Rounded corners
-        backgroundColor: "white", // White background
-        shadowColor: "grey", // Shadow color for iOS
-        shadowOffset: { width: 0, height: 0 }, // Shadow offset for iOS
-        shadowRadius: 10, // Shadow radius for iOS
-        shadowOpacity: 1, // Shadow opacity for iOS
-        elevation: 4, // Add shadow for Android
+        borderRadius: 10, 
+        backgroundColor: "white", 
+        shadowColor: "grey", 
+        shadowOffset: { width: 0, height: 0 }, 
+        shadowRadius: 10, 
+        shadowOpacity: 1, 
+        elevation: 4, 
     },
-    // Style for the submit button
     submitButton: {
-        backgroundColor: "green", // Green background
+        backgroundColor: "green", 
         color: "white", // White text color
         fontWeight: "bold", // Bold text
         borderRadius: 17, // Rounded corners
@@ -1103,7 +1050,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 1, // Shadow opacity for iOS
         elevation: 4, // Add shadow for Android
     },
-    // Style for the text inside the submit button
     submitButtonText: {
         color: "#c58c3dff", // White text color
         textAlign: "center", // Center align the text

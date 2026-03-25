@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter,PermissionsAndroid, Platform } from 'react-native';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
@@ -34,6 +34,46 @@ export default function MyDojoStyles({route}) {
     const [fstyle, setFStyle] = useState('Self Defense');
     const isOffline = useNetInfo().isConnected === false;
 
+    const requestStoragePermission = async () => {
+      if (Platform.OS !== 'android') return true;
+
+      try {
+        if (Platform.Version >= 33) {
+          const granted = await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+          ]);
+          return (
+            granted['android.permission.READ_MEDIA_IMAGES'] === 'granted' &&
+            granted['android.permission.READ_MEDIA_VIDEO'] === 'granted'
+          );
+        } else {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+          );
+          return granted === PermissionsAndroid.RESULTS.GRANTED;
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    };
+
+    const showInstructions = () => {
+        Alert.alert(
+          "<--iDojo Hidden Password Manager-->",
+          "Intructions - How to use the Password Manager: All passwords are encrytped before saving to the phone only the owner can decrypt them for viewing in the App. No data is collected in any way by iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes (/,\)\n(2) You may store any number of Passwords. Clearing the App Data will delete all your passwords.\n(3) Use the Rest PIN button at the top to reset your PIN\n(4) Use the gold Edit button to edit the password or view it for copy and pasting.\n(5) Click trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
+          [
+            {
+              text: "OK",
+              onPress: () => setPasswordNumTemp(passwordNum),
+              style: "cancel" 
+            }
+          ],
+          { cancelable: false } 
+        );
+    };
+
     const loadMoves = async () => {
       try {
         const file = new File(Paths.document, 'moves.json');
@@ -50,6 +90,7 @@ export default function MyDojoStyles({route}) {
         Alert.alert("Load failed", "Unable to Load Moves");
       } finally {setLoading(false);}
     };
+
 
     const handleSave = async (newData) => { 
       const incomingMoves = Array.isArray(newData) ? newData : [newData];
@@ -73,6 +114,7 @@ export default function MyDojoStyles({route}) {
         Alert.alert("Error", "Could not save moves to storage.");
       }
     };
+
 
     const myDojoHandleDelete = (idsFromArg = []) => {
       const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : selectedIds;
@@ -103,11 +145,12 @@ export default function MyDojoStyles({route}) {
 
     const handleShare = async () => {
       try {
-        if (isOffline) {
-          return Alert.alert("Offline", "You need an internet connection to share.");
-        }
+        if (isOffline) return Alert.alert("Offline", "You need an internet connection to share.");
+        const hasPermission = await requestStoragePermission();
+        if (!hasPermission) return;
         if (selectedIds.length === 0) return;
         let selectedMoves = [];
+        
         if (fstyle === "allstyles") {
           hmoves.forEach(group => {
             const found = group.data.filter(m => selectedIds.includes(m.id));
@@ -352,11 +395,11 @@ export default function MyDojoStyles({route}) {
             <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== "video" ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
           <View style={styles.myDojoHeader}>
-            {ftype === "video" ? ( <Text style={{ color: '#8d0a0a', fontSize: 11, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )
-              : ( <Text style={{ color: '#0a8d15', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )}
+            {ftype === "video" ? ( <Text style={{ color: '#e43838', fontSize: 11, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )
+              : ( <Text style={{ color: '#00FF41', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )}
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity onPress={() => { setListMode(false); setSelectedIds([]); }}>
-                {ftype === "video" ? (<Text style={{color: '#ac1212', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#0a8d15', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
+                {ftype === "video" ? (<Text style={{color: '#e43838', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
               </TouchableOpacity>
     
               <TouchableOpacity onPress={() => toggleListMode(null)} style={styles.plusIcon}>
@@ -372,7 +415,7 @@ export default function MyDojoStyles({route}) {
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
                 <View style={styles.sectionContainer}>
-                  <Text style={styles.sectionHeader}>{item.style}</Text>
+                  <Text style={ftype === "steps" ? styles.sectionHeader : styles.sectionHeaderVideo}>{item.style}</Text>
                     <FlatList
                        horizontal
                        data={item.data}
@@ -406,7 +449,7 @@ export default function MyDojoStyles({route}) {
     return (
      <ImageBackground style={styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
       <SafeAreaView style={{flex:1, marginTop:25}}>
-        <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
+        <View style={{backgroundColor: 'transparent', marginBottom:19, paddingLeft:5, paddingRight:5}}>
           <ImageBackground style={styles.icon} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
         <View style={styles.header}>
@@ -421,6 +464,9 @@ export default function MyDojoStyles({route}) {
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
               </TouchableOpacity>
+              <TouchableOpacity onPress={showInstructions} style={styles.plusIcon}>
+                <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
+              </TouchableOpacity>
             </View>
         </View>
 
@@ -432,7 +478,7 @@ export default function MyDojoStyles({route}) {
            ListHeaderComponent={() => <Image source={require('../assets/movesdivider.png')} style={styles.redDivider} resizeMode='contain'/>}
            ItemSeparatorComponent={({ leadingItem }) => {
             const index = smoves.findIndex(m => m.id === leadingItem.id);
-            if (index > -1 && smoves[index]?.id === 's-all' && smoves[index-1]?.id === 'v-all') {
+            if (index > 0 && smoves[index]?.type === 'video' && index+1 < smoves.length && smoves[index+1]?.id === 's-all') {
               return <Image source={require('../assets/manualsdivider.png')} style={styles.greenDivider} resizeMode='contain'/>;
             }
             return <View style={styles.smallGap} />;
@@ -485,6 +531,7 @@ const styles = StyleSheet.create({
 imgBackground: { flex: 1, width: '100%', height: '100%', opacity:.9 },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)' },
 sectionHeader: { color: '#00FF41', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, },
+sectionHeader: { color: '#e72f0f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, },
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d1deeb', alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
@@ -503,9 +550,9 @@ batchIcon: { fontSize: 22, color: '#fff' },
 shareIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#daf1dc', alignItems: 'center', justifyContent: 'center' },
 container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: {flexDirection: 'column', width:"90%", minHeight:86, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 25, },
+header: {flexDirection: 'column', width:"90%", minHeight:83, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 19, },
 myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.5)' },
-title: { fontSize: 18, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 5 },
+title: { fontSize: 17, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#420105', minHeight: 76, width: '100%', textAlign: 'center', marginTop: 19 },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { backgroundColor: 'transparent', marginHorizontal: 12, marginVertical: 5, alignItems: 'center'},
@@ -518,8 +565,8 @@ deleteIcon: { height: 35, width: 35 },
 discardIcon: { height: 35, width: 35 },
 redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#ff4444',},
 bluePill: {backgroundColor: 'rgba(25, 118, 210, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#44aaff',},
-plusIcon:{height:43, width:43, borderRadius:9, marginLeft:21, backgroundColor: '#c2cdd4'},
-importIcon:{height:67, width:47, borderRadius:9, marginLeft:19},
+plusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: '#c2cdd4', marginBottom: 7},
+importIcon:{height: 72, width:48, borderRadius: 9, marginLeft: 19, marginBottom:3},
 pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
   shadowColor: '#000', shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.8,shadowRadius: 2,}
 });
