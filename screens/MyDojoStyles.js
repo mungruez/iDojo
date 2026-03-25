@@ -30,7 +30,6 @@ export default function MyDojoStyles({route}) {
     const [hmoves, setHMoves] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
 
-
     const [ftype, setType] = useState('select move type');
     const [fstyle, setFStyle] = useState('Self Defense');
     const isOffline = useNetInfo().isConnected === false;
@@ -54,7 +53,6 @@ export default function MyDojoStyles({route}) {
     const handleSave = async (newData) => { 
       const incomingMoves = Array.isArray(newData) ? newData : [newData];
       let currentList = [...moves];
-      
       incomingMoves.forEach(moveData => {
         const index = currentList.findIndex(m => m.id === moveData.id);
         if (index > -1) {
@@ -67,12 +65,10 @@ export default function MyDojoStyles({route}) {
       try {
         const file = new File(Paths.document, 'moves.json');
         await file.write(JSON.stringify(currentList)); 
-        
         setMoves(currentList);
         parseStyles(currentList);
         setHMoves(getMoves(fstyle, ftype));
       } catch (e) {
-        console.error("Save failed", e);
         Alert.alert("Error", "Could not save moves to storage.");
       }
     };
@@ -94,6 +90,7 @@ export default function MyDojoStyles({route}) {
               await file.write(JSON.stringify(updatedListSnapshot));
               setHMoves(h => h.filter(m => !cleanIdsToDelete.includes(String(m.id))));
               parseStyles(updatedListSnapshot);
+              setHMoves(getMoves(fstyle, ftype));
               setSelectedIds([]);
               } catch (error) {
                 console.error("File write error:", error);
@@ -285,8 +282,8 @@ export default function MyDojoStyles({route}) {
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
         onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : navigation.navigate('Move', { video: item })}
-        style={[styles.itemContainer, selectedIds.includes(item.id) && styles.selectedItem]}
-      >
+        style={[styles.itemContainer, selectedIds.includes(item.id) && styles.selectedItem]}>
+          
         <View style={styles.card}>
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} style={styles.titleText}>{item.title}</Text>
@@ -304,11 +301,6 @@ export default function MyDojoStyles({route}) {
 
     if (loading && ftype=== 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
-    if (adding) return (<ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
-      <SafeAreaView style={{flex:1, marginTop:25}}>
-        </SafeAreaView>
-        </ImageBackground>);
-
     if (listmode) return (
       <ImageBackground style={{flex:1,width:'100%',height:'100%'}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <SafeAreaView style={{ flex: 1, margingTop:25}}>
@@ -362,18 +354,15 @@ export default function MyDojoStyles({route}) {
                <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDiscardIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
                </TouchableOpacity>
-             </View>
-           )}
-         </SafeAreaView>
-        </ImageBackground>);
-
-
+             </View>)}
+        </SafeAreaView>
+      </ImageBackground>);
 
     return (
-     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
+     <ImageBackground style={styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
       <SafeAreaView style={{flex:1, marginTop:25}}>
         <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
-          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
+          <ImageBackground style={styles.icon} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO FIGHTING STYLES LIST</Text>
@@ -395,12 +384,11 @@ export default function MyDojoStyles({route}) {
            data={smoves}
            extraData={moves}
            keyExtractor={item => item.id}
+           ListHeaderComponent={() => <Image source={require('../assets/movesdivider.png')} style={styles.redDivider} resizeMode='contain'/>}
            ItemSeparatorComponent={({ leadingItem }) => {
             const index = smoves.findIndex(m => m.id === leadingItem.id);
-            if (index > 0 && smoves[index]?.id === 'v-all' && smoves[index + 1]?.id === 's-all') {
+            if (index > -1 && smoves[index]?.id === 's-all' && smoves[index-1]?.id === 'v-all') {
               return <Image source={require('../assets/manualsdivider.png')} style={styles.greenDivider} resizeMode='contain'/>;
-            } else if (index > -1 && smoves[index]?.id === 'v-all') {
-              return <Image source={require('../assets/movesdivider.png')} style={styles.redDivider} resizeMode='contain'/>;
             }
             return <View style={styles.smallGap} />;
            }}
@@ -410,7 +398,7 @@ export default function MyDojoStyles({route}) {
                 ( <TouchableOpacity
                   style={{ width: '79%', height: 43 }}
                   onPress={() => { setHMoves(getMoves(item.style, item.type)); setFStyle(item.style); setType(item.type); setListMode(true);}}>
-                  <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/redbtnbg.png')}>
+                  <ImageBackground style={{flex: 1, justifyContent:'center', alignItems:'center'}} resizeMode='stretch' source={require('../assets/redbtnbg.png')}>
                     {item.id === 'v-all' ? 
                       ( <Image
                           resizeMode="contain"
