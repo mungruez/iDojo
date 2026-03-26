@@ -473,7 +473,7 @@ export default function MyDojoStyles({route}) {
           <ImageBackground style={styles.icon} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
         <View style={styles.header}>
-           <Text style={styles.title}>MY DOJO FIGHTING STYLES LIST</Text>
+           <Text style={styles.title}>MY DOJO MOVES LIST</Text>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.plusIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
@@ -555,7 +555,7 @@ sectionHeader: { color: '#e72f0f', fontSize: 18, fontWeight: 'bold', marginBotto
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d1deeb', alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
-titleBanner: {width: '90%', padding: 5, borderRadius: 5, marginTop: 3 },
+titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 3 },
 titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#048119' },
 titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#ff5722' },
 thumbImage: { width: '100%', height: 150, backgroundColor: '#1a1a1a' },
