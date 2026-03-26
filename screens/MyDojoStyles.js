@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, PermissionsAndroid, Platform, ImageBackground, Image, Dimensions, DeviceEventEmitter,PermissionsAndroid, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter,PermissionsAndroid, Platform } from 'react-native';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
@@ -28,38 +28,27 @@ export default function MyDojoStyles({route}) {
 
     const requestStoragePermission = async () => {
       if (Platform.OS !== 'android') return true;
-
       const apiLevel = Platform.Version;
-
       try {
         if (apiLevel >= 33) {
-          // Android 13+ uses granular media permissions
           const permissions = [
             PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
             PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
           ];
-
-          // 1. Check if already granted to avoid annoying popups
           const hasImages = await PermissionsAndroid.check(permissions[0]);
           const hasVideos = await PermissionsAndroid.check(permissions[1]);
-
           if (hasImages && hasVideos) return true;
-
-          // 2. Request both at once in a single dialog
           const granted = await PermissionsAndroid.requestMultiple(permissions);
-          
           return (
             granted[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] === 'granted' &&
             granted[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] === 'granted'
           );
         } else {
-          // Android 12 and below use standard storage permission
           const hasPermission = await PermissionsAndroid.check(
             PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
           );
 
           if (hasPermission) return true;
-
           const result = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
             {
@@ -73,11 +62,9 @@ export default function MyDojoStyles({route}) {
           return result === PermissionsAndroid.RESULTS.GRANTED;
         }
       } catch (err) {
-        console.error("Permission error:", err);
         return false;
       }
     };
-
 
     const showInstructions = () => {
         Alert.alert(
@@ -231,12 +218,12 @@ export default function MyDojoStyles({route}) {
         }, 15000);
 
       } catch (e) {
-        console.error("Batch share error:", e);
         Alert.alert("Error", "Sharing failed. Please check app storage permissions.");
       } finally {
         setLoading(false);
       }
     };
+
 
     const handleImport = async () => {
       try {
