@@ -26,39 +26,69 @@ export default function MyDojoStyles({route}) {
     const [fstyle, setFStyle] = useState('Self Defense');
     const isOffline = useNetInfo().isConnected === false;
 
+import { PermissionsAndroid, Platform } from 'react-native';
+
     const requestStoragePermission = async () => {
       if (Platform.OS !== 'android') return true;
 
+      const apiLevel = Platform.Version;
+
       try {
-        if (Platform.Version >= 33) {
-          const granted = await PermissionsAndroid.requestMultiple([
+        if (apiLevel >= 33) {
+          // Android 13+ uses granular media permissions
+          const permissions = [
             PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
             PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-          ]);
+          ];
+
+          // 1. Check if already granted to avoid annoying popups
+          const hasImages = await PermissionsAndroid.check(permissions[0]);
+          const hasVideos = await PermissionsAndroid.check(permissions[1]);
+
+          if (hasImages && hasVideos) return true;
+
+          // 2. Request both at once in a single dialog
+          const granted = await PermissionsAndroid.requestMultiple(permissions);
+          
           return (
-            granted['android.permission.READ_MEDIA_IMAGES'] === 'granted' &&
-            granted['android.permission.READ_MEDIA_VIDEO'] === 'granted'
+            granted[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] === 'granted' &&
+            granted[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] === 'granted'
           );
         } else {
-          const granted = await PermissionsAndroid.request(
+          // Android 12 and below use standard storage permission
+          const hasPermission = await PermissionsAndroid.check(
             PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
           );
-          return granted === PermissionsAndroid.RESULTS.GRANTED;
+
+          if (hasPermission) return true;
+
+          const result = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            {
+              title: "Storage Permission",
+              message: "Dojo needs access to your media to share moves.",
+              buttonNeutral: "Ask Me Later",
+              buttonNegative: "Cancel",
+              buttonPositive: "OK",
+            }
+          );
+          return result === PermissionsAndroid.RESULTS.GRANTED;
         }
       } catch (err) {
-        console.warn(err);
+        console.error("Permission error:", err);
         return false;
       }
     };
 
+
     const showInstructions = () => {
         Alert.alert(
-          "<--iDojo Hidden Password Manager-->",
-          "Intructions - How to use the Password Manager: All passwords are encrytped before saving to the phone only the owner can decrypt them for viewing in the App. No data is collected in any way by iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes (/,\)\n(2) You may store any number of Passwords. Clearing the App Data will delete all your passwords.\n(3) Use the Rest PIN button at the top to reset your PIN\n(4) Use the gold Edit button to edit the password or view it for copy and pasting.\n(5) Click trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
+          "<--My Dojo Moves List-->",
+          "Intructions: Save, Edit, Share, View, Delete and Import moves with iDojo. You may add any number of Moves the phone memory allows.\n(1) Use the red and green + buttons to add moves. Images and video for the moves should remain in a folder on the phone, once deleted the move will now show the image or video. You can either add video moves or moves with an image,title and description in each steps.\n(2) Click on one of the red or green buttons in the List to see all moves with the same move list title. Red buttons in the list are for Video Moves and green buttons are for Steps Moves also called Manuals. On the list screen press and hold a move to see the batch bar appear. Select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button below each move in the list to edit a move.\n(3) Scroll horizontally and vertically for the all styles list to view all your moves. Click the save button to save moves. on the add Move screen click +step button to add a new step to the move.",
           [
             {
               text: "OK",
-              onPress: () => setPasswordNumTemp(passwordNum),
+              onPress: () => setListMode(false),
               style: "cancel" 
             }
           ],
@@ -135,21 +165,21 @@ export default function MyDojoStyles({route}) {
         ]);
     };
 
-    const handleShare = async () => {
+    const handleShare = async (selectedids) => {
       try {
         if (isOffline) return Alert.alert("Offline", "You need an internet connection to share.");
         const hasPermission = await requestStoragePermission();
         if (!hasPermission) return;
-        if (selectedIds.length === 0) return;
+        if (selectedids.length === 0) return;
         let selectedMoves = [];
         
         if (fstyle === "allstyles") {
           hmoves.forEach(group => {
-            const found = group.data.filter(m => selectedIds.includes(m.id));
+            const found = group.data.filter(m => selectedids.includes(m.id));
             selectedMoves = [...selectedMoves, ...found];
           });
         } else {
-          selectedMoves = hmoves.filter(m => selectedIds.includes(m.id));
+          selectedMoves = hmoves.filter(m => selectedids.includes(m.id));
         }
         setLoading(true);
         const shareDir = `${FileSystem.documentDirectory}batch_share/`;
