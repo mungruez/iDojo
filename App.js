@@ -16,7 +16,6 @@ import FreeYourMindScreen from './screens/FreeYourMindScreen';
 import LoginScreen from './screens/LoginScreen';
 import PasswordManager from './screens/PasswordManager';
 import MyDojoStyles from './screens/MyDojoStyles';
-import MyDojo from './screens/MyDojo';
 import AddMove from './screens/AddMove';
 
 const Stack = createNativeStackNavigator();
@@ -42,7 +41,6 @@ export default function App() {
         <Stack.Screen name="PasswordManager" component={PasswordManager} options={{headerShown:false, gestureEnabled: false, animation: 'fade'}}/>
         <Stack.Screen name="Res"  component={Resources} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
         <Stack.Screen name="MyDojoStyles" component={MyDojoStyles} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
-        <Stack.Screen name="MyDojo" component={MyDojo} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_right'}}/>
         <Stack.Screen name="AddMove" component={AddMove} options={{headerShown:false, gestureEnabled: true, animation: 'slide_from_bottom'}}/>
       </Stack.Navigator>
      </NavigationContainer>
