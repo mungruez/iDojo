@@ -101,7 +101,6 @@ export default function MyDojo({route}) {
 
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener('MOVE_SAVED_EVENT', (newMove) => {
-      // 1. Update the local list of moves for this specific style
       setHMoves(prev => {
         const exists = prev.find(m => m.id === newMove.id);
         if (exists) {
@@ -115,9 +114,9 @@ export default function MyDojo({route}) {
   }, [hmoves]);
 
   const MoveCard = ({ item }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       onLongPress={() => toggleSelect(item.id)}
-      onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : navigation.navigate('Move', { video: item })}
+      onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? navigation.navigate('Move', { video: item }) :  navigation.navigate('Manual', { manual: item })}
       style={[styles.itemContainer, selectedIds.includes(item.id) && styles.selectedItem]}
     >
       <View style={styles.card}>
@@ -220,3 +219,30 @@ const styles = StyleSheet.create({
   deleteIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d9d6e4', alignItems: 'center', justifyContent: 'center' },
   discardIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d1deeb', alignItems: 'center', justifyContent: 'center' },
 });
+//FUTURE UPDATES: (1) AI COACH - How it makes money: Users record themselves doing a strike. The API compares their skeletal movement to a "Master" video. You charge a premium subscription for this "AI Private Lesson" feature
+//(2) PDF parsing Use a PDF Parsing API to let users upload their federation’s manual. The Tech: Your app scans the PDF for text and images (using the code we discussed), identifies specific techniques (e.g., "Wrist Release"), and automatically generates a digital checklist or interactive training plan
+//(3) ez FIGHTERS VAULT- present day best fighters and those with traing to sell could have a marketplace 30% cut
+//(4)  ez Use a Product API to suggest specific gear (pepper spray, tactical flashlights, Gi brands) based on the "moves" the user is learning.
+//(5) ez In-app video recording and analysis: Allow users to record themselves performing techniques and use a video analysis API to provide feedback on their form, timing, and execution. This could be a premium feature that offers personalized coaching tips based on the user's performance.
+// (6) Use the Google Maps API and a Real-time Notification API (like Ably or PubNub) to alert users when they enter a "high-alert" zone marked by the community.
+//(7) vez Implement a "Move of the Day" feature using a Content Management API to rotate featured techniques, keeping users engaged and encouraging daily practice.
+//(8) vez Create a "Dojo Challenges" system where users can complete specific training challenges (e.g., "Practice 10 wrist releases this week") and earn badges or rewards. Use a Gamification API to manage challenges, track progress, and distribute rewards.
+//(9) vez Social sharing for individual self defense stories. track progress, etc, help remember all self training, catas, moves etc 
+//(10) Implement a "Move of the Day" feature using a Content Management API to rotate featured techniques, keeping users engaged and encouraging daily practice.
+//(11) Create a "Dojo Challenges" system where users can complete specific training challenges (e.g., "Practice 10 wrist releases this week") and earn badges or rewards. Use a Gamification API to manage challenges, track progress, and distribute rewards.
+//(12) Integrate a "Move Library" feature that allows users to browse and search a comprehensive database of techniques, categorized by type, style, and difficulty. Use a Search API to enable advanced filtering and sorting options, making it easy for users to find specific moves or discover new ones based on their interests and skill level.
+//(13) hard Implement a "Move Comparison" tool that allows users to compare their execution of a technique against a reference video. Use a Video Analysis API to break down the user's performance and provide side-by-side feedback on key elements like form, timing, and power.
+//(14) Develop a "Move Customization" feature that lets users modify existing techniques or create their own variations. Use a Drag-and-Drop API to enable users to rearrange steps, add annotations, and personalize their training regimen. This could
+//(15) Integrate a "Move Sharing" platform where users can upload and share their own techniques with the community. Use a Cloud Storage API to handle media uploads and a Social API to facilitate sharing, commenting, and rating of user-generated content. This would foster a sense of community and encourage knowledge exchange among practitioners. 
+//(16) Implement a "Move History" feature that tracks the user's training progress over time. Use a Database API to store and retrieve historical data on techniques practiced, improvements made, and milestones achieved. This would allow users to reflect on their journey and set future goals based on their past performance.
+//(17) Use Blazepose and MediPipe to covert video to timestamps with body angles for comparing to other users move videos. Matching algorihtm needed.
+
+//Code for parent screen whith one list, A list all moves grouped first by move.type=(video or steps) then grouped by move.style(user entered or Self-Defence by default) 
+//depending on which group (a specific moves style button or all styles button) is clicked on navigate and show list of moves filtered by type and style clicked on all style button but no all types button 
+//this means no screen will show all video and steps moves in one list. So the child MyDojo screen will only have lists with either (1) a type with all styles, OR (2) a type and one style    
+//only when rendering moves with all styles from a type MyDojo will need to render a vertical list (for each style) and horizontal list(for each move with same style) in the manager, instead of one vertical list that will be rendered when hmoves=one type and one style. 
+// A horizontal divider needed in flatList when type changes to type=='steps',
+//use matrix dojo in bg, try use red/blue pills buttons (each style,allstyles) , 
+// Added Move title - subtitle add,share,import moves, Edit Move title, My Dojo Move Styles, MyDojo
+//Added-> share btn, import btn, plus btn, edit btn, del btn, add step btn, save move btn, info btn 
+// added cool fonts, and a prieview for the video(or Thumbnail) and images in the steps, and an import/share many option.

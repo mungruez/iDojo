@@ -111,7 +111,7 @@ const AddMove = ({ route }) => {
       <Text style={styles.label}>Move Title</Text>
       <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter move Title" value={title} onChangeText={setTitle} />
       
-      <Text style={styles.label}>Fighting Style</Text>
+      <Text style={styles.label}>Moves List Title</Text>
       <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
 
       {!move && type !== 'video' && type!=='steps' && ( 
@@ -172,10 +172,10 @@ const AddMove = ({ route }) => {
             </View>
           ))}
           <TouchableOpacity style={styles.addStepBtn} onPress={() => setSteps([...steps, { id: Date.now().toString(), title: '',img: null, desc: '' }])}>
-            <ImageBackground style={{width: '100%', height: 43, justifyContent: 'center'}} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
+            <ImageBackground style={{width: '100%', height: 38, justifyContent: 'center'}} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
               <Image
                 resizeMode="contain"
-                style={{ height:34, width: 172, alignSelf:"center",}}
+                style={{ height:24, width: 140, alignSelf:"center",}}
                 source={require('../assets/addstep.png')}
               />
             </ImageBackground>
@@ -217,11 +217,11 @@ const styles = StyleSheet.create({
   stepRow: { flexDirection: 'column', marginTop: 12, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
   stepImg: { flex:1, width: '100%', height: '100%' },
   stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, backgroundColor: 'rgba(93, 231, 167, 0.5)', borderRadius: 8,},
-  removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:3, fontWeight: 'bold', height: 19, width: '100%' },
+  removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:1, fontWeight: 'bold', height: 17, width: '100%' },
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:114, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d',},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
-  addStepBtn: {marginTop:5, height:50 ,width: 190, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
+  addStepBtn: {marginTop:5, height:40 ,width: 154, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   addStepText: { color: '#0b5737', fontWeight: 'bold' },
   saveBtn: { backgroundColor:'transparent', width:190, height:50, borderRadius: 12, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },

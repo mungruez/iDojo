@@ -9,15 +9,7 @@ import { zip, unzip } from 'react-native-zip-archive';
 import * as Sharing from 'expo-sharing';
 
 const { width } = Dimensions.get('window');
-//Code for parent screen whith one list, A list all moves grouped first by move.type=(video or steps) then grouped by move.style(user entered or Self-Defence by default) 
-//depending on which group (a specific moves style button or all styles button) is clicked on navigate and show list of moves filtered by type and style clicked on all style button but no all types button 
-//this means no screen will show all video and steps moves in one list. So the child MyDojo screen will only have lists with either (1) a type with all styles, OR (2) a type and one style    
-//only when rendering moves with all styles from a type MyDojo will need to render a vertical list (for each style) and horizontal list(for each move with same style) in the manager, instead of one vertical list that will be rendered when hmoves=one type and one style. 
-// A horizontal divider needed in flatList when type changes to type=='steps',
-//use matrix dojo in bg, try use red/blue pills buttons (each style,allstyles) , 
-// Added Move title - subtitle add,share,import moves, Edit Move title, My Dojo Move Styles, MyDojo
-//Added-> share btn, import btn, plus btn, edit btn, del btn, add step btn, save move btn, info btn 
-// added cool fonts, and a prieview for the video(or Thumbnail) and images in the steps, and an import/share many option.    
+    
 export default function MyDojoStyles({route}) {
     const [moves, setMoves] = useState([]); 
     const [loading, setLoading] = useState(true);
