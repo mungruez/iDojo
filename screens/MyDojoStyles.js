@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, PermissionsAndroid, Platform, ImageBackground, Image, Dimensions, DeviceEventEmitter,PermissionsAndroid, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter,PermissionsAndroid, Platform } from 'react-native';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
