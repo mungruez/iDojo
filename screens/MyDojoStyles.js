@@ -333,6 +333,7 @@ const handleShare = async (selectedids) => {
       return sMoves;
     }
 
+
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
 
     useEffect(() => {
@@ -346,6 +347,7 @@ const handleShare = async (selectedids) => {
         navigation.setParams({ deletedId: undefined });
       }
     }, [route.params?.savedMove, route.params?.deletedId]);
+
 
     useEffect(() => {
       const subscription = DeviceEventEmitter.addListener("SAVE_MOVE_EVENT", (newMove) => {
@@ -361,9 +363,11 @@ const handleShare = async (selectedids) => {
       };
     }, [moves]);
 
+
     const toggleSelect = (id) => {
       setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };
+
 
     const toggleListMode = (mv) => {
       if(mv===null) {
@@ -375,6 +379,7 @@ const handleShare = async (selectedids) => {
       }
     };
     
+
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
@@ -395,6 +400,16 @@ const handleShare = async (selectedids) => {
         </View>
       </TouchableOpacity>
     );    
+
+
+    const MyHeader = () => {
+      if (smoves.length === 0) return null;
+      const firstId = smoves[0].id;
+      if (firstId === "v-all") return <Image source={require('../assets/movesdivider.png')} style={styles.redDivider} resizeMode='contain'/>;
+      if (firstId === "s-all") return <Image source={require('../assets/manualsdivider.png')} style={styles.greenDivider} resizeMode='contain'/>;
+      return null;
+    };
+
 
     if (loading && ftype=== 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
@@ -456,6 +471,7 @@ const handleShare = async (selectedids) => {
         </SafeAreaView>
       </ImageBackground>);
 
+
     return (
      <ImageBackground style={styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
       <SafeAreaView style={{flex:1, marginTop:25}}>
@@ -465,7 +481,7 @@ const handleShare = async (selectedids) => {
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO MOVES LIST</Text>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.redPlusIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"steps", mstyle: null })} style={styles.plusIcon}>
@@ -475,7 +491,7 @@ const handleShare = async (selectedids) => {
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={showInstructions} style={styles.plusIcon}>
-                <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
+                <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/mydojostylesinfoicon.png')}/>         
               </TouchableOpacity>
             </View>
         </View>
@@ -485,7 +501,7 @@ const handleShare = async (selectedids) => {
            data={smoves}
            extraData={moves}
            keyExtractor={item => item.id}
-           ListHeaderComponent={() => <Image source={require('../assets/movesdivider.png')} style={styles.redDivider} resizeMode='contain'/>}
+           ListHeaderComponent={MyHeader}
            ItemSeparatorComponent={({ leadingItem }) => {
             const index = smoves.findIndex(m => m.id === leadingItem.id);
             if (index > 0 && smoves[index]?.type === 'video' && index+1 < smoves.length && smoves[index+1]?.id === 's-all') {
@@ -540,19 +556,20 @@ const handleShare = async (selectedids) => {
 const styles = StyleSheet.create({
 imgBackground: { flex: 1, width: '100%', height: '100%', opacity:.9 },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)' },
-sectionHeader: { color: '#00FF41', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, },
-sectionHeader: { color: '#e72f0f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, },
+sectionHeader: { color: '#00FF41', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },
+sectionHeaderVideo: { color: '#e72f0f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },
+itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, },
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d1deeb', alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 3 },
 titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#048119' },
-titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#ff5722' },
+titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#e43333' },
 thumbImage: { width: '100%', height: 150, backgroundColor: '#1a1a1a' },
 myDojoDeleteIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d9d6e4', alignItems: 'center', justifyContent: 'center' },
 pillRow: { backgroundColor: 'rgba(0, 255, 65, 0.3)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8 },
 typePill: { backgroundColor: 'rgba(5, 17, 8, 0.2)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
-typePillVideo: { backgroundColor: 'rgba(235, 77, 14, 0.2)', color: '#c21b29', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
+typePillVideo: { backgroundColor: 'rgba(235, 77, 14, 0.2)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 editIcon: { fontSize: 16 },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#00FF41', elevation: 10 },
 batchText: { color: '#00FF41', fontWeight: 'bold' },
@@ -575,8 +592,9 @@ deleteIcon: { height: 35, width: 35 },
 discardIcon: { height: 35, width: 35 },
 redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#ff4444',},
 bluePill: {backgroundColor: 'rgba(25, 118, 210, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#44aaff',},
-plusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: '#c2cdd4', marginBottom: 7},
-importIcon:{height: 72, width:48, borderRadius: 9, marginLeft: 19, marginBottom:3},
+redPlusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: '#c2cdd4', marginBottom: 7},
+plusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: "transparent", marginBottom: 7},
+importIcon:{height: 75, width:50, borderRadius: 9, marginLeft: 19, marginBottom:3},
 pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
   shadowColor: '#000', shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.8,shadowRadius: 2,}
 });
