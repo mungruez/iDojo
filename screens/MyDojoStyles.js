@@ -182,9 +182,8 @@ const handleShare = async (selectedids) => {
           img: await copyToStaging(s.img)
         })));
       }
-      updatedMove.thumb = move.type === 'video' 
-        ? (updatedMove.vid || updatedMove.videoUrl) 
-        : (updatedMove.steps?.[0]?.img || null);
+      updatedMove.thumb = move.type === 'video' ? (updatedMove.vid || updatedMove.videoUrl) 
+        : (updatedMove.steps && updatedMove.steps.length > 0 ? updatedMove.steps[0].img : null);
 
       return updatedMove;
     }));
