@@ -87,7 +87,7 @@ const AddMove = ({ route }) => {
       steps: type === 'steps' ? validatedSteps : [],
       vid: type === 'video' ? vid : null,
       videoUrl: type === 'video' ? videoUrl : '',
-      Thumb: type === 'video' ? (vid || videoUrl) : validatedSteps[0]?.img,
+      thumb: type === 'video' ? (vid || videoUrl) : validatedSteps[0]?.img,
       desc: desc 
     };
 
