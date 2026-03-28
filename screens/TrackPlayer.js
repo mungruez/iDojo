@@ -112,7 +112,7 @@ export default function TrackPlayer({ track }) {
       {status.error ? (
         <Text style={styles.duration}>WiFi Error</Text>
           ) : status.playing || status.currentTime > 0 ? (
-            <View styles={{flexDirection:"column", alignItems:"center", width: 228}}> 
+            <View style={{flexDirection:"column", alignItems:"center", width: 228}}> 
               <View
                 style={styles.sliderTrack}
                 {...panResponder.panHandlers}
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   sliderTrack: {
-    flex: 1,
+    width: "100",
     height: 6,
     backgroundColor: '#C0C0C0',
     marginHorizontal: 15,
