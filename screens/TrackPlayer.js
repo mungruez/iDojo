@@ -1,7 +1,7 @@
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, PanResponder } from 'react-native';
 import { DeviceEventEmitter } from 'react-native'; 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 
 const LOCAL_AUDIO_MAP = {
@@ -25,8 +25,11 @@ export default function TrackPlayer({ track }) {
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
 
+  const [barWidth, setBarWidth] = useState(0);
+  const startXRef = useRef(0);
+
   const formatTime = (seconds) => {
-    if (!seconds) return "0:00";
+    if (!seconds && seconds !==0) return "0:00";
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
@@ -48,14 +51,34 @@ export default function TrackPlayer({ track }) {
     };
   }, [player]);
 
-  //This the old invis button changec it to lonpress title <TouchableOpacity
-        //style={styles.invisiblebtn}
-        //onPress={navKSound}
-        ///activeOpacity={1}>
-          //<View style={styles.buttonArea} />                     
-      //</TouchableOpacity>
+  const panResponder = useRef(
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: (evt) => {
+          const locX = evt.nativeEvent.locationX;
+          startXRef.current = typeof locX === 'number' ? locX : 0;
+        },
+        onPanResponderRelease: (evt, gestureState) => {
+          const dur = status.duration;
+          if (dur > 0 && barWidth > 0) {
+            const finalXInSlider = startXRef.current + gestureState.dx;
+            let percentage = Math.max(0, Math.min(1, finalXInSlider / barWidth));
+            
+            try {
+              player.seekTo(percentage * dur);
+            } catch (e) {
+              console.warn('Seek error', e);
+            }
+          }
+        },
+        onPanResponderTerminationRequest: () => false,
+      })
+    ).current;
 
-  //Sync with Pause/Play Button from Parent    
+  const progressPercent = status.duration > 0
+    ? (status.currentTime / status.duration) * 100
+    : 0;
+  
   useEffect(() => {
     if (!player || !status || !track) return;
 
@@ -89,9 +112,19 @@ export default function TrackPlayer({ track }) {
       {status.error ? (
         <Text style={styles.duration}>WiFi Error</Text>
           ) : status.playing || status.currentTime > 0 ? (
-            <Text style={styles.duration}>
-              {formatTime(status.currentTime)} / {formatTime(status.duration)}
-            </Text>
+            <View styles={{flesDirection:"column", alignItems:"center"}}> 
+              <View
+                style={styles.sliderTrack}
+                {...panResponder.panHandlers}
+                onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
+              >
+                <View style={[styles.progressLine, { width: `${progressPercent}%` }]} />
+                <View style={[styles.thumb, { left: `${progressPercent}%` }]} />
+              </View>
+              <Text style={styles.duration}>
+                {formatTime(status.currentTime)} / {formatTime(status.duration)}
+              </Text>
+            </View>
           ) : player && !track.ispaused ?
             <ActivityIndicator size="small" color="#5b12a5ff" /> :
       <></> }
@@ -109,11 +142,37 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: "center",
     borderRadius: 50,
-  }, 
-  slider: { 
-    flex: 1, 
-    height: 40,
-    marginHorizontal: 5
+  },
+  sliderTrack: {
+    flex: 1,
+    height: 6,
+    backgroundColor: '#C0C0C0',
+    marginHorizontal: 15,
+    borderRadius: 3,
+    justifyContent: 'center',
+    position: 'relative',
+    paddingVertical: 10, 
+  },
+  thumb: {
+    position: 'absolute',
+    top: 5, 
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#270647',
+    marginLeft: -8,
+    borderWidth: 2,
+    borderColor: '#FFF',
+    elevation: 3, // Add a slight shadow for Android
+    shadowColor: '#000', // Add shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  progressLine: {
+    height: 6, 
+    backgroundColor: '#792dc5',
+    borderRadius: 3,
   },
   duration: {
     fontSize: 12,
