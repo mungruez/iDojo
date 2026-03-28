@@ -112,7 +112,7 @@ export default function TrackPlayer({ track }) {
       {status.error ? (
         <Text style={styles.duration}>WiFi Error</Text>
           ) : status.playing || status.currentTime > 0 ? (
-            <View styles={{flesDirection:"column", alignItems:"center"}}> 
+            <View styles={{flexDirection:"column", alignItems:"center", width: 228}}> 
               <View
                 style={styles.sliderTrack}
                 {...panResponder.panHandlers}
