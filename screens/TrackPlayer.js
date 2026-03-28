@@ -54,6 +54,7 @@ export default function TrackPlayer({ track }) {
   const panResponder = useRef(
       PanResponder.create({
         onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
         onPanResponderGrant: (evt) => {
           const locX = evt.nativeEvent.locationX;
           startXRef.current = typeof locX === 'number' ? locX : 0;
@@ -144,14 +145,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   sliderTrack: {
-    width: "100",
+    width: "100%",
     height: 6,
     backgroundColor: '#C0C0C0',
-    marginHorizontal: 15,
     borderRadius: 3,
     justifyContent: 'center',
     position: 'relative',
     paddingVertical: 10, 
+    marginBottom: 5,
   },
   thumb: {
     position: 'absolute',
@@ -182,5 +183,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#C0C0C0',
     borderWidth: 2,
     borderRadius: 19,
+    paddingHorizontal: 8,
   }
 });
