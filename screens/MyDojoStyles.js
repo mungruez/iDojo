@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndi
 import { useNavigation, useFocusEffect  } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
+import * as FileSystem from 'expo-file-system';
 import { File, Directory, Paths } from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
 import React, { useState, useCallback, useEffect  } from 'react';
@@ -221,19 +222,21 @@ const handleShare = async (selectedids) => {
           copyToCacheDirectory: true 
         });
 
-        if (res.canceled || !res.assets) return;
+        if (res.canceled) return;
         setLoading(true);
-        const zipUri = res.assets[0].uri;
+        const zipUri = res?.assets?.[0]?.uri || res.uri;
         const importId = Date.now().toString();
         const permanentDir = `${FileSystem.documentDirectory}imported_${importId}/`;
         const nakedZip = zipUri.replace(/^file:\/\//, '');
         const nakedDest = permanentDir.replace(/^file:\/\//, '');
+        
         await FileSystem.makeDirectoryAsync(permanentDir, { intermediates: true });
         await unzip(nakedZip, nakedDest);
         
         const dataFilePath = `${permanentDir}data.json`;
         const content = await FileSystem.readAsStringAsync(dataFilePath);
         const importedMoves = JSON.parse(content);
+        if (!Array.isArray(importedMoves)) throw new Error("Invalid data format");
 
         const finalMoves = importedMoves.map((move, index) => {
           const fixPath = (oldPath) => {
@@ -262,6 +265,7 @@ const handleShare = async (selectedids) => {
         });
 
         await handleSave(finalMoves);
+        await FileSystem.deleteAsync(permanentDir, { idempotent: true });
         await FileSystem.deleteAsync(dataFilePath).catch(() => {});
         Alert.alert("Success", `${finalMoves.length} moves added!`);
       } catch (e) {
@@ -458,7 +462,7 @@ const handleShare = async (selectedids) => {
            {selectedIds.length > 0 && (
              <View style={styles.batchBar}>
                <Text style={styles.batchText}>{selectedIds.length} Selected</Text>
-               <TouchableOpacity onPress={handleShare} style={styles.shareIcon}>
+               <TouchableOpacity onPress={() => handleShare(selectedIds)} style={styles.shareIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDeleteIcon}>

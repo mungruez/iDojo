@@ -24,14 +24,13 @@ const AddMove = ({ route }) => {
     const isVideo = (type === "video" && index === null);
     try {
       const res = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: isVideo ? ImagePicker.MediaTypeOptions.Videos : ImagePicker.MediaTypeOptions.Images,
+       mediaTypes: ['images', 'videos', ],
         allowsEditing: false,
         quality: 1.0,
       });
 
       if (!res.canceled && res.assets && res.assets.length > 0) {
         const pickedUri = res.assets[0].uri; 
-
         if (isVideo) {
           setVid(pickedUri);
         } else {
