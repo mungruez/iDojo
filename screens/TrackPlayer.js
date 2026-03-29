@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, ActivityIndicator, PanResponder } from 'react-n
 import { DeviceEventEmitter } from 'react-native'; 
 import React, { useEffect, useRef, useState } from 'react';
 
-
 const LOCAL_AUDIO_MAP = {
   0: require('../assets/freeyourmind/freeyourmind(part1).mp3'),
   1: require('../assets/freeyourmind/freeyourmind(part2).mp3'),
@@ -51,35 +50,37 @@ export default function TrackPlayer({ track }) {
     };
   }, [player]);
 
+  
   const panResponder = useRef(
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderGrant: (evt) => {
-          const locX = evt.nativeEvent.locationX;
-          startXRef.current = typeof locX === 'number' ? locX : 0;
-        },
-        onPanResponderRelease: (evt, gestureState) => {
-          const dur = status.duration;
-          if (dur > 0 && barWidth > 0) {
-            const finalXInSlider = startXRef.current + gestureState.dx;
-            let percentage = Math.max(0, Math.min(1, finalXInSlider / barWidth));
-            
-            try {
-              player.seekTo(percentage * dur);
-            } catch (e) {
-              console.warn('Seek error', e);
-            }
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt) => {
+        const locX = evt.nativeEvent.locationX;
+        startXRef.current = typeof locX === 'number' ? locX : 0;
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        const dur = status.duration;
+        if (dur > 0 && barWidth > 0) {
+          const finalXInSlider = startXRef.current + gestureState.dx;
+          let percentage = Math.max(0, Math.min(1, finalXInSlider / barWidth));
+          try {
+             player.seekTo(percentage * dur);
+           } catch (e) {
+            alert("Seek error");
           }
-        },
-        onPanResponderTerminationRequest: () => false,
-      })
-    ).current;
+        }
+      },
+      onPanResponderTerminationRequest: () => false,
+    })
+  ).current;
+
 
   const progressPercent = status.duration > 0
     ? (status.currentTime / status.duration) * 100
     : 0;
   
+
   useEffect(() => {
     if (!player || !status || !track) return;
 
@@ -90,23 +91,26 @@ export default function TrackPlayer({ track }) {
     }
   }, [track.ispaused, status.playing]);
 
+
   useEffect(() => {
     if (status && status.didJustFinish) {
       if (isMounted.current) {
         try {
           DeviceEventEmitter.emit('TRACK_FINISHED');
         } catch (e) {
-          // Silently fail if emitting fails during unmount
+          //silent...
         }
       }
     }
   }, [status?.didJustFinish]);
+
 
   useEffect(() => {
     if (status && status.error && isMounted.current) {
       DeviceEventEmitter.emit('TRACK_FINISHED');
     }
   }, [status?.error]);
+
 
   return (
     <View style={styles.row}>
@@ -132,6 +136,7 @@ export default function TrackPlayer({ track }) {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   row: { 
@@ -164,8 +169,8 @@ const styles = StyleSheet.create({
     marginLeft: -8,
     borderWidth: 2,
     borderColor: '#FFF',
-    elevation: 3, // Add a slight shadow for Android
-    shadowColor: '#000', // Add shadow for iOS
+    elevation: 3, 
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,

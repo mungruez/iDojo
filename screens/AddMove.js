@@ -153,14 +153,9 @@ const AddMove = ({ route }) => {
                 <Text style={styles.label}>Step Description</Text>
                 <TextInput 
                   style={styles.stepInput} 
-                  multiline={true}
-                  placeholder={`Enter Step ${i+1} description...`}
-                  value={s.desc} 
-                  onChangeText={(t) => {
-                    const ns = [...steps];
-                    ns[i].desc = t;
-                    setSteps(ns);
-                  }} 
+                  multiline={true} 
+                  placeholder={`Enter Step ${i+1} description...`} value={s.desc} 
+                  onChangeText={(t) => { const ns = [...steps]; ns[i].desc = t; setSteps(ns); }} 
                 />
                 {steps.length > 1 && (
                   <TouchableOpacity onPress={() => setSteps(steps.filter(st => st.id !== s.id))} style={styles.removeStepIcon}>
@@ -172,10 +167,10 @@ const AddMove = ({ route }) => {
             </View>
           ))}
           <TouchableOpacity style={styles.addStepBtn} onPress={() => setSteps([...steps, { id: Date.now().toString(), title: '',img: null, desc: '' }])}>
-            <ImageBackground style={{width: '100%', height: 27, justifyContent: 'center'}} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
+            <ImageBackground style={{width: '100%', height: 32, justifyContent: 'center'}} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
               <Image
                 resizeMode="contain"
-                style={{ height:19, width: 120, alignSelf:"center",}}
+                style={{ height:27, width: 120, alignSelf:"center",}}
                 source={require('../assets/addstep.png')}
               />
             </ImageBackground>
@@ -221,13 +216,13 @@ const styles = StyleSheet.create({
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d',},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
-  addStepBtn: {marginTop:5, height:29 ,width: 133, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
+  addStepBtn: {marginTop:5, height:37 ,width: 131, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   addStepText: { color: '#0b5737', fontWeight: 'bold' },
   saveBtn: { backgroundColor:'transparent', width:190, height:50, borderRadius: 12, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
-  discardBtn: { marginBottom: 7, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
-  discardText: { textAlign: 'center', color: '#d40a25', fontWeight: 'bold', fontSize:10, marginTop: 3, height: 19, width: '100%' },
-  stepImgContainer: { width: 75, height: 75, borderColor: '#083a1d', backgroundColor: 'rgba(93, 231, 167, 0.5)', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)', overflow: 'hidden',},
+  discardBtn: { marginBottom: 4, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
+  discardText: { textAlign: 'center', color: '#e41934', fontWeight: 'bold', fontSize:10, marginTop: 1, height: 16, width: '100%' },
+  stepImgContainer: { width: 77, height: 77, borderColor: '#083a1d', backgroundColor: 'rgba(93, 231, 167, 0.5)', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)', overflow: 'hidden',},
 });
 
 export default AddMove;

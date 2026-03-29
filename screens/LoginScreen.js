@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, Pressable,  UIManager, findNodeHandle} from 'react-native'
+import { StyleSheet, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, Pressable,  UIManager, findNodeHandle} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, {useState,useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -13,7 +13,6 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const insideViewRef = React.useRef(null);
-
 
   const fetchPasswords = async () => {
     try {
@@ -41,8 +40,8 @@ export default function LoginScreen() {
         return;
 
       } else {
-        setHasPasswords(true);
 
+        setHasPasswords(true);
         let passKey = await AsyncStorage.getItem('xx7771xxiDojoAESpassKey');
         if(passKey==null) {
           setHasPasswordList(false);
@@ -75,7 +74,7 @@ export default function LoginScreen() {
   useEffect(() => {
  
     fetchPasswords();
-  }, []);
+  }, [pin]);
 
 
   const showConfirmDialog = () => {
@@ -86,24 +85,21 @@ export default function LoginScreen() {
         {
           text: "Cancel",
           onPress: () => setPinConfirm(""),
-          style: "cancel" // Applies 'cancel' style for iOS (places it correctly)
+          style: "cancel" 
         },
         {
           text: "OK",
           onPress: () => resetPasswords()
         }
       ],
-      { cancelable: false } // Prevents closing the alert by tapping outside
+      { cancelable: false } 
     );
   };
 
 
   const handleGlobalTouch = (event) => {
-    // UIManager and findNodeHandle are used to get native tags from refs
     const insideViewNode = findNodeHandle(insideViewRef.current);
     const touchedNode = event?.nativeEvent?.target;
-
-    // Check if the touched node is the inside view itself or a descendant
     if (insideViewNode && touchedNode !== insideViewNode) {
       UIManager.viewIsDescendantOf(touchedNode, insideViewNode, (isAncestor) => {
         if (!isAncestor) {
@@ -132,6 +128,7 @@ export default function LoginScreen() {
         alert("Successfully deleted PIN, found no Passwords to delete.");
         await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
         setHasPasswords(false);
+        setHasPasswordList(false);
         await AsyncStorage.clear();
         return;
       }
@@ -151,6 +148,7 @@ export default function LoginScreen() {
       
       if(errorFlag == 0) {
         setHasPasswords(false);
+        setHasPasswordList(false);
         await AsyncStorage.clear();
         await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
         alert("Successfully deleted PIN, found 0 Passwords to delete.");
@@ -166,9 +164,9 @@ export default function LoginScreen() {
     }
 
     setHasPasswords(false);
+    setHasPasswordList(false);
     alert("Successfully deleted PIN and ALL "+errorFlag+" Passwords."); 
   }
-
 
 
   const checkPin = async () => {
@@ -184,8 +182,6 @@ export default function LoginScreen() {
 
       if(pin && savedPIN) {
         const cleanPIN = savedPIN.trim();
-        //const cleanPIN = cleanString.replace(/[^0-9.]/g, '');
-        //console.log("Your PIN :"+cleanPIN);
         if(pin.length != cleanPIN.length) {
           alert("PIN entered does not match with what is saved. Please try again.");
           setPin("");
@@ -249,7 +245,6 @@ export default function LoginScreen() {
       navigation.navigate('PasswordManager');
     }  
   }
-
 
 
   return ( !hasPasswords ? ( 
@@ -320,7 +315,7 @@ export default function LoginScreen() {
                 <View ref={insideViewRef} style={{flexDirection:"row", maxHeight:57, padding:0, width:"77%", marginTop:16,}}>
                   <TouchableOpacity
                     style={{height:27, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
-                    onPress={resetPasswords}>
+                    onPress={showConfirmDialog}>
                       <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/confirmbutton.png')} />
                   </TouchableOpacity>
 
@@ -360,11 +355,11 @@ export default function LoginScreen() {
                 />
               </View> 
 
-            <TouchableOpacity
+            {hasPasswordList && (<TouchableOpacity
               style={{height:43, width:"61%", alignSelf:"center", backgroundColor:"transparent",}}
               onPress={openOverlay}>
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
-            </TouchableOpacity> 
+            </TouchableOpacity>)} 
             
             <TouchableOpacity
               style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
@@ -421,8 +416,8 @@ export default function LoginScreen() {
       backgroundColor: "green",
     },
     logintext: {
-      color: "#c58c3dff", // White text color
-      textAlign: "center", // Center align the text
+      color: "#c58c3dff", 
+      textAlign: "center",
       fontWeight:"bold",
     },
     loginscreentitle: {
@@ -500,13 +495,12 @@ export default function LoginScreen() {
         borderColor: "#228b22",
         borderWidth:1,
       },
-    // Style for the back button
     backButton: {
-        backgroundColor: "transparent", // Blue background
-        borderRadius: 7, // Slightly rounded corners
-        padding: 1, // Add padding inside the button
-        marginLeftt: 10, // Space to the right of the button
-        borderWidth: 2, // Border width
+        backgroundColor: "transparent", 
+        borderRadius: 7, 
+        padding: 1, 
+        marginLeftt: 10, 
+        borderWidth: 2, 
         borderColor: "goldenrod",
         elevation: 0,
         height: 76,
