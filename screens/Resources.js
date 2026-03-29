@@ -1,19 +1,17 @@
 import { StyleSheet, Text, View, ImageBackground, TouchableWithoutFeedback , ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect} from 'react';
+import React from 'react';
 import { useAudioPlayer } from 'expo-audio';
 
 const ksoundFile = require('../assets/woosh.mp3');
 
 export default function Resources() {
   const navigation = useNavigation();
-  const [ksound, setKSound] = useState();
 
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
       kplayer.loop = false; 
     });
-  
   
     const navKSound = () => {
       try {
@@ -21,11 +19,10 @@ export default function Resources() {
           kplayer.play();
         }
       } catch (error) {
-          alert('Error playing sound effect:'+error);
+          alert("Error playing sound effect");
       }
-      navigation.navigate('LoginScreen');
+      navigation.navigate("LoginScreen");
     };
-
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
@@ -37,14 +34,16 @@ export default function Resources() {
 
       <ScrollView style={{ flexDirection:"column", marginTop:5, marginBottom:19, }}>
         <View style={{marginTop:2, borderColor:'silver', borderWidth:1, borderRadius:7, marginBotton:19}}>
-<Text style={ styles.title }> Thank you for downloading the iDojo mobile App by DojoSoft, we hope you have learned about Self Defense. Special thanks to all involved, a lot of time and effort was put into making the App. 
+<Text style={ styles.title }> Thank you for downloading the iDojo mobile App by DojoSoft, we hope you have learned about Self Defense, your support will be put to constructive use. Special thanks to all involved, a lot of time and effort was put into making iDojo. Thank you to the sponsors, people and organizations who made this original App possible. We mention them here with their corporate or organizational affiliation at the time from which this App was created.
   Thanks to: The World Boxing Federation, MMA and UFC for giving us the opportunity to analyse the best fighters of all time and their fighting styles. Use the volume buttom(top right) to control sounds, videos can be played in slow motion, wifi is only needed for the Featured List. Most of all be careful when trying out these moves and have fun. 
   Disclaimer: This App does not collect any data from the device it is installed on or any device.    
 </Text>
-<Text style={ styles.title }>Years of research into accumulating the best audio and graphics for self defense moves made iDojo a work of art. All future upgrades will be free as the main goal is to teach Self Defense to those who would use it only when required. DojoSoft`s continues to innovate by placing an invisible button in this iDojo App that will launch a secret password Manager App. DojoSoft promises to be the best Self Defense mobile App by releasing meaningful upgrades in the future. 
+<Text style={ styles.title }>Years of research into accumulating the best audio and graphics for self defense moves made iDojo a work of art. All future upgrades will be free as the main goal is to teach Self Defense to those who would use it only when required. DojoSoft`s continues to innovate by placing an invisible button in this iDojo App that will launch a secret password Manager App. DojoSoft promises to be the best Self Defense mobile App by releasing meaningful upgrades in the future. We plan to realse:-  In-app video recording and analysis to allow users to record themselves performing techniques and use a video analysis service to provide feedback on their form, timing, and execution to offers personalized coaching tips based on the user's performance. Other future upgrades include:-  A community forum, Move of The Day, Challenges and AI Coach for traing and gear.
 </Text>
 <Text style={ styles.movesList }>Moves List: </Text>
 <Text style={ styles.title }> A list of over 80 videos of moves with audio and text instructions. Each video was carefully edited to contain a description with an AI Morpheus voice and can be slowed to view the move in slow motion.</Text>
+<Text style={ styles.addMove }>Add Move: </Text>
+<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense moves to the iDojo App. Awesome for sharing individual self Defence stories, albums, events and more. </Text>
 <Text style={ styles.fightersList }>Fighters List: </Text>
 <Text style={ styles.title }> A first time ever list of the best fighters of all time. Each fighter was hand picked and carefully researched by DojoSoft before being added to the list. DojoSoft only considers real life, Fighting styles that effective and are practised for Self Defense. 
 </Text>
@@ -115,9 +114,17 @@ const styles = StyleSheet.create({
   buttonArea: {
     flex: 1,
   },
+  addMove: {
+    textDecorationLine: 'underline',
+    textDecorationColor: '#f74646',
+    color:'red',
+    fontSize: 19,
+    fontStyle: "italic",
+    fontWeight:'600',
+  },
   movesList: {
     textDecorationLine: 'underline',
-    textDecorationColor: 'red',
+    textDecorationColor: '#92192d',
     color:'red',
     fontSize: 19,
     fontStyle: "italic",
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
   },
   fightersList: {
     textDecorationLine: 'underline',
-    textDecorationColor: 'yellow',
+    textDecorationColor: '#b8ca12',
     fontStyle: "italic",
     color:'yellow',
     fontSize: 19,
@@ -133,7 +140,7 @@ const styles = StyleSheet.create({
   },
   manuals: {
     textDecorationLine: 'underline',
-    textDecorationColor: 'green',
+    textDecorationColor: '#0b942e',
     fontStyle: "italic",
     color:'green',
     fontSize: 19,
@@ -149,7 +156,7 @@ const styles = StyleSheet.create({
   },
   freeyourmind: {
     textDecorationLine: 'underline',
-    textDecorationColor: 'purple',
+    textDecorationColor: '#a30cc9',
     fontStyle: "italic",
     backgroundColor: 'transparent',
     color:'purple',

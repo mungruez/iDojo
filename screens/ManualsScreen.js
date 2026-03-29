@@ -28,7 +28,7 @@ export default function ManualsScreen() {
         kplayer.play();
       }
     } catch (error) {
-        alert('Error pausing or un-pausing sound:'+error);
+        alert("Error pausing or un-pausing sound");
     }
     setIsMuted(!isMuted);
   }
@@ -40,11 +40,10 @@ export default function ManualsScreen() {
           kplayer.play();
         }
       } catch (error) {
-          alert('Error playing sound effect:'+error);
+          alert("Error playing sound effect");
       }
-      navigation.navigate('Manual', {manual: item});
+      navigation.navigate("Manual", {manual: item});
   };
-
 
 
   return (

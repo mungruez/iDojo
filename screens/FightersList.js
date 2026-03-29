@@ -6,14 +6,12 @@ import { useAudioPlayer } from 'expo-audio';
 
 const ksoundFile = require('../assets/woosh.mp3');
 
-
 export default function FightersList() {
   const navigation = useNavigation();
   
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
     kplayer.loop = false; 
   });
-
 
   const navKSound = (item) => {
     try {
@@ -25,8 +23,6 @@ export default function FightersList() {
     }
     navigation.navigate('FighterScreen', {fighter: item, offset: 0});
   };
-
-
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
