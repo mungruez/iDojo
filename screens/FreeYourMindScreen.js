@@ -325,7 +325,7 @@ export default function FreeYourMindScreen() {
 
             <FlatList
               data={musicFiles} 
-              style={{flex: 1,}}
+              style={{flex: 1, width:"94%", flexDirection: "column", alignSelf: "center", marginTop: 1, backgroundColor: "transparent", borderRadius: 50,}}
               keyExtractor={(item) => item.id.toString()} 
               extraData={playingId} 
               renderItem={({ item: file }) => (
@@ -335,11 +335,10 @@ export default function FreeYourMindScreen() {
                     style={styles.playButton}>
                                   
                       <View style={{
-                        flexDirection: "row",
                         backgroundColor: "transparent",
                         alignItems:"flex-start",
                         height: 47,
-                        width: "94%",}}>
+                        width: "100%",}}>
                                   
                           <ImageBackground 
                             style={ styles.imgSound } 
@@ -347,9 +346,16 @@ export default function FreeYourMindScreen() {
                             source={playingId === file.id && !file.ispaused ? require('../assets/fympausebutton.png') : require('../assets/fymplaybutton.png')}>
               
                           </ImageBackground>
-                          <Text style={styles.fileName} numberOfLines={1} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"\u00A0\u00A0\u00A0\u00A0"} </Text>        
                       </View>
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                    <View style={{
+                        backgroundColor: "transparent",
+                        alignItems:"flex-start",
+                        height: 17,
+                        width: "95%",}}>
+                        <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"\u00A0\u00A0\u00A0\u00A0"} </Text>        
+                    </View>
+                  
 
                   { playingId == file.id && (
                     <TrackPlayer track={file} />
@@ -358,9 +364,9 @@ export default function FreeYourMindScreen() {
               )}
 
               ListFooterComponent={() => (
-                <View style={{ width: "100%", height: 7, justifyContent: "center", alignItems: "center", marginBottom: 38, marginTop: 12 }}>
-                  <Text style={{ textAlign: "center", color: "rgb(130, 32, 228)", fontSize: 15, borderColor: '#5f239bff', borderWidth: 2, borderRadius: 2, padding: 0 }}>
-                        _________________
+                <View style={{ width: "100%", height: 9, justifyContent: "center", alignItems: "center", marginTop: 38, paddingBottom:4, borderRadius:12,}}>
+                  <Text style={{ textAlign: "center", height: 7,  color: "rgb(52, 15, 90)", fontSize: 9, borderColor: '#5f239bff', borderWidth: 2, borderRadius: 12, padding: 1 }}>
+                        ____________________________
                   </Text>
                 </View>
               )} 
@@ -387,49 +393,49 @@ const styles = StyleSheet.create({
     },
     list: {
       marginTop: 22,
-      minHeight: 83,
+      minHeight: 67,
       width:"94%",
-      backgroundColor: "transparent",
+      backgroundColor: "#C0C0C0",
       borderRadius: 50,
-      padding: 0,
-      borderWidth: 0,    
+      padding: 0,  
+      borderColor: '#5f239bff',
+      borderWidth: 5, 
     },
     fileName: {
-      fontSize: 12,
+      fontSize: 11,
       color: "#5b12a5ff",
       fontWeight: 'bold',
-      maxHeight: 27,
+      maxHeight: 17,
       backgroundColor: "transparent",
       width:"100%",
       textAlign: "left",
-      paddingLeft: 57,
-      marginTop: 7,
+      paddingLeft: 62,
+      marginTop: -57,
       overflow: "hidden",
     },
     playButton: {
-      backgroundColor: '#C0C0C0',
+      backgroundColor: 'transparent',
       borderRadius: 50,
-      width:"94%",
-      height: 81,
+      width: 57,
+      height: 57,
       padding: 5,
-      marginLeft: 12,
+      marginLeft: 7,
       marginBottom: 5,
       marginRight: 10,
-      marginTop: 0,
+      marginTop: 5,
       borderColor: '#5f239bff',
-      borderWidth: 5,
+      borderWidth: 0,
      // Unified Shadow for React Native
-      shadowColor: "#000",
+      shadowColor: "#c494e4",
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.3,
       shadowRadius: 4.65,
-      elevation: 8, // Required for Android shadow
+      elevation: 5, // Required for Android shadow
       },
     imgSound: {
       backgroundColor: "transparent",
       height: 47,
       width: 47,
-      flex:1,
       marginTop: 7,
     },
       title: {

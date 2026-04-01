@@ -17,9 +17,7 @@ export default function MyDojoStyles({route}) {
     const [smoves, setSMoves] = useState([]);
     const navigation = useNavigation();
 
-    const [adding, setAdding] = useState(false);
     const [listmode, setListMode] = useState(false);
-    const [prevMode, setPrevMode] = useState('none');
     const [hmoves, setHMoves] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
 
@@ -69,8 +67,8 @@ export default function MyDojoStyles({route}) {
 
     const showInstructions = () => {
         Alert.alert(
-          "<--My Dojo Moves List-->",
-          "Intructions: Save, Edit, Share, View, Delete and Import moves with iDojo. You may add any number of Moves the phone memory allows.\n(1) Use the red and green + buttons to add moves. Images and video for the moves should remain in a folder on the phone, once deleted the move will now show the image or video. You can either add video moves or moves with an image,title and description in each steps.\n(2) Click on one of the red or green buttons in the List to see all moves with the same move list title. Red buttons in the list are for Video Moves and green buttons are for Steps Moves also called Manuals. On the list screen press and hold a move to see the batch bar appear. Select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button below each move in the list to edit a move.\n(3) Scroll horizontally and vertically for the all styles list to view all your moves. Click the save button to save moves. on the add Move screen click +step button to add a new step to the move.",
+          "My Dojo Moves List",
+          "Intructions: Save, Edit, Share, View, Delete and Import moves with iDojo. You may add any number of Moves your phone memory allows.\n(1) Use the red and green + buttons to add moves. Images and video for the moves should remain in a folder on the phone, once deleted the move will no longer show the image or video. You can either add video moves or, moves with an image, title and description in each steps.\n(2) Click on one of the red or green buttons in the Moves List to see all moves with the same move list title. The first list title is all styles.  Red buttons in the list are for Video Moves and green buttons are for Steps Moves also called Manuals.\n(3) On the list screen press and hold a move to see the batch bar appear. Select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button below each move in the list to edit a move.\n(4) Scroll horizontally and vertically for the all styles list to view all your moves. Click the save button to save moves. on the add Move screen click +step button to add a new step to the move.",
           [
             {
               text: "OK",
@@ -478,8 +476,8 @@ const handleShare = async (selectedids) => {
 
     return (
      <ImageBackground style={styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
-      <SafeAreaView style={{flex:1, marginTop:25}}>
-        <View style={{backgroundColor: 'transparent', marginBottom:19, paddingLeft:5, paddingRight:5}}>
+      <SafeAreaView style={{flex:1, marginTop:7}}>
+        <View style={{backgroundColor: 'transparent', marginBottom:9, paddingLeft:5, paddingRight:5}}>
           <ImageBackground style={styles.icon} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
         <View style={styles.header}>
@@ -494,7 +492,7 @@ const handleShare = async (selectedids) => {
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
               </TouchableOpacity>
-              <TouchableOpacity onPress={showInstructions} style={styles.plusIcon}>
+              <TouchableOpacity onPress={showInstructions} style={styles.infoIcon}>
                 <ImageBackground style={{ flex:1, height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/mydojostylesinfoicon.png')}/>         
               </TouchableOpacity>
             </View>
@@ -584,7 +582,7 @@ banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
 header: {flexDirection: 'column', width:"90%", minHeight:83, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 19, },
 myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.5)' },
 title: { fontSize: 17, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
-infoText: { fontSize: 14, fontWeight: 'bold', color: '#420105', minHeight: 76, width: '100%', textAlign: 'center', marginTop: 19 },
+infoText: { fontSize: 14, fontWeight: 'bold', color: '#fc2626', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { backgroundColor: 'transparent', marginHorizontal: 12, marginVertical: 5, alignItems: 'center'},
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#bddff3', paddingHorizontal: 5,},
@@ -598,7 +596,8 @@ redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidt
 bluePill: {backgroundColor: 'rgba(25, 118, 210, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#44aaff',},
 redPlusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: '#c2cdd4', marginBottom: 7},
 plusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: "transparent", marginBottom: 7},
-importIcon:{height: 75, width:50, borderRadius: 9, marginLeft: 19, marginBottom:3},
+infoIcon:{height: 40, width: 40, borderRadius: 19, marginLeft: 19, backgroundColor: "transparent", marginBottom: 9},
+importIcon:{height: 79, width:50, borderRadius: 9, marginLeft: 19, marginBottom:3},
 pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
   shadowColor: '#000', shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.8,shadowRadius: 2,}
 });

@@ -137,7 +137,7 @@ const AddMove = ({ route }) => {
           <TextInput style={styles.input} multiline={true} placeholder="Enter description" value={desc} onChangeText={setDesc} />
         </View>
       ) : (
-        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 3 }}>
           {steps.map((s, i) => (
             <View key={s.id} style={styles.stepRow}>
               <Text style={styles.label}>Step Title</Text>
@@ -166,10 +166,10 @@ const AddMove = ({ route }) => {
             </View>
           ))}
           <TouchableOpacity style={styles.addStepBtn} onPress={() => setSteps([...steps, { id: Date.now().toString(), title: '',img: null, desc: '' }])}>
-            <ImageBackground style={{width: '100%', height: 32, justifyContent: 'center'}} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
+            <ImageBackground style={{width: '100%', height: 32, justifyContent: 'center', backgroundColor: '#083a1d',}} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
               <Image
                 resizeMode="contain"
-                style={{ height:27, width: 120, alignSelf:"center",}}
+                style={{ height:25, width: 114, alignSelf:"center", }}
                 source={require('../assets/addstep.png')}
               />
             </ImageBackground>
@@ -178,10 +178,10 @@ const AddMove = ({ route }) => {
       )}
 
       <TouchableOpacity style={styles.saveBtn} onPress={() => save()}>
-        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center'}} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : require('../assets/redbtnbg.png')}>
+        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center', }} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : require('../assets/redbtnbg.png')}>
           <Image
             resizeMode="contain"
-            style={{height:34, width:161, alignSelf:"center",}}
+            style={{height:36, width:172, alignSelf:"center", }}
             source={require('../assets/save.png')}
           />
         </ImageBackground>
@@ -208,20 +208,20 @@ const styles = StyleSheet.create({
   activeTab: { backgroundColor: '#5b12a5' },
   tabText: { color: '#3e1c5f', fontWeight: 'bold' },
   activeTabText: { color: '#e6c8c8' },
-  stepRow: { flexDirection: 'column', marginTop: 12, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
+  stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
   stepImg: { flex:1, width: '100%', height: '100%' },
   stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, backgroundColor: 'rgba(93, 231, 167, 0.5)', borderRadius: 8,},
   removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:1, fontWeight: 'bold', height: 17, width: '100%' },
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d',},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
-  addStepBtn: {marginTop:5, height:37 ,width: 131, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
+  addStepBtn: {marginTop:5, height:37 ,width: 111, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   addStepText: { color: '#0b5737', fontWeight: 'bold' },
-  saveBtn: { backgroundColor:'transparent', width:190, height:50, borderRadius: 12, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
+  saveBtn: { backgroundColor:'transparent', width:195, height:53, borderRadius: 12, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   discardBtn: { marginBottom: 4, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
   discardText: { textAlign: 'center', color: '#e41934', fontWeight: 'bold', fontSize:10, marginTop: 1, height: 16, width: '100%' },
-  stepImgContainer: { width: 77, height: 77, borderColor: '#083a1d', backgroundColor: 'rgba(93, 231, 167, 0.5)', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)', overflow: 'hidden',},
+  stepImgContainer: { width: 77, height: 77, borderColor: '#083a1d', backgroundColor: 'rgba(93, 231, 167, 0.5)',  borderColor: '#083a1d', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, overflow: 'hidden',},
 });
 
 export default AddMove;

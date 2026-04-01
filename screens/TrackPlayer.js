@@ -1,5 +1,5 @@
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
-import { View, Text, StyleSheet, ActivityIndicator, PanResponder } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
 import { DeviceEventEmitter } from 'react-native'; 
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -25,7 +25,6 @@ export default function TrackPlayer({ track }) {
   const status = useAudioPlayerStatus(player);
 
   const [barWidth, setBarWidth] = useState(0);
-  const startXRef = useRef(0);
 
   const formatTime = (seconds) => {
     if (!seconds && seconds !==0) return "0:00";
@@ -50,30 +49,18 @@ export default function TrackPlayer({ track }) {
     };
   }, [player]);
 
-  
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (evt) => {
-        const locX = evt.nativeEvent.locationX;
-        startXRef.current = typeof locX === 'number' ? locX : 0;
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        const dur = status.duration;
-        if (dur > 0 && barWidth > 0) {
-          const finalXInSlider = startXRef.current + gestureState.dx;
-          let percentage = Math.max(0, Math.min(1, finalXInSlider / barWidth));
-          try {
-             player.seekTo(percentage * dur);
-           } catch (e) {
-            alert("Seek error");
-          }
-        }
-      },
-      onPanResponderTerminationRequest: () => false,
-    })
-  ).current;
+  const handleSliderPress = (evt) => {
+    const dur = status.duration;
+    if (dur > 0 && barWidth > 0) {
+      const locationX = evt.nativeEvent.locationX;
+      let percentage = Math.max(0, Math.min(1, locationX / barWidth));
+      try {
+        player.seekTo(percentage * dur);
+      } catch (e) {
+        console.log("Seek error:", e);
+      }
+    }
+  };
 
 
   const progressPercent = status.duration > 0
@@ -117,15 +104,14 @@ export default function TrackPlayer({ track }) {
       {status.error ? (
         <Text style={styles.duration}>00</Text>
           ) : status.playing || status.currentTime > 0 ? (
-            <View style={{flexDirection:"column", alignItems:"center", width: 228, backgroundColor: '#C0C0C0',}}> 
-              <View
+            <View style={{flexDirection:"column", alignItems:"center", width: 228, backgroundColor: 'transparent', marginTop: -2, padding: 3, borderRadius: 7}}> 
+              <Pressable
                 style={styles.sliderTrack}
-                {...panResponder.panHandlers}
+                onPress={handleSliderPress}
                 onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
               >
-                <View style={[styles.progressLine, { width: `${progressPercent}%` }]} />
-                <View style={[styles.thumb, { left: `${progressPercent}%` }]} />
-              </View>
+                <View style={[styles.progressLine, { width: `${progressPercent}%` }]} pointerEvents="none" />
+              </Pressable>
               <Text style={styles.duration}>
                 {formatTime(status.currentTime)} / {formatTime(status.duration)}
               </Text>
@@ -152,41 +138,31 @@ const styles = StyleSheet.create({
   sliderTrack: {
     width: "100%",
     height: 6,
-    borderRadius: 3,
+    borderRadius: 19,
     justifyContent: 'center',
     position: 'relative',
-    paddingVertical: 10, 
-    marginBottom: 5,
-  },
-  thumb: {
-    position: 'absolute',
-    top: 5, 
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: '#270647',
-    marginLeft: -8,
-    borderWidth: 2,
-    borderColor: '#FFF',
-    elevation: 3, 
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    paddingVertical: 7, 
+    marginBottom: 15,
+    paddinginLeft: 12,
+    marginLeft: 25,
+    backgroundColor: '#a64fbe50',
   },
   progressLine: {
     height: 6, 
     backgroundColor: '#792dc5',
-    borderRadius: 3,
+    borderRadius: 19,
+    marginLeft: 0,
+    paddingVertical: 7,
   },
   duration: {
     fontSize: 12,
     color: "#5b12a5ff",
     fontWeight: 'bold',
     borderColor: '#8d6facff',
-    backgroundColor: '#C0C0C0',
+    backgroundColor: 'transparent',
     borderWidth: 2,
     borderRadius: 19,
     paddingHorizontal: 8,
+    marginTop: -3,
   }
 });
