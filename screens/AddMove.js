@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
   plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
   container: { flex: 1, backgroundColor: 'transparent', },
-  headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 15, marginLeft: 19, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid',},
+  headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 15, marginLeft: 19, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19,},
   label: { fontWeight: 'bold', color: '#420105', marginTop: 7, fontSize: 13, marginLeft:12 },
   input: { borderWidth: 1, borderColor: '#990808', borderRadius: 8, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', },
   modeToggle: { flexDirection: 'row', marginTop: 7, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
