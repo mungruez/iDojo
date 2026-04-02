@@ -293,9 +293,9 @@ const renderVerticalItem = ({ item }) => (
 
 
 return ( <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
-    <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+    <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25, backgroundColor: 'transparent',}}>
 
-      <View style={{backgroundColor: 'transparent', marginBottom:20, paddingBottom:10, opacity: .7,}}>
+      <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingBottom:10, opacity: .7,}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
       </View>
@@ -305,7 +305,7 @@ return ( <ImageBackground style={ styles.imgBackground } resizeMode='cover' sour
             data={hfvideos}
             renderItem={renderVerticalItem}
             keyExtractor={(item) => item.Source}
-            contentContainerStyle={{ flex :1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop:40, }}
+            contentContainerStyle={{ flex :1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop:19, }}
             showsVerticalScrollIndicator={false}
             />
         </View> )
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
       minHeight: '100%',
       height: Dimensions.get('window').height,
       flex: 1, 
-  },  
+  }, 
   image: {
       height: 190,
       flex: 1,

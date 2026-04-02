@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, StatusBar } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,6 +7,8 @@ export default function ManualScreen({ route, navigation }) {
     const bgColor = ['palegoldenrod', 'khaki','goldenrod','orange', 'gold','cornflowerblue','peru','darkgoldenrod','darkorange ','tan','chocolate', 'brown']
 
   return (
+   <View style={{flex:1, paddingTop:40,  backgroundColor:"#228b22"}}> 
+    <StatusBar barStyle="light-content"/>
     <SafeAreaView style={{ backgroundColor:'black', flex:1}}>
 
       <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:19, marginTop:38 }}>
@@ -57,6 +59,7 @@ export default function ManualScreen({ route, navigation }) {
         </ScrollView>
       </View>
     </SafeAreaView>
+   </View>
   )
 }
 

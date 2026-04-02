@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {manuals} from '../data/manuals';
 import React, { useState} from 'react';
@@ -48,6 +48,7 @@ export default function ManualsScreen() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
+      <StatusBar barStyle="light-content" backgroundColor="#269b26" /> 
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
         <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0,borderRadius:7,}}>
@@ -204,8 +205,8 @@ const styles = StyleSheet.create({
         fontWeight:"500"
       },
       imgSound: {
-      height: "undefined",
-      width: "undefined",
+      height: "100%",
+      width: "100%",
       flex: 1, 
     },
 })

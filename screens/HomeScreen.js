@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ImageBackground, BackHandler} from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ImageBackground, BackHandler, StatusBar, Dimensions} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useLayoutEffect, useState, useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -98,7 +98,7 @@ export default function HomeScreen() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
-
+      <StatusBar barStyle="light-content"/>
       <View style={{flexDirection:"row", position: "relative"}}>
           <TouchableOpacity onPress={stopSound} style={{position:"absolute", top:10, right:10, zIndex:1, height: 42, width: 38}}>
             <ImageBackground style={ styles.imgSound } resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         
@@ -222,15 +222,16 @@ const styles = StyleSheet.create({
       backgroundColor:"transparent"
     },
     imgBackground: {
-      maxHeight: "93%",
+      maxHeight: "91%",
       minWidth: "100%",
+      height: Dimensions.get('window').height,
       flex: 1,
       opacity: .9,
-      marginTop:"7%" 
+      marginTop: "7%", 
     },
     imgSound: {
-      height: "undefined",
-      width: "undefined",
+      height: "100%",
+      width: "100%",
       flex: 1, 
     },
     icon: {

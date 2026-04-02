@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, StatusBar } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 import moves from '../data/moves'
@@ -13,8 +13,9 @@ export default function MoveListScreen() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+      <StatusBar barStyle="light-content" backgroundColor="#dc143c" />
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
-      <View style={{backgroundColor: '#323232', color:"#dc143c", marginBottom:20, paddingBottom:10, opacity: .7}}>
+      <View style={{backgroundColor: '#323232', marginBottom:20, paddingBottom:10, opacity: .7}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/moveslisttitle.png')} />
       </View>
 
@@ -36,7 +37,6 @@ export default function MoveListScreen() {
                   marginLeft:"1",
                   marginRight:"1",
                   width:"50%",
-                  height:"auto",
                   borderColor:"transparent",
                   borderWidth:0,
                   backgroundColor:'#2f4f4f'

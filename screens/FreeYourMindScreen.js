@@ -445,7 +445,8 @@ const styles = StyleSheet.create({
         textAlign: "center", 
       },
     imgBackground: {
-      height: "100%",
+      marginBottom: "9%",
+      maxHeight: "91%",
       width: "100%",
       flex: 1,
       opacity: .9, 

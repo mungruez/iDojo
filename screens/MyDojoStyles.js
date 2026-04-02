@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter,PermissionsAndroid, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter,PermissionsAndroid, Platform, StatusBar } from 'react-native';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
@@ -417,6 +417,7 @@ const handleShare = async (selectedids) => {
     if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (listmode) return (
       <ImageBackground style={{flex:1,width:'100%',height:'100%'}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
+        <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1, marginTop:25}}>
           <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
             <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== "video" ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
@@ -596,7 +597,7 @@ redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidt
 bluePill: {backgroundColor: 'rgba(25, 118, 210, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#44aaff',},
 redPlusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: '#c2cdd4', marginBottom: 7},
 plusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: "transparent", marginBottom: 7},
-infoIcon:{height: 40, width: 40, borderRadius: 19, marginLeft: 19, backgroundColor: "transparent", marginBottom: 9},
+infoIcon:{height: 40, width: 44, marginLeft: 19, backgroundColor: "transparent", marginBottom: 9,},
 importIcon:{height: 79, width:50, borderRadius: 9, marginLeft: 19, marginBottom:3},
 pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
   shadowColor: '#000', shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.8,shadowRadius: 2,}
