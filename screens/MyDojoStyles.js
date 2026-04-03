@@ -83,7 +83,7 @@ export default function MyDojoStyles({route}) {
     const loadMoves = async () => {
       try {
         const file = new File(Paths.document, 'moves.json');
-        if (file.exists) {
+        if (await file.exists) {
           const content = await file.text(); 
           const movesList = JSON.parse(content);
           setMoves(movesList);
