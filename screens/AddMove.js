@@ -84,7 +84,7 @@ const AddMove = ({ route }) => {
       const moveId = move?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
       const permanentDir = new Directory(permanentDirUri);
-      if (!permanentDir.exists) {
+      if (!(await permanentDir.exists)) {
         await permanentDir.create(); 
       }
 
@@ -96,7 +96,7 @@ const AddMove = ({ route }) => {
         return destUri;
       };
 
-      let finalVid = vid;
+      let finalVid = vid; 
       let finalSteps = [...steps];
       if (type === 'video' && vid) {
         finalVid = await ensurePermanent(vid, `video_${Date.now()}.mp4`);
@@ -162,7 +162,8 @@ const AddMove = ({ route }) => {
 
       {type === 'video' ? (
         <View>
-          <TextInput placeholder="Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />
+          <Text style={styles.label}>Enter Move Video URL/Upload Move Video</Text>
+          {!vid && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
           <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
             { vid || videoUrl ? 
               ( <ImageBackground style={{ alignSelf:'center', height:50, width:50, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
