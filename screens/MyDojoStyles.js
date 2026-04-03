@@ -121,7 +121,7 @@ export default function MyDojoStyles({route}) {
         const file = new File(Paths.document, 'moves.json');
         await file.write(JSON.stringify(list));
         parseStyles(list);
-        setHMoves(getMoves(fstyle, ftype, list));
+        setHMoves(getMoves(fstyle, ftype));
         setListMode(false);
       } catch (e) {
         console.error("Storage Error", e);
@@ -208,13 +208,18 @@ export default function MyDojoStyles({route}) {
           return updatedMove;
         }));
 
+        if (processedMoves.length === 0) {
+          Alert.alert("No Moves", "No valid local files were found to share.");
+          return;
+        }
+
         const dataFile = new File(shareDir.uri, 'data.json');
         await dataFile.write(JSON.stringify(processedMoves));
         const nakedSource = Platform.OS === 'android' ? shareDirUri.replace('file://', '').replace(/\/$/, '')  : shareDirUri;
         const nakedTarget = Platform.OS === 'android' ? zipPathUri.replace('file://', '') : zipPathUri;
         await zip(nakedSource, nakedTarget);
         if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(zipPath, {
+          await Sharing.shareAsync(zipPathUri, {
             mimeType: 'application/zip',
             dialogTitle: 'Export Dojo Moves',
             UTI: 'public.zip-archive' 
