@@ -46,7 +46,10 @@
     "plugins": [
       "expo-video",
       "expo-audio",
-      "expo-asset"
+      "expo-asset",
+      "expo-image-picker",
+      "expo-document-picker",
+      "expo-sharing"
     ],
     "extra": {
       "eas": {
