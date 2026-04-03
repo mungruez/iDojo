@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler, StatusBar} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -656,7 +656,7 @@ export default function PasswordManager() {
 
     return isOverlayVisible > -1 ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}>      
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
-        
+        <StatusBar style="light" backgroundColor="#bcbe14" />
         <View style={{backgroundColor: 'transparent', marginBottom:7, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>
@@ -742,7 +742,7 @@ export default function PasswordManager() {
     </Pressable> ) 
     : ( 
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
-        
+        <StatusBar style="light" backgroundColor="#96891a"/>
         <View style={{backgroundColor: 'transparent', marginBottom:7, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>

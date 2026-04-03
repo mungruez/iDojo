@@ -249,6 +249,7 @@ export default function LoginScreen() {
 
   return ( !hasPasswords ? ( 
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
+      <StatusBar style="light" backgroundColor="#96891a"/>
       <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
         <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
         <StatusBar style='light' />
@@ -292,6 +293,7 @@ export default function LoginScreen() {
     </SafeAreaView>) 
 
     : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}> 
+      <StatusBar style="light" backgroundColor="#96891a"/>
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
           <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
@@ -336,6 +338,7 @@ export default function LoginScreen() {
         </Pressable>)
 
         : ( <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
+          <StatusBar style="light" backgroundColor="#96891a"/>
           <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
             <StatusBar style='light' />

@@ -48,7 +48,7 @@ export default function ManualsScreen() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
-      <StatusBar barStyle="light-content" backgroundColor="#269b26" /> 
+      <StatusBar barStyle="light-content"backgroundColor="#269b26"  /> 
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
         <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0,borderRadius:7,}}>
