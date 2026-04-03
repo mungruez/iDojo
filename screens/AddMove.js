@@ -1,5 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, StyleSheet, ImageBackground, DeviceEventEmitter, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as FileSystem from 'expo-file-system';
+import { Directory, File } from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 
@@ -45,7 +47,7 @@ const AddMove = ({ route }) => {
   };
 
 
-  const save = () => {
+  const save = async () => {
     let validatedSteps = []; 
     if (!title.trim()) {
       Alert.alert("Required", "Please enter a Move Title.");
@@ -78,20 +80,53 @@ const AddMove = ({ route }) => {
       }
     }
 
-    const finalData = {
-      id: move?.id || Date.now().toString(),
-      title: title.trim(),
-      type,
-      style: fstyle.trim() || 'Self-Defence',
-      steps: type === 'steps' ? validatedSteps : [],
-      vid: type === 'video' ? vid : null,
-      videoUrl: type === 'video' ? videoUrl : '',
-      thumb: type === 'video' ? (vid || videoUrl) : validatedSteps[0]?.img,
-      desc: desc 
-    };
+    try {
+      const moveId = move?.id || Date.now().toString();
+      const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
+      const permanentDir = new Directory(permanentDirUri);
+      if (!permanentDir.exists) {
+        await permanentDir.create(); 
+      }
 
-    DeviceEventEmitter.emit('SAVE_MOVE_EVENT', finalData);
-    navigation.pop();
+      const ensurePermanent = async (uri, fileName) => {
+        if (!uri || !uri.startsWith('file://') || uri.includes('/moves/')) return uri;
+        const destUri = `${permanentDirUri}${fileName}`;
+        const sourceFile = new File(uri); 
+        await sourceFile.copy(destUri); 
+        return destUri;
+      };
+
+      let finalVid = vid;
+      let finalSteps = [...steps];
+      if (type === 'video' && vid) {
+        finalVid = await ensurePermanent(vid, `video_${Date.now()}.mp4`);
+      }
+      if (type === 'steps') {
+        finalSteps = await Promise.all(steps.map(async (s, i) => ({
+          ...s,
+          title: s.title.trim() || `Step ${i + 1}`,
+          img: await ensurePermanent(s.img, `step_${i}_${Date.now()}.jpg`)
+        })));
+      }
+
+      const finalData = {
+        id: moveId,
+        title: title.trim(),
+        type,
+        style: fstyle.trim() || 'Self-Defence',
+        steps: type === 'steps' ? finalSteps : [],
+        vid: type === 'video' ? finalVid : null,
+        videoUrl: type === 'video' ? videoUrl : '',
+        thumb: type === 'video' ? (finalVid || videoUrl) : finalSteps[0]?.img,
+        desc: desc 
+      };
+
+      DeviceEventEmitter.emit('SAVE_MOVE_EVENT', finalData);
+      navigation.pop();
+
+    } catch (err) {
+      Alert.alert("Save Error", "Could not save media to permanent storage.");
+    }
   };
 
 

@@ -100,29 +100,36 @@ export default function MyDojoStyles({route}) {
 
     const handleSave = async (newData) => { 
       const incomingMoves = Array.isArray(newData) ? newData : [newData];
-      let currentList = [...moves];
-      incomingMoves.forEach(moveData => {
-        const index = currentList.findIndex(m => m.id === moveData.id);
-        if (index > -1) {
-          currentList[index] = moveData; 
-        } else {
-          currentList.push(moveData);
-        }
+      let updatedList = [...moves];
+      setMoves(prevMoves => {
+        updatedList = [...prevMoves];
+        incomingMoves.forEach(moveData => {
+          const index = updatedList.findIndex(m => m.id === moveData.id);
+          if (index > -1) {
+            updatedList[index] = moveData;
+          } else {
+            updatedList.push(moveData);
+          }
+        });
+        saveToStorage(updatedList); 
+        return updatedList;
       });
+    };
 
+    const saveToStorage = async (list) => {
       try {
         const file = new File(Paths.document, 'moves.json');
-        await file.write(JSON.stringify(currentList)); 
-        setMoves(currentList);
-        parseStyles(currentList);
-        setHMoves(getMoves(fstyle, ftype));
+        await file.write(JSON.stringify(list));
+        parseStyles(list);
+        setHMoves(getMoves(fstyle, ftype, list));
+        setListMode(false);
       } catch (e) {
-        Alert.alert("Error", "Could not save moves to storage.");
+        console.error("Storage Error", e);
       }
     };
 
 
-    const myDojoHandleDelete = (idsFromArg = []) => {
+    const myDojoHandleDelete = async (idsFromArg = []) => {
       const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : selectedIds;
       const cleanIdsToDelete = actualIds.map(id => String(id).trim());
       if (cleanIdsToDelete.length === 0) return;
@@ -130,93 +137,108 @@ export default function MyDojoStyles({route}) {
         [{ text: "Cancel", style: "cancel" },
           {text: "Delete",style: "destructive",onPress: async () => {
             try {
-              let updatedListSnapshot = [];
-              setMoves(currentMoves => {
-                updatedListSnapshot = currentMoves.filter(m => !cleanIdsToDelete.includes(String(m.id)));
-                return updatedListSnapshot;
-              });
+              const movesToDelete = moves.filter(m => cleanIdsToDelete.includes(String(m.id)));
+              for (const move of movesToDelete) {
+                const uri = move.vid || move.thumb;
+                if (uri && uri.startsWith('file://')) {
+                  const folderUri = uri.substring(0, uri.lastIndexOf('/') + 1);
+                  const moveDir = new Directory(folderUri);
+                  if (await moveDir.exists) { 
+                    await moveDir.delete();
+                  }
+                }
+              }
+
+              const updatedList = moves.filter(m => !cleanIdsToDelete.includes(String(m.id)));
               const file = new File(Paths.document, "moves.json");
-              await file.write(JSON.stringify(updatedListSnapshot));
-              setHMoves(h => h.filter(m => !cleanIdsToDelete.includes(String(m.id))));
-              parseStyles(updatedListSnapshot);
+              await file.write(JSON.stringify(updatedList));
+              setMoves(updatedList);
+              parseStyles(updatedList);
               setHMoves(getMoves(fstyle, ftype));
               setSelectedIds([]);
               setListMode(false);
-              } catch (error) {
-                console.error("File write error:", error);
-              }
+            } catch (error) {
+              Alert.alert("File write error:", error);
+            }
           }}
         ]);
     };
 
 
-const handleShare = async (selectedids) => {
-  try {
-    if (!selectedids?.length) return;
-    setLoading(true);
-    const selectedMoves = fstyle === "allstyles" 
-      ? hmoves.flatMap(g => g.data.filter(m => selectedids.includes(m.id)))
-      : hmoves.filter(m => selectedids.includes(m.id));
+    const handleShare = async (selectedids) => {
+      try {
+        if (!selectedids?.length) return;
+        setLoading(true);
+        const selectedMoves = fstyle === "allstyles" 
+          ? hmoves.flatMap(g => g.data.filter(m => selectedids.includes(m.id)))
+          : hmoves.filter(m => selectedids.includes(m.id));
 
-    const shareDir = `${FileSystem.cacheDirectory}share_batch/`;
-    const zipPath = `${FileSystem.cacheDirectory}Dojo_Export.zip`;
-    await FileSystem.deleteAsync(shareDir, { idempotent: true });
-    await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
-    const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
-      const updatedMove = { ...move };
-
-      const copyToStaging = async (uri) => {
-        if (!uri || typeof uri !== 'string' || !uri.startsWith('file://')) return uri;
-        const fileName = `${idx}_${uri.split('/').pop()}`;
-        const dest = `${shareDir}${fileName}`;
+        const zipPath = `${FileSystem.cacheDirectory}Dojo_Export.zip`;
+        const shareDirUri = `${FileSystem.cacheDirectory}share_batch/`;
+        const zipPathUri = `${FileSystem.cacheDirectory}Dojo_Export.zip`;
+        const shareDir = new Directory(shareDirUri);
+        if (await shareDir.exists) {
+          await shareDir.delete();
+        }
+        await shareDir.create();
         
-        await FileSystem.copyAsync({ from: uri, to: dest }).catch(() => {});
-        return fileName; 
-      };
-      if (move.vid) updatedMove.vid = await copyToStaging(move.vid);
-      if (move.videoUrl) updatedMove.videoUrl = await copyToStaging(move.videoUrl);
-      if (Array.isArray(move.steps)) {
-        updatedMove.steps = await Promise.all(move.steps.map(async (s) => ({
-          ...s,
-          img: await copyToStaging(s.img)
-        })));
+        const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
+          const updatedMove = { ...move };
+          const copyToStaging = async (uri) => {
+            if (!uri || typeof uri !== 'string' || !uri.startsWith('file://')) return uri;
+            const fileName = `${idx}_${uri.split('/').pop()}`;
+            const dest = `${shareDirUri}${fileName}`;  
+            try {
+              await FileSystem.copyAsync({ from: uri, to: dest }).catch(() => {});
+              return fileName;
+            } catch (e) {
+              return null;
+            }
+          };
+
+          if (move.vid) updatedMove.vid = await copyToStaging(move.vid);
+          if (move.videoUrl) updatedMove.videoUrl = await copyToStaging(move.videoUrl);
+          if (Array.isArray(move.steps)) {
+            updatedMove.steps = await Promise.all(move.steps.map(async (s) => ({
+              ...s,
+              img: await copyToStaging(s.img)
+            })));
+          }
+          updatedMove.thumb = move.type === 'video' ? (updatedMove.vid || updatedMove.videoUrl) : (updatedMove.steps?.[0]?.img || null);
+          return updatedMove;
+        }));
+
+        const dataFile = new File(shareDir.uri, 'data.json');
+        await dataFile.write(JSON.stringify(processedMoves));
+        const nakedSource = Platform.OS === 'android' ? shareDirUri.replace('file://', '').replace(/\/$/, '')  : shareDirUri;
+        const nakedTarget = Platform.OS === 'android' ? zipPathUri.replace('file://', '') : zipPathUri;
+        await zip(nakedSource, nakedTarget);
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(zipPath, {
+            mimeType: 'application/zip',
+            dialogTitle: 'Export Dojo Moves',
+            UTI: 'public.zip-archive' 
+          });
+        }
+        setSelectedIds([]);
+        await shareDir.delete().catch(() => {});
+        const finalZip = new File(zipPathUri);
+        if (await finalZip.exists) await finalZip.delete().catch(() => {})
+        
+      } catch (e) {
+        console.error("Batch Share Error:", e);
+        Alert.alert("Error", e.message);
+      } finally {
+        setLoading(false);
       }
-      updatedMove.thumb = move.type === 'video' ? (updatedMove.vid || updatedMove.videoUrl) 
-        : (updatedMove.steps && updatedMove.steps.length > 0 ? updatedMove.steps[0].img : null);
-
-      return updatedMove;
-    }));
-
-    await FileSystem.writeAsStringAsync(`${shareDir}data.json`, JSON.stringify(processedMoves));
-    const nakedSource = shareDir.replace(/^file:\/\//, '');
-    const nakedTarget = zipPath.replace(/^file:\/\//, '');
-
-    await zip(nakedSource, nakedTarget);
-    if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(zipPath, {
-        mimeType: 'application/zip',
-        dialogTitle: 'Export Dojo Moves',
-        UTI: 'public.zip-archive' 
-      });
-    }
-    setSelectedIds([]);
-    await FileSystem.deleteAsync(shareDir).catch(() => {});
-    
-  } catch (e) {
-    console.error("Batch Share Error:", e);
-    Alert.alert("Error", "Could not bundle moves. Check your storage permissions.");
-  } finally {
-    setLoading(false);
-  }
-};
-
+    };
 
 
 
    const handleImport = async () => {
       try {
         const res = await DocumentPicker.getDocumentAsync({ 
-          type: ['application/zip', 'application/x-zip-compressed'], 
+          type: ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'], 
           copyToCacheDirectory: true 
         });
 
@@ -224,15 +246,19 @@ const handleShare = async (selectedids) => {
         setLoading(true);
         const zipUri = res?.assets?.[0]?.uri || res.uri;
         const importId = Date.now().toString();
-        const permanentDir = `${FileSystem.documentDirectory}imported_${importId}/`;
-        const nakedZip = zipUri.replace(/^file:\/\//, '');
-        const nakedDest = permanentDir.replace(/^file:\/\//, '');
-        
-        await FileSystem.makeDirectoryAsync(permanentDir, { intermediates: true });
+        const permanentDirUri = `${FileSystem.documentDirectory}imported_${importId}/`;
+        const permanentDir = new Directory(permanentDirUri);
+        if (!permanentDir.exists) {
+          await permanentDir.create();
+        }
+        const nakedZip = Platform.OS === 'android' ? zipUri.replace('file://', '') : zipUri;
+        const nakedDest = Platform.OS === 'android' ? permanentDirUri.replace('file://', '').replace(/\/$/, '') : permanentDirUri;
         await unzip(nakedZip, nakedDest);
         
-        const dataFilePath = `${permanentDir}data.json`;
-        const content = await FileSystem.readAsStringAsync(dataFilePath);
+        const manifestFile = new File(permanentDirUri, 'data.json');
+        const exists = await manifestFile.exists; 
+        if (!exists) throw new Error("Manifest not found in zip");
+        const content = await manifestFile.text();
         const importedMoves = JSON.parse(content);
         if (!Array.isArray(importedMoves)) throw new Error("Invalid data format");
 
@@ -240,7 +266,7 @@ const handleShare = async (selectedids) => {
           const fixPath = (oldPath) => {
             if (!oldPath || typeof oldPath !== 'string' || oldPath.startsWith('http')) return oldPath;
             const fileName = oldPath.split('/').pop(); 
-            return `${permanentDir}${fileName}`;
+            return `${permanentDirUri}${fileName}`;
           };
 
           const restored = {
@@ -249,26 +275,23 @@ const handleShare = async (selectedids) => {
             vid: move.type === 'video' ? fixPath(move.vid || move.videoUrl) : null,
             videoUrl: move.type === 'video' ? fixPath(move.videoUrl || move.vid) : '',
           };
+
           if (move.type === 'steps' && Array.isArray(move.steps)) {
             restored.steps = move.steps.map(step => ({
               ...step,
               img: fixPath(step.img)
             }));
           }
-          restored.thumb = move.type === 'video' 
-            ? (restored.vid || restored.videoUrl) 
-            : (restored.steps?.[0]?.img || null);
-
+          restored.thumb = move.type === 'video' ? (restored.vid || restored.videoUrl) : (restored.steps?.[0]?.img || null);
           return restored;
         });
 
         await handleSave(finalMoves);
-        await FileSystem.deleteAsync(permanentDir, { idempotent: true });
-        await FileSystem.deleteAsync(dataFilePath).catch(() => {});
+        await manifestFile.delete().catch(() => {});
         Alert.alert("Success", `${finalMoves.length} moves added!`);
+
       } catch (e) {
-        console.error("Import Error:", e);
-        Alert.alert("Import Failed", "Invalid file structure.");
+        Alert.alert("Import Failed", e.message ||"Invalid file structure.");
       } finally {
         setLoading(false);
       }
