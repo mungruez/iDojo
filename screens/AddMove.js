@@ -162,7 +162,7 @@ const AddMove = ({ route }) => {
 
       {type === 'video' ? (
         <View>
-          <Text style={styles.label}>Enter Move Video URL</Text>
+          <Text style={styles.label}>Move Video URL</Text>
           {!vid && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
           <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
             { vid || videoUrl ? 

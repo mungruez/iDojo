@@ -98,7 +98,7 @@ export default function HomeScreen() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
-      <StatusBar barStyle="light-content"/>
+      <StatusBar barStyle="dark-content"/>
       <View style={{flexDirection:"row", position: "relative"}}>
           <TouchableOpacity onPress={stopSound} style={{position:"absolute", top:10, right:10, zIndex:1, height: 42, width: 38}}>
             <ImageBackground style={ styles.imgSound } resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         

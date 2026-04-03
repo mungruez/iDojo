@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, Dimensions, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {fighters} from '../data/fighters';
 import { useNavigation } from '@react-navigation/native';
@@ -26,6 +26,7 @@ export default function FightersList() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
+      <StatusBar barStyle="light-content" backgroundColor="goldenrod" />
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
         <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>

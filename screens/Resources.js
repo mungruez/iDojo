@@ -26,14 +26,14 @@ export default function Resources() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
-      <StatusBar barStyle="light-content"/>
+      <StatusBar barStyle="light-content" backgroundColor="#2522ce"/>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:7, backgroundColor: 'transparent',}}>
 
       <TouchableWithoutFeedback  activeOpacity={1} onLongPress={() => navKSound()} delayLongPress={1200} style={{backgroundColor: 'transparent', marginBottom:19, paddingTop:1, paddingBottom:7, height:76 ,width: '90%',alignSelf: 'center',zIndex: 19,elevation: 19,}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/resourcestitle.png')} /> 
       </TouchableWithoutFeedback > 
 
-      <ScrollView style={{ flexDirection:"column", marginTop:5, marginBottom:19, }}>
+      <ScrollView style={{ flexDirection:"column", marginTop:5, marginBottom: 1, paddingBottom: 5 }}>
         <View style={{marginTop:2, borderColor:'silver', borderWidth:1, borderRadius:7, marginBotton:19}}>
 <Text style={ styles.title }> Thank you for downloading the iDojo mobile App by DojoSoft, we hope you have learned about Self Defense, your support will be put to constructive use. Special thanks to all involved, a lot of time and effort was put into making iDojo. Thank you to the sponsors, people and organizations who made this original App possible. We mention them here with their corporate or organizational affiliation at the time from which this App was created.
   Thanks to: The World Boxing Federation, MMA and UFC for giving us the opportunity to analyse the best fighters of all time and their fighting styles. Use the volume buttom(top right) to control sounds, videos can be played in slow motion, wifi is only needed for the Featured List. Most of all be careful when trying out these moves and have fun. 
@@ -66,9 +66,9 @@ export default function Resources() {
 
 const styles = StyleSheet.create({
   imgBackground: {
-    marginBottom:"9%",
+    marginBottom:"5%",
     width: '100%',
-    height: '91%',
+    maxHeight: '95%',
     flex: 1,
     opacity: 1, 
   },

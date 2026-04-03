@@ -316,7 +316,7 @@ export default function FreeYourMindScreen() {
 
             <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
                 <ImageBackground style={ styles.title } resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
-                <StatusBar style='light' />
+                <StatusBar style='light' backgroundColor='#430d79'/>
             </View>
 
             <Text style={styles.heading}>
@@ -445,8 +445,8 @@ const styles = StyleSheet.create({
         textAlign: "center", 
       },
     imgBackground: {
-      marginBottom: "9%",
-      maxHeight: "91%",
+      marginBottom: "5%",
+      maxHeight: "95%",
       width: "100%",
       flex: 1,
       opacity: .9, 
