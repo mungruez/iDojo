@@ -84,6 +84,15 @@ const AddMove = ({ route }) => {
       const moveId = move?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
       const permanentDir = new Directory(permanentDirUri);
+
+      const isVideoChanged = move && type === 'video' && vid && vid !== move?.vid;
+      const isStepsChanged = move && type === 'steps' && steps.some(s => s.img && !s.img.includes('/moves/'));
+      if (isVideoChanged || isStepsChanged) {
+        if (await permanentDir.exists) {
+          await permanentDir.delete();
+        }
+      }
+
       if (!(await permanentDir.exists)) {
         await permanentDir.create(); 
       }
@@ -91,9 +100,13 @@ const AddMove = ({ route }) => {
       const ensurePermanent = async (uri, fileName) => {
         if (!uri || !uri.startsWith('file://') || uri.includes('/moves/')) return uri;
         const destUri = `${permanentDirUri}${fileName}`;
-        const sourceFile = new File(uri); 
-        await sourceFile.copy(destUri); 
-        return destUri;
+        try {
+          const sourceFile = new File(uri); 
+          await sourceFile.copy(destUri); 
+          return destUri;
+        } catch (e) {
+          return uri; 
+        }
       };
 
       let finalVid = vid; 
