@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, StyleSheet, ImageBackground, DeviceEventEmitter, StatusBar } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, StyleSheet, ImageBackground, DeviceEventEmitter, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
@@ -139,6 +139,11 @@ const AddMove = ({ route }) => {
   return (
    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
     <StatusBar barStyle="light-content" />
+    <KeyboardAvoidingView 
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20} // Adjust offset if header blocks text
+    >
     <View style={{backgroundColor: 'transparent', marginBottom:12, paddingLeft:5, paddingRight:5, marginTop:25}}>
       <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
     </View>
@@ -150,10 +155,10 @@ const AddMove = ({ route }) => {
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
+      <TextInput style={type ==='video' ? styles.input : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
       
       <Text style={styles.label}>Moves List Title/Styles</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
+      <TextInput style={type ==='video' ? styles.input : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
 
       {!move && type !== 'video' && type!=='steps' && ( 
         <View style={styles.modeToggle}>
@@ -177,14 +182,14 @@ const AddMove = ({ route }) => {
             }
           </TouchableOpacity>
           <Text style={styles.label}>Move Description</Text>
-          <TextInput style={styles.input} multiline={true} placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+          <TextInput style={styles.input} multiline={true} underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
         </View>
       ) : (
         <View style={{ marginTop: 3 }}>
           {steps.map((s, i) => (
             <View key={s.id} style={styles.stepRow}>
               <Text style={styles.label}>Step Title</Text>
-              <TextInput style={styles.stepInput} placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
+              <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
               
               <Text style={styles.label}>Step Image</Text>
               <TouchableOpacity onPress={() => pickMedia(i)} style={styles.stepImgContainer}>
@@ -196,6 +201,7 @@ const AddMove = ({ route }) => {
                 <TextInput 
                   style={styles.stepInput} 
                   multiline={true} 
+                  underlineColorAndroid="transparent"
                   placeholder={`Enter Step ${i+1} Description...`} value={s.desc} 
                   onChangeText={(t) => { const ns = [...steps]; ns[i].desc = t; setSteps(ns); }} 
                 />
@@ -230,6 +236,7 @@ const AddMove = ({ route }) => {
         </ImageBackground>
       </TouchableOpacity>
     </ScrollView>
+   </KeyboardAvoidingView>
    </ImageBackground>
   );
 }
