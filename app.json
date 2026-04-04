@@ -4,7 +4,7 @@
     "slug": "iDojo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/squareicon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": false,
     "splash": {
@@ -24,11 +24,14 @@
       }
     },
     "android": {
+      "gradleProps": {
+        "newArchEnabled": "false"
+      },
       "package": "DojoSoft.ZaakirMungrue.iDojo",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/squareicon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
-    },
+      },
       "permissions": [
         "RECORD_AUDIO",
         "MODIFY_AUDIO_SETTINGS",
