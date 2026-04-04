@@ -24,9 +24,6 @@
       }
     },
     "android": {
-      "gradleProps": {
-        "newArchEnabled": "false"
-      },
       "package": "DojoSoft.ZaakirMungrue.iDojo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/squareicon.png",
