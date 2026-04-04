@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndi
 import { useNavigation, useFocusEffect  } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
 import React, { useState, useCallback, useEffect  } from 'react';
 import { zip, unzip } from 'react-native-zip-archive';
@@ -94,7 +94,7 @@ export default function MyDojoStyles({route}) {
           setMoves([]);
         }
       } catch (e) {
-        Alert.alert("Load Failed", "Unable to load your Dojo moves.");
+        Alert.alert("Load Failed", e.message);
       } finally {
         setLoading(false);
       }
@@ -124,7 +124,7 @@ export default function MyDojoStyles({route}) {
         setHMoves(getMoves(fstyle, ftype, list)); 
         setListMode(false);
       } catch (e) {
-        Alert.alert("Storage Error", "Could not save move list to disk.");
+        Alert.alert("Storage Error", e.message || "Could not save move list to disk.");
       }
     };
 
@@ -155,7 +155,7 @@ export default function MyDojoStyles({route}) {
               setListMode(false);
               
             } catch (error) {
-              Alert.alert("Delete Error", "Could not remove files from storage.");
+              Alert.alert("Delete Error", error.message || "Could not remove files from storage.");
             }
           }
         }
