@@ -158,7 +158,7 @@ const AddMove = ({ route }) => {
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter move Title" value={title} onChangeText={setTitle} />
+      <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
       
       <Text style={styles.label}>Moves List Title/Styles</Text>
       <TextInput style={type ==='video' ? styles.input : styles.stepInput} placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
@@ -185,14 +185,14 @@ const AddMove = ({ route }) => {
             }
           </TouchableOpacity>
           <Text style={styles.label}>Move Description</Text>
-          <TextInput style={styles.input} multiline={true} placeholder="Enter description" value={desc} onChangeText={setDesc} />
+          <TextInput style={styles.input} multiline={true} placeholder="Enter Description" value={desc} onChangeText={setDesc} />
         </View>
       ) : (
         <View style={{ marginTop: 3 }}>
           {steps.map((s, i) => (
             <View key={s.id} style={styles.stepRow}>
               <Text style={styles.label}>Step Title</Text>
-              <TextInput style={styles.stepInput} placeholder={`Enter Step ${i+1} title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
+              <TextInput style={styles.stepInput} placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
               
               <Text style={styles.label}>Step Image</Text>
               <TouchableOpacity onPress={() => pickMedia(i)} style={styles.stepImgContainer}>
@@ -204,7 +204,7 @@ const AddMove = ({ route }) => {
                 <TextInput 
                   style={styles.stepInput} 
                   multiline={true} 
-                  placeholder={`Enter Step ${i+1} description...`} value={s.desc} 
+                  placeholder={`Enter Step ${i+1} Description...`} value={s.desc} 
                   onChangeText={(t) => { const ns = [...steps]; ns[i].desc = t; setSteps(ns); }} 
                 />
                 {steps.length > 1 && (
