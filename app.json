@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": false,
     "splash": {
-      "image": "./assets/splash.gif",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "infoPList": {
+      "infoPlist": {
         "UIBackgroundModes": [
           "audio"
         ]
@@ -25,6 +25,10 @@
     },
     "android": {
       "package": "DojoSoft.ZaakirMungrue.iDojo",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/squareicon.png",
+        "backgroundColor": "#ffffff"
+    },
       "permissions": [
         "RECORD_AUDIO",
         "MODIFY_AUDIO_SETTINGS",
@@ -33,10 +37,6 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ]
-    },
-    "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#ffffff"
     },
     "plugins": [
       "expo-video",
