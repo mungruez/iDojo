@@ -1,7 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, StyleSheet, ImageBackground, DeviceEventEmitter, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
-import { Directory, File } from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 
@@ -84,29 +83,22 @@ const AddMove = ({ route }) => {
     try {
       const moveId = move?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
-      const permanentDir = new Directory(permanentDirUri);
-
-      const isVideoChanged = move && type === 'video' && vid && vid !== move?.vid;
-      const isStepsChanged = move && type === 'steps' && steps.some(s => s.img && !s.img.includes('/moves/'));
-      if (isVideoChanged || isStepsChanged) {
-        if (await permanentDir.exists) {
-          await permanentDir.delete();
-        }
+      const videoChanged = move && type === 'video' && vid && vid !== move?.vid;
+      const stepsChanged = move && type === 'steps' && steps.some(s => s.img && !s.img.includes('/moves/'));
+      if (videoChanged || stepsChanged) {
+        await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
       }
 
-      if (!(await permanentDir.exists)) {
-        await permanentDir.create(); 
-      }
-
+      await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
       const ensurePermanent = async (uri, fileName) => {
         if (!uri || !uri.startsWith('file://') || uri.includes('/moves/')) return uri;
         const destUri = `${permanentDirUri}${fileName}`;
         try {
-          const sourceFile = new File(uri); 
-          await sourceFile.copy(destUri); 
+          await FileSystem.copyAsync({ from: uri, to: destUri });
           return destUri;
         } catch (e) {
-          return uri; 
+          Alert.alert("Copy Failed", `File: ${fileName}\nError: ${e.message}`);
+          return uri;
         }
       };
 
@@ -131,7 +123,7 @@ const AddMove = ({ route }) => {
         steps: type === 'steps' ? finalSteps : [],
         vid: type === 'video' ? finalVid : null,
         videoUrl: type === 'video' ? videoUrl : '',
-        thumb: type === 'video' ? (finalVid || videoUrl) : finalSteps[0]?.img,
+        thumb: type === 'video' ? (finalVid || videoUrl) : (finalSteps[0]?.img || null),
         desc: desc 
       };
 
@@ -139,7 +131,7 @@ const AddMove = ({ route }) => {
       navigation.pop();
 
     } catch (err) {
-      Alert.alert("Save Error", "Could not save media to permanent storage.");
+      Alert.alert("Save Error", err.message || "An unknown error occurred.");
     }
   };
 
