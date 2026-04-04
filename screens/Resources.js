@@ -55,7 +55,7 @@ export default function Resources() {
 <Text style={ styles.title }>DojoSoft's hand picked list of online videos and shorts for Self Defense. Whether your looking for one to one paid training or just a quick watch and learn this iDojo's Featured List has it. Each video must meet certain criteria in order to be considered effective Self Defense. WiFi is necessary for this section as Featured videos are copyrighted. Please contact us on social media to have your suggested videos in our Featured List.
 </Text>
 <Text style={ styles.freeyourmind }>Free Your Mind: </Text>
-<Text style={ styles.title }>Audio for a healthy mind to help with learning Self Defense. Each Audio must meet certain requirements in order to be selected as stoic, heart touching, motivation to free your mind.
+<Text style={ styles.title }>Audio for a healthy mind to help with learning Self Defense. Each Audio must meet certain requirements in order to be selected as stoic, heart touching, motivation to free your mind. Click the slider for seeking.
           </Text>
         </View>
       </ScrollView>
