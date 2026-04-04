@@ -24,9 +24,10 @@ const AddMove = ({ route }) => {
     }
     
     const isVideo = (type === "video" && index === null);
+    const mediaType = isVideo ? 'videos' : 'images';
     try {
       const res = await ImagePicker.launchImageLibraryAsync({
-       mediaTypes: ['images', 'videos', ],
+       mediaTypes: [mediaType],
         allowsEditing: false,
         quality: 1.0,
       });
