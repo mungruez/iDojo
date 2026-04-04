@@ -29,7 +29,7 @@
       },
       "package": "DojoSoft.ZaakirMungrue.iDojo",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/squareicon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
