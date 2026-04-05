@@ -24,46 +24,6 @@ export default function MyDojoStyles({route}) {
     const [fstyle, setFStyle] = useState('Self Defense');
     const isOffline = useNetInfo().isConnected === false;
 
-    const requestStoragePermission = async () => {
-      if (Platform.OS !== 'android') return true;
-      const apiLevel = Platform.Version;
-      try {
-        if (apiLevel >= 33) {
-          const permissions = [
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-          ];
-          const hasImages = await PermissionsAndroid.check(permissions[0]);
-          const hasVideos = await PermissionsAndroid.check(permissions[1]);
-          if (hasImages && hasVideos) return true;
-          const granted = await PermissionsAndroid.requestMultiple(permissions);
-          return (
-            granted[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] === 'granted' &&
-            granted[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] === 'granted'
-          );
-        } else {
-          const hasPermission = await PermissionsAndroid.check(
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
-          );
-
-          if (hasPermission) return true;
-          const result = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-            {
-              title: "Storage Permission",
-              message: "Dojo needs access to your media to share moves.",
-              buttonNeutral: "Ask Me Later",
-              buttonNegative: "Cancel",
-              buttonPositive: "OK",
-            }
-          );
-          return result === PermissionsAndroid.RESULTS.GRANTED;
-        }
-      } catch (err) {
-        return false;
-      }
-    };
-
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
@@ -164,138 +124,136 @@ export default function MyDojoStyles({route}) {
 
 
     const handleShare = async (selectedids) => {
-  try {
-    if (!selectedids?.length) return;
-    setLoading(true);
-
-    const selectedMoves = fstyle === "allstyles" 
-      ? hmoves.flatMap(g => g.data.filter(m => selectedids.includes(m.id)))
-      : hmoves.filter(m => selectedids.includes(m.id));
-
-    const shareDirUri = `${FileSystem.cacheDirectory}share_batch/`;
-    const zipPathUri = `${FileSystem.cacheDirectory}Dojo_Export.zip`;
-
-    // STABLE CLEANUP & CREATE
-    await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
-    await FileSystem.makeDirectoryAsync(shareDirUri, { intermediates: true });
-
-    const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
-      const updatedMove = { ...move };
-      const copyToStaging = async (uri) => {
-        if (!uri || typeof uri !== 'string' || !uri.startsWith('file://')) return uri;
-        const fileName = `${idx}_${uri.split('/').pop()}`;
-        const dest = `${shareDirUri}${fileName}`;  
-        try {
-          await FileSystem.copyAsync({ from: uri, to: dest });
-          return fileName;
-        } catch (e) { return null; }
-      };
-
-      if (move.vid) updatedMove.vid = await copyToStaging(move.vid);
-      if (move.videoUrl) updatedMove.videoUrl = await copyToStaging(move.videoUrl);
-      if (Array.isArray(move.steps)) {
-        updatedMove.steps = await Promise.all(move.steps.map(async (s) => ({
-          ...s, img: await copyToStaging(s.img)
-        })));
+      if (isOffline) {
+        Alert.alert("No Internet", "You need an internet connection to share moves.");
+        return;
       }
-      updatedMove.thumb = move.type === 'video' ? (updatedMove.vid || updatedMove.videoUrl) : (updatedMove.steps?.[0]?.img || null);
-      return updatedMove;
-    }));
+      try {
+        if (!selectedids?.length) return;
+        setLoading(true);
 
-    // STABLE WRITE
-    await FileSystem.writeAsStringAsync(`${shareDirUri}data.json`, JSON.stringify(processedMoves));
+        const selectedMoves = fstyle === "allstyles" 
+          ? hmoves.flatMap(g => g.data.filter(m => selectedids.includes(m.id)))
+          : hmoves.filter(m => selectedids.includes(m.id));
 
-    const nakedSource = Platform.OS === 'android' ? shareDirUri.replace('file://', '').replace(/\/$/, '') : shareDirUri;
-    const nakedTarget = Platform.OS === 'android' ? zipPathUri.replace('file://', '') : zipPathUri;
+        const shareDirUri = `${FileSystem.cacheDirectory}share_batch/`;
+        const zipPathUri = `${FileSystem.cacheDirectory}Dojo_Export.zip`;
+        await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
+        await FileSystem.makeDirectoryAsync(shareDirUri, { intermediates: true });
 
-    await zip(nakedSource, nakedTarget);
+        const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
+          const updatedMove = { ...move };
+          const copyToStaging = async (uri) => {
+            if (!uri || typeof uri !== 'string' || !uri.startsWith('file://')) return uri;
+            const fileName = `${idx}_${uri.split('/').pop()}`;
+            const dest = `${shareDirUri}${fileName}`;  
+            try {
+              await FileSystem.copyAsync({ from: uri, to: dest });
+              return fileName;
+            } catch (e) { return null; }
+          };
 
-    if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(zipPathUri, {
-        mimeType: 'application/zip',
-        UTI: 'public.zip-archive' 
-      });
-    }
-    setSelectedIds([]);
-    await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
-    await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
-    
-  } catch (e) {
-    Alert.alert("Share Error", e.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
-
-   const handleImport = async () => {
-  try {
-    const res = await DocumentPicker.getDocumentAsync({ 
-      type: ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'], 
-      copyToCacheDirectory: true 
-    });
-
-    if (res.canceled) return;
-    setLoading(true);
-
-    const zipUri = res.assets ? res.assets[0].uri : res.uri;
-    const importId = Date.now().toString();
-    const permanentDirUri = `${FileSystem.documentDirectory}imported_${importId}/`;
-
-    await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
-
-    const nakedZip = Platform.OS === 'android' ? zipUri.replace('file://', '') : zipUri;
-    const nakedDest = Platform.OS === 'android' ? permanentDirUri.replace('file://', '').replace(/\/$/, '') : permanentDirUri;
-
-    await unzip(nakedZip, nakedDest);
-    
-    const dataFilePath = `${permanentDirUri}data.json`;
-    const exists = await FileSystem.getInfoAsync(dataFilePath);
-    if (!exists.exists) throw new Error("Manifest not found in zip");
-
-    const content = await FileSystem.readAsStringAsync(dataFilePath);
-    const importedMoves = JSON.parse(content);
-
-    const finalMoves = importedMoves.map((move, index) => {
-      const fixPath = (oldPath) => {
-        if (!oldPath || typeof oldPath !== 'string' || oldPath.startsWith('http')) return oldPath;
-        const fileName = oldPath.split('/').pop(); 
-        return `${permanentDirUri}${fileName}`;
-      };
-
-      const restored = {
-        ...move,
-        id: `move_${importId}_${index}_${Math.random().toString(36).substr(2, 4)}`,
-        vid: move.type === 'video' ? fixPath(move.vid || move.videoUrl) : null,
-        videoUrl: move.type === 'video' ? fixPath(move.videoUrl || move.vid) : '',
-      };
-
-      if (move.type === 'steps' && Array.isArray(move.steps)) {
-        restored.steps = move.steps.map(step => ({
-          ...step, img: fixPath(step.img)
+          if (move.vid) updatedMove.vid = await copyToStaging(move.vid);
+          if (move.videoUrl) updatedMove.videoUrl = await copyToStaging(move.videoUrl);
+          if (Array.isArray(move.steps)) {
+            updatedMove.steps = await Promise.all(move.steps.map(async (s) => ({
+              ...s, img: await copyToStaging(s.img)
+            })));
+          }
+          updatedMove.thumb = move.type === 'video' ? (updatedMove.vid || updatedMove.videoUrl) : (updatedMove.steps?.[0]?.img || null);
+          return updatedMove;
         }));
+
+        await FileSystem.writeAsStringAsync(`${shareDirUri}data.json`, JSON.stringify(processedMoves));
+        const nakedSource = Platform.OS === 'android' ? shareDirUri.replace('file://', '').replace(/\/$/, '') : shareDirUri;
+        const nakedTarget = Platform.OS === 'android' ? zipPathUri.replace('file://', '') : zipPathUri;
+
+        await zip(nakedSource, nakedTarget);
+
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(zipPathUri, {
+            mimeType: 'application/zip',
+            UTI: 'public.zip-archive' 
+          });
+        }
+        setSelectedIds([]);
+        await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
+        await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
+        
+      } catch (e) {
+        Alert.alert("Share Error", e.message);
+      } finally {
+        setLoading(false);
       }
-      restored.thumb = move.type === 'video' ? (restored.vid || restored.videoUrl) : (restored.steps?.[0]?.img || null);
-      return restored;
-    });
-
-    await handleSave(finalMoves);
-    await FileSystem.deleteAsync(dataFilePath, { idempotent: true });
-    Alert.alert("Success", `${finalMoves.length} moves added!`);
-
-  } catch (e) {
-    Alert.alert("Import Failed", e.message);
-  } finally {
-    setLoading(false);
-  }
-};
+    };
 
 
 
 
-    
+    const handleImport = async () => {
+      try {
+        const res = await DocumentPicker.getDocumentAsync({ 
+          type: ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'], 
+          copyToCacheDirectory: true 
+        });
+
+        if (res.canceled) return;
+        setLoading(true);
+
+        const zipUri = res.assets ? res.assets[0].uri : res.uri;
+        const importId = Date.now().toString();
+        const permanentDirUri = `${FileSystem.documentDirectory}imported_${importId}/`;
+
+        await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+
+        const nakedZip = Platform.OS === 'android' ? zipUri.replace('file://', '') : zipUri;
+        const nakedDest = Platform.OS === 'android' ? permanentDirUri.replace('file://', '').replace(/\/$/, '') : permanentDirUri;
+
+        await unzip(nakedZip, nakedDest);
+        
+        const dataFilePath = `${permanentDirUri}data.json`;
+        const exists = await FileSystem.getInfoAsync(dataFilePath);
+        if (!exists.exists) throw new Error("Manifest not found in zip");
+
+        const content = await FileSystem.readAsStringAsync(dataFilePath);
+        const importedMoves = JSON.parse(content);
+
+        const finalMoves = importedMoves.map((move, index) => {
+          const fixPath = (oldPath) => {
+            if (!oldPath || typeof oldPath !== 'string' || oldPath.startsWith('http')) return oldPath;
+            const fileName = oldPath.split('/').pop(); 
+            return `${permanentDirUri}${fileName}`;
+          };
+
+          const restored = {
+            ...move,
+            id: `move_${importId}_${index}_${Math.random().toString(36).substr(2, 4)}`,
+            vid: move.type === 'video' ? fixPath(move.vid || move.videoUrl) : null,
+            videoUrl: move.type === 'video' ? fixPath(move.videoUrl || move.vid) : '',
+          };
+
+          if (move.type === 'steps' && Array.isArray(move.steps)) {
+            restored.steps = move.steps.map(step => ({
+              ...step, img: fixPath(step.img)
+            }));
+          }
+          restored.thumb = move.type === 'video' ? (restored.vid || restored.videoUrl) : (restored.steps?.[0]?.img || null);
+          return restored;
+        });
+
+        await handleSave(finalMoves);
+        await FileSystem.deleteAsync(dataFilePath, { idempotent: true });
+        Alert.alert("Success", `${finalMoves.length} moves added!`);
+
+      } catch (e) {
+        Alert.alert("Import Failed", e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+
+  
     const parseStyles = (list) => {
       if (!Array.isArray(list)) {
         alert("Data is not an array, skipping parse.");
@@ -414,7 +372,7 @@ export default function MyDojoStyles({route}) {
           <Image source={{ uri: item.thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
           <View style={styles.pillRow}>
             <Text style={ftype === 'video' ? styles.typePillVideo : styles.typePill}>{item.type}</Text>
-            <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.plusIcon}>
+            <TouchableOpacity onPress={() => toggleListMode(item)} style={ftype === "steps" ? styles.plusIcon : styles.redPlusIcon}>
               <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : require('../assets/editmoveicon.png') }/>         
             </TouchableOpacity>             
           </View>
@@ -449,8 +407,8 @@ export default function MyDojoStyles({route}) {
                 {ftype === "video" ? (<Text style={{color: '#e43838', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
               </TouchableOpacity>
     
-              <TouchableOpacity onPress={() => toggleListMode(null)} style={styles.plusIcon}>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : require('../assets/addmoveicon.png') }/>         
+              <TouchableOpacity onPress={() => toggleListMode(null)} style={ftype === "steps" ? styles.plusIcon : styles.redPlusIcon}>
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : require('../assets/addmoveicon.png') }/>         
               </TouchableOpacity>
             </View>
           </View>
@@ -495,7 +453,7 @@ export default function MyDojoStyles({route}) {
 
 
     return (
-     <ImageBackground style={styles.imgBackground } resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
+     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
       <SafeAreaView style={{flex:1, marginTop:7}}>
         <View style={{backgroundColor: 'transparent', marginBottom:9, paddingLeft:5, paddingRight:5}}>
           <ImageBackground style={styles.icon} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
@@ -576,22 +534,22 @@ export default function MyDojoStyles({route}) {
 }
 
 const styles = StyleSheet.create({
-imgBackground: { flex: 1, width: '100%', height: '100%', opacity:.9 },
+imgBackground: { flex: 1, width: '100%', height: '100%' },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)' },
-sectionHeader: { color: '#00FF41', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },
-sectionHeaderVideo: { color: '#e72f0f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },
+sectionHeader: { color: '#1cf151', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },
+sectionHeaderVideo: { color: '#e72f0f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: '#ffe5e5', },
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, },
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d1deeb', alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 3 },
-titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#048119' },
-titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#e43333' },
+titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#65e47a' },
+titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#e43333', backgroundColor: '#ffe5e5', },
 thumbImage: { width: '100%', height: 150, backgroundColor: '#1a1a1a' },
 myDojoDeleteIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d9d6e4', alignItems: 'center', justifyContent: 'center' },
 pillRow: { backgroundColor: 'rgba(0, 255, 65, 0.3)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8 },
-typePill: { backgroundColor: 'rgba(5, 17, 8, 0.2)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
-typePillVideo: { backgroundColor: 'rgba(235, 77, 14, 0.2)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
+typePill: { backgroundColor: 'rgba(203, 212, 206, 0.38)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
+typePillVideo: { backgroundColor: 'rgba(247, 217, 205, 0.38)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 editIcon: { fontSize: 16 },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#00FF41', elevation: 10 },
 batchText: { color: '#00FF41', fontWeight: 'bold' },

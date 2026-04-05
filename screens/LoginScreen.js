@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, Pressable,  UIManager, findNodeHandle} from 'react-native'
+import { StyleSheet, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, Pressable,  UIManager, findNodeHandle, KeyboardAvoidingView} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, {useState,useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -61,7 +61,7 @@ export default function LoginScreen() {
           }
         }
 
-        alert("Welcome to iDojo's Passwords Manager. Please enter your PIN/Password to proceed.");
+        alert("Welcome Back Please enter your PIN/Password to proceed to iDojo's Passwords Manager.");
         return;
       }
     } catch(error) {
@@ -72,9 +72,9 @@ export default function LoginScreen() {
   
 
   useEffect(() => {
- 
+
     fetchPasswords();
-  }, [pin]);
+  }, []);
 
 
   const showConfirmDialog = () => {
@@ -249,7 +249,12 @@ export default function LoginScreen() {
 
   return ( !hasPasswords ? ( 
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
-      <StatusBar style="light" backgroundColor="#96891a"/>
+     <StatusBar style="light" backgroundColor="#96891a"/>
+     <KeyboardAvoidingView 
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+     >
       <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
         <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
         <StatusBar style='light' />
@@ -290,11 +295,17 @@ export default function LoginScreen() {
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
       </View> 
+     </KeyboardAvoidingView>
     </SafeAreaView>) 
 
     : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}> 
       <StatusBar style="light" backgroundColor="#96891a"/>
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
+         <KeyboardAvoidingView 
+           style={{ flex: 1 }}
+           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+           keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+         >
           <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
             <StatusBar style='light' />
@@ -334,11 +345,17 @@ export default function LoginScreen() {
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
           </View> 
+         </KeyboardAvoidingView>
         </SafeAreaView>
         </Pressable>)
 
         : ( <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
-          <StatusBar style="light" backgroundColor="#96891a"/>
+         <StatusBar style="light" backgroundColor="#96891a"/>
+         <KeyboardAvoidingView 
+           style={{ flex: 1 }}
+           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+           keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+         >
           <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
             <StatusBar style='light' />
@@ -370,8 +387,8 @@ export default function LoginScreen() {
                 <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
             </View>
-          </SafeAreaView>
-        )
+         </KeyboardAvoidingView>
+        </SafeAreaView>)
   )}
 
   const styles = StyleSheet.create({

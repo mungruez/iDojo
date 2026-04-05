@@ -137,12 +137,12 @@ const AddMove = ({ route }) => {
 
 
   return (
-   <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
+   <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.7 }} resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
     <StatusBar barStyle="light-content" />
     <KeyboardAvoidingView 
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20} // Adjust offset if header blocks text
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
     >
     <View style={{backgroundColor: 'transparent', marginBottom:12, paddingLeft:5, paddingRight:5, marginTop:25}}>
       <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
@@ -243,7 +243,7 @@ const AddMove = ({ route }) => {
 }
 
 const styles = StyleSheet.create({
-  imgBackground: {  ...StyleSheet.absoluteFillObject, opacity: .7 },
+  imgBackground: {  ...StyleSheet.absoluteFillObject, flex: 1, },
   icon: { height: 57, width: '90%', alignSelf: 'center' },
   videoIcon: { height: 76, width:76, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},
   videoIconUploaded: { height: 76, width:76, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},

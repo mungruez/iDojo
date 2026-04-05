@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler, StatusBar} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler, StatusBar, KeyboardAvoidingView} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -655,21 +655,26 @@ export default function PasswordManager() {
 
 
     return isOverlayVisible > -1 ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}>      
-      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
-        <StatusBar style="light" backgroundColor="#bcbe14" />
-        <View style={{backgroundColor: 'transparent', marginBottom:7, paddingLeft:1, paddingRight:1,}}>
+      <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+       <StatusBar barStyle="light-content"/>
+       <KeyboardAvoidingView 
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+       >
+        <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>
         
-        <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
+        <View style={{ flexDirection:'row', alignItems:'center', marginBottom: 1, padding: 0,}}>
             <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backiconvault.png')}/>         
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/backiconvault.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.resetpinButton }>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
             </TouchableOpacity>
             <TouchableOpacity onPress={() => showInstructions()} style={ styles.infoButton }>
-                <ImageBackground style={{ flex:1,}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
+                <ImageBackground style={{ width: "100%", height:"100%"}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
             </TouchableOpacity>
         </View>
 
@@ -738,12 +743,18 @@ export default function PasswordManager() {
                 </TouchableOpacity>
             </View>
         </ScrollView>
+       </KeyboardAvoidingView>
       </ImageBackground>
     </Pressable> ) 
     : ( 
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
         <StatusBar style="light" backgroundColor="#96891a"/>
-        <View style={{backgroundColor: 'transparent', marginBottom:7, paddingLeft:1, paddingRight:1,}}>
+        <KeyboardAvoidingView 
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        >
+        <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>
         
@@ -759,7 +770,7 @@ export default function PasswordManager() {
             </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection:'row', alignItems:'center', marginTop: -27, padding: 0, marginLeft: 12,}}> 
+        <View style={{ flexDirection:'row', alignItems:'center', marginTop: -21, padding: 0, marginLeft: 12,}}> 
             { passwords.length > 0 ? 
                 ( <Image
                     resizeMode="contain"
@@ -791,19 +802,22 @@ export default function PasswordManager() {
                 </Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Website"
+                    placeholderTextColor="rgba(160, 128, 80, 0.6)"
+                    placeholder="Enter Website"
                     value={website}
                     onChangeText={(website) => setWebsite(website)} />
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Username"
+                     placeholderTextColor="rgba(160, 128, 80, 0.6)"
+                    placeholder="Enter Username"
                     value={username}
                     onChangeText={(username) => setUsername(username)} />
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Password"
+                     placeholderTextColor="rgba(160, 128, 80, 0.6)"
+                    placeholder="Enter Password"
                     secureTextEntry={false}
                     value={password}
                     onChangeText={(password) => setPassword(password)} />
@@ -821,6 +835,7 @@ export default function PasswordManager() {
                 </TouchableOpacity>
             </View>
         </ScrollView>
+        </KeyboardAvoidingView>
       </ImageBackground> 
     )
 };
@@ -1024,7 +1039,7 @@ const styles = StyleSheet.create({
     // Style for the input fields
     input: {
         borderWidth: 2, // Border width
-        borderColor: "#eee", // Light gray border color
+        borderColor: "#8B7021", // Light gray border color
         paddingVertical: 10, // Vertical padding inside the input
         paddingHorizontal: 15, // Horizontal padding inside the input
         marginBottom: 12, // Space below the input
@@ -1036,6 +1051,8 @@ const styles = StyleSheet.create({
         shadowRadius: 10, 
         shadowOpacity: 1, 
         elevation: 4, 
+        backgroundColor: 'rgba(255, 248, 225, 0.85)', // Light cream background
+        color: '#80671c', // Dark gold text
     },
     submitButton: {
         backgroundColor: "green", 
@@ -1059,11 +1076,10 @@ const styles = StyleSheet.create({
     imgBackground: {
       height: "100%",
       width: "100%",
-      flex: 1,
-      opacity: .9, 
+      flex: 1, 
     },
       icon: {
-        marginTop:40,
+        marginTop:19,
         height: 76,
         opacity: 1,
         textAlign: "center" 
