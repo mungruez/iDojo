@@ -47,7 +47,7 @@ export default function ManualsScreen() {
 
 
   return (
-    <ImageBackground style={ styles.imgBackground } resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
+    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
       <StatusBar barStyle="light-content"backgroundColor="#269b26"  /> 
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
@@ -56,7 +56,7 @@ export default function ManualsScreen() {
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/manualstitle.png')} >
             <View style={{flexDirection:"row", position: "relative", backgroundColor:"transparent", height: 47,}}>
               
-              <TouchableOpacity onPress={stopSound} style={{position:"absolute", top: 38, right:9, zIndex:2, height: 42, width: 38, elevation:8, backgroundColor:"transparent",}}>
+              <TouchableOpacity onPress={stopSound} style={{position:"absolute", top: 38, right:9, zIndex:2, height: 42, width: 38, elevation:8, backgroundColor:"transparent", opacity:1}}>
                 <ImageBackground style={ styles.imgSound } resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         
               </TouchableOpacity>  
             </View>

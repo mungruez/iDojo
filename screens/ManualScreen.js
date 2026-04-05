@@ -42,7 +42,7 @@ export default function ManualScreen({ route, navigation }) {
 
                 <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:8, flex:1,padding:0, borderColor:"silver", borderWidth:1, borderRadius:5, borderBottomWidth:2}}>
                   <ScrollView>
-                    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/greentextbackground.png')}>
+                    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/greentextbackground.png')}>
                       
                       <View style={{backgroundColor: "#2f4f4f",  borderColor:"silver", borderWidth:0, borderRadius:5}}>
                         <Text style={styles.desctext}> {step.desc} </Text>
@@ -75,10 +75,9 @@ const styles = StyleSheet.create({
     backgroundColor:"transparent"
   },
   imgBackground: {
-    
     minWidth:"100%",
     flex: 1,
-    opacity: .8,
+    opacity: 1,
     margin:0,
     padding:0,
     borderRadius:5, 

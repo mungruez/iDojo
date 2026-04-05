@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ActivityIndicator, FlatList, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from "@react-native-community/netinfo";
@@ -310,13 +309,13 @@ export default function FreeYourMindScreen() {
     if (loading) return <ActivityIndicator size="large" color="#430d79" style={{flex:1, transform: [{scale: 2.0}]}} />;
 
     return (
-      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fymbackground.png')}>
+      <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/fymbackground.png')}>
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, backgroundColor: 'transparent',}}>
           <View style={styles.container}>
 
             <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
-                <ImageBackground style={ styles.title } resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
-                <StatusBar style='light' backgroundColor='#430d79'/>
+                <ImageBackground style={ styles.title } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
+                <StatusBar barStyle='light-content' backgroundColor='#430d79'/>
             </View>
 
             <Text style={styles.heading}>
@@ -341,7 +340,8 @@ export default function FreeYourMindScreen() {
                         width: "100%",}}>
                                   
                           <ImageBackground 
-                            style={ styles.imgSound } 
+                            style={ styles.imgSound }
+                            imageStyle={{ opacity: 1 }}
                             resizeMode='contain' 
                             source={playingId === file.id && !file.ispaused ? require('../assets/fympausebutton.png') : require('../assets/fymplaybutton.png')}>
               
@@ -449,7 +449,6 @@ const styles = StyleSheet.create({
       maxHeight: "95%",
       width: "100%",
       flex: 1,
-      opacity: .9, 
       borderRadius: 50,
     },
 });

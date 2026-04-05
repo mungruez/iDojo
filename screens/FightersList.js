@@ -25,12 +25,12 @@ export default function FightersList() {
   };
 
   return (
-    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
+    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
       <StatusBar barStyle="light-content" backgroundColor="goldenrod" />
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
         <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
-          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
+          <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
         </View>    
             <View style={{flexDirection:'row' ,flex:1}}>
               <FlatList

@@ -292,11 +292,11 @@ const renderVerticalItem = ({ item }) => (
 
 
 
-return ( <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25, backgroundColor: 'transparent',}}>
 
-      <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingBottom:10, opacity: .7,}}>
-        <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/featuredtitle.png')} />
+      <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingBottom:10, opacity: 1,}}>
+        <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
       </View>
       

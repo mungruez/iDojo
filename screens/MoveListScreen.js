@@ -5,17 +5,16 @@ import moves from '../data/moves'
 import { useNavigation } from '@react-navigation/native'
 
 const images = require.context('../assets/thumbnails', true, /\.png$/);
-// Create an array of image sources
 const imageSources = images.keys().map((key) => images(key));
 
 export default function MoveListScreen() {
   const navigation = useNavigation();
 
   return (
-    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
       <StatusBar barStyle="light-content" backgroundColor="#dc143c" />
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
-      <View style={{backgroundColor: '#323232', marginBottom:20, paddingBottom:10, opacity: .7}}>
+      <View style={{backgroundColor: '#323232', marginBottom:20, paddingBottom:10, opacity: 1}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/moveslisttitle.png')} />
       </View>
 
@@ -271,7 +270,6 @@ const styles = StyleSheet.create({
         minHeight: '100%',
         height: Dimensions.get('window').height,
         flex: 1,
-        opacity: .9, 
       },
       icon: {
         height: 57,

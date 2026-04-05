@@ -95,13 +95,12 @@ export default function HomeScreen() {
   };
 
 
-
   return (
-    <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
+    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
       <StatusBar barStyle="dark-content"/>
       <View style={{flexDirection:"row", position: "relative"}}>
           <TouchableOpacity onPress={stopSound} style={{position:"absolute", top:10, right:10, zIndex:1, height: 42, width: 38}}>
-            <ImageBackground style={ styles.imgSound } resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         
+            <ImageBackground style={ styles.imgSound }  imageStyle={{ opacity: 1 }} resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         
           </TouchableOpacity>
       </View> 
 
@@ -109,44 +108,44 @@ export default function HomeScreen() {
          
         <View style={{backgroundColor: '#2f4f4f', flexDirection:"row", marginHorizontal:3, marginVertical:19, textAlign:"center", justifyContent:"space-between"}}>
           <Text style={{color: "lightgray", fontWeight:"700",fontSize: 23, textAlign:"center", marginLeft:38, marginTop:10}}>Main Menu</Text>
-          <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/icon.png')} /> 
+          <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} /> 
         </View>
 
         <ScrollView style={{ flexDirection:"column", marginTop:57}}>
             <TouchableOpacity
               onPress={()=>stopSoundN('MoveList')}>
-              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillmoveslist.png')} />
+              <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpillmoveslist.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity
               onPress={()=>stopSoundN('Manuals')}>
-              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillmanuals.png')} />
+              <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }}  resizeMode='contain' source={require('../assets/redpillmanuals.png')} />
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={()=>stopSoundN('MyDojoStyles')}>
-              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpilladdmove.png')} />
+              <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpilladdmove.png')} />
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={()=>stopSoundN('FeaturedList')}>
-              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillfeatured.png')} />
+              <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpillfeatured.png')} />
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={()=>stopSoundN('FightersList')}>
-              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillfighterslist.png')} />
+              <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpillfighterslist.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity
               onPress={()=>stopSoundN('FreeYourMind')}>
-              <ImageBackground style={ styles.button } resizeMode='contain' source={require('../assets/redpillfreeyourmind.png')} />
+              <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpillfreeyourmind.png')} />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.buttonimage}
               onPress={()=>stopSoundN('Res')}>
-              <ImageBackground style={ styles.buttonres } resizeMode='contain' source={require('../assets/bluepillresources.png')} />
+              <ImageBackground style={ styles.buttonres } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/bluepillresources.png')} />
             </TouchableOpacity>  
         
         </ScrollView>
@@ -190,7 +189,7 @@ const styles = StyleSheet.create({
       marginLeft:25,
       height: 57,
       width: 193,
-      opacity:1,
+      opacity: 1,
       shadowOpacity: 0,
     },
     buttonimage:{  
@@ -226,18 +225,19 @@ const styles = StyleSheet.create({
       minWidth: "100%",
       height: Dimensions.get('window').height,
       flex: 1,
-      opacity: .9,
       marginTop: "7%", 
     },
     imgSound: {
       height: "100%",
       width: "100%",
-      flex: 1, 
+      flex: 1,
+      opacity: 1 
     },
     icon: {
       height: 57,
       width: 76,
       elevation: 4,
       marginRight:1,
+      opacity: 1
     },
   });

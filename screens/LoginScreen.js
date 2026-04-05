@@ -249,7 +249,7 @@ export default function LoginScreen() {
 
   return ( !hasPasswords ? ( 
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
-     <StatusBar style="light" backgroundColor="#96891a"/>
+     <StatusBar barStyle="light-content" backgroundColor="#96891a"/>
      <KeyboardAvoidingView 
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -308,7 +308,7 @@ export default function LoginScreen() {
          >
           <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
-            <StatusBar style='light' />
+            <StatusBar barStyle="light-content" backgroundColor="#96891a"/>
           </View>
           <View style={styles.container}>
             <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
@@ -350,7 +350,7 @@ export default function LoginScreen() {
         </Pressable>)
 
         : ( <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
-         <StatusBar style="light" backgroundColor="#96891a"/>
+         <StatusBar barStyle="light-content" backgroundColor="#96891a"/>
          <KeyboardAvoidingView 
            style={{ flex: 1 }}
            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
