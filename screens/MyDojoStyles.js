@@ -363,7 +363,7 @@ export default function MyDojoStyles({route}) {
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
         onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : navigation.navigate('Move', { video: item })}
-        style={[styles.itemContainer, selectedIds.includes(item.id) && styles.selectedItem]}>
+        style={[styles.itemContainer, selectedIds.includes(item.id) && ftype ==="steps" ? styles.selectedItem : styles.selectedItemVideo]}>
 
         <View style={styles.card}>
           <View style={styles.titleBanner}>
@@ -419,7 +419,7 @@ export default function MyDojoStyles({route}) {
             keyExtractor={(item, index) => item.id || index.toString()}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
-                <View style={styles.sectionContainer}>
+                <View style={ftype == "steps" ? styles.sectionContainer : styles.sectionContainerVideo}>
                   <Text style={ftype === "steps" ? styles.sectionHeader : styles.sectionHeaderVideo}>{item.style}</Text>
                     <FlatList
                        horizontal
@@ -436,16 +436,16 @@ export default function MyDojoStyles({route}) {
            />
      
            {selectedIds.length > 0 && (
-             <View style={styles.batchBar}>
-               <Text style={styles.batchText}>{selectedIds.length} Selected</Text>
+             <View style={ftype === "steps" ? styles.batchBar : styles.batchBarVideo}>
+               <Text style={ftype === "steps" ? styles.batchText : styles.batchTextVideo}>{selectedIds.length} Selected</Text>
                <TouchableOpacity onPress={() => handleShare(selectedIds)} style={styles.shareIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
-               <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDeleteIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
-               </TouchableOpacity>
-               <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDiscardIcon}>
+               <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDiscardIcon}>
                  <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
+               </TouchableOpacity>
+               <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDeleteIcon}>
+                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
                </TouchableOpacity>
              </View>)}
         </SafeAreaView>
@@ -536,36 +536,40 @@ export default function MyDojoStyles({route}) {
 const styles = StyleSheet.create({
 imgBackground: { flex: 1, width: '100%', height: '100%' },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)' },
+sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)' },
 sectionHeader: { color: '#1cf151', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },
 sectionHeaderVideo: { color: '#f8735b', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: '#ffe5e5', },
-itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, },
+itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
-myDojoDiscardIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d1deeb', alignItems: 'center', justifyContent: 'center' },
+myDojoDiscardIcon: {height: 47, width: 43, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
+selectedItemVideo: { borderColor: '#d82e10', borderWidth: 2, backgroundColor: 'rgba(248, 86, 57, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 3 },
 titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#65e47a' },
 titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#e43333', backgroundColor: '#ffe5e5', alignSelf: "flex-start"},
 thumbImage: { width: '100%', height: 150, backgroundColor: '#1a1a1a' },
-myDojoDeleteIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#d9d6e4', alignItems: 'center', justifyContent: 'center' },
+myDojoDeleteIcon: {height: 47, width: 47, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
 pillRow: { backgroundColor: 'rgba(0, 255, 65, 0.3)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8 },
 typePill: { backgroundColor: 'rgba(203, 212, 206, 0.38)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 typePillVideo: { backgroundColor: 'rgba(247, 217, 205, 0.38)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 editIcon: { fontSize: 16 },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#00FF41', elevation: 10 },
+batchBarVideo: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#b30000', elevation: 10 },
 batchText: { color: '#00FF41', fontWeight: 'bold' },
+batchTextVideo: { color: '#fa3d30', fontWeight: 'bold' },
 batchIcon: { fontSize: 22, color: '#fff' },
-shareIcon: {height: 43, width: 43, borderRadius: 9, backgroundColor: '#daf1dc', alignItems: 'center', justifyContent: 'center' },
+shareIcon: {height: 45, width: 45, borderRadius: 9, backgroundColor: '#daf1dc', alignItems: 'center', justifyContent: 'center' },
 container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
 header: {flexDirection: 'column', width:"90%", minHeight:83, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 19, },
-myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.5)' },
+myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.5)', opacity: 1 },
 title: { fontSize: 17, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#fc2626', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { backgroundColor: 'transparent', marginHorizontal: 12, marginVertical: 5, alignItems: 'center'},
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#bddff3', paddingHorizontal: 5,},
-greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)'},
-redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)'},
+greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
+redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
 smallGap: {height: 12,},
 cardInternal: { padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10 },
 deleteIcon: { height: 35, width: 35 },
