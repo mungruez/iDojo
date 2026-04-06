@@ -363,14 +363,14 @@ export default function MyDojoStyles({route}) {
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
         onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : navigation.navigate('Move', { video: item })}
-        style={[styles.itemContainer, selectedIds.includes(item.id) && ftype ==="steps" ? styles.selectedItem : styles.selectedItemVideo]}>
+        style={[styles.itemContainer, selectedIds.includes(item.id) && ftype ==="steps" ? styles.selectedItem : selectedIds.includes(item.id) && ftype ==="video" && styles.selectedItemVideo]}>
 
         <View style={styles.card}>
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : styles.titleText}>{item.title}</Text>
           </View>
           <Image source={{ uri: item.thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
-          <View style={styles.pillRow}>
+          <View style={ftype == "steps" ? styles.pillRow : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={ftype === "steps" ? styles.plusIcon : styles.redPlusIcon}>
               <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : require('../assets/editmoveicon.png') }/>         
@@ -535,8 +535,8 @@ export default function MyDojoStyles({route}) {
 
 const styles = StyleSheet.create({
 imgBackground: { flex: 1, width: '100%', height: '100%' },
-sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)' },
-sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)' },
+sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)', opacity: 1 },
+sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)', opacity: 1 },
 sectionHeader: { color: '#1cf151', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1 },
 sectionHeaderVideo: { color: '#f8735b', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: '#ffe5e5', },
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
@@ -544,12 +544,13 @@ verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 47, width: 43, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
 selectedItemVideo: { borderColor: '#d82e10', borderWidth: 2, backgroundColor: 'rgba(248, 86, 57, 0.6)' },
-titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 3 },
+titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 2 },
 titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#65e47a' },
 titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#e43333', backgroundColor: '#ffe5e5', alignSelf: "flex-start"},
-thumbImage: { width: '100%', height: 150, backgroundColor: '#1a1a1a' },
+thumbImage: { width: '100%', height: 152, backgroundColor: '#1a1a1a' },
 myDojoDeleteIcon: {height: 47, width: 47, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
-pillRow: { backgroundColor: 'rgba(0, 255, 65, 0.3)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8 },
+pillRowVideo: { backgroundColor: 'rgba(43, 0, 0, 0.5)', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 7, borderRadius: 9, opacity: 1},
+pillRow: { backgroundColor: 'rgba(0, 43, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8, borderRadius: 9, opacity: 1 },
 typePill: { backgroundColor: 'rgba(203, 212, 206, 0.38)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 typePillVideo: { backgroundColor: 'rgba(247, 217, 205, 0.38)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 editIcon: { fontSize: 16 },
@@ -566,18 +567,14 @@ myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItem
 title: { fontSize: 17, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#fc2626', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
-card: { backgroundColor: 'transparent', marginHorizontal: 12, marginVertical: 5, alignItems: 'center'},
+card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#bddff3', paddingHorizontal: 5,},
 greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
 redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
 smallGap: {height: 12,},
 cardInternal: { padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10 },
-deleteIcon: { height: 35, width: 35 },
-discardIcon: { height: 35, width: 35 },
-redPill: {backgroundColor: 'rgba(211, 47, 47, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#ff4444',},
-bluePill: {backgroundColor: 'rgba(25, 118, 210, 0.8)', borderRadius: 25,borderWidth: 1,borderColor: '#44aaff',},
-redPlusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: '#c2cdd4', marginBottom: 7},
-plusIcon:{height: 43, width: 43, borderRadius: 9, marginLeft: 21, backgroundColor: "transparent", marginBottom: 7},
+redPlusIcon:{height: 45, width: 45, borderRadius: 9, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
+plusIcon:{height: 45, width: 45, borderRadius: 9, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
 infoIcon:{height: 40, width: 44, marginLeft: 19, backgroundColor: "transparent", marginBottom: 9,},
 importIcon:{height: 79, width:50, borderRadius: 9, marginLeft: 19, marginBottom:3},
 pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
