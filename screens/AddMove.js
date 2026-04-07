@@ -228,7 +228,7 @@ const AddMove = ({ route }) => {
       )}
 
       <TouchableOpacity style={styles.saveBtn} onPress={() => save()}>
-        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center', opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : require('../assets/redbtnbg.png')}>
+        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : require('../assets/redbtnbg.png')}>
           <Image
             resizeMode="contain"
             style={{height:36, width:172, alignSelf:"center", opacity: 1}}
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', },
   headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 15, marginLeft: 19, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
   label: { fontWeight: 'bold', color: '#420105', marginTop: 7, fontSize: 13, marginLeft:12 },
-  input: { borderWidth: 1, borderColor: '#990808', borderRadius: 20, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1},
+  input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1},
   modeToggle: { flexDirection: 'row', marginTop: 7, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
   tab: { flex: 1, padding: 12, alignItems: 'center', backgroundColor: '#f3bebe' },
   activeTab: { backgroundColor: '#5b12a5' },
@@ -261,14 +261,14 @@ const styles = StyleSheet.create({
   activeTabText: { color: '#e6c8c8' },
   stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
   stepImg: { flex:1, width: '100%', height: '100%' },
-  stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(93, 231, 167, 0.5)', borderRadius: 19, opacity: 1, },
+  stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(93, 231, 167, 0.5)', borderRadius: 12, opacity: 1, },
   removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:1, fontWeight: 'bold', height: 17, width: '100%' },
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
   addStepBtn: {marginTop:5, height:37 ,width: 116, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   addStepText: { color: '#0b5737', fontWeight: 'bold' },
-  saveBtn: { backgroundColor:'transparent', width:195, height:53, borderRadius: 12, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
+  saveBtn: { width:195, height:53, borderRadius: 15, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
   saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   discardBtn: { marginBottom: 4, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
   discardText: { textAlign: 'center', color: '#e41934', fontWeight: 'bold', fontSize:10, marginTop: 1, height: 16, width: '100%' },

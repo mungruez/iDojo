@@ -30,9 +30,9 @@ export default function FightersList() {
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
       <StatusBar barStyle="light-content"/>
-      <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+      <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, backgroundColor: 'transparent',}}>
 
-        <View style={{backgroundColor: 'transparent', marginBottom:19, paddingTop:-10, paddingBottom:20,}}>
+        <View style={{marginBottom:19, paddingTop:-10, paddingBottom: 10,}}>
           <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
         </View>    
         
@@ -48,10 +48,10 @@ export default function FightersList() {
                   flex: 1,
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 12,
+                  marginTop: 2,
                   marginLeft: 7,
                   marginRight: 7,
-                  width: "49%",
+                  width: "50%",
                   borderWidth: 0,
                 }}
               >
@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
         minHeight: '100%',
         height: Dimensions.get('window').height,
         flex: 1,
-        opacity: 1, 
       },
       icon: {
         height: 57,
@@ -129,6 +128,7 @@ const styles = StyleSheet.create({
       },
       mainCardView: {
         minHeight: 228,
+        width: "100%",
         backgroundColor: "#2f4f4f",
         borderRadius: 15,
         shadowColor: "#000",
@@ -137,8 +137,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 8,
         justifyContent: 'center',
-        paddingLeft: 10,
-        paddingRight: 10,
+        padding: 5,
         marginTop: 12,
         marginBottom: 12,
         marginLeft: 1,
@@ -151,14 +150,14 @@ const styles = StyleSheet.create({
       subCardView: {
         minHeight: 207,
         width: "100%",
-        marginLeft: -15,
+        marginLeft: 7,
         borderRadius: 8,
         backgroundColor: "slategray",
         color: 'crimson',
         borderWidth: 0,
         alignSelf: 'center',
         justifyContent: 'center',
-        marginRight: 9,
+        marginRight: 7,
         padding:0,
       },
 })

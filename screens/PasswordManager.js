@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler, StatusBar, KeyboardAvoidingView} from "react-native";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler, StatusBar, KeyboardAvoidingView, Platform} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -656,12 +656,6 @@ export default function PasswordManager() {
 
     return isOverlayVisible > -1 ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}>      
       <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
-       <StatusBar barStyle="light-content"/>
-       <KeyboardAvoidingView 
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-       >
         <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>
@@ -682,7 +676,7 @@ export default function PasswordManager() {
             { passwords.length > 0 ? 
                 ( <Image
                     resizeMode="contain"
-                    style={{ flex:1, maxHeight:42, maxWidth:190, padding:0, marginBottom:0,}}
+                    style={{ flex:1, maxHeight:42, maxWidth:190, padding:0, marginTop: 0,}}
                     source={require('../assets/yourpwrds.png')}
                 /> ) : (
             <></> )}
@@ -743,17 +737,10 @@ export default function PasswordManager() {
                 </TouchableOpacity>
             </View>
         </ScrollView>
-       </KeyboardAvoidingView>
       </ImageBackground>
     </Pressable> ) 
     : ( 
       <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
-        <StatusBar style="light" backgroundColor="#96891a"/>
-        <KeyboardAvoidingView 
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-        >
         <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>
@@ -835,7 +822,6 @@ export default function PasswordManager() {
                 </TouchableOpacity>
             </View>
         </ScrollView>
-        </KeyboardAvoidingView>
       </ImageBackground> 
     )
 };
@@ -844,6 +830,7 @@ export default function PasswordManager() {
 const styles = StyleSheet.create({
     container: {
         flex: 1, // Take up the full height of the screen
+        height: "100%",
         margin: 4, // Add margin around the container
     },
     content: {
