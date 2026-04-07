@@ -9,9 +9,11 @@ const ksoundFile = require('../assets/woosh.mp3');
 export default function FightersList() {
   const navigation = useNavigation();
   
+
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
     kplayer.loop = false; 
   });
+
 
   const navKSound = (item) => {
     try {
@@ -24,61 +26,52 @@ export default function FightersList() {
     navigation.navigate('FighterScreen', {fighter: item, offset: 0});
   };
 
+
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
-      <StatusBar barStyle="light-content" backgroundColor="goldenrod" />
+      <StatusBar barStyle="light-content"/>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
-        <View style={{backgroundColor: 'transparent', marginBottom:30, paddingTop:-10, paddingBottom:20,}}>
+        <View style={{backgroundColor: 'transparent', marginBottom:19, paddingTop:-10, paddingBottom:20,}}>
           <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
         </View>    
-            <View style={{flexDirection:'row' ,flex:1}}>
-              <FlatList
-                data={fighters}
-                numColumns={2}
-                contentContainerStyle={{ paddingBottom: 57 }}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <View
-                    key={item.name}
-                    style={{
-                      alignItems: "center",
-                      flex:1,
-                      justifyContent: "space-between",
-                      flexDirection: "column",
-                      alignItems: "top",
-                      marginTop:7,
-                      marginLeft:"1",
-                      marginRight:"1",
-                      width:"50%",
-                      height:"auto",
-                      borderColor:"transparent",
-                      borderWidth:0,
-                      backgroundColor:'#2f4f4f'
-                    }}
-                  >
+        
+        <FlatList
+          data={fighters}
+          numColumns={2}
+          contentContainerStyle={{ paddingBottom: 57 }}
+          keyExtractor={(item, index) => item.name || index.toString()}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 12,
+                  marginLeft: 7,
+                  marginRight: 7,
+                  width: "49%",
+                  borderWidth: 0,
+                }}
+              >
               
-                <Pressable
-                  onPress={() => navKSound(item)}>
-                    <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
-                          <Text>{item.name}</Text>
-                          <View style={styles.subCardView}>
-                                <Image
-                                  source={item.avatar}
-                                  resizeMode="contain"
-                                  style={{
-                                    borderRadius: 12,
-                                    alignSelf: 'flex-start',
-                                    marginTop:0,
-                                    marginLeft:0,
-                                    height: 130,
-                                    width: 180,
-                                  }}
-                                />
+                <Pressable onPress={() => navKSound(item)} style={styles.mainCardView}>
+                    <View style={styles.subCardView}>
+                      <Image
+                        source={item.avatar}
+                        resizeMode="contain"
+                          style={{
+                            borderRadius: 12,
+                            alignSelf: 'flex-start',
+                            margin: 0,
+                            height: 133,
+                            width: "100%",
+                          }}
+                        />
 
-                        <View style={{marginLeft: 12}}>
-                            <Text
+                        <View style={{marginLeft: 12, marginBottom: 7}}>
+                          <Text
                               style={{
                                 fontSize: 14,
                                 color: "gold",
@@ -86,16 +79,20 @@ export default function FightersList() {
                                 textTransform: 'capitalize',
                               }}>
                                 {item.name}
-                            </Text>
+                          </Text>
                             
-                            <View
+                          <View
                               style={{
                                 marginTop: 3,
                                 borderWidth: .5,
+                                borderRadius: 12,
                                 borderColor:'#228b22',
                                 flexDirection:'row',
                                 backgroundColor:'#323232',
-                                justifyContent:'space-between'
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-start',
+                                paddingHorizontal: 4,
+                                paddingVertical: 2,
                               }}>
                                 <Text
                                     style={{
@@ -105,19 +102,16 @@ export default function FightersList() {
                                     {item.style}
                                 </Text>
                             </View>
-                          </View>
                         </View>
-                    </View>
-                </View>
-              </Pressable>
+                      </View>
+                </Pressable>
             </View>)}
           />
-
-        </View> 
-    </SafeAreaView>
-  </ImageBackground>
+      </SafeAreaView>
+    </ImageBackground>
   )
 }
+
 
 const styles = StyleSheet.create({
       imgBackground: {
@@ -130,44 +124,41 @@ const styles = StyleSheet.create({
       icon: {
         height: 57,
         opacity: 1,
-        marginTop:38,
+        marginTop: 38,
         textAlign: "center" 
       },
       mainCardView: {
-        height: 190,
-        alignItems: 'center',
-        justifyContent: 'center',
+        minHeight: 228,
         backgroundColor: "#2f4f4f",
-        borderRadius: 12,
+        borderRadius: 15,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: 1,
         shadowRadius: 5,
         elevation: 8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingLeft: 16,
-        paddingRight: 14,
-        marginTop: 1,
-        marginBottom: 1,
+        justifyContent: 'center',
+        paddingLeft: 10,
+        paddingRight: 10,
+        marginTop: 12,
+        marginBottom: 12,
         marginLeft: 1,
         marginRight: 5,
         borderColor: "#228b22",
-        borderWidth:1,
+        borderWidth: 2,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
       },
       subCardView: {
-        height: 186,
-        width: 180,
-        marginLeft:-15,
+        minHeight: 207,
+        width: "100%",
+        marginLeft: -15,
         borderRadius: 8,
         backgroundColor: "slategray",
-        borderColor: "transparent",
         color: 'crimson',
         borderWidth: 0,
-        borderStyle: 'solid',
         alignSelf: 'center',
         justifyContent: 'center',
-        marginRight:9,
+        marginRight: 9,
         padding:0,
       },
 })

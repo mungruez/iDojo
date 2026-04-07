@@ -39,6 +39,7 @@ export default function MyDojoStyles({route}) {
         );
     };
 
+
     const loadMoves = async () => {
       try {
         const fileUri = `${FileSystem.documentDirectory}moves.json`;
@@ -75,6 +76,7 @@ export default function MyDojoStyles({route}) {
       setMoves(updatedList);
       await saveToStorage(updatedList); 
     };
+
 
     const saveToStorage = async (list) => {
       try {
@@ -284,6 +286,7 @@ export default function MyDojoStyles({route}) {
       }
     };
     
+
     const parseHMoves = (movesList) => {
       let hMoves = [];
       let stylesSeen = [];
@@ -305,6 +308,7 @@ export default function MyDojoStyles({route}) {
       return hMoves;
     };
 
+
     const getMoves = (mstyle, type) => {
       if(type !== "video" && type !== "steps") return [];
       let sMoves = moves.filter(m => m.type === type && (mstyle === "allstyles" || m.style === mstyle));
@@ -314,6 +318,7 @@ export default function MyDojoStyles({route}) {
 
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
+
 
     useEffect(() => {
       if (route.params?.savedMove) {
@@ -326,6 +331,7 @@ export default function MyDojoStyles({route}) {
         navigation.setParams({ deletedId: undefined });
       }
     }, [route.params?.savedMove, route.params?.deletedId]);
+
 
 
     useEffect(() => {
@@ -341,6 +347,7 @@ export default function MyDojoStyles({route}) {
         unsubscribeNav();
       };
     }, [moves]);
+
 
 
     const toggleSelect = (id) => {
@@ -393,12 +400,13 @@ export default function MyDojoStyles({route}) {
     if (loading && ftype=== 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (listmode) return (
-      <ImageBackground style={{flex:1,width:'100%',height:'100%'}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
+      <ImageBackground style={{flex: 1, width: '100%', height: '100%'}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1, marginTop:25}}>
-          <View style={{backgroundColor: 'transparent', marginBottom:30, paddingLeft:5, paddingRight:5}}>
-            <ImageBackground style={ styles.icon } resizeMode='contain' source={ftype=== "video" ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
+          <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft: 5, paddingRight: 5}}>
+            <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ftype=== "video" ? require('../assets/moveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
+
           <View style={styles.myDojoHeader}>
             {ftype === "video" ? ( <Text style={{ color: '#e43838', fontSize: 11, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )
               : ( <Text style={{ color: '#00FF41', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )}
@@ -439,13 +447,13 @@ export default function MyDojoStyles({route}) {
              <View style={ftype === "steps" ? styles.batchBar : styles.batchBarVideo}>
                <Text style={ftype === "steps" ? styles.batchText : styles.batchTextVideo}>{selectedIds.length} Selected</Text>
                <TouchableOpacity onPress={() => handleShare(selectedIds)} style={styles.shareIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
+                 <ImageBackground style={{height:"100%", width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDiscardIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
+                 <ImageBackground style={{height:"100%", width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
                </TouchableOpacity>
                <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDeleteIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
+                 <ImageBackground style={{height:"100%", width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : require('../assets/deletemoveicon.png') }/>         
                </TouchableOpacity>
              </View>)}
         </SafeAreaView>
@@ -454,10 +462,12 @@ export default function MyDojoStyles({route}) {
 
     return (
      <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
+      <StatusBar barStyle="light-content"/>
       <SafeAreaView style={{flex:1, marginTop:7}}>
-        <View style={{backgroundColor: 'transparent', marginBottom:9, paddingLeft:5, paddingRight:5}}>
-          <ImageBackground style={styles.icon} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
+        <View style={{backgroundColor: 'transparent', marginBottom:9, paddingLeft:5, paddingRight:5, opacity: 1}}>
+          <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
+
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO MOVES LIST</Text>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
@@ -533,33 +543,31 @@ export default function MyDojoStyles({route}) {
     );
 }
 
+
 const styles = StyleSheet.create({
 imgBackground: { flex: 1, width: '100%', height: '100%' },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)', opacity: 1 },
 sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)', opacity: 1 },
 sectionHeader: { color: '#1cf151', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(203, 212, 206, 0.38)', alignSelf: "flex-start", opacity: 1 },
-sectionHeaderVideo: { color: '#fd694f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 217, 205, 0.38)', alignSelf: "flex-start", opacity: 1 },
+sectionHeaderVideo: { color: '#fd694f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 190, 170, 0.38)', alignSelf: "flex-start", opacity: 1 },
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 47, width: 43, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
-selectedItemVideo: { borderColor: '#d82e10', borderWidth: 2, backgroundColor: 'rgba(248, 86, 57, 0.6)' },
+selectedItemVideo: { borderColor: '#e74325', borderWidth: 2, backgroundColor: 'rgba(248, 86, 57, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 2 },
 titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#35e925', backgroundColor: 'rgba(203, 212, 206, 0.38)', alignSelf: "flex-start" },
-titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#f33c3c', backgroundColor: 'rgba(247, 217, 205, 0.38)', alignSelf: "flex-start"},
-
+titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#f33c3c', backgroundColor: 'rgba(247, 190, 170, 0.38)', alignSelf: "flex-start"},
 thumbImage: { width: '100%', height: 152, backgroundColor: '#1a1a1a' },
 myDojoDeleteIcon: {height: 47, width: 47, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
 pillRowVideo: { backgroundColor: 'rgba(43, 0, 0, 0.5)', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 7, borderRadius: 9, opacity: 1},
 pillRow: { backgroundColor: 'rgba(0, 43, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8, borderRadius: 9, opacity: 1 },
 typePill: { backgroundColor: 'rgba(203, 212, 206, 0.38)', color: '#00FF41', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
-typePillVideo: { backgroundColor: 'rgba(247, 217, 205, 0.38)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
-editIcon: { fontSize: 16 },
+typePillVideo: { backgroundColor: 'rgba(247, 190, 170, 0.38)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#00FF41', elevation: 10 },
 batchBarVideo: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#b30000', elevation: 10 },
 batchText: { color: '#00FF41', fontWeight: 'bold' },
 batchTextVideo: { color: '#fa3d30', fontWeight: 'bold' },
-batchIcon: { fontSize: 22, color: '#fff' },
 shareIcon: {height: 45, width: 45, borderRadius: 9, backgroundColor: '#daf1dc', alignItems: 'center', justifyContent: 'center' },
 container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
@@ -577,7 +585,5 @@ cardInternal: { padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 1
 redPlusIcon:{height: 45, width: 45, borderRadius: 9, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
 plusIcon:{height: 45, width: 45, borderRadius: 9, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
 infoIcon:{height: 40, width: 44, marginLeft: 19, backgroundColor: "transparent", marginBottom: 9,},
-importIcon:{height: 79, width:50, borderRadius: 9, marginLeft: 19, marginBottom:3},
-pillButton: {paddingVertical: 15, paddingHorizontal: 25, borderRadius: 30, marginVertical: 10, marginHorizontal: 20, borderWidth: 1,borderColor: 'rgba(255,255,255,0.3)',elevation: 5, 
-  shadowColor: '#000', shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.8,shadowRadius: 2,}
+importIcon:{height: 79, width:50, borderRadius: 9, marginLeft: 19, marginBottom:3}
 });
