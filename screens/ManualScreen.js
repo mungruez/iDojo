@@ -4,14 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ManualScreen({ route, navigation }) {
     const { manual } = route.params;
-    const bgColor = ['palegoldenrod', 'khaki','goldenrod','orange', 'gold','cornflowerblue','peru','darkgoldenrod','darkorange ','tan','chocolate', 'brown']
+    const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
   return (
-   <View style={{flex:1, paddingTop:40,  backgroundColor:"#228b22"}}> 
+   <View style={{flex: 1, paddingTop:40, backgroundColor:"#228b22"}}> 
     <StatusBar barStyle="light-content"/>
     <SafeAreaView style={{ backgroundColor:'black', flex:1}}>
 
-      <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:19, marginTop:38 }}>
+      <Text style={{ backgroundColor: '#2f4f4f', color:"crimson", textAlign:"center", fontSize:21, marginBottom:19, marginTop:38 }}>
           {manual.title}
       </Text>
 
@@ -21,7 +21,7 @@ export default function ManualScreen({ route, navigation }) {
             
             return ( <View key={index} style={{backgroundColor:"black", marginBottom:19}}>
               
-              <View style={{backgroundColor: bgColor[(index%12)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+              <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
                 <Text style={styles.titletext}>{step.title}</Text>
               </View>
 
@@ -36,7 +36,7 @@ export default function ManualScreen({ route, navigation }) {
                    marginBottom:0,
                    margin:0,
                    height: 490,
-                   maxWidth: 380,
+                   maxWidth: 380, 
                   }}
                 />
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     marginLeft: 7,
     color: 'black',
-    opacity:1,
+    opacity: 1,
     backgroundColor:"transparent"
   },
   imgBackground: {

@@ -369,7 +369,7 @@ export default function MyDojoStyles({route}) {
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
-        onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : navigation.navigate('Move', { video: item })}
+        onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? navigation.navigate('Move', { video: item }) : navigation.navigate('Manual', { manual: item })}
         style={[styles.itemContainer, selectedIds.includes(item.id) && ftype ==="steps" ? styles.selectedItem : selectedIds.includes(item.id) && ftype ==="video" && styles.selectedItemVideo]}>
 
         <View style={styles.card}>

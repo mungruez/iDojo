@@ -9,8 +9,11 @@ const videoSources = videos.keys().map((key) => videos(key));
 const MoveScreen = ({ route, navigation }) => {
   const { video } = route.params;
 
-  //useVideoPlayer hook init video source with move id automatically unloads video when component unmounts
-  const player = useVideoPlayer(videoSources[video.mid], (player) => {
+  const videoIndex = videoSources.findIndex(source => source.includes(video.mid));
+  const sourceToUse = videoIndex !== -1 ? videoSources[videoIndex] : video.vid || video.videourl;
+  
+  //useVideoPlayer hook init video source with move.mid or move.vid automatically unloads video when component unmounts
+  const player = useVideoPlayer(sourceToUse, (player) => {
     player.loop = true;
     player.play();
   });
@@ -30,7 +33,8 @@ const MoveScreen = ({ route, navigation }) => {
               contentFit="contain"
               useNativeControls
               allowsPictureinPicture
-              style={{ flex: 1,marginBottom:5, marginLeft:1, marginRight:3, padding:0,borderColor:'#9a9aa1',borderWidth:2, width:"100%", height:"38%" }}
+              allowsPlayBackSpeed={true}
+              style={{ flex: 1,marginBottom:5, marginLeft:1, marginRight:3, padding:0,borderColor:'#9a9aa1', borderWidth:2, width:"100%", height:"38%" }}
             />
         
         </View>

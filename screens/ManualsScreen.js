@@ -47,11 +47,11 @@ export default function ManualsScreen() {
 
 
   return (
-    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
+    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
       <StatusBar barStyle="light-content"backgroundColor="#269b26"  /> 
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
-        <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0,borderRadius:7,}}>
+        <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0, borderRadius: 7,}}>
           
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/manualstitle.png')} >
             <View style={{flexDirection:"row", position: "relative", backgroundColor:"transparent", height: 47,}}>
@@ -63,7 +63,7 @@ export default function ManualsScreen() {
           </ImageBackground> 
         </View>    
         
-            <View style={{flexDirection:'row' ,flex:1, padding: 1, backgroundColor:'transparent',}}>
+            <View style={{flexDirection:'row' ,flex:1, padding: 1, opacity: 1}}>
               <FlatList
                 data={manuals}
                 numColumns={1}
@@ -78,15 +78,12 @@ export default function ManualsScreen() {
                       flex:1,
                       justifyContent: "space-between",
                       flexDirection: "column",
-                      alignItems: "top",
-                      marginTop:2,
-                      marginLeft:"1",
-                      marginRight:"1",
+                      marginTop: 2,
+                      marginLeft: 1,
+                      marginRight: 1,
                       width:"100%",
-                      height:"auto",
-                      borderColor:"transparent",
-                      borderWidth:0,
-                      backgroundColor:'#2f4f4f',
+                      borderWidth: 0,
+                      backgroundColor: '#2f4f4f',
                     }}
                   >
               
