@@ -9,7 +9,7 @@ const imageSources = images.keys().map((key) => images(key));
 
 export default function Fighter({ route, navigation }) {
   const { fighter,offset } = route.params;
-  const bgColor = ['khaki', 'sandybrown', 'darkkhaki', 'papayawhip', 'wheat', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'moccasin',];
+  const bgColor = ['khaki', 'sandybrown', 'honeydew', 'darkkhaki', 'papayawhip', 'wheat', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'moccasin',];
 
 
   return (
