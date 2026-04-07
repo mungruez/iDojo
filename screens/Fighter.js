@@ -9,11 +9,11 @@ const imageSources = images.keys().map((key) => images(key));
 
 export default function Fighter({ route, navigation }) {
   const { fighter,offset } = route.params;
-  const bgColor = ['khaki','palegoldenrod','goldenrod','orange','gold','sandybrown','peru','darkgoldenrod','darkorange ','tan','chocolate', 'sienna']
+  const bgColor = ['goldenrod','gold','sandybrown','peru', 'khaki','darkgoldenrod', 'tan','chocolate', 'sienna']
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'khaki', width:'100%', height:'100%' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], width:'100%', height:'100%' }}>
       <StatusBar barStyle="dark-content"/>
       <ScrollView>
 
@@ -32,7 +32,7 @@ export default function Fighter({ route, navigation }) {
         {fighter.desc.map((quote, index) => {
           return (
             <View key={index}>
-              <Text style={{backgroundColor: bgColor[index], fontSize: 16, color: "black"}}>{quote}</Text>
+              <Text style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize: 16, color: "black", fontWeight: "semibold"}}>{quote}</Text>
             </View>
           );
         })}
@@ -46,7 +46,7 @@ export default function Fighter({ route, navigation }) {
                 resizeMode="contain"
                 style={styles.fighterImage}
               />
-              <Text style={{color: "black"}}>{move.desc}</Text>
+              <Text style={{color: "black", fontWeight: "semibold"}}>{move.desc}</Text>
             </View>
           );
         })}
