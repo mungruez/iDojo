@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, InteractionManager, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler, StatusBar, KeyboardAvoidingView, Platform} from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import {  View,  Text, TextInput, TouchableOpacity,  ScrollView, StyleSheet, ImageBackground, Image, Alert, Pressable, TouchableWithoutFeedback, UIManager, findNodeHandle, Dimensions, BackHandler, StatusBar, Keyboard, Platform} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,11 +13,10 @@ export default function PasswordManager() {
     const [passwords, setPasswords] = useState([]); 
     const [editing, setEditing] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
-    const [isReady, setIsReady] = useState(true);
+    const [isReady, setIsReady] = useState(false);
+    const [bottomPadding, setBottomPadding] = useState(0);
 
     const insideViewRef = React.useRef(null);
-
-    const itemRef = React.useRef(null);
     const scrollRef = React.useRef(null);
 
     const navigation = useNavigation();
@@ -138,17 +137,6 @@ export default function PasswordManager() {
     }, [password]);
 
 
-    const handleAutoScroll = () => {
-        const deviceWidth = (Dimensions.get('window').width / 100)*71;
-        let mv = isOverlayVisible*(deviceWidth);
-        InteractionManager.runAfterInteractions(() => {
-            if (scrollRef.current && isReady) {
-                scrollRef.current.scrollTo({ x: mv, animated: false });
-            }
-        });
-    };
-
-
     const handleGlobalTouch = (event) => {
         const insideViewNode = findNodeHandle(scrollRef.current);
         const touchedNode = event?.nativeEvent?.target;
@@ -170,16 +158,13 @@ export default function PasswordManager() {
         setOverlayVisible(passNum);
     };
 
+
     const resetPin = async () => {
         await AsyncStorage.removeItem('xx7771xxiDojoPIN');
         navigation.popToTop();
     };
 
-    useEffect(() => {
-        handleAutoScroll()
-
-    }, [isOverlayVisible]);
-
+   
 
 
     const encryptPassword = async (pass, passNum) => {
@@ -286,7 +271,12 @@ export default function PasswordManager() {
         return dec+"";
     };
 
+
     const savePassword = async () => {
+        if(isOverlayVisible > -1) {
+            setOverlayVisible(-1);
+        }
+
         if (!website || !username || !password) {
             alert("Please fill in all fields."); 
             return;
@@ -390,7 +380,11 @@ export default function PasswordManager() {
         setPassword(passwords[index].password);
         setPasswordNumTemp(passwordNum);
         setPasswordNum(passwords[index].passwordNum);
+        if(isOverlayVisible > -1) {
+            setOverlayVisible(-1);
+        }
     };
+
 
     const showConfirmDialog = () => {
         Alert.alert(
@@ -409,13 +403,13 @@ export default function PasswordManager() {
           ],
           { cancelable: false } 
         );
-      };
+    };
 
     
     const showInstructions = () => {
         Alert.alert(
-          "<--iDojo Hidden Password Manager-->",
-          "Intructions : All passwords are encrytped before saving to the phone only the owner can decrypt them for viewing in the App. No data is collected in any way by iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes (/,\)\n(2) You may store over 1900 of Passwords. Clearing the App Data will delete all your passwords.\n(3) Use the Rest PIN button at the top to reset your PIN\n(4) Use the gold Edit button to edit the password or view it for copy and pasting.\n(5) Click trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
+          "iDojo Hidden Password Manager-->",
+          "Intructions : All passwords are encrytped before saving to the phone only the owner with the PIN/Password can decrypt them for viewing in the App. No data is collected in any way by the iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes(/).\n(2) You may store as many Passwords as your phone memory allows. Uninstalling the App or Clearing the App Data will delete all your passwords.\n(3) Use the Reset PIN button at the top to reset your PIN/Password.\n(4) Use the gold Edit button to edit the password or view it for, copy and pasting.\n(5) Click gold Trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
           [
             {
               text: "OK",
@@ -426,6 +420,7 @@ export default function PasswordManager() {
           { cancelable: false } 
         );
     };
+
 
     const deletePassword = async (passNum) => {
         let webst = "";
@@ -527,7 +522,7 @@ export default function PasswordManager() {
     const renderPasswordList = () => {
         return passwords.map((item, index) => (
             <View key={index}
-              ref={item.passwordNum === isOverlayVisible ? insideViewRef : null}
+              ref={index === isOverlayVisible ? insideViewRef : null}
               style={styles.passwordItem}>
                 
                 <View style={styles.listItem}>
@@ -559,24 +554,22 @@ export default function PasswordManager() {
 
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity onPress={() => editPassword(index)} style={ styles.editButton }>
-                        <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
+                        <ImageBackground style={{ height:"100%", width:"100%" }} resizeMode='contain' source={require('../assets/editicongold.png')}/>         
                     </TouchableOpacity>
 
-                    { isOverlayVisible===index ? (
-                        <TouchableWithoutFeedback onPress={closeOverlay}>
-                            <View style={{flexDirection:'column', margin:0, padding:0,}}>  
-                                <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.confirmButton }>
-                                    <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
-                                </TouchableOpacity>
+                    { isOverlayVisible === index ? (
+                        <View style={{flexDirection:'column', padding: 0,}}>  
+                            <TouchableOpacity onPress={() => deletePassword(item.passwordNum)} style={ styles.confirmButton }>
+                                <ImageBackground style={{ height: 35, width:"100%" }} resizeMode='contain' source={require('../assets/deletebutton.png')}/>         
+                            </TouchableOpacity>
                             
-                                <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
-                                     <ImageBackground style={{ flex:1, height:34, width:"auto" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
-                                </TouchableOpacity>
-                            </View>
-                        </TouchableWithoutFeedback> ) 
+                            <TouchableOpacity onPress={() => closeOverlay()} style={ styles.cancelButton }>
+                                <ImageBackground style={{ height:34, width:"100%" }} resizeMode='contain' source={require('../assets/cancelbutton.png')}/>         
+                            </TouchableOpacity>
+                        </View> ) 
                         : (
                             <TouchableOpacity onPress={() => openOverlay(index)} style={ styles.deleteButton }>
-                                <ImageBackground style={{ flex:1, height:"auto", width:"auto" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
+                                <ImageBackground style={{ height:"100%", width: "100%" }} resizeMode='contain' source={require('../assets/deletebuttongold.png')}/>         
                             </TouchableOpacity> )
                     }
                 </View>
@@ -653,14 +646,37 @@ export default function PasswordManager() {
         }
     }
 
+    
 
-    return isOverlayVisible > -1 ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}>      
-      <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+    useEffect(() => {
+        const showSub = Keyboard.addListener(
+        Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+        (e) => {
+            setBottomPadding(e.endCoordinates.height+48);
+        }
+        );
+        const hideSub = Keyboard.addListener(
+        Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+        () => {
+            setBottomPadding(0);
+        }
+        );
+
+        return () => {
+        showSub.remove();
+        hideSub.remove();
+        };
+    }, []);
+
+
+    if(isOverlayVisible !== -1) return (
+      <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+        <TouchableWithoutFeedback onPress={() => setOverlayVisible(-1)}>
         <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
-        </View>
+        </View></TouchableWithoutFeedback>
         
-        <View style={{ flexDirection:'row', alignItems:'center', marginBottom: 1, padding: 0,}}>
+        <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 3, padding: 0,}}>
             <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/backiconvault.png')}/>         
             </TouchableOpacity> 
@@ -668,19 +684,20 @@ export default function PasswordManager() {
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
             </TouchableOpacity>
             <TouchableOpacity onPress={() => showInstructions()} style={ styles.infoButton }>
-                <ImageBackground style={{ width: "100%", height:"100%"}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
+                <ImageBackground style={{  height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
             </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection:'row', alignItems:'center', marginTop: -27, padding: 0, marginLeft: 12,}}> 
+        <TouchableWithoutFeedback onPress={() => setOverlayVisible(-1)}>
+        <View style={{ flexDirection:'row', alignItems:'center', marginTop: 4, padding: 0, marginLeft: 4,}}> 
             { passwords.length > 0 ? 
                 ( <Image
                     resizeMode="contain"
-                    style={{ flex:1, maxHeight:42, maxWidth:190, padding:0, marginTop: 0,}}
+                    style={{height:42, width:190}}
                     source={require('../assets/yourpwrds.png')}
                 /> ) : (
             <></> )}
-        </View>
+        </View></TouchableWithoutFeedback>
         
         <ScrollView style={styles.container}>
             <View style={styles.content}>
@@ -700,30 +717,37 @@ export default function PasswordManager() {
                     </ScrollView> )
                 }
 
+                <TouchableWithoutFeedback onPress={() => setOverlayVisible(-1)}>
                 <Text style={styles.subHeading}>
                     {editing
                         ? "Edit Password"
                         : "Add a Password"}
-                </Text>
+                </Text></TouchableWithoutFeedback>
                 <TextInput
                     style={styles.input}
-                    placeholder="Website"
+                    placeholderTextColor="rgba(160, 128, 80, 0.6)"
+                    placeholder="Enter Website"
                     value={website}
-                    onChangeText={(website) => setWebsite(website)} />
+                    onFocus={() => setOverlayVisible(-1)}
+                    onChangeText={(website) => setOverlayVisible(-1)} />
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Username"
+                     placeholderTextColor="rgba(160, 128, 80, 0.6)"
+                    placeholder="Enter Username"
                     value={username}
-                    onChangeText={(username) => setUsername(username)} />
+                    onFocus={() => setOverlayVisible(-1)}
+                    onChangeText={(username) => setOverlayVisible(-1)} />
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Password"
+                    placeholderTextColor="rgba(160, 128, 80, 0.6)"
+                    placeholder="Enter Password"
                     secureTextEntry={false}
                     value={password}
-                    onChangeText={(password) => setPassword(password)} />
-
+                    onFocus={() => setOverlayVisible(-1)}
+                    onChangeText={(password) => setOverlayVisible(-1)} />
+                
                 <TouchableOpacity
                     style={{height:95, width:"99%", alignSelf:"center",}}
                     onPress={savePassword}>
@@ -738,30 +762,32 @@ export default function PasswordManager() {
             </View>
         </ScrollView>
       </ImageBackground>
-    </Pressable> ) 
-    : ( 
-      <ImageBackground style={ styles.imgBackground } resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+    )
+     
+    return ( 
+      <ImageBackground style={[styles.imgBackground, { paddingBottom: bottomPadding, backgroundColor: 'silver', }]} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+           
         <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View>
         
-        <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 1, padding: 0,}}>
+        <View style={{ flexDirection:'row', alignItems:'left', marginBottom: 3, padding: 0,}}>
             <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backiconvault.png')}/>         
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/backiconvault.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={() => showConfirmDialog()} style={ styles.resetpinButton }>
-                <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/resetpinbutton.png')}/>         
             </TouchableOpacity>
             <TouchableOpacity onPress={() => showInstructions()} style={ styles.infoButton }>
-                <ImageBackground style={{ flex:1,}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
+                <ImageBackground style={{  height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/infobtn.png')}/>         
             </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection:'row', alignItems:'center', marginTop: -21, padding: 0, marginLeft: 12,}}> 
+        <View style={{ flexDirection:'row', alignItems:'center', marginTop: 4, padding: 0, marginLeft: 4,}}> 
             { passwords.length > 0 ? 
                 ( <Image
                     resizeMode="contain"
-                    style={{ flex:1, maxHeight:42, maxWidth:190, padding:0, marginBottom:0,}}
+                    style={{height:42, width:190}}
                     source={require('../assets/yourpwrds.png')}
                 /> ) : (
             <></> )}
@@ -775,13 +801,16 @@ export default function PasswordManager() {
                         No Passwords To Show
                     </Text>
                 ) : (
-                    <ScrollView horizontal>
+                    <ScrollView 
+                      ref={scrollRef}
+                      horizontal
+                      onContentSizeChange={() => setIsReady(true)}>
                         <View style={styles.table}>
                             {renderPasswordList()}
                         </View>
                     </ScrollView>
                 )}
-
+         
                 <Text style={styles.subHeading}>
                     {editing
                         ? "Edit Password"
@@ -803,7 +832,7 @@ export default function PasswordManager() {
 
                 <TextInput
                     style={styles.input}
-                     placeholderTextColor="rgba(160, 128, 80, 0.6)"
+                    placeholderTextColor="rgba(160, 128, 80, 0.6)"
                     placeholder="Enter Password"
                     secureTextEntry={false}
                     value={password}
@@ -831,7 +860,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1, // Take up the full height of the screen
         height: "100%",
-        margin: 4, // Add margin around the container
+        margin: 4, 
+        marginTop: 0,
     },
     content: {
         margin: 5, 
@@ -938,86 +968,86 @@ const styles = StyleSheet.create({
         backgroundColor: "transparent", // Red background
         borderRadius: 9, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 19, // Space to the left of the button
+        marginLeft: 29, // Space to the left of the button
         borderWidth: .8, 
         borderColor: "goldenrod",
-        elevation: 2,
-        height: 49,
-        width: 49,
+        elevation: 1,
+        height: 55,
+        width: 55,
     },
     confirmButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 9, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 12, // Space to the left of the button
+        marginLeft: 17, // Space to the left of the button
         borderWidth: 0, 
         elevation: 0,
-        minHeight: 48,
-        minWidth: 67,
-        marginTop:-16,
+        height: 38,
+        width: 67,
+        marginTop: -7,
     },
     // Style for the delete button
     cancelButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 9, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 12, // Space to the left of the button
+        marginLeft: 17, // Space to the left of the button
         borderWidth: 0, 
         elevation: 0,
-        minHeight: 48,
-        minWidth: 67,
+        height: 38,
+        width: 67,
         marginTop: -7,
-        marginBottom: -22,
+        marginBottom: -10,
     },
     // Style for the edit button
     editButton: {
         backgroundColor: "transparent", // Blue background
         borderRadius: 5, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 1, // Space to the right of the button
+        marginLeft: -7, // Space to the right of the button
         marginRight: 19,
         borderWidth: 0, // Border width
         elevation: 0,
-        height: 52,
-        width: 57,
+        height: 57,
+        width: 55,
     },
     // Style for the back button
     backButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 9, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 31, // Space to the left of the button
+        marginLeft: 43, // Space to the left of the button
         borderWidth: 0, 
         elevation: 0,
         height: 70,
         width: 61,
         marginTop: -10,
-        marginRight: 22,
+        marginRight: 5,
     },
     // Style for the resetPin button
     resetpinButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 4, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 19, // Space to the left of the button
+        marginLeft: 10, // Space to the left of the button
         borderWidth: 0,
         elevation: 0,
-        minHeight: 172,
-        minWidth: 76,
-        marginTop: -67,
+        height: 57,
+        width: 176,
+        marginTop: -7,
     },
     // Style for the resetPin button
     infoButton: {
         backgroundColor: "transparent", // Red background
         borderRadius: 7, // Slightly rounded corners
         padding: 0, // Add padding inside the button
-        marginLeft: 38, // Space to the left of the button
+        marginLeft: 7, // Space to the left of the button
         borderWidth: 0,
         elevation: 0,
-        minHeight: 67,
-        minWidth: 38,
-        marginTop: -67,
-        marginRight: 5,
+        height: 71,
+        width: 41,
+        marginTop: -9,
+        marginRight: 40,
     },
     // Style for the container holding the edit and delete buttons
     buttonsContainer: {

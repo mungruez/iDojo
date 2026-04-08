@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, TouchableOpacity, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, FlatList, Pressable, Image, TouchableOpacity, StatusBar, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {manuals} from '../data/manuals';
 import React, { useState} from 'react';
@@ -47,9 +47,9 @@ export default function ManualsScreen() {
 
 
   return (
-    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fightersbackground.jpeg')}>
-      <StatusBar barStyle="light-content"backgroundColor="#269b26"  /> 
-      <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='stretch' source={require('../assets/fightersbackground.jpeg')}>
+      <StatusBar barStyle="light-content" backgroundColor="#269b26"  /> 
+      <SafeAreaView style={{ flex: 1, height: "100%", width: "100%", marginTop:25, backgroundColor: 'transparent',}}>
 
         <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0, borderRadius: 7,}}>
           
@@ -63,7 +63,7 @@ export default function ManualsScreen() {
           </ImageBackground> 
         </View>    
         
-            <View style={{flexDirection:'row' ,flex:1, padding: 1, opacity: 1}}>
+       
               <FlatList
                 data={manuals}
                 numColumns={1}
@@ -74,14 +74,16 @@ export default function ManualsScreen() {
                   <View
                     key={item.title}
                     style={{
-                      alignItems: "center",
-                      flex:1,
+                      alignItems: "flex-start",
+                      borderColor: "#228b22",
+                      borderWidth: 2,
+                      borderRadius: 12,
+                      flex: 1,
                       justifyContent: "space-between",
                       flexDirection: "column",
-                      marginTop: 2,
-                      marginLeft: 1,
-                      marginRight: 1,
-                      width:"100%",
+                      marginTop: 5,
+                      marginLeft: 21,
+                      width: "90%",
                       borderWidth: 0,
                       backgroundColor: '#2f4f4f',
                     }}
@@ -106,7 +108,6 @@ export default function ManualsScreen() {
               </Pressable>
             </View>)}
           />
-        </View> 
     </SafeAreaView>
   </ImageBackground>
   )
@@ -115,19 +116,21 @@ export default function ManualsScreen() {
 
 const styles = StyleSheet.create({
       imgBackground: {
-        minWidth: '100%',
-        height: '100%',
+        width: '100%',
+        height: "95%",
         flex: 1,
         opacity: 1,
       },
       icon: {
         height: 57,
         opacity: 1,
-        marginTop:38,
+        marginTop: 38,
         textAlign: "center" 
       },
       mainCardView: {
-        height: 190,
+        height: 304,
+        width: "100%",
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: "#2f4f4f",
@@ -146,15 +149,14 @@ const styles = StyleSheet.create({
         marginLeft: 1,
         marginRight: 5,
         borderColor: "#228b22",
-        borderWidth:1,
+        borderWidth: 2,
       },
       subCardView: {
-        height: 186,
-        width: 180,
+        height: 285,
+        width: "100%",
         marginLeft:-15,
         borderRadius: 8,
         backgroundColor: "slategray",
-        borderColor: "transparent",
         color: 'crimson',
         borderWidth: 0,
         borderStyle: 'solid',
@@ -164,8 +166,11 @@ const styles = StyleSheet.create({
         padding:0,
       },
       image: {
-        width: 60,
-        height: 60,
+        width: 95,
+        height: 101,
+        borderColor: "#1b681b",
+        borderWidth: 2,
+        borderRadius: 12,
       },
       name: {
         fontSize: 22,
@@ -180,6 +185,9 @@ const styles = StyleSheet.create({
         padding: 5,
         marginTop: 1,
         marginBottom: 1,
+        borderColor: "#228b22",
+        borderWidth: 2,
+        borderRadius: 12,
         backgroundColor: '#FFFFFF',
         flexDirection: 'row',
         shadowColor: 'black',
@@ -189,21 +197,20 @@ const styles = StyleSheet.create({
           width: -2,
         },
         elevation: 2,
-        flexWrap:'wrap'
+        flexWrap:'wrap',
+        width: "100%",
       },
       username: {
         color: 'darkgreen',
-        fontSize: 16,
-        alignSelf: 'center',
+        fontSize: 14,
+        alignSelf: 'flex-start',
         marginLeft: 4,
         flexWrap: 'wrap',
         flex:1,
-        flexShrink:1,
         fontWeight:"500"
       },
       imgSound: {
       height: "100%",
       width: "100%",
-      flex: 1, 
     },
 })

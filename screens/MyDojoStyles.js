@@ -582,8 +582,8 @@ greenDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,s
 redDivider: {width: '90%',height: 40, alignSelf: 'center',marginVertical: 15,shadowColor: '#f8d9de', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10,backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
 smallGap: {height: 12,},
 cardInternal: { padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10 },
-redPlusIcon:{height: 45, width: 49, borderRadius: 9, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
-plusIcon:{height: 45, width: 49, borderRadius: 9, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
-infoIcon:{height: 43, width: 47, marginLeft: 19, marginBottom: 9,},
-importIcon:{height: 79, width: 50, borderRadius: 9, marginLeft: 19, marginBottom: 3}
+redPlusIcon:{height: 50, width: 50, borderRadius: 4, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
+plusIcon:{height: 50, width: 50, borderRadius: 4, marginLeft: 21, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 7, opacity: 1},
+infoIcon:{height: 45, width: 47, marginLeft: 19, marginBottom: 9,},
+importIcon:{height: 61, width: 57, borderRadius: 9, marginLeft: 21, marginBottom: 3}
 });

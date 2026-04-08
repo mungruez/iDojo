@@ -15,7 +15,7 @@ export default function Fighter({ route, navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], width:'100%', height:'100%' }}>
       <StatusBar barStyle="dark-content"/>
-      <ScrollView style={{marginBottom: 38, marginTop: 19, padding: 7}}>
+      <ScrollView style={{marginBottom: 38, marginTop: 19, padding: 19}}>
 
         <Text style={{ backgroundColor:'#2f4f4f', color: "crimson", textAlign:"center", fontSize: 21, marginBottom: 19, marginTop: 38 }}>
           {fighter.name}
