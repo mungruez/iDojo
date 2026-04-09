@@ -48,6 +48,13 @@ export default function MyDojoStyles({route}) {
         if (info.exists) {
           const content = await FileSystem.readAsStringAsync(fileUri);
           const movesList = JSON.parse(content);
+          movesList = movesList.filter(m => 
+            m && 
+            m.id && 
+            m.title && 
+            m.title.trim() !== "" &&
+            (m.type === 'video' || (m.steps && m.steps.length > 0))
+          );
           setMoves(movesList);
           parseStyles(movesList);
           setHMoves(getMoves(fstyle, ftype, movesList));
@@ -197,7 +204,7 @@ export default function MyDojoStyles({route}) {
         await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
         
       } catch (e) {
-        Alert.alert("Share Error, you may be sharing the same step image twice. ", e.message);
+        Alert.alert("Share Error, you may to retry. ", e.message);
       } finally {
         setLoading(false);
       }
