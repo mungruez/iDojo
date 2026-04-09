@@ -147,10 +147,19 @@ export default function MyDojoStyles({route}) {
           const updatedMove = { ...move };
           const copyToStaging = async (uri) => {
             if (!uri || typeof uri !== 'string' || !uri.startsWith('file://')) return uri;
-            const fileName = `${idx}_${uri.split('/').pop()}`;
-            const dest = `${shareDirUri}${fileName}`;  
+              const info = await FileSystem.getInfoAsync(uri);
+              if (!info.exists) {
+                alert(`File does not exist: ${uri}`);
+                return null; 
+              }  
+              const fileName = `${idx}_${uri.split('/').pop()}`;
+              const dest = `${shareDirUri}${fileName}`;  
             try {
               await FileSystem.copyAsync({ from: uri, to: dest });
+              const destInfo = await FileSystem.getInfoAsync(dest);
+              if (!destInfo.exists) {
+                throw new Error(`Copy verification failed: ${fileName} not found after copy`);
+              }
               return fileName;
             } catch (e) { return null; }
           };
@@ -158,9 +167,14 @@ export default function MyDojoStyles({route}) {
           if (move.vid) updatedMove.vid = await copyToStaging(move.vid);
           if (move.videoUrl) updatedMove.videoUrl = await copyToStaging(move.videoUrl);
           if (Array.isArray(move.steps)) {
-            updatedMove.steps = await Promise.all(move.steps.map(async (s) => ({
-              ...s, img: await copyToStaging(s.img)
-            })));
+            updatedMove.steps = await Promise.all(move.steps.map(async (s, sIdx) => {
+              const imgFileName = await copyToStaging(s.img);
+              return { ...s, img: imgFileName };
+            }));
+
+            if (updatedMove.steps.some(s => s.img === null)) {
+              throw new Error('Failed to share step image.');
+            }
           }
           updatedMove.thumb = move.type === 'video' ? (updatedMove.vid || updatedMove.videoUrl) : (updatedMove.steps?.[0]?.img || null);
           return updatedMove;
@@ -183,7 +197,7 @@ export default function MyDojoStyles({route}) {
         await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
         
       } catch (e) {
-        Alert.alert("Share Error", e.message);
+        Alert.alert("Share Error, you may be sharing the same step image twice. ", e.message);
       } finally {
         setLoading(false);
       }
