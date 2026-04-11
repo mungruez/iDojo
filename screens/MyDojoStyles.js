@@ -308,6 +308,8 @@ export default function MyDojoStyles({route}) {
         setSMoves([...sMoves, ...bMoves]);
       } else if(sMoves.length > 1 && pMoves.length > 1) {
         setSMoves([...sMoves, ...pMoves]);
+      } else if(bMoves.length > 1 && pMoves.length > 1) {
+        setSMoves([...bMoves, ...pMoves]);
       } else if (sMoves.length > 1) {
         setSMoves(sMoves);
       } else if (bMoves.length > 1) {
