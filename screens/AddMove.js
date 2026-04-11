@@ -1,5 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, StyleSheet, ImageBackground, DeviceEventEmitter, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
@@ -18,27 +19,36 @@ const AddMove = ({ route }) => {
   const pickMedia = async (index = null) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Permission Denied", "We need gallery access to add moves!");
+      Alert.alert("Permission Denied", "Gallery access is needed to add moves!");
       return;
     }
     
     const isVideo = (type === "video" && index === null);
     const mediaType = isVideo ? 'videos' : 'images';
     try {
-      const res = await ImagePicker.launchImageLibraryAsync({
-       mediaTypes: [mediaType],
-        allowsEditing: false,
-        quality: 1.0,
-      });
 
-      if (!res.canceled && res.assets && res.assets.length > 0) {
-        const pickedUri = res.assets[0].uri; 
-        if (isVideo) {
-          setVid(pickedUri);
-        } else {
-          const s = [...steps];
-          s[index].img = pickedUri;
-          setSteps(s);
+      if(type === "pdf") {
+        const result = await DocumentPicker.getDocumentAsync({
+          type: 'application/pdf',
+        });
+        if (!result.canceled && result.assets && result.assets.length > 0) setVid(result.assets[0].uri);
+
+      } else {
+        const res = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: [mediaType],
+          allowsEditing: false,
+          quality: 1.0,
+        });
+
+        if (!res.canceled && res.assets && res.assets.length > 0) {
+          const pickedUri = res.assets[0].uri; 
+          if (isVideo) {
+            setVid(pickedUri);
+          } else {
+            const s = [...steps];
+            s[index].img = pickedUri;
+            setSteps(s);
+          }
         }
       }
     } catch (err) {
@@ -69,9 +79,10 @@ const AddMove = ({ route }) => {
         title: s.title.trim() || `Step ${i + 1}`
       }));
 
-    } else if (type === "video") {
+    } else if (type === "video" || type === "pdf") {
       if (!vid && !videoUrl.trim()) {
-        Alert.alert("Required", "Please upload a video or provide a link.");
+        if(type === "video") Alert.alert("Required", "Please upload a video or provide a link.");
+        if(type === "pdf") Alert.alert("Required", "Please upload a pdf or provide a link.");
         return;
       }
       if(!desc) {
@@ -83,7 +94,7 @@ const AddMove = ({ route }) => {
     try {
       const moveId = move?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
-      const videoChanged = move && type === 'video' && vid && vid !== move?.vid;
+      const videoChanged = move && (type === "video" || type === "pdf") && vid && vid !== move?.vid;
       const stepsChanged = move && type === 'steps' && steps.some(s => s.img && !s.img.includes('/moves/'));
       if (videoChanged || stepsChanged) {
         await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
@@ -104,7 +115,7 @@ const AddMove = ({ route }) => {
 
       let finalVid = vid; 
       let finalSteps = [...steps];
-      if (type === 'video' && vid) {
+      if ((type === "video" || type === "pdf") && vid) {
         finalVid = await ensurePermanent(vid, `video_${Date.now()}.mp4`);
       }
       if (type === 'steps') {
@@ -119,11 +130,11 @@ const AddMove = ({ route }) => {
         id: moveId,
         title: title.trim(),
         type,
-        style: fstyle.trim() || 'Self-Defence',
-        steps: type === 'steps' ? finalSteps : [],
-        vid: type === 'video' ? finalVid : null,
-        videoUrl: type === 'video' ? videoUrl : '',
-        thumb: type === 'video' ? (finalVid || videoUrl) : (finalSteps[0]?.img || null),
+        style: fstyle.trim() || "Self-Defence",
+        steps: type === "steps" ? finalSteps : [],
+        vid: type === "video" || type === "pdf" ? finalVid : null,
+        videoUrl: type === "video" || type === "pdf" ? videoUrl : '',
+        thumb: type === "video" || type === "pdf" ? (finalVid || videoUrl) : (finalSteps[0]?.img || null),
         desc: desc 
       };
 
@@ -145,7 +156,7 @@ const AddMove = ({ route }) => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
     >
     <View style={{backgroundColor: 'transparent', marginBottom:12, paddingLeft:5, paddingRight:5, marginTop:25, opacity : 1}}>
-      <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : require('../assets/editmanualtitle.png') } /> 
+      <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : type=='steps' && move ? require('../assets/editmanualtitle.png') : type=="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
     </View>
     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
       <ImageBackground style={{ alignSelf:'center', height:70, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
@@ -160,13 +171,16 @@ const AddMove = ({ route }) => {
       <Text style={styles.label}>Moves List Title/Styles</Text>
       <TextInput style={type ==='video' ? styles.input : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
 
-      {!move && type !== 'video' && type!=='steps' && ( 
+      {!move && type !== "video" && type !== "steps" && type !== "pdf" && (
         <View style={styles.modeToggle}>
           <TouchableOpacity onPress={() => setType('video')} style={[styles.tab, type === 'video' && styles.activeTab]}>
             <Text style={[styles.tabText, type === 'video' && styles.activeTabText]}>VIDEO MOVE</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setType('steps')} style={[styles.tab, type === 'steps' && styles.activeTab]}>
             <Text style={[styles.tabText, type === 'steps' && styles.activeTabText]}>IMAGE STEPS MOVE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setType('pdf')} style={[styles.tab, type === 'pdf' && styles.activeTab]}>
+            <Text style={[styles.tabText, type === 'pdf' && styles.activeTabText]}>PDF MOVE</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -184,7 +198,20 @@ const AddMove = ({ route }) => {
           <Text style={styles.label}>Move Description</Text>
           <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
         </View>
-      ) : (
+        ) : type ===  "pdf" ? (
+          <View>
+            <Text style={styles.label}>PDF URL of Move</Text>
+            {!vid && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
+            <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
+              { vid || videoUrl ? 
+                ( <ImageBackground style={{ alignSelf:'center', height:50, width:50, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
+                : ( <Text style={styles.pdfIconText}>UPLOAD PDF FILE</Text> ) 
+              }
+            </TouchableOpacity>
+            <Text style={styles.label}>Move Description</Text>
+            <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+          </View>
+        ) : (
         <View style={{ marginTop: 3 }}>
           {steps.map((s, i) => (
             <View key={s.id} style={styles.stepRow}>
@@ -228,7 +255,7 @@ const AddMove = ({ route }) => {
       )}
 
       <TouchableOpacity style={styles.saveBtn} onPress={() => save()}>
-        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : require('../assets/redbtnbg.png')}>
+        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : type === "video" ? require('../assets/redbtnbg.png') : require('../assets/bluebtnbg.png')}>
           <Image
             resizeMode="contain"
             style={{height:36, width:172, alignSelf:"center", opacity: 1}}
@@ -245,8 +272,10 @@ const AddMove = ({ route }) => {
 const styles = StyleSheet.create({
   imgBackground: {  ...StyleSheet.absoluteFillObject, flex: 1, },
   icon: { height: 57, width: '90%', alignSelf: 'center' },
-  videoIcon: { height: 76, width:76, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},
-  videoIconUploaded: { height: 76, width:76, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f76b82',borderStyle: 'dashed'},
+  videoIcon: { height: 76, width:76, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f16969',borderStyle: 'dashed'},
+  videoIconUploaded: { height: 76, width:76, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
+  pdfIcon: { height: 76, width:76, backgroundColor: 'rgba(29, 56, 212, 0.1)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#1e0899',borderStyle: 'dashed'},
+  pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12 },
   videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
   plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
@@ -254,6 +283,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 15, marginLeft: 19, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
   label: { fontWeight: 'bold', color: '#420105', marginTop: 7, fontSize: 13, marginLeft:12 },
   input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1},
+  pdfinput: { borderWidth: 1, borderColor: '#1e0899', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(29, 56, 212, 0.1)', opacity: 1},
   modeToggle: { flexDirection: 'row', marginTop: 7, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
   tab: { flex: 1, padding: 12, alignItems: 'center', backgroundColor: '#f3bebe' },
   activeTab: { backgroundColor: '#5b12a5' },
@@ -267,9 +297,7 @@ const styles = StyleSheet.create({
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
   addStepBtn: {marginTop:5, height:37 ,width: 116, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
-  addStepText: { color: '#0b5737', fontWeight: 'bold' },
   saveBtn: { width:195, height:53, borderRadius: 15, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
-  saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   discardBtn: { marginBottom: 4, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
   discardText: { textAlign: 'center', color: '#e41934', fontWeight: 'bold', fontSize:10, marginTop: 1, height: 16, width: '100%' },
   stepImgContainer: { width: 77, height: 77, borderColor: '#083a1d', backgroundColor: 'rgba(93, 231, 167, 0.5)',  borderColor: '#083a1d', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, overflow: 'hidden', opacity: 1},

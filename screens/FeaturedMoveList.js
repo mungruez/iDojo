@@ -260,7 +260,7 @@ export default function FeatureMoveList() {
 
                               <Text
                                 numberOfLines={3}
-                                ellipsizeMode='tail'
+                                ellipsizeMode='clip'
                                 style={{
                                   fontSize: 11,
                                   color: "#cfcfafff",
