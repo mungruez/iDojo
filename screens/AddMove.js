@@ -166,10 +166,10 @@ const AddMove = ({ route }) => {
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
+      <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
       
       <Text style={styles.label}>Moves List Title/Styles</Text>
-      <TextInput style={type ==='video' ? styles.input : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
+      <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
 
       {!move && type !== "video" && type !== "steps" && type !== "pdf" && (
         <View style={styles.modeToggle}>
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 15, marginLeft: 19, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
   label: { fontWeight: 'bold', color: '#420105', marginTop: 7, fontSize: 13, marginLeft:12 },
   input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1},
-  pdfinput: { borderWidth: 1, borderColor: '#1e0899', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(29, 56, 212, 0.1)', opacity: 1},
+  pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1},
   modeToggle: { flexDirection: 'row', marginTop: 7, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
   tab: { flex: 1, padding: 12, alignItems: 'center', backgroundColor: '#f3bebe' },
   activeTab: { backgroundColor: '#5b12a5' },
