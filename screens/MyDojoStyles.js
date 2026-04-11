@@ -501,7 +501,7 @@ export default function MyDojoStyles({route}) {
               </TouchableOpacity>
     
               <TouchableOpacity onPress={() => toggleListMode(null)} style={ftype === "steps" ? styles.plusIcon : styles.redPlusIcon}>
-                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : ftype === "pdf" ? require('../assets/addpdficon.png') : require('../assets/addmoveicon.png') }/>         
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : ftype === "pdf" ? require('../assets/addpdfmoveicon.png') : require('../assets/addmoveicon.png') }/>         
               </TouchableOpacity>
             </View>
           </View>
