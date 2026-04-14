@@ -192,7 +192,7 @@ const AddMove = ({ route }) => {
           <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
             { vid || videoUrl ? 
               ( <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
-              : ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} />) 
+              : ( <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} />) 
             }
           </TouchableOpacity>
           <Text style={styles.label}>Move Description</Text>
@@ -205,7 +205,7 @@ const AddMove = ({ route }) => {
             <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
               { vid || videoUrl ? 
                 ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
-                : ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> ) 
+                : ( <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> ) 
               }
             </TouchableOpacity>
             <Text style={styles.label}>Move Description</Text>
@@ -217,10 +217,9 @@ const AddMove = ({ route }) => {
             <View key={s.id} style={styles.stepRow}>
               <Text style={styles.label}>Step Title</Text>
               <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
-              
               <Text style={styles.label}>Step Image</Text>
               <TouchableOpacity onPress={() => pickMedia(i)} style={styles.stepImgContainer}>
-                {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
+                {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
               </TouchableOpacity>
 
               <View style={{ width: '100%', marginTop: 12 }}>
@@ -243,25 +242,24 @@ const AddMove = ({ route }) => {
             </View>
           ))}
           <TouchableOpacity style={styles.addStepBtn} onPress={() => setSteps([...steps, { id: Date.now().toString(), title: '',img: null, desc: '' }])}>
-            <ImageBackground style={{width: '100%', height: 32, justifyContent: 'center',}} imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/greenbtnbg.png')}>
-              <Image
-                resizeMode="contain"
-                style={{ height:25, width: 114, alignSelf:"center", opacity: 1}}
-                source={require('../assets/addstep.png')}
-              />
-            </ImageBackground>
+            <ImageBackground style={{width: '100%', height: 38, justifyContent: 'center',}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/addstepbtn.png')} />
           </TouchableOpacity>
         </View>
+        
       )}
 
       <TouchableOpacity style={styles.saveBtn} onPress={() => save()}>
-        <ImageBackground style={{ height:43, width:"100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={type==='steps' ? require('../assets/greenbtnbg.png') : type === "video" ? require('../assets/redbtnbg.png') : require('../assets/bluebtnbg.png')}>
+        { type === "pdf" ? ( <ImageBackground style={{ height: 43, width: "100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='stretch' source={require('../assets/bluebtnbg.png')}>
           <Image
-            resizeMode="contain"
-            style={{height:36, width:172, alignSelf:"center", opacity: 1}}
+            resizeMode = "contain"
+            style={{height: 38, width: 172, alignSelf:"center", opacity: 1}}
             source={require('../assets/save.png')}
           />
-        </ImageBackground>
+        </ImageBackground> ) 
+        : type === "video" ? ( <ImageBackground style={{ height: 57, width: "100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/savevideobtn.png')} />
+         ) 
+        : ( <ImageBackground style={{ height:47, width:"100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/savemanualbtn.png')} />
+         ) }
       </TouchableOpacity>
     </ScrollView>
    </KeyboardAvoidingView>
@@ -272,15 +270,15 @@ const AddMove = ({ route }) => {
 const styles = StyleSheet.create({
   imgBackground: {  ...StyleSheet.absoluteFillObject, flex: 1, },
   icon: { height: 57, width: '90%', alignSelf: 'center' },
-  videoIcon: { height: 76, width:76, marginLeft: 12, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 10, marginTop: 5, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#f16969',borderStyle: 'dashed'},
+  videoIcon: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center'},
   videoIconUploaded: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
-  pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 10, marginTop: 5, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#1e0899',borderStyle: 'dashed', marginLeft: 12},
+  pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
   pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
   videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
   plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
   container: { flex: 1, backgroundColor: 'transparent', },
-  headerTitle: { fontSize: 19, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 15, marginLeft: 19, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
+  headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 5, marginLeft: 43, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
   label: { fontWeight: 'bold', color: '#420105', marginTop: 12, fontSize: 13, marginLeft:12 },
   input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1},
   pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1},
@@ -290,17 +288,17 @@ const styles = StyleSheet.create({
   tabText: { color: '#3e1c5f', fontWeight: 'bold' },
   activeTabText: { color: '#e6c8c8' },
   stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
-  stepImg: { flex:1, width: '100%', height: '100%' },
+  stepImg: { width: '100%', height: '100%' },
   stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(93, 231, 167, 0.5)', borderRadius: 12, opacity: 1, },
   removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:1, fontWeight: 'bold', height: 17, width: '100%' },
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
-  addStepBtn: {marginTop:5, height:37 ,width: 116, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
-  saveBtn: { width:195, height:53, borderRadius: 15, marginTop:19,alignSelf:'center',alignItems: 'center', justifyContent:'center', },
+  addStepBtn: {marginTop: 5, height: 41 ,width: 114, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
+  saveBtn: { width: 125, height: 97, borderRadius: 15, marginTop: 7, alignSelf:'center', alignItems: 'center', justifyContent:'center', },
   discardBtn: { marginBottom: 4, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
   discardText: { textAlign: 'center', color: '#e41934', fontWeight: 'bold', fontSize:10, marginTop: 1, height: 16, width: '100%' },
-  stepImgContainer: { width: 77, height: 77, borderColor: '#083a1d', backgroundColor: 'rgba(93, 231, 167, 0.5)',  borderColor: '#083a1d', justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 1, overflow: 'hidden', opacity: 1},
+  stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 });
 
 export default AddMove;
