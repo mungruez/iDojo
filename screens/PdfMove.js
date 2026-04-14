@@ -29,7 +29,7 @@ const PdfMove = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {pdfDropdownVisible && (
+      { pdfDropdownVisible && (
         <View style={styles.dropdownContainer}>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Style:</Text>
@@ -39,7 +39,7 @@ const PdfMove = ({ route, navigation }) => {
             </View>
           </View>
 
-          {pdf.desc && (
+          { pdf.desc && (
             <View style={styles.descSection}>
               <Text style={styles.descLabel}>Description</Text>
               <ScrollView style={styles.descScroll}>
