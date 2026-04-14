@@ -159,7 +159,7 @@ const AddMove = ({ route }) => {
       <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : type=='steps' && move ? require('../assets/editmanualtitle.png') : type=="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
     </View>
     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
-      <ImageBackground style={{ alignSelf:'center', height:70, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
+      <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
       <Text style={styles.discardText}>CANCEL</Text>
     </TouchableOpacity>
 
@@ -298,8 +298,8 @@ const styles = StyleSheet.create({
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
   addStepBtn: {marginTop: 5, height: 41 ,width: 114, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   saveBtn: { width: 125, height: 97, borderRadius: 15, marginTop: 7, alignSelf:'center', alignItems: 'center', justifyContent:'center', },
-  discardBtn: { marginBottom: 4, height: 95, width: 83, borderRadius: 12, backgroundColor: 'rgba(204, 33, 56, 0.1)', justifyContent: 'center', alignItems: 'center'},
-  discardText: { textAlign: 'center', color: '#e41934', fontWeight: 'bold', fontSize:10, marginTop: 1, height: 16, width: '100%' },
+  discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadius: 10, justifyContent: 'center', alignItems: 'center', opacity: 1},
+  discardText: { textAlign: 'center', color: '#ac162a', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
   stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 });
 
