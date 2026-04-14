@@ -191,8 +191,8 @@ const AddMove = ({ route }) => {
           {!vid && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
           <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
             { vid || videoUrl ? 
-              ( <ImageBackground style={{ alignSelf:'center', height:50, width:50, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
-              : ( <Text style={styles.videoIconText}>UPLOAD MP4 FILE</Text> ) 
+              ( <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
+              : ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} />) 
             }
           </TouchableOpacity>
           <Text style={styles.label}>Move Description</Text>
@@ -204,8 +204,8 @@ const AddMove = ({ route }) => {
             {!vid && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
             <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
               { vid || videoUrl ? 
-                ( <ImageBackground style={{ alignSelf:'center', height:50, width:50, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
-                : ( <Text style={styles.pdfIconText}>UPLOAD PDF FILE</Text> ) 
+                ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
+                : ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> ) 
               }
             </TouchableOpacity>
             <Text style={styles.label}>Move Description</Text>
@@ -220,7 +220,7 @@ const AddMove = ({ route }) => {
               
               <Text style={styles.label}>Step Image</Text>
               <TouchableOpacity onPress={() => pickMedia(i)} style={styles.stepImgContainer}>
-                {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <Text style={styles.plusIconText}>+ image</Text>}
+                {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
               </TouchableOpacity>
 
               <View style={{ width: '100%', marginTop: 12 }}>
@@ -272,9 +272,9 @@ const AddMove = ({ route }) => {
 const styles = StyleSheet.create({
   imgBackground: {  ...StyleSheet.absoluteFillObject, flex: 1, },
   icon: { height: 57, width: '90%', alignSelf: 'center' },
-  videoIcon: { height: 76, width:76, marginLeft: 12, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f16969',borderStyle: 'dashed'},
-  videoIconUploaded: { height: 76, width:76, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
-  pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#1e0899',borderStyle: 'dashed', marginLeft: 12},
+  videoIcon: { height: 76, width:76, marginLeft: 12, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 10, marginTop: 5, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#f16969',borderStyle: 'dashed'},
+  videoIconUploaded: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
+  pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 10, marginTop: 5, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#1e0899',borderStyle: 'dashed', marginLeft: 12},
   pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
   videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },

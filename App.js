@@ -17,6 +17,7 @@ import LoginScreen from './screens/LoginScreen';
 import PasswordManager from './screens/PasswordManager';
 import MyDojoStyles from './screens/MyDojoStyles';
 import AddMove from './screens/AddMove';
+import PdfMove from './screens/PdfMove';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,10 +37,11 @@ export default function App() {
         <Stack.Screen name="FighterScreen" component={Fighter} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
         <Stack.Screen name="FreeYourMind"  component={FreeYourMindScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="LoginScreen"   component={LoginScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
-        <Stack.Screen name="PasswordManager" component={PasswordManager} options={{headerShown:false,  animation: 'fade'}}/>
+        <Stack.Screen name="PasswordManager" component={PasswordManager} options={{headerShown:false,  animation: 'fade_from_bottom'}}/>
         <Stack.Screen name="Res"  component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="MyDojoStyles" component={MyDojoStyles} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="AddMove" component={AddMove} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="PdfMove" component={PdfMove} options={{headerShown:false, animation: 'slide_from_right'}}/>
       </Stack.Navigator>
      </NavigationContainer>
   );
