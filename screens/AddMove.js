@@ -164,14 +164,14 @@ const AddMove = ({ route }) => {
     </TouchableOpacity>
 
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
-      <Text style={styles.headerTitle}>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
+      <Text style={ type === "steps" ? styles.headerTitle : type === "video" ? styles.headerTitleVideo : styles.headerTitlePdf }>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
       <Text style={styles.label}>Move Title</Text>
       <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
       
       <Text style={styles.label}>Moves List Title/Styles</Text>
       <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
 
-      {!move && type !== "video" && type !== "steps" && type !== "pdf" && (
+      { !move && type !== "video" && type !== "steps" && type !== "pdf" && (
         <View style={styles.modeToggle}>
           <TouchableOpacity onPress={() => setType('video')} style={[styles.tab, type === 'video' && styles.activeTab]}>
             <Text style={[styles.tabText, type === 'video' && styles.activeTabText]}>VIDEO MOVE</Text>
@@ -183,9 +183,9 @@ const AddMove = ({ route }) => {
             <Text style={[styles.tabText, type === 'pdf' && styles.activeTabText]}>PDF MOVE</Text>
           </TouchableOpacity>
         </View>
-      )}
+      ) }
 
-      {type === 'video' ? (
+      { type === "video" ? (
         <View>
           <Text style={styles.label}>Move Video URL</Text>
           {!vid && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
@@ -278,10 +278,12 @@ const styles = StyleSheet.create({
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
   plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
   container: { flex: 1, backgroundColor: 'transparent', },
-  headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 5, marginLeft: 43, backgroundColor: 'rgba(212, 29, 54, 0.1)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
+  headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#023010', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(61, 170, 91, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#014211', textDecorationStyle: 'solid', borderRadius: 12, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
+  headerTitleVideo: { fontSize: 17, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(167, 38, 57, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
+  headerTitlePdf: { fontSize: 17, fontWeight: 'bold', color: '#010242', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(45, 43, 158, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#020142', textDecorationStyle: 'solid', borderRadius:19, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 3,},
   label: { fontWeight: 'bold', color: '#420105', marginTop: 12, fontSize: 13, marginLeft:12 },
-  input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1},
-  pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1},
+  input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1, fontWeight: "semibold" },
+  pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "semibold" },
   modeToggle: { flexDirection: 'row', marginTop: 7, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
   tab: { flex: 1, padding: 12, alignItems: 'center', backgroundColor: '#f3bebe' },
   activeTab: { backgroundColor: '#5b12a5' },
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
   activeTabText: { color: '#e6c8c8' },
   stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
   stepImg: { width: '100%', height: '100%' },
-  stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(93, 231, 167, 0.5)', borderRadius: 12, opacity: 1, },
+  stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(80, 214, 145, 0.41)', borderRadius: 12, opacity: 1, fontWeight: "semibold"},
   removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:1, fontWeight: 'bold', height: 17, width: '100%' },
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
