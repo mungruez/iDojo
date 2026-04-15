@@ -585,6 +585,9 @@ export default function MyDojoStyles({route}) {
             if (index > 0 && smoves[index]?.type === 'video' && index+1 < smoves.length && smoves[index+1]?.id === 's-all') {
               return <Image source={require('../assets/manualsdivider.png')} style={styles.greenDivider} resizeMode='contain'/>;
             }
+            if (index > 0 && smoves[index]?.type !== 'pdf' && index+1 < smoves.length && smoves[index+1]?.id === 'p-all') {
+              return <Image source={require('../assets/pdfmovesdivider.png')} style={styles.blueDivider} resizeMode='contain'/>;
+            }
             return <View style={styles.smallGap} />;
            }}
            renderItem={({ item }) => (
