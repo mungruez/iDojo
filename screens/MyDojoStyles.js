@@ -458,7 +458,7 @@ export default function MyDojoStyles({route}) {
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
           </View>
-          <Image source={{ uri: item.thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
+          <Image source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : { uri: item.thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
           <View style={ftype == "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={ftype === "pdf" ? styles.redPlusIcon : styles.plusIcon}>
@@ -484,7 +484,7 @@ export default function MyDojoStyles({route}) {
     if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype=== 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (listmode) return (
-      <ImageBackground style={{flex: 1, width: '100%', height: '100%'}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
+      <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1, marginTop:25}}>
           <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft: 5, paddingRight: 5}}>
@@ -492,16 +492,16 @@ export default function MyDojoStyles({route}) {
           </View>
 
           <View style={styles.myDojoHeader}>
-            {ftype === "video" ? ( <Text style={{ color: '#e43838', fontSize: 11, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )
-              : ftype === "pdf" ? ( <Text style={{ color: '#0004ff', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> ) 
-              : ( <Text style={{ color: '#00FF41', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> ) }
+            {ftype === "video" ? ( <Text style={{ color: '#ff8d8d', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )
+              : ftype === "pdf" ? ( <Text style={{ color: '#9afff7', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> ) 
+              : ( <Text style={{ color: '#51ff00', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> ) }
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity onPress={() => { setListMode(false); setSelectedIds([]); }}>
-                {ftype === "video" ? (<Text style={{color: '#e43838', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : ftype === "pdf" ? (<Text style={{color: '#0004ff', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
+                {ftype === "video" ? (<Text style={{color: '#ffd2d2', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : ftype === "pdf" ? (<Text style={{color: '#aed1f3', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
               </TouchableOpacity>
     
               <TouchableOpacity onPress={() => toggleListMode(null)} style={ftype === "steps" ? styles.plusIcon : styles.redPlusIcon}>
-                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : ftype === "pdf" ? require('../assets/addpdfmoveicon.png') : require('../assets/addmoveicon.png') }/>         
+                <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : ftype === "pdf" ? require('../assets/addpdfmoveicon.png') : require('../assets/addmoveicon.png') }/>         
               </TouchableOpacity>
             </View>
           </View>
@@ -532,13 +532,13 @@ export default function MyDojoStyles({route}) {
              <View style={ftype === "steps" ? styles.batchBar  : ftype === "pdf" ? styles.batchBarPdf : styles.batchBarVideo}>
                <Text style={ftype === "steps" ? styles.batchText : ftype === "pdf" ? styles.batchTextPdf : styles.batchTextVideo}>{selectedIds.length} Selected</Text>
                <TouchableOpacity onPress={() => handleShare(selectedIds)} style={styles.shareIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : ftype === "pdf" ? require('../assets/sharepdfmoveicon.png') : require('../assets/sharemoveicon.png') }/>         
+                 <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : ftype === "pdf" ? require('../assets/sharepdfmoveicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDiscardIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
+                 <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
                </TouchableOpacity>
                <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDeleteIcon}>
-                 <ImageBackground style={{height:"100%", width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : ftype === "pdf" ? require('../assets/deletepdfmoveicon.png') : require('../assets/deletemoveicon.png') }/>         
+                 <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : ftype === "pdf" ? require('../assets/deletepdfmoveicon.png') : require('../assets/deletemoveicon.png') }/>         
                </TouchableOpacity>
              </View>)}
         </SafeAreaView>
@@ -546,10 +546,10 @@ export default function MyDojoStyles({route}) {
 
 
     return (
-     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
+     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
       <StatusBar barStyle="light-content"/>
-      <SafeAreaView style={{flex:1, marginTop:7}}>
-        <View style={{backgroundColor: 'transparent', marginBottom:9, paddingLeft:5, paddingRight:5, opacity: 1}}>
+      <SafeAreaView style={{flex: 1, marginTop: 7}}>
+        <View style={{backgroundColor: 'transparent', marginBottom: 9, paddingLeft: 5, paddingRight: 5, opacity: 1}}>
           <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
 
@@ -650,22 +650,22 @@ export default function MyDojoStyles({route}) {
 
 
 const styles = StyleSheet.create({
-imgBackground: { flex: 1, width: '100%', height: '100%' },
+imgBackground: { flex: 1, width: "100%", height: "100%" },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)', opacity: 1 },
 sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)', opacity: 1 },
 sectionContainerPdf: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 0, 255, 0.1)', opacity: 1 },
-sectionHeader: { color: '#1cf151', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(203, 212, 206, 0.38)', alignSelf: "flex-start", opacity: 1 },
-sectionHeaderVideo: { color: '#fd694f', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 190, 170, 0.38)', alignSelf: "flex-start", opacity: 1 },
-sectionHeaderPdf: { color: '#0000ff', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(173, 216, 230, 0.38)', alignSelf: "flex-start", opacity: 1 },
+sectionHeader: { color: '#1cf151', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(54, 56, 58, 0.28)', alignSelf: "flex-start", opacity: 1 },
+sectionHeaderVideo: { color: '#701210', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgb(255, 255, 253)', alignSelf: "flex-start", opacity: 1 },
+sectionHeaderPdf: { color: '#0f0f63', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 247, 223, 0.9)', alignSelf: "flex-start", opacity: 1 },
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 47, width: 43, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
 selectedItemVideo: { borderColor: '#e74325', borderWidth: 2, backgroundColor: 'rgba(252, 102, 75, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 2 },
-titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#35e925', backgroundColor: 'rgba(203, 212, 206, 0.38)', alignSelf: "flex-start" },
-titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#f33c3c', backgroundColor: 'rgba(247, 190, 170, 0.38)', alignSelf: "flex-start"},
-thumbImage: { width: '100%', height: 152, backgroundColor: '#1a1a1a' },
+titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#35e925', alignSelf: "flex-start" },
+titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#f3bdbd', alignSelf: "flex-start"},
+thumbImage: { width: "100%", height: 152, backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 myDojoDeleteIcon: {height: 47, width: 47, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
 pillRowVideo: { backgroundColor: 'rgba(43, 0, 0, 0.5)', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 7, borderRadius: 9, opacity: 1},
 pillRow: { backgroundColor: 'rgba(0, 43, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8, borderRadius: 9, opacity: 1 },
@@ -681,7 +681,7 @@ shareIcon: {height: 45, width: 45, borderRadius: 9, backgroundColor: '#daf1dc', 
 container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
 header: {flexDirection: 'column', width:"95%", minHeight:83, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 19, },
-myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.5)', opacity: 1 },
+myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.76)', opacity: 1 },
 title: { fontSize: 17, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#fc2626', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 60, width: '90%', alignSelf: 'center' },
@@ -696,7 +696,7 @@ plusIcon:{height: 50, width: 50, borderRadius: 4, marginLeft: 19, backgroundColo
 infoIcon:{height: 45, width: 45, marginLeft: 16, marginBottom: 9,},
 importIcon:{height: 61, width: 57, borderRadius: 9, marginLeft: 16, marginBottom: 3},
 selectedItemPdf: { borderWidth: 2, borderColor: '#1e0899', backgroundColor: 'rgba(97, 71, 245, 0.6)' },
-titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 12, textAlign: "center", backgroundColor: 'rgba(195, 209, 223, 0.38)', alignSelf: "flex-start" },
+titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 12, textAlign: "center", alignSelf: "flex-start" },
 pillRowPdf: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 5, backgroundColor: 'rgba(8, 35, 153, 0.3)', paddingHorizontal: 3, borderRadius: 9, marginTop: 8, opacity: 1 },
 typePillPdf: { color: '#6b8cff', fontSize: 10, fontWeight: 'bold' },
 bluePlusIcon: { width: 30, height: 30 },
