@@ -313,7 +313,7 @@ export default function FreeYourMindScreen() {
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, backgroundColor: 'transparent',}}>
           <View style={styles.container}>
 
-            <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
+            <View style={{ marginBottom:19, paddingBottom:7, opacity: 1}}>
                 <ImageBackground style={ styles.title } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
                 <StatusBar barStyle='light-content' backgroundColor='#430d79'/>
             </View>

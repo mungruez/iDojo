@@ -487,7 +487,7 @@ export default function MyDojoStyles({route}) {
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1, marginTop:25}}>
-          <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft: 5, paddingRight: 5}}>
+          <View style={{marginBottom: 19, paddingLeft: 5, paddingRight: 5, justifyContent: 'center', alignItems: 'center', opacity: 1, alignSelf: 'center'}}>
             <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ftype=== "video" ? require('../assets/moveslisttitle.png') : ftype === "pdf" ? require('../assets/pdfmoveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
 
@@ -549,7 +549,7 @@ export default function MyDojoStyles({route}) {
      <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
       <StatusBar barStyle="light-content"/>
       <SafeAreaView style={{flex: 1, marginTop: 7}}>
-        <View style={{backgroundColor: 'transparent', marginBottom: 9, paddingLeft: 5, paddingRight: 5, opacity: 1}}>
+        <View style={{ marginBottom: 9, paddingLeft: 7, paddingRight: 7, opacity: 1, alignSelf: 'center'}}>
           <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
 

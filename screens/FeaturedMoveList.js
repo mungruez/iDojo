@@ -208,7 +208,6 @@ export default function FeatureMoveList() {
                     marginLeft:9,
                     marginTop:7,
                     width: (Dimensions.get('window').width*0.47),
-                    borderColor:"transparent",
                     borderWidth:0,
                     borderRadius:38,
                     backgroundColor:'#2f4f4f',
@@ -295,7 +294,7 @@ const renderVerticalItem = ({ item }) => (
 return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25, backgroundColor: 'transparent',}}>
 
-      <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingBottom:10, opacity: 1,}}>
+      <View style={{ marginBottom: 19, paddingBottom:10, opacity: 1,}}>
         <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
       </View>

@@ -104,7 +104,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
       </View> 
 
-      <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:19}}>
+      <SafeAreaView style={{ flexDirection:"column", height: "100%", marginTop:19, opacity: 1}}>
          
         <View style={{backgroundColor: '#2f4f4f', flexDirection:"row", marginHorizontal:3, marginVertical:19, textAlign:"center", justifyContent:"space-between"}}>
           <Text style={{color: "lightgray", fontWeight:"700",fontSize: 23, textAlign:"center", marginLeft:38, marginTop:10}}>Main Menu</Text>

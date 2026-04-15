@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
   plusIcon: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
   plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
-  container: { flex: 1, backgroundColor: 'transparent', },
+  container: { flex: 1, opacity: 1 },
   headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#023010', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(61, 170, 91, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#014211', textDecorationStyle: 'solid', borderRadius: 12, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
   headerTitleVideo: { fontSize: 17, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(167, 38, 57, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius: 12, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
   headerTitlePdf: { fontSize: 17, fontWeight: 'bold', color: '#010242', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(45, 43, 158, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#020142', textDecorationStyle: 'solid', borderRadius: 12, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},

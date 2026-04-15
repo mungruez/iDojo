@@ -7,7 +7,7 @@ export default function ManualScreen({ route, navigation }) {
     const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
   return (
-   <View style={{flex: 1, paddingTop:40, backgroundColor:"#228b22"}}> 
+   <View style={{flex: 1, paddingTop:40, backgroundColor:"#228b22", opacity: 1}}> 
     <StatusBar barStyle="light-content"/>
     <SafeAreaView style={{ backgroundColor:'black', flex:1}}>
 

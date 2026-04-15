@@ -30,7 +30,7 @@ export default function FightersList() {
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
       <StatusBar barStyle="light-content"/>
-      <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, backgroundColor: 'transparent',}}>
+      <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7,}}>
 
         <View style={{marginBottom:19, paddingTop:-10, paddingBottom: 10,}}>
           <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 

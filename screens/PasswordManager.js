@@ -672,7 +672,7 @@ export default function PasswordManager() {
     if(isOverlayVisible !== -1) return (
       <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
         <TouchableWithoutFeedback onPress={() => setOverlayVisible(-1)}>
-        <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
+        <View style={{ marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View></TouchableWithoutFeedback>
         

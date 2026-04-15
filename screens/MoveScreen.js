@@ -18,7 +18,7 @@ const MoveScreen = ({ route, navigation }) => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%', marginTop:38 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%', marginTop:38, opacity: 1 }}>
       <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:9 }}>
         {video.title}
       </Text>
