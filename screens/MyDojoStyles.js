@@ -47,7 +47,7 @@ export default function MyDojoStyles({route}) {
         
         if (info.exists) {
           const content = await FileSystem.readAsStringAsync(fileUri);
-          const movesList = JSON.parse(content);
+          let movesList = JSON.parse(content);
           movesList = movesList.filter(m => 
             m && 
             m.id && 
@@ -374,7 +374,7 @@ export default function MyDojoStyles({route}) {
           } else {
             Alert.alert(
               "Open PDF",
-              "Select a PDF viewer app",
+              "Select a PDF viewer app, and click View PDF",
               [
                 { text: "Cancel", style: "cancel" },
                 {
@@ -622,13 +622,13 @@ export default function MyDojoStyles({route}) {
                     </ImageBackground>
                   </TouchableOpacity> )
                   : item && item.style && item.type==="pdf" && ( <TouchableOpacity
-                    style={{ width: '79%', height: 43 }}
+                    style={{ width: "79%", height: 43 }}
                     onPress={() => { setType(item.type); setFStyle(item.style); setHMoves(getMoves(item.style, item.type)); setListMode(true); }}>
                     <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/bluebtnbg.png')}>
-                      {item.id === 's-all' ? 
+                      {item.id === 'p-all' ? 
                         ( <Image
                           resizeMode="contain"
-                          style={{height:"45%", width:"57%", alignSelf:"center",}}
+                          style={{height: "45%", width: "57%", alignSelf: "center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
@@ -640,7 +640,7 @@ export default function MyDojoStyles({route}) {
            )}
          />) : (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.infoText}>Click the + icons to adds moves or use the import icon to import moves. You can share the moves after.</Text>
+            <Text style={styles.infoText}>Click the 3 + icons to add moves or use the import icon to import moves. You can share moves after adding or importing.</Text>
           </View>
         )}
       </SafeAreaView>
@@ -700,5 +700,5 @@ titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 12, textAlign: "
 pillRowPdf: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 5, backgroundColor: 'rgba(8, 35, 153, 0.3)', paddingHorizontal: 3, borderRadius: 9, marginTop: 8, opacity: 1 },
 typePillPdf: { color: '#6b8cff', fontSize: 10, fontWeight: 'bold' },
 bluePlusIcon: { width: 30, height: 30 },
-blueDivider: { width: '90%', height: 40, marginVertical: 15, shadowColor: '#6b8cff', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1 },
+blueDivider: { width: '90%', height: 43, alignSelf: "center", marginVertical: 15, shadowColor: '#6b8cff', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1 },
 });
