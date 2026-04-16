@@ -27,7 +27,7 @@ export default function ManualScreen({ route, navigation }) {
 
               <View>
                 <Image
-                  source={step.img}
+                  source = { manual.type && manual.type === 'steps' ? {uri: step.img} : step.img }
                   resizeMode="contain"
                   style={{
                    borderRadius: 19,
