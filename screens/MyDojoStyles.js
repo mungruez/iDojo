@@ -694,7 +694,7 @@ cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10
 redPlusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 plusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 45, width: 45, marginLeft: 16, marginBottom: 9,},
-importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 16, marginBottom: 3},
+importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
 selectedItemPdf: { borderWidth: 2, borderColor: '#1e0899', backgroundColor: 'rgba(97, 71, 245, 0.6)' },
 titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 12, textAlign: "center", alignSelf: "flex-start" },
 pillRowPdf: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 5, backgroundColor: 'rgba(8, 35, 153, 0.3)', paddingHorizontal: 3, borderRadius: 9, marginTop: 8, opacity: 1 },
