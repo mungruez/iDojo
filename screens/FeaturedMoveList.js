@@ -14,7 +14,6 @@ export default function FeatureMoveList() {
   const isOffline = useNetInfo().isConnected === false;
   
   const fetchFvideos = async () => {
-    //test await AsyncStorage.clear();
     let errorFlag = 0;
     try {
     //Memory cleared if Diff in current and last updated dates > 2.28 days
@@ -23,9 +22,8 @@ export default function FeatureMoveList() {
           const currentDate = new Date();
           const savedDateObj = new Date(savedDate);
           const differenceInMs = currentDate - savedDateObj;
-          //console.log(`Difference in days: ${differenceInMs/ 86400000.0}`);
+          
           if( (differenceInMs / 86400000.0) > 5.70) {
-            //console.log(`Difference in days: ${differenceInMs}`);
             alert("Featured Videos not Updated in a few days. Trying to update .....");
             const currentDate = new Date().toISOString(); 
             await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
@@ -44,7 +42,6 @@ export default function FeatureMoveList() {
         AsyncStorage.getItem('xx7771xxiDojoFvideos').then((fvalue) => {
           if (fvalue != null) {
             vds = JSON.parse(fvalue);
-            //console.log("Saved Videos found: "+vds.length); 
             let hVideos = [];
             let hlist = [];
             let hstyle = "";
@@ -138,7 +135,6 @@ export default function FeatureMoveList() {
       }
     }
     setHfvideos(hVideos);
-    setIsLoading(false);
     //console.log("hvideos: "+hVideos[0].data.length);
 
     try {
@@ -146,7 +142,6 @@ export default function FeatureMoveList() {
       //Save Date Stamp as ISO string
       const currentDate = new Date().toISOString();
       await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
-      alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
     } catch (error) {
       alert("Unable to Store Featured List. Featured List only available when online. !");
     } 
@@ -158,14 +153,14 @@ export default function FeatureMoveList() {
       alert("Offline", "Internet required for featured content.");
       return;
     } 
-    const savedfv=fetchFvideos();
-    if ( savedfv && savedfv > 38 && hfvideos.length > 38 ) { 
-      //console.log("Saved Featured videos found! "+fvideos.length);
+    
+    fetchFvideos();
+    if ( hfvideos.length > 6 ) { 
       return;
     }
-    //console.log("ZERO Saved Featured videos found! ");
+    
     try { 
-    fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=")
+    fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
     .then(res => res.json())
     .then(
       (result) => {
@@ -176,14 +171,12 @@ export default function FeatureMoveList() {
         setIsLoading(false);
       }
     )
+    //alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
     } catch (error) {
-    // This catches network errors and the custom HTTP error above
         if (error.message === 'Network request failed') {
           alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing all featured content!');
-         // Display a message to the user or use cached data
         } else {
           alert('An unexpected error occurred while updating featured content: ', error);
-          //throw error, Rethrow other errors if needed
         }
     } 
   }, []);
@@ -193,30 +186,29 @@ export default function FeatureMoveList() {
   const HorizontalList = ({ data }) => {
     return (
       <FlatList
-        horizontal={true} // Key prop for horizontal scrolling
+        horizontal={true} 
         data={data}
         keyExtractor={(item) => item.Title}
         showsHorizontalScrollIndicator={true}
-        contentContainerStyle={{ minWidth: (Dimensions.get('window').width*data.length)/2, paddingRight: 5, height: 313, flexGrow: 1, }}
+        contentContainerStyle={{ minWidth: (Dimensions.get('window').width*data.length)/2, paddingRight: 5, flexGrow: 1, }}
         renderItem={({ item, index }) => (
                 <View
                   style={{
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexDirection: "column",
-                    alignItems: "top",
-                    marginLeft:9,
-                    marginTop:7,
+                    marginLeft: 9,
+                    marginRight: 7,
+                    marginTop: 9,
                     width: (Dimensions.get('window').width*0.47),
-                    borderWidth:0,
-                    borderRadius:38,
-                    backgroundColor:'#2f4f4f',
+                    borderWidth: 0,
+                    borderRadius: 38,
                   }}>
               
                 { item.Title && <Pressable
                   onPress={() => {navigation.navigate('Featured', {video: item});}}>
                     <View key={index}> 
-                      { item.Title && <View key={item.Source} style={{backgroundColor: 'silver', marginBottom:3, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:38, width: (Dimensions.get('window').width*0.47),}}>
+                      { item.Title && <View key={item.Source} style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:38, width: (Dimensions.get('window').width*0.47),}}>
                         <Text numberOfLines={2} style={styles.titletext}>{item.Title}</Text>
                       </View> } 
 
@@ -292,9 +284,9 @@ const renderVerticalItem = ({ item }) => (
 
 
 return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
-    <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25, backgroundColor: 'transparent',}}>
+    <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25,}}>
 
-      <View style={{ marginBottom: 19, paddingBottom:10, opacity: 1,}}>
+      <View style={{ marginBottom: 7, paddingBottom:10, opacity: 1, alignItmms: "center", justifyContent: "center",}}>
         <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
       </View>
@@ -304,13 +296,13 @@ return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 
             data={hfvideos}
             renderItem={renderVerticalItem}
             keyExtractor={(item) => item.Source}
-            contentContainerStyle={{ flex :1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop:19, }}
+            contentContainerStyle={{ flex :1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop: 7, }}
             showsVerticalScrollIndicator={false}
             />
         </View> )
-        : ( <View style ={{flex:1, justifyContent:'center', alignItems:'center',}}> 
-          <ActivityIndicator style={{marginTop: 114, textAlign: 'center',flex:1, transform: [{scale: 2.0}]}} size="large" color="#0e2a35ff"/> 
-          <Text style={{color: '#0e2a35ff', fontSize:21, fontStyle: "italic", fontWeight:"bold", textAlign:"center",}}> Loading...</Text> 
+        : ( <View style ={{ marginTop: Dimensions.get('window').height*0.43, justifyContent:'center', alignItems:'center',  borderRadius: 12, marginLeft: 9, marginRight: 9, padding: 9,}}> 
+          <ActivityIndicator style={{alignSelf: "center", textAlign: 'center', transform: [{scale: 3.0}]}} size="large" color="rgb(174, 185, 185)"/> 
+          <Text style={{ marginTop: 57, height: "100%", color: 'rgb(174, 185, 185)', fontSize: 25, fontStyle: "italic", fontWeight:"bold", textAlign:"center", alignSelf: "center"}}> Loading...</Text> 
         </View> )
       }
 
@@ -338,17 +330,22 @@ const styles = StyleSheet.create({
   sourcetext: {
       fontSize: 12,
       fontWeight: '600',
-      marginLeft: 3,
+      marginLeft: 7,
       color: 'white',
+      backgroundColor: 'rgba(0, 0, 0, 0.76)',
+      alignSelf: 'flex-start',
+      marginTop: 12,
+      paddingLeft: 3,
+      paddingRight: 3,
     }, 
     titletext: {
       fontSize: 12,
       fontWeight: '600',
-      marginLeft: 3,
+      marginLeft: 5,
       color: 'black',
     },
       mainCardView: {
-        height: 256,
+        height: 273,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: "#2f4f4f",
@@ -360,36 +357,30 @@ const styles = StyleSheet.create({
         elevation: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingLeft: 16,
-        paddingRight: 14,
+        padding:1,
         marginTop: 1,
         marginBottom: 1,
-        marginLeft: 1,
+        marginLeft: 5,
         marginRight: 5,
         borderColor: "#228b22",
-        borderWidth:1,
-        width: (Dimensions.get('window').width/100)*47,
+        borderWidth: 1,
+        width: ((Dimensions.get('window').width/100)*47)+5,
       },
       subCardView: {
-        minHeight: 235,
+        minHeight: 257,
         width: (Dimensions.get('window').width*0.47),
-        marginLeft:-15,
         borderRadius: 8,
         backgroundColor: "slategray",
-        borderColor: "transparent",
         color: 'crimson',
         borderWidth: 0,
-        borderStyle: 'solid',
         alignSelf: 'center',
         justifyContent: 'center',
-        marginRight:9,
-        padding:0,
+        padding: 3,
         flex: 1,
       }, 
       icon: {
         height: 57,
         opacity: 1,
-        elevation:2,
-        textAlign: "center" 
+        elevation: 2,
       }
 })

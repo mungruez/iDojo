@@ -462,7 +462,7 @@ export default function MyDojoStyles({route}) {
           <View style={ftype == "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={ftype === "pdf" ? styles.redPlusIcon : styles.plusIcon}>
-              <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdfmoveicon.png')}/>         
+              <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
             </TouchableOpacity>             
           </View>
         </View>
@@ -549,7 +549,7 @@ export default function MyDojoStyles({route}) {
      <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
       <StatusBar barStyle="light-content"/>
       <SafeAreaView style={{flex: 1, marginTop: 7}}>
-        <View style={{ marginBottom: 9, paddingLeft: 7, paddingRight: 7, opacity: 1, alignSelf: 'center'}}>
+        <View style={{ marginBottom: 9, paddingLeft: 7, paddingRight: 7, opacity: 1, justifyContent: "center", alignItems: 'center'}}>
           <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
         </View>
 
@@ -640,7 +640,7 @@ export default function MyDojoStyles({route}) {
            )}
          />) : (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.infoText}>Click the 3 + icons to add moves or use the import icon to import moves. You can share moves after adding or importing.</Text>
+            <Text style={styles.infoText}>Click one of the 3 + icons to add moves or use the import icon to import moves. You can share moves after adding or importing.</Text>
           </View>
         )}
       </SafeAreaView>
@@ -691,8 +691,8 @@ greenDivider: {width: '90%', height: 42, alignSelf: 'center',marginVertical: 15,
 redDivider: {width: '90%',height: 41, alignSelf: 'center', marginVertical: 15, shadowColor: '#f8d7d7', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10 },
-redPlusIcon: { height: 57, width: 57, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
-plusIcon: { height: 57, width: 57, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
+redPlusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
+plusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 45, width: 45, marginLeft: 16, marginBottom: 9,},
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 16, marginBottom: 3},
 selectedItemPdf: { borderWidth: 2, borderColor: '#1e0899', backgroundColor: 'rgba(97, 71, 245, 0.6)' },

@@ -286,7 +286,7 @@ export default function FreeYourMindScreen() {
         }
         
         try { 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=")
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
         .then(res => res.json())
         .then(
           (result) => {
@@ -309,11 +309,11 @@ export default function FreeYourMindScreen() {
     if (loading) return <ActivityIndicator size="large" color="#430d79" style={{flex:1, transform: [{scale: 2.0}]}} />;
 
     return (
-      <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/fymbackground.png')}>
-        <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, backgroundColor: 'transparent',}}>
+      <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/fymbackground.png')}>
+        <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, opacity: 1}}>
           <View style={styles.container}>
 
-            <View style={{ marginBottom:19, paddingBottom:7, opacity: 1}}>
+            <View style={{ marginBottom:19, paddingBottom: 7, justifyContent: "center", opacity: 1}}>
                 <ImageBackground style={ styles.title } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
                 <StatusBar barStyle='light-content' backgroundColor='#430d79'/>
             </View>
@@ -324,7 +324,7 @@ export default function FreeYourMindScreen() {
 
             <FlatList
               data={musicFiles} 
-              style={{flex: 1, width:"94%", flexDirection: "column", alignSelf: "center", marginTop: 1, backgroundColor: "transparent", borderRadius: 50,}}
+              style={{flex: 1, width:"94%", flexDirection: "column", alignSelf: "center", marginTop: 1, borderRadius: 50,}}
               keyExtractor={(item) => item.id.toString()} 
               extraData={playingId} 
               renderItem={({ item: file }) => (
@@ -441,8 +441,7 @@ const styles = StyleSheet.create({
       title: {
         height: 57,
         opacity: 1,
-        marginTop:38,
-        textAlign: "center", 
+        marginTop: 38, 
       },
     imgBackground: {
       marginBottom: "5%",
