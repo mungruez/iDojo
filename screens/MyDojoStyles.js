@@ -353,9 +353,32 @@ export default function MyDojoStyles({route}) {
 
 
     const viewPdf = async (move) => {
+      if (isOffline) {
+        Alert.alert("No Internet", "You need an internet connection to view PDF moves.");
+        return;
+      }
+
+      if (!move) {
+        Alert.alert("Error", "No move data");
+        return;
+      }
+
       if (move.videoUrl && move.videoUrl.startsWith('http')) {
-        const viewerUrl = `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(move.videoUrl)}`;
-        navigation.navigate('PdfMove', { pdf: {...move, vid: viewerUrl}});
+        try {
+          const viewerUrl = `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(move.videoUrl)}`;
+          const pdfData = {
+            id: move.id,
+            title: move.title || 'PDF Document',
+            style: move.style || 'Self-Defence',
+            desc: move.desc || '',
+            vid: viewerUrl,
+            type: 'pdf'
+          };
+          navigation.navigate('PdfMove', { pdf: pdfData });
+          
+        } catch (err) {
+          Alert.alert("Error", "Failed to open PDF: " + err.message);
+        }
       } else if (move.vid) {
         setLoading(true);
         try {
@@ -461,7 +484,7 @@ export default function MyDojoStyles({route}) {
           <Image source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : { uri: item.thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
           <View style={ftype == "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
-            <TouchableOpacity onPress={() => toggleListMode(item)} style={ftype === "pdf" ? styles.redPlusIcon : styles.plusIcon}>
+            <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
               <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
             </TouchableOpacity>             
           </View>
@@ -487,7 +510,7 @@ export default function MyDojoStyles({route}) {
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1, marginTop:25}}>
-          <View style={{marginBottom: 19, paddingLeft: 5, paddingRight: 5, justifyContent: 'center', alignItems: 'center', opacity: 1, alignSelf: 'center'}}>
+          <View style={{marginBottom: 19, paddingLeft: 5, paddingRight: 5, justifyContent: 'center', alignItems: 'center', opacity: 1}}>
             <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ftype=== "video" ? require('../assets/moveslisttitle.png') : ftype === "pdf" ? require('../assets/pdfmoveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
 
@@ -554,7 +577,7 @@ export default function MyDojoStyles({route}) {
         </View>
 
         <View style={styles.header}>
-           <Text style={styles.title}>MY DOJO MOVES LIST</Text>
+           <Text style={styles.title}>MY DOJO MOVES LISTS</Text>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.redPlusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
@@ -693,6 +716,7 @@ smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10 },
 redPlusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 plusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
+editIcon: { height: 47, width: 47, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 45, width: 45, marginLeft: 16, marginBottom: 9,},
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
 selectedItemPdf: { borderWidth: 2, borderColor: '#1e0899', backgroundColor: 'rgba(97, 71, 245, 0.6)' },

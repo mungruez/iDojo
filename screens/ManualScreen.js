@@ -26,19 +26,35 @@ export default function ManualScreen({ route, navigation }) {
               </View>
 
               <View>
-                <Image
-                  source = { manual.type && manual.type === 'steps' ? {uri: step.img} : step.img }
-                  resizeMode="contain"
-                  style={{
-                   borderRadius: 19,
-                   alignSelf: 'flex-start',
-                   marginTop:0,
-                   marginBottom:0,
-                   margin:0,
-                   height: 490,
-                   maxWidth: 380, 
-                  }}
-                />
+                { manual.type && manual.type === 'steps' ? 
+                  ( <Image
+                    source = {{uri: step.img}}
+                    resizeMode="contain"
+                    style={{
+                    borderRadius: 19,
+                    alignSelf: 'center',
+                    marginTop: 0,
+                    marginBottom: 0,
+                    margin: 0,
+                    height: 490,
+                    width: 380, 
+                    }}
+                  /> ) 
+                  : ( <Image
+                    source = { step.img }
+                    resizeMode="contain"
+                    style={{
+                    borderRadius: 19,
+                    alignSelf: 'center',
+                    marginTop: 0,
+                    marginBottom: 0,
+                    margin: 0,
+                    height: 490,
+                    width: 380, 
+                    }}
+                  /> )
+                }
+                
 
                 <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:8, flex:1,padding:0, borderColor:"silver", borderWidth:1, borderRadius:5, borderBottomWidth:2}}>
                   <ScrollView>

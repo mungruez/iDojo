@@ -10,6 +10,21 @@ const PdfMove = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
 
+
+  if (!route.params || !route.params.pdf) {
+    return (
+      <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e'}}>
+        <Text style={{color: 'white', fontSize: 18}}>Error: No PDF data</Text>
+        <TouchableOpacity 
+          onPress={() => navigation.goBack()}
+          style={{marginTop: 20, padding: 10, backgroundColor: '#3b82f6', borderRadius: 5}}
+        >
+          <Text style={{color: 'white'}}>Go Back</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#323232',width: '100%', height:'100%', marginTop:38 }}>
       <View style={styles.header}>

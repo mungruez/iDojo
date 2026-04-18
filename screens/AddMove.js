@@ -94,9 +94,12 @@ const AddMove = ({ route }) => {
     try {
       const moveId = move?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
+
       const videoChanged = move && (type === "video" || type === "pdf") && vid && vid !== move?.vid;
-      const stepsChanged = move && type === 'steps' && steps.some(s => s.img && !s.img.includes('/moves/'));
-      if (videoChanged || stepsChanged) {
+      //const stepsChanged = move && type === 'steps' && steps.some(s => s.img && !s.img.includes('/moves/'));
+      if (videoChanged) {
+        await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
+      } else if( !move ) {
         await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
       }
 
@@ -122,10 +125,12 @@ const AddMove = ({ route }) => {
         finalSteps = await Promise.all(steps.map(async (s, i) => ({
           ...s,
           title: s.title.trim() || `Step ${i + 1}`,
-          img: await ensurePermanent(s.img, `step_${i}_${Date.now()}.jpg`)
+          img: s.img && s.img.startsWith('file://') && !s.img.includes('/moves/') 
+            ? await ensurePermanent(s.img, `step_${i}_${Date.now()}.jpg`)
+            : s.img
         })));
       }
-
+    
       const finalData = {
         id: moveId,
         title: title.trim(),
@@ -155,7 +160,7 @@ const AddMove = ({ route }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
     >
-    <View style={{backgroundColor: 'transparent', marginBottom:12, paddingLeft:5, paddingRight:5, marginTop:25, opacity : 1}}>
+    <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
       <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : type=='steps' && move ? require('../assets/editmanualtitle.png') : type=="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
     </View>
     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
