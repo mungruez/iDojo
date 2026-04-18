@@ -176,20 +176,6 @@ const AddMove = ({ route }) => {
       <Text style={styles.label}>Moves List Title/Styles</Text>
       <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
 
-      { !move && type !== "video" && type !== "steps" && type !== "pdf" && (
-        <View style={styles.modeToggle}>
-          <TouchableOpacity onPress={() => setType('video')} style={[styles.tab, type === 'video' && styles.activeTab]}>
-            <Text style={[styles.tabText, type === 'video' && styles.activeTabText]}>VIDEO MOVE</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setType('steps')} style={[styles.tab, type === 'steps' && styles.activeTab]}>
-            <Text style={[styles.tabText, type === 'steps' && styles.activeTabText]}>IMAGE STEPS MOVE</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setType('pdf')} style={[styles.tab, type === 'pdf' && styles.activeTab]}>
-            <Text style={[styles.tabText, type === 'pdf' && styles.activeTabText]}>PDF MOVE</Text>
-          </TouchableOpacity>
-        </View>
-      ) }
-
       { type === "video" ? (
         <View>
           <Text style={styles.label}>Move Video URL</Text>
@@ -289,11 +275,6 @@ const styles = StyleSheet.create({
   label: { fontWeight: 'bold', color: '#420105', marginTop: 12, fontSize: 13, marginLeft:12 },
   input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1, fontWeight: "semibold" },
   pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "semibold" },
-  modeToggle: { flexDirection: 'row', marginTop: 7, borderRadius: 25, overflow: 'hidden', borderWidth: 1, borderColor: '#5b12a5' },
-  tab: { flex: 1, padding: 12, alignItems: 'center', backgroundColor: '#f3bebe' },
-  activeTab: { backgroundColor: '#5b12a5' },
-  tabText: { color: '#3e1c5f', fontWeight: 'bold' },
-  activeTabText: { color: '#e6c8c8' },
   stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
   stepImg: { width: '100%', height: '100%' },
   stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(80, 214, 145, 0.41)', borderRadius: 12, opacity: 1, fontWeight: "semibold"},
