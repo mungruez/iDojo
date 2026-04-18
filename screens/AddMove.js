@@ -239,8 +239,8 @@ const AddMove = ({ route }) => {
                 />
                 {steps.length > 1 && (
                   <TouchableOpacity onPress={() => setSteps(steps.filter(st => st.id !== s.id))} style={styles.removeStepIcon}>
-                    <ImageBackground style={{ height:91, width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removeimgicon.png')}/>
-                    <Text style={styles.removeText}>✕ REMOVE STEP</Text>
+                    <ImageBackground style={{ height: 91, width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removeimgicon.png')}/>
+                    <Text style={styles.removeText}>➖ STEP</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -297,14 +297,14 @@ const styles = StyleSheet.create({
   stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
   stepImg: { width: '100%', height: '100%' },
   stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(80, 214, 145, 0.41)', borderRadius: 12, opacity: 1, fontWeight: "semibold"},
-  removeText: { color: '#d40a25', fontSize: 10, textAlign:'center', marginTop:1, fontWeight: 'bold', height: 17, width: '100%' },
+  removeText: { color: '#dc2626', fontSize: 10, textAlign:'center', marginTop: 1, fontWeight: 'bold', width: '100%' },
   removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
   mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
   mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
   addStepBtn: {marginTop: 5, height: 41 ,width: 114, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
   saveBtn: { width: 125, height: 97, borderRadius: 15, marginTop: 7, alignSelf:'center', alignItems: 'center', justifyContent:'center', },
   discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadius: 10, justifyContent: 'center', alignItems: 'center', opacity: 1},
-  discardText: { textAlign: 'center', color: '#ac162a', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
+  discardText: { textAlign: 'center', color: '#dc2626', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
   stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 });
 
