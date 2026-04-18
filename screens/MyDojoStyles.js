@@ -481,7 +481,7 @@ export default function MyDojoStyles({route}) {
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
           </View>
-          <Image source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : { uri: item.thumb || 'https://via.placeholder.com/150' }} style={styles.thumbImage} />
+          <Image source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : { uri: item.thumb || 'https://via.placeholder.com/150' }} style={ftype === "pdf" ? styles.thumbPdf : styles.thumbImage} />
           <View style={ftype == "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
@@ -689,6 +689,7 @@ titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 2 },
 titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#35e925', alignSelf: "flex-start" },
 titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#f3bdbd', alignSelf: "flex-start"},
 thumbImage: { width: "100%", height: 152, backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
+thumbPdf: { width: "100%", height: 76, backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 myDojoDeleteIcon: {height: 49, width: 49, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
 pillRowVideo: { backgroundColor: 'rgba(43, 0, 0, 0.5)', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 7, borderRadius: 9, opacity: 1},
 pillRow: { backgroundColor: 'rgba(0, 43, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8, borderRadius: 9, opacity: 1 },
