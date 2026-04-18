@@ -468,8 +468,7 @@ export default function MyDojoStyles({route}) {
         navigation.navigate('AddMove', {move: mv, });
       }
     };
-    
-        
+      
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
@@ -506,6 +505,7 @@ export default function MyDojoStyles({route}) {
     if (loading && ftype=== 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype=== 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+    
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
