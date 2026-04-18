@@ -515,15 +515,15 @@ export default function MyDojoStyles({route}) {
           </View>
 
           <View style={styles.myDojoHeader}>
-            {ftype === "video" ? ( <Text style={{ color: '#ff8d8d', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> )
-              : ftype === "pdf" ? ( <Text style={{ color: '#9afff7', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> ) 
-              : ( <Text style={{ color: '#51ff00', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} FIGHTING STYLES` : "FIGHTING STYLE: "+fstyle} </Text> ) }
+            {ftype === "video" ? ( <Text style={{ color: '#ff8d8d', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> )
+              : ftype === "pdf" ? ( <Text style={{ color: '#9afff7', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> ) 
+              : ( <Text style={{ color: '#51ff00', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> ) }
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity onPress={() => { setListMode(false); setSelectedIds([]); }}>
-                {ftype === "video" ? (<Text style={{color: '#ffd2d2', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : ftype === "pdf" ? (<Text style={{color: '#aed1f3', fontSize: 18, paddingLeft: 10}}>← BACK</Text>) : (<Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 10}}>← BACK</Text>)}
+                {ftype === "video" ? (<Text style={{color: '#ffd2d2', fontSize: 18, paddingLeft: 12}}>← BACK</Text>) : ftype === "pdf" ? (<Text style={{color: '#aed1f3', fontSize: 18, paddingLeft: 12}}>← BACK</Text>) : (<Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 12}}>← BACK</Text>)}
               </TouchableOpacity>
     
-              <TouchableOpacity onPress={() => toggleListMode(null)} style={ftype === "steps" ? styles.plusIcon : styles.redPlusIcon}>
+              <TouchableOpacity onPress={() => toggleListMode(null)} style={ftype === "steps" ? styles.plusIcon : styles.plusIcon}>
                 <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : ftype === "pdf" ? require('../assets/addpdfmoveicon.png') : require('../assets/addmoveicon.png') }/>         
               </TouchableOpacity>
             </View>
@@ -579,7 +579,7 @@ export default function MyDojoStyles({route}) {
         <View style={styles.header}>
            <Text style={styles.title}>MY DOJO MOVES LISTS</Text>
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.redPlusIcon}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
               <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"steps", mstyle: null })} style={styles.plusIcon}>
@@ -677,29 +677,33 @@ imgBackground: { flex: 1, width: "100%", height: "100%" },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)', opacity: 1 },
 sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)', opacity: 1 },
 sectionContainerPdf: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 0, 255, 0.1)', opacity: 1 },
-sectionHeader: { color: '#1cf151', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(54, 56, 58, 0.28)', alignSelf: "flex-start", opacity: 1 },
+sectionHeader: { color: '#33fc4d', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(37, 37, 37, 0.76)', alignSelf: "flex-start", opacity: 1 },
 sectionHeaderVideo: { color: '#701210', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgb(255, 255, 253)', alignSelf: "flex-start", opacity: 1 },
-sectionHeaderPdf: { color: '#0f0f63', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 247, 223, 0.9)', alignSelf: "flex-start", opacity: 1 },
+sectionHeaderPdf: { color: '#131375', fontSize: 18, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 247, 223, 0.9)', alignSelf: "flex-start", opacity: 1 },
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
 myDojoDiscardIcon: {height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
-selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(16, 212, 65, 0.6)' },
-selectedItemVideo: { borderColor: '#e74325', borderWidth: 2, backgroundColor: 'rgba(252, 102, 75, 0.6)' },
+selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(31, 221, 79, 0.6)' },
+selectedItemVideo: { borderColor: '#eb2121', borderWidth: 2, backgroundColor: 'rgba(250, 85, 85, 0.6)' },
+selectedItemPdf: { borderWidth: 2, borderColor: '#1e0899', backgroundColor: 'rgba(97, 71, 245, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 2 },
 titleText: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#35e925', alignSelf: "flex-start" },
-titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#f3bdbd', alignSelf: "flex-start"},
+titleTextVideo: { textAlign: 'center', fontSize: 12, fontWeight: 'bold', color: '#ffecec', alignSelf: "flex-start"},
+titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 12, textAlign: "center", alignSelf: "flex-start" },
 thumbImage: { width: "100%", height: 152, backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 thumbPdf: { width: "100%", height: 76, resizeMode: 'contain', backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 myDojoDeleteIcon: {height: 49, width: 49, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
-pillRowVideo: { backgroundColor: 'rgba(43, 0, 0, 0.5)', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 7, borderRadius: 9, opacity: 1},
 pillRow: { backgroundColor: 'rgba(0, 43, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8, borderRadius: 9, opacity: 1 },
+pillRowVideo: { backgroundColor: 'rgba(43, 0, 0, 0.5)', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 7, borderRadius: 9, opacity: 1},
+pillRowPdf: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 5, backgroundColor: 'rgba(8, 35, 153, 0.3)', paddingHorizontal: 3, borderRadius: 9, marginTop: 8, opacity: 1 },
 typePill: { backgroundColor: 'rgba(203, 212, 206, 0.38)', color: '#29fd5e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 typePillVideo: { backgroundColor: 'rgba(247, 190, 170, 0.38)', color: '#cf313e', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
+typePillPdf: { color: '#6b8cff', fontSize: 10, fontWeight: 'bold' },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#00FF41', elevation: 10 },
 batchBarVideo: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#b30000', elevation: 10 },
 batchBarPdf: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#0505c2', elevation: 10 },
 batchText: { color: '#00FF41', fontWeight: 'bold'},
-batchTextVideo: { color: '#fa3d30', fontWeight: 'bold'},
+batchTextVideo: { color: '#fa3030', fontWeight: 'bold'},
 batchTextPdf: { color: '#2f2ff8', fontWeight: 'bold'},
 shareIcon: { height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 container: { flex: 1, backgroundColor: '#c2cdd4' },
@@ -711,19 +715,13 @@ infoText: { fontSize: 14, fontWeight: 'bold', color: '#fc2626', minHeight: 76, w
 icon: { height: 60, width: '90%', alignSelf: 'center' },
 card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#bddff3', paddingHorizontal: 5,},
-greenDivider: {width: '90%', height: 42, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
-redDivider: {width: '90%',height: 41, alignSelf: 'center', marginVertical: 15, shadowColor: '#f8d7d7', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
+greenDivider: {width: '90%', height: 43, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
+redDivider: {width: '90%',height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#f8d7d7', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
+blueDivider: { width: '90%', height: 43, alignSelf: "center", marginVertical: 15, shadowColor: '#6b8cff', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1 },
 smallGap: {height: 12,},
-cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 10 },
-redPlusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
+cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
 plusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 editIcon: { height: 47, width: 47, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 45, width: 45, marginLeft: 16, marginBottom: 9,},
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
-selectedItemPdf: { borderWidth: 2, borderColor: '#1e0899', backgroundColor: 'rgba(97, 71, 245, 0.6)' },
-titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 12, textAlign: "center", alignSelf: "flex-start" },
-pillRowPdf: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 5, backgroundColor: 'rgba(8, 35, 153, 0.3)', paddingHorizontal: 3, borderRadius: 9, marginTop: 8, opacity: 1 },
-typePillPdf: { color: '#6b8cff', fontSize: 10, fontWeight: 'bold' },
-bluePlusIcon: { width: 30, height: 30 },
-blueDivider: { width: '90%', height: 43, alignSelf: "center", marginVertical: 15, shadowColor: '#6b8cff', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1 },
 });
