@@ -240,7 +240,7 @@ const AddMove = ({ route }) => {
                 {steps.length > 1 && (
                   <TouchableOpacity onPress={() => setSteps(steps.filter(st => st.id !== s.id))} style={styles.removeStepIcon}>
                     <ImageBackground style={{ height: 91, width:"100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removeimgicon.png')}/>
-                    <Text style={styles.removeText}>➖ STEP</Text>
+                    <Text style={styles.removeText}> <Text style={{color: '#ff4444'}}>➖</Text> STEP</Text>
                   </TouchableOpacity>
                 )}
               </View>
