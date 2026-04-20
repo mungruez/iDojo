@@ -37,18 +37,18 @@ const FeaturedMove = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%', marginTop:38 }}>
-     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize:21,marginBottom:9 }}>
+     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize: 21, marginBottom: 9 }}>
       {video.Title}
      </Text>
 
-       {video.Link && video.Link.length > 19 ?
+       {video.Link && video.Link.length < 19 ?
         
         ( <View style={styles.wvcontainer}> 
           <WebView
             style={styles.webview}
             javaScriptEnabled={true}
             domStorageEnabled={true}
-            allowsInlineMediaPlayback={true} // Required for iOS inline play
+            allowsInlineMediaPlayback={true}
             source={{ uri: embedUrl }}
             injectedJavaScript={INJECTED_JAVASCRIPT}
           /> 
@@ -76,12 +76,12 @@ const FeaturedMove = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   wvcontainer: {
     flex: 1,
-    marginTop: -50, // Add some top margin
+    marginTop: -50, 
     width: deviceWidth,
-    height: deviceHeight, // Define the height of the WebView container in React Native
+    height: deviceHeight, 
   },
   webview: {
-    flex: 1, // Make the WebView fill its container
+    flex: 1, 
     backgroundColor: 'black',
   },
 });
