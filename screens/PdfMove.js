@@ -1,4 +1,4 @@
-import { View, ScrollView, Text, StyleSheet, Dimensions } from "react-native";
+import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { useState } from 'react';
@@ -6,12 +6,8 @@ import { useState } from 'react';
 const { height, width } = Dimensions.get('window');
 
 const PdfMove = ({ route, navigation }) => {
-  const { pdf } = route.params;
-  const [loading, setLoading] = useState(true);
-  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
 
-
-  if (!route.params || !route.params.pdf) {
+  if (!route?.params?.pdf) {
     return (
       <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e'}}>
         <Text style={{color: 'white', fontSize: 18}}>Error: No PDF data</Text>
@@ -24,6 +20,10 @@ const PdfMove = ({ route, navigation }) => {
       </SafeAreaView>
     );
   }
+
+  const { pdf } = route.params;
+  const [loading, setLoading] = useState(true);
+  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
   
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#323232',width: '100%', height:'100%', marginTop:38 }}>
