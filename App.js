@@ -28,12 +28,12 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home"     component={HomeScreen} options={{headerShown:false, animation: 'slide_from_left'}}/>
         <Stack.Screen name="MoveList" component={MoveListScreen} options={{headerShown:false,  animation: 'slide_from_right'}}/>
-        <Stack.Screen name="Move"     component={MoveScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="Move"     component={MoveScreen} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
         <Stack.Screen name="Manuals"  component={ManualsScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
-        <Stack.Screen name="Manual"   component={ManualScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="Manual"   component={ManualScreen} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
         <Stack.Screen name="FightersList"  component={FightersList} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="FeaturedList"  component={FeaturedMoveList} options={{headerShown:false,animation: 'slide_from_right'}}/>
-        <Stack.Screen name="Featured"      component={FeaturedMove} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="Featured"      component={FeaturedMove} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
         <Stack.Screen name="FighterScreen" component={Fighter} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
         <Stack.Screen name="FreeYourMind"  component={FreeYourMindScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="LoginScreen"   component={LoginScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>

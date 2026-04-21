@@ -156,6 +156,9 @@ export default function FeatureMoveList() {
     
     fetchFvideos();
     if ( hfvideos.length > 6 ) { 
+      if(isloading) {
+        setIsLoading(false);
+      }
       return;
     }
     
@@ -165,6 +168,7 @@ export default function FeatureMoveList() {
     .then(
       (result) => {
         parseFvideos(result.values); 
+        setIsLoading(false);
         return;     
       },
       (error) => {

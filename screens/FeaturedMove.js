@@ -22,11 +22,50 @@ const INJECTED_JAVASCRIPT = `
 `;
 
 
+const playerHTML = `
+  <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin:0;padding:0;background-color:black;">
+      <iframe 
+        width="100%" height="100%" 
+        src="https://youtube.com{videoId}?autoplay=1&modestbranding=1" 
+        frameborder="0" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin"> 
+      </iframe>
+    </body>
+  </html>
+`;
+
+
 const FeaturedMove = ({ route, navigation }) => {
   const { video } = route.params;
   const videoRef = useRef(null);
 
-  const embedUrl = `https://www.youtube.com/embed/${video.Link}?rel=0&autoplay=0&showinfo=0&controls=1`;
+  const embedUrl = `https://www.youtube.com/embed/${video.Link}`;
+
+  const playerHTML = `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin:0;padding:0;background-color:black;">
+      <iframe 
+        width="100%" 
+        height="100%" 
+        src="https://www.youtube.com/embed/${video.Link}?autoplay=1&modestbranding=1&origin=https://www.youtube.com" 
+        frameborder="0" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin"> 
+      </iframe>
+    </body>
+  </html>
+`;
 
 
   const player = useVideoPlayer(video.Link, (player) => {
@@ -45,13 +84,19 @@ const FeaturedMove = ({ route, navigation }) => {
         
         ( <View style={styles.wvcontainer}> 
           <WebView
-            style={styles.webview}
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            allowsInlineMediaPlayback={true}
-            source={{ uri: embedUrl }}
-            injectedJavaScript={INJECTED_JAVASCRIPT}
-          /> 
+  style={styles.webview}
+  javaScriptEnabled={true}
+  domStorageEnabled={true}
+  mediaPlaybackRequiresUserAction={false}
+  allowsInlineMediaPlayback={true}
+  // This tells the WebView to whitelist the youtube domain
+  originWhitelist={['*']} 
+  source={{ 
+    html: playerHTML, 
+    baseUrl: 'https://www.youtube.com' 
+  }}
+  // Remove androidLayerType if it's still crashing with the robot icon
+/>
           
         </View> )
         : (
