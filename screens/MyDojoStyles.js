@@ -511,7 +511,7 @@ export default function MyDojoStyles({route}) {
           <View style={ftype == "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
-              <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
+              <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
             </TouchableOpacity>             
           </View>
         </View>
