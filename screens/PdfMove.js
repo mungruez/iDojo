@@ -10,7 +10,7 @@ const PdfMove = ({ route, navigation }) => {
   if (!route?.params?.pdf) {
     return (
       <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e'}}>
-        <Text style={{color: 'white', fontSize: 18}}>Error: No PDF data</Text>
+        <Text style={{color: 'white', fontSize: 16}}>Error: No PDF data</Text>
         <TouchableOpacity 
           onPress={() => navigation.goBack()}
           style={{marginTop: 20, padding: 10, backgroundColor: '#3b82f6', borderRadius: 5}}
@@ -39,7 +39,7 @@ const PdfMove = ({ route, navigation }) => {
           style={styles.toggleBtn}
         >
           <Text style={styles.toggleText}>
-            {pdfDropdownVisible ? '▼' : '▲'}
+            {!pdfDropdownVisible ? '▼' : '▲'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#1e3a8a',
+    backgroundColor: '#1d377e91',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 2,

@@ -458,7 +458,7 @@ export default function MyDojoStyles({route}) {
 
 
     const toggleListMode = (mv) => {
-      if(mv===null) {
+      if(mv === null) {
         setSelectedIds([]);
         navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Move List Title' })
       } else {
