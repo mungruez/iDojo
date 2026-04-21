@@ -1,134 +1,84 @@
-import React, { useRef, useState } from "react";
-import { View, Dimensions, Text, StyleSheet } from "react-native";
+import React, { useRef, useState, useEffect } from "react";
+import { View, Dimensions, Text, StyleSheet, AppState } from "react-native"; 
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { WebView } from 'react-native-webview';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
+import { useIsFocused } from '@react-navigation/native';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const INJECTED_JAVASCRIPT = `
-  (function() {
-    const header = document.getElementById('header');
-    if (header) {
-      header.style.display = 'none';
-    }
-    
-    const footers = document.getElementsByClassName('footer');
-    for (let i = 0; i < footers.length; i++) {
-      footers[i].style.display = 'none';
-    }
-  })();
-`;
-
-
-const playerHTML = `
-  <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body style="margin:0;padding:0;background-color:black;">
-      <iframe 
-        width="100%" height="100%" 
-        src="https://youtube.com{videoId}?autoplay=1&modestbranding=1" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media" 
-        allowfullscreen
-        referrerpolicy="strict-origin-when-cross-origin"> 
-      </iframe>
-    </body>
-  </html>
-`;
-
-
 const FeaturedMove = ({ route, navigation }) => {
   const { video } = route.params;
-  const videoRef = useRef(null);
+  const isFocused = useIsFocused(); 
+  const [playing, setPlaying] = useState(true);
 
-  const embedUrl = `https://www.youtube.com/embed/${video.Link}`;
 
-  const playerHTML = `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body style="margin:0;padding:0;background-color:black;">
-      <iframe 
-        width="100%" 
-        height="100%" 
-        src="https://www.youtube.com/embed/${video.Link}?autoplay=1&modestbranding=1&origin=https://www.youtube.com" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media" 
-        allowfullscreen
-        referrerpolicy="strict-origin-when-cross-origin"> 
-      </iframe>
-    </body>
-  </html>
-`;
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", nextAppState => {
+      if (nextAppState !== "active") {
+        setPlaying(false); 
+      }
+    });
+
+    return () => subscription.remove();
+  }, []);
+
+
+  useEffect(() => {
+    if (!isFocused) {
+      setPlaying(false);
+    }
+  }, [isFocused]);
 
 
   const player = useVideoPlayer(video.Link, (player) => {
-      player.loop = true;
+    player.loop = true;
+    if (video.Link && video.Link.length >= 19) {
       player.play();
-    });
+    }
+  });
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#323232',width:'100%', height:'100%', marginTop:38 }}>
-     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson",textAlign:"center",fontSize: 21, marginBottom: 9 }}>
+    <SafeAreaView style={{ backgroundColor:'#323232',width:'100%', height:'100%', marginTop: 38 }}>
+     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center",fontSize: 21, marginBottom: 9 }}>
       {video.Title}
      </Text>
 
        {video.Link && video.Link.length < 19 ?
-        
         ( <View style={styles.wvcontainer}> 
-          <WebView
-  style={styles.webview}
-  javaScriptEnabled={true}
-  domStorageEnabled={true}
-  mediaPlaybackRequiresUserAction={false}
-  allowsInlineMediaPlayback={true}
-  // This tells the WebView to whitelist the youtube domain
-  originWhitelist={['*']} 
-  source={{ 
-    html: playerHTML, 
-    baseUrl: 'https://www.youtube.com' 
-  }}
-  // Remove androidLayerType if it's still crashing with the robot icon
-/>
-          
+            <YoutubePlayer
+              height={deviceWidth * 0.5625}
+              play={playing && isFocused}
+              videoId={video.Link}
+              initialPlayerParams={{
+                controls: true,
+                modestbranding: true,
+                rel: false,
+              }}
+            />
         </View> )
-        : (
-        <View style={{flex:1, padding:0,backgroundColor:'#323232',marginLeft:0,marginTop:5, marginBottom:0, width:"100%", maxHeight:"91%" }}>
-            
+        : ( <View style={{flex: 1, padding: 0,backgroundColor: '#323232',marginLeft: 0,marginTop: 5, marginBottom: 0, width: "100%", maxHeight: "91%" }}>
             <VideoView
               player={player}
               allowsTransparency={true}
               contentFit="contain"
               useNativeControls
               allowsPictureinPicture
-              style={{ flex: 1,marginBottom:5, marginLeft:1, marginRight:3, padding:0,borderColor:'#9a9aa1',borderWidth:2, height:"95%"}}
+              style={{ flex: 1,marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "95%"}}
             />
-        </View>
-        )
+        </View>)
       }
     </SafeAreaView>
   );
 };
 
-
 const styles = StyleSheet.create({
   wvcontainer: {
-    flex: 1,
-    marginTop: -50, 
+    marginTop: 2, 
     width: deviceWidth,
-    height: deviceHeight, 
-  },
-  webview: {
-    flex: 1, 
-    backgroundColor: 'black',
-  },
+  }
 });
 
 export default FeaturedMove;
