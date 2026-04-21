@@ -92,7 +92,6 @@ export default function MyDojoStyles({route}) {
         await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(list));
         parseStyles(list);
         setHMoves(getMoves(fstyle, ftype, list)); 
-        setListMode(false);
       } catch (e) {
         Alert.alert("Storage Error", e.message || "Could not save move list to disk.");
       }
@@ -122,7 +121,6 @@ export default function MyDojoStyles({route}) {
               parseStyles(updatedList);
               setHMoves(getMoves(fstyle, ftype, updatedList)); 
               setSelectedIds([]);
-              setListMode(false);
               
             } catch (error) {
               Alert.alert("Delete Error", error.message || "Could not remove files from storage.");
@@ -461,10 +459,10 @@ export default function MyDojoStyles({route}) {
 
     const toggleListMode = (mv) => {
       if(mv===null) {
-        setListMode(false);
-        navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Self Defense' })
+        setSelectedIds([]);
+        navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Move List Title' })
       } else {
-        setListMode(false);
+        setSelectedIds([]);
         navigation.navigate('AddMove', {move: mv, });
       }
     };
