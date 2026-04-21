@@ -6,7 +6,6 @@ import { useIsFocused } from '@react-navigation/native';
 import YoutubePlayer from "react-native-youtube-iframe";
 
 const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
 
 const FeaturedMove = ({ route, navigation }) => {
   const { video } = route.params;

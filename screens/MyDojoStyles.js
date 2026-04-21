@@ -468,12 +468,41 @@ export default function MyDojoStyles({route}) {
         navigation.navigate('AddMove', {move: mv, });
       }
     };
+     
+
+    const getYouTubeID = (url) => {
+      if (!url) return null;
+      if (!url.includes('/') && !url.includes('.')) return url;
+      const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+      const match = url.match(regExp);
       
+      return (match && match[1]) ? match[1] : null;
+    };
+
+    const checkVideo = (mv) => {
+      if(mvl.contains("youtube.com") || mvl.contains("youtu.be")) {
+        setListMode(true);
+        const mvData = {
+          id: mv.id,
+          title: mv.title || 'Video Move',
+          style: mv.style || 'Self-Defence',
+          desc: mv.desc || '',
+          vid: mv.vid,
+          videoUrl: getYouTubeId(mv.videoUrl),
+          type: 'video'
+        };
+        navigation.navigate('Featured', { video: mvData });
+      } else {
+        setListMode(true);
+        navigation.navigate('Move', { video: mv });
+      }
+    };
+
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
-        onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? navigation.navigate('Move', { video: item }) : ftype === "pdf" ? viewPdf(item) : navigation.navigate('Manual', { manual: item })}
+        onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? checkVideo(item) : ftype === "pdf" ? viewPdf(item) : navigation.navigate('Manual', { manual: item })}
         style={[styles.itemContainer, selectedIds.includes(item.id) && ftype ==="steps" ? styles.selectedItem : selectedIds.includes(item.id) && ftype === "video" ? styles.selectedItemVideo : selectedIds.includes(item.id) && ftype === "pdf" ? styles.selectedItemPdf : null]}>
 
         <View style={styles.card}>
