@@ -471,24 +471,24 @@ export default function MyDojoStyles({route}) {
      
 
     const getYouTubeID = (url) => {
-      if (!url) return null;
+      if (!url) return "";
+      if (url.length < 19) return "";
       if (!url.includes('/') && !url.includes('.')) return url;
       const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
       const match = url.match(regExp);
       
-      return (match && match[1]) ? match[1] : null;
+      return (match && match[1]) ? match[1] : "";
     };
 
     const checkVideo = (mv) => {
-      if(mvl.contains("youtube.com") || mvl.contains("youtu.be")) {
+      if(mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be")) {
         setListMode(true);
         const mvData = {
           id: mv.id,
           title: mv.title || 'Video Move',
           style: mv.style || 'Self-Defence',
           desc: mv.desc || '',
-          vid: mv.vid,
-          videoUrl: getYouTubeId(mv.videoUrl),
+          Link: getYouTubeId(mv.videoUrl),
           type: 'video'
         };
         navigation.navigate('Featured', { video: mvData });
