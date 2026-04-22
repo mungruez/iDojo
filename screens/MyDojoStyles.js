@@ -516,7 +516,7 @@ export default function MyDojoStyles({route}) {
           </View>
         </View>
       </TouchableOpacity>
-    );    
+    );
 
 
     const MyHeader = () => {
@@ -560,8 +560,7 @@ export default function MyDojoStyles({route}) {
             data={hmoves}
             extraData={[selectedIds, moves]}
             keyExtractor={(item, index) => item.id || index.toString()}
-            removeClippedSubviews={false}
-            contentContainerStyle={{ paddingBottom: 57, flexGrow: 1 }}
+            contentContainerStyle={{ paddingBottom: 57, }}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
                 <View style={ftype == "steps" ? styles.sectionContainer : ftype === "pdf" ? styles.sectionContainerPdf : styles.sectionContainerVideo}>
@@ -571,9 +570,8 @@ export default function MyDojoStyles({route}) {
                        data={item.data}
                        extraData={[selectedIds, moves]}
                        keyExtractor={m => m.id.toString()}
-                       removeClippedSubviews={false}
                        renderItem={({ item }) => <MoveCard item={item} />}
-                       contentContainerStyle={{ paddingRight: 50, paddingLeft: 12, flexGrow: 1 }}
+                       contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, }}
                        showsHorizontalScrollIndicator={false}
                      />
                  </View>
@@ -593,9 +591,9 @@ export default function MyDojoStyles({route}) {
                <TouchableOpacity onPress={() => setSelectedIds([])} style={styles.myDojoDeleteIcon}>
                  <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/deletemanualicon.png') : ftype === "pdf" ? require('../assets/deletepdfmoveicon.png') : require('../assets/deletemoveicon.png') }/>         
                </TouchableOpacity>
-             </View>)}
+             </View> ) }
         </SafeAreaView>
-      </ImageBackground>);
+      </ImageBackground> );
 
 
     return (
@@ -648,7 +646,7 @@ export default function MyDojoStyles({route}) {
               { item && item.style && item.type === "video" ? 
                 ( <TouchableOpacity
                   style={{ width: '79%', height: 43 }}
-                  onPress={() => { setHMoves(getMoves(item.style, item.type)); setFStyle(item.style); setType(item.type); setListMode(true);}}>
+                  onPress={() => { setHMoves(getMoves(item.style, item.type, moves)); setFStyle(item.style); setType(item.type); setListMode(true);}}>
                   <ImageBackground style={{flex: 1, justifyContent:'center', alignItems:'center'}} resizeMode='stretch' source={require('../assets/redbtnbg.png')}>
                     {item.id === 'v-all' ? 
                       ( <Image
