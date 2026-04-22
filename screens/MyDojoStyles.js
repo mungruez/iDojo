@@ -483,11 +483,11 @@ export default function MyDojoStyles({route}) {
         setListMode(true);
         const mvData = {
           id: mv.id,
-          title: mv.title || 'Video Move',
-          style: mv.style || 'Self-Defence',
-          desc: mv.desc || '',
+          Title: mv.title || 'Video Move',
+          Style: mv.style || 'Self-Defence',
+          Desc: mv.desc || '',
           Link: getYouTubeId(mv.videoUrl),
-          type: 'video'
+          Type: 'video'
         };
         navigation.navigate('Featured', { video: mvData });
       } else {
