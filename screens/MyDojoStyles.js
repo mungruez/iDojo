@@ -468,31 +468,41 @@ export default function MyDojoStyles({route}) {
     };
      
 
-    const getYouTubeID = (url) => {
-      if (!url) return "";
-      if (url.length < 19) return "";
-      if (!url.includes('/') && !url.includes('.')) return url;
-      const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-      const match = url.match(regExp);
-      
-      return (match && match[1]) ? match[1] : "";
+    const getYouTubeId = (url) => {
+      try {
+        if (!url || typeof url !== 'string') return "";
+        if (url.length < 19) return "";
+        if (!url.includes('/') && !url.includes('.')) return url;
+        
+        const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+        const match = url.match(regExp);
+        
+        return (match && match[1]) ? match[1] : "";
+        
+      } catch (e) {
+        return "";
+      }
     };
 
     const checkVideo = (mv) => {
-      if(mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be")) {
-        setListMode(true);
-        const mvData = {
-          id: mv.id,
-          Title: mv.title || 'Video Move',
-          Style: mv.style || 'Self-Defence',
-          Desc: mv.desc || '',
-          Link: getYouTubeId(mv.videoUrl),
-          Type: 'video'
-        };
-        navigation.navigate('Featured', { video: mvData });
-      } else {
-        setListMode(true);
-        navigation.navigate('Move', { video: mv });
+      try {
+        if(mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be")) {
+          setListMode(true);
+          const mvData = {
+            id: mv.id,
+            Title: mv.title || "Video Move",
+            Style: mv.style || "Self-Defence",
+            Desc: mv.desc || "",
+            Link: getYouTubeId(mv.videoUrl),
+            Type: "video",
+          };
+          navigation.navigate('Featured', { video: mvData });
+        } else {
+          setListMode(true);
+          navigation.navigate('Move', { video: mv });
+        }
+      } catch (e) {
+        Alert.alert("Error", "Could not open video");
       }
     };
 
