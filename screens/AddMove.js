@@ -57,6 +57,16 @@ const AddMove = ({ route }) => {
   };
 
 
+  const isValidPdfUrl = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    const trimmed = url.trim().toLowerCase();
+    return (
+      (trimmed.startsWith('http://') || trimmed.startsWith('https://')) &&
+      trimmed.includes('.pdf')
+    );
+  };
+
+
   const save = async () => {
     let validatedSteps = []; 
     if (!title.trim()) {
@@ -85,6 +95,12 @@ const AddMove = ({ route }) => {
         if(type === "pdf") Alert.alert("Required", "Please upload a pdf or provide a link.");
         return;
       }
+
+      if (videoUrl && videoUrl.length > 0 && !isValidPdfUrl(videoUrl)) {
+        Alert.alert("Invalid PDF URL", "URL must start with http/https and include .pdf");
+        return;
+      }
+
       if(!desc) {
         Alert.alert("Required", "Please provide a description.");
         return;

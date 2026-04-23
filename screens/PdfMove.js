@@ -1,4 +1,4 @@
-import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, Alert } from "react-native";
+import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, Alert, StatusBar } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ const PdfMove = ({ route, navigation }) => {
   if (!route?.params?.pdf) {
     return (
       <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e'}}>
+        <StatusBar barStyle="dark-content"/>
         <Text style={{color: 'white', fontSize: 16}}>Error: No PDF data</Text>
         <TouchableOpacity 
           onPress={() => navigation.goBack()}
@@ -22,11 +23,34 @@ const PdfMove = ({ route, navigation }) => {
   }
 
   const { pdf } = route.params;
+  const [key, setKey] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
+  const [useDirectLink, setUseDirectLink] = useState(false);
+  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(false);
+
+
+  const getPdfUrl = () => {
+    if (useDirectLink) {
+      return pdf.vid;
+    }
+    return `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(rawUrl)}`;
+  };
+
+
+  const toggleViewer = () => {
+    setUseDirectLink(prev => !prev);
+  };
+
+
+  const handleRetry = () => {
+    setLoading(true);
+    setKey(prev => prev + 1); 
+  };
+  
   
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232',width: '100%', height:'100%', marginTop:38 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232',width: '100%', height:'100%', marginTop: 12 }}>
+      <StatusBar barStyle="dark-content"/>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeBtn}>
           <Text style={styles.closeText}>✕</Text>
@@ -34,10 +58,7 @@ const PdfMove = ({ route, navigation }) => {
         <Text style={styles.headerTitle} numberOfLines={1}>
           {pdf.title}
         </Text>
-        <TouchableOpacity 
-          onPress={() => setPdfDropdownVisible(!pdfDropdownVisible)} 
-          style={styles.toggleBtn}
-        >
+        <TouchableOpacity onPress={() => setPdfDropdownVisible(!pdfDropdownVisible)} style={styles.toggleBtn}>
           <Text style={styles.toggleText}>
             {!pdfDropdownVisible ? '▼' : '▲'}
           </Text>
@@ -49,14 +70,19 @@ const PdfMove = ({ route, navigation }) => {
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Style:</Text>
             <Text style={styles.infoValue}>{pdf.style || 'Self-Defence'}</Text>
-            <View style={styles.typeBadge}>
-              <Text style={styles.typeText}>PDF</Text>
-            </View>
+            <TouchableOpacity onPress={toggleViewer} style={[styles.toggleBadge, useDirectLink ? styles.directBadge : styles.googleBadge ]}>
+              <Text style={styles.toggleText}>
+                {useDirectLink ? 'D' : 'G'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleRetry} style={styles.typeBadge}>
+              <Text style={styles.typeText}>🔄PDF</Text>
+            </TouchableOpacity>
           </View>
 
           { pdf.desc && (
             <View style={styles.descSection}>
-              <Text style={styles.descLabel}>Description</Text>
+              <Text style={styles.descLabel}>Description:</Text>
               <ScrollView style={styles.descScroll}>
                 <Text style={styles.descText}>{pdf.desc}</Text>
               </ScrollView>
@@ -72,13 +98,19 @@ const PdfMove = ({ route, navigation }) => {
           </View>
         )}
         <WebView 
-          source={{ uri: pdf.vid }}
+          key={key}
+          source={{ uri: getPdfUrl() }}
           style={styles.webview}
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => setLoading(false)}
           onError={() => {
             alert("Could not load PDF");
           }}
+          onHttpError={toggleViewer}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          cacheEnabled={false}
+          incognito={true}
         />
       </View>
     </SafeAreaView>
@@ -167,6 +199,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
+    flexDirection: 'row',
   },
   typeText: {
     color: 'white',
@@ -185,7 +218,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     marginBottom: 1,
-    textTransform: 'uppercase',
   },
   descScroll: {
     maxHeight: height * 0.03
@@ -220,6 +252,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  toggleBadge: {
+  width: 28,
+  height: 28,
+  borderRadius: 14,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginLeft: 6,
+  borderWidth: 1,
+},
+directBadge: {
+  backgroundColor: '#2fcfba', 
+  borderColor: '#9fb8af',
+},
+googleBadge: {
+  backgroundColor: '#44e4ef', 
+  borderColor: '#b8c9ce',
+},
+toggleText: {
+  color: 'white',
+  fontSize: 12,
+  fontWeight: 'bold',
+},
 });
 
 export default PdfMove;
