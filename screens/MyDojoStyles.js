@@ -560,7 +560,8 @@ export default function MyDojoStyles({route}) {
             data={hmoves}
             extraData={[selectedIds, moves]}
             keyExtractor={(item, index) => item.id || index.toString()}
-            contentContainerStyle={{ paddingBottom: 57, }}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flex: 1, paddingBottom: 57, flexGrow: 1, minHeight: 228 * hmoves.length }}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
                 <View style={ftype == "steps" ? styles.sectionContainer : ftype === "pdf" ? styles.sectionContainerPdf : styles.sectionContainerVideo}>
@@ -571,7 +572,7 @@ export default function MyDojoStyles({route}) {
                        extraData={[selectedIds, moves]}
                        keyExtractor={m => m.id.toString()}
                        renderItem={({ item }) => <MoveCard item={item} />}
-                       contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, }}
+                       contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width*data.length) * 0.7, flexGrow: 1 }}
                        showsHorizontalScrollIndicator={false}
                      />
                  </View>

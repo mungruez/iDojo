@@ -300,7 +300,7 @@ return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 
             data={hfvideos}
             renderItem={renderVerticalItem}
             keyExtractor={(item) => item.Source}
-            contentContainerStyle={{ flex :1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop: 7, }}
+            contentContainerStyle={{ flex : 1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop: 7, }}
             showsVerticalScrollIndicator={false}
             />
         </View> )
