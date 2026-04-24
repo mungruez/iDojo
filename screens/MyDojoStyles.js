@@ -370,6 +370,7 @@ export default function MyDojoStyles({route}) {
             style: move.style || 'Self-Defence',
             desc: move.desc || '',
             vid: viewerUrl,
+            videoUrl: move.videoUrl,
             type: 'pdf'
           };
           navigation.navigate('PdfMove', { pdf: pdfData });

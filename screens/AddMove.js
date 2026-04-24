@@ -96,12 +96,12 @@ const AddMove = ({ route }) => {
         return;
       }
 
-      if (videoUrl && videoUrl.length > 0 && !isValidPdfUrl(videoUrl)) {
+      if (type ==="pdf" && videoUrl && videoUrl.trim().length > 0 && !isValidPdfUrl(videoUrl)) {
         Alert.alert("Invalid PDF URL", "URL must start with http/https and include .pdf");
         return;
       }
 
-      if(!desc) {
+      if(!desc || !desc.trim()) {
         Alert.alert("Required", "Please provide a description.");
         return;
       }

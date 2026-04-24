@@ -26,14 +26,14 @@ const PdfMove = ({ route, navigation }) => {
   const [key, setKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [useDirectLink, setUseDirectLink] = useState(false);
-  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(false);
+  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
 
 
   const getPdfUrl = () => {
     if (useDirectLink) {
-      return pdf.vid;
+      return pdf.videoUrl;
     }
-    return `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(rawUrl)}`;
+    return pdf.vid;
   };
 
 
@@ -76,7 +76,8 @@ const PdfMove = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleRetry} style={styles.typeBadge}>
-              <Text style={styles.typeText}>🔄PDF</Text>
+              <Text style={{fontSize: 14}}>🔄</Text>
+              <Text style={styles.typeText}>PDF</Text>
             </TouchableOpacity>
           </View>
 
@@ -104,9 +105,11 @@ const PdfMove = ({ route, navigation }) => {
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => setLoading(false)}
           onError={() => {
-            alert("Could not load PDF");
+            Alert.alert("PDF Error", "Could not load PDF");
           }}
-          onHttpError={toggleViewer}
+          onHttpError={() => { 
+            Alert.alert("PDF Error", "Could not load PDF, click the D/G to try direct link or Google viewer. The reload button reloads the D/G option.");
+          }}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           cacheEnabled={false}
@@ -253,25 +256,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   toggleBadge: {
-  width: 28,
-  height: 28,
+  width: 27,
+  height: 27,
   borderRadius: 14,
   justifyContent: 'center',
   alignItems: 'center',
-  marginLeft: 6,
+  marginRight: 7,
   borderWidth: 1,
 },
 directBadge: {
-  backgroundColor: '#2fcfba', 
+  backgroundColor: '#2f9b8c', 
   borderColor: '#9fb8af',
 },
 googleBadge: {
-  backgroundColor: '#44e4ef', 
+  backgroundColor: '#3065b9', 
   borderColor: '#b8c9ce',
 },
 toggleText: {
   color: 'white',
-  fontSize: 12,
+  fontSize: 11,
   fontWeight: 'bold',
 },
 });
