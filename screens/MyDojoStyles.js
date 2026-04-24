@@ -487,7 +487,7 @@ export default function MyDojoStyles({route}) {
 
     const checkVideo = (mv) => {
       try {
-        if(mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be")) {
+        if(mv.videourl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
           setListMode(true);
           const mvData = {
             id: mv.id,
@@ -519,7 +519,7 @@ export default function MyDojoStyles({route}) {
             <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
           </View>
           <Image source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : { uri: item.thumb || 'https://via.placeholder.com/150' }} style={ftype === "pdf" ? styles.thumbPdf : styles.thumbImage} />
-          <View style={ftype == "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
+          <View style={ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
               <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
@@ -572,7 +572,7 @@ export default function MyDojoStyles({route}) {
             extraData={[selectedIds, moves]}
             keyExtractor={(item, index) => item.id || index.toString()}
             style={{ flex: 1 }}
-            contentContainerStyle={{ flex: 1, paddingBottom: 57, flexGrow: 1, minHeight: 228 * hmoves.length }}
+            contentContainerStyle={{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
                 <View style={ftype == "steps" ? styles.sectionContainer : ftype === "pdf" ? styles.sectionContainerPdf : styles.sectionContainerVideo}>
@@ -582,8 +582,8 @@ export default function MyDojoStyles({route}) {
                        data={item.data}
                        extraData={[selectedIds, moves]}
                        keyExtractor={m => m.id.toString()}
-                       renderItem={({ item }) => <MoveCard item={item} />}
-                       contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width*data.length) * 0.7, flexGrow: 1 }}
+                       renderItem={({ item: move }) => <MoveCard item={move} />}
+                       contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
                        showsHorizontalScrollIndicator={false}
                      />
                  </View>

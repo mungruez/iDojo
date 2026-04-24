@@ -108,7 +108,7 @@ const PdfMove = ({ route, navigation }) => {
             Alert.alert("PDF Error", "Could not load PDF");
           }}
           onHttpError={() => { 
-            Alert.alert("PDF Error", "Could not load PDF, click the D/G to try direct link or Google viewer. The reload button reloads the D/G option.");
+            Alert.alert("PDF Error", "Failed to load. Try D/G toggle or reload PDF");
           }}
           javaScriptEnabled={true}
           domStorageEnabled={true}
@@ -256,12 +256,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   toggleBadge: {
-  width: 27,
-  height: 27,
-  borderRadius: 14,
+  width: 30,
+  height: 30,
+  borderRadius: 15,
   justifyContent: 'center',
   alignItems: 'center',
-  marginRight: 7,
+  marginRight: 8,
   borderWidth: 1,
 },
 directBadge: {
