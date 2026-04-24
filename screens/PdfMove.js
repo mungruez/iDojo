@@ -27,6 +27,29 @@ const PdfMove = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [useDirectLink, setUseDirectLink] = useState(false);
   const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
+  const [lastClickTime, setLastClickTime] = useState(0);
+  
+  const COOLDOWN_MS = 1500; 
+
+  const canClick = () => {
+    const now = Date.now();
+    if (now - lastClickTime < COOLDOWN_MS) {
+      return false;
+    }
+    setLastClickTime(now);
+    return true;
+  };
+
+  const toggleViewer = () => {
+    if (!canClick()) return;
+    setUseDirectLink(prev => !prev);
+  };
+
+  const handleRetry = () => {
+    if (!canClick()) return;
+    setLoading(true);
+    setKey(prev => prev + 1);
+  };
 
 
   const getPdfUrl = () => {
@@ -70,12 +93,12 @@ const PdfMove = ({ route, navigation }) => {
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Style:</Text>
             <Text style={styles.infoValue}>{pdf.style || 'Self-Defence'}</Text>
-            <TouchableOpacity onPress={toggleViewer} style={[styles.toggleBadge, useDirectLink ? styles.directBadge : styles.googleBadge ]}>
+            <TouchableOpacity onPress={toggleViewer} style={[styles.toggleBadge, useDirectLink ? styles.directBadge : styles.googleBadge, Date.now() - lastClickTime < COOLDOWN_MS && {opacity: 0.5} ]}>
               <Text style={styles.toggleText}>
                 {useDirectLink ? 'D' : 'G'}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleRetry} style={styles.typeBadge}>
+            <TouchableOpacity onPress={handleRetry} style={styles.typeBadge, Date.now() - lastClickTime < COOLDOWN_MS && {opacity: 0.5}}>
               <Text style={{fontSize: 14}}>🔄</Text>
               <Text style={styles.typeText}>PDF</Text>
             </TouchableOpacity>
