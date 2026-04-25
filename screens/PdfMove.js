@@ -58,17 +58,6 @@ const PdfMove = ({ route, navigation }) => {
     }
     return pdf.vid;
   };
-
-
-  const toggleViewer = () => {
-    setUseDirectLink(prev => !prev);
-  };
-
-
-  const handleRetry = () => {
-    setLoading(true);
-    setKey(prev => prev + 1); 
-  };
   
   
   return (
@@ -98,7 +87,7 @@ const PdfMove = ({ route, navigation }) => {
                 {useDirectLink ? 'D' : 'G'}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleRetry} style={styles.typeBadge, Date.now() - lastClickTime < COOLDOWN_MS && {opacity: 0.5}}>
+            <TouchableOpacity onPress={handleRetry} style={[styles.typeBadge, Date.now() - lastClickTime < COOLDOWN_MS && {opacity: 0.5}]}>
               <Text style={{fontSize: 14}}>🔄</Text>
               <Text style={styles.typeText}>PDF</Text>
             </TouchableOpacity>

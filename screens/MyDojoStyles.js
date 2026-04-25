@@ -507,6 +507,19 @@ export default function MyDojoStyles({route}) {
       }
     };
 
+    const checkVideoThumb = (mv) => {
+      try {
+        if(mv.videourl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
+          return `https://i.ytimg.com/vi/${getYouTubeId(mv.videoUrl)}/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDhXeuJpa20FEDzlI4ajH0Ah-KdIw`
+        } else if(mv.videoUrl && mv.videoUrl.trim().length > 0 ) {
+          return 
+        }
+      } catch (e) {
+        Alert.alert("Error", "Could not open video");
+      }
+    };
+    
+
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
@@ -518,7 +531,9 @@ export default function MyDojoStyles({route}) {
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
           </View>
-          <Image source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : { uri: item.thumb || 'https://via.placeholder.com/150' }} style={ftype === "pdf" ? styles.thumbPdf : styles.thumbImage} />
+          <Image style={ftype === "pdf" ? styles.thumbPdf : styles.thumbImage}
+            source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : item.videourl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be")) ? `https://i.ytimg.com/vi/${getYouTubeId(item.videoUrl)}/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDhXeuJpa20FEDzlI4ajH0Ah-KdIw` 
+            : item.videoUrl && item.videoUrl.trim().length > 0 ? require('../assets/onlinevideoicon.png') : { uri: item.thumb || require('../assets/onlinevideoicon.png') }} />
           <View style={ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
