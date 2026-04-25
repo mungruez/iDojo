@@ -345,7 +345,7 @@ export default function MyDojoStyles({route}) {
     const getMoves = (mstyle, type, movesList) => {
       if(type !== "video" && type !== "steps" && type !== "pdf") return [];
       let sMoves = movesList.filter(m => m.type === type && (mstyle === "allstyles" || m.style === mstyle));
-      if(mstyle=="allstyles") return parseHMoves(sMoves);
+      if(mstyle === "allstyles") return parseHMoves(sMoves);
       return sMoves;
     }
 
@@ -461,10 +461,10 @@ export default function MyDojoStyles({route}) {
     const toggleListMode = (mv) => {
       if(mv === null) {
         setSelectedIds([]);
-        navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Move List Title' })
+        navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Move List Title' });
       } else {
         setSelectedIds([]);
-        navigation.navigate('AddMove', {move: mv, });
+        navigation.navigate('AddMove', {move: mv});
       }
     };
      
@@ -487,7 +487,7 @@ export default function MyDojoStyles({route}) {
 
     const checkVideo = (mv) => {
       try {
-        if(mv.videourl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
+        if(mv.videoUrl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
           setListMode(true);
           const mvData = {
             id: mv.id,
@@ -507,33 +507,35 @@ export default function MyDojoStyles({route}) {
       }
     };
 
-    const checkVideoThumb = (mv) => {
-      try {
-        if(mv.videourl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
-          return `https://i.ytimg.com/vi/${getYouTubeId(mv.videoUrl)}/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDhXeuJpa20FEDzlI4ajH0Ah-KdIw`
-        } else if(mv.videoUrl && mv.videoUrl.trim().length > 0 ) {
-          return 
-        }
-      } catch (e) {
-        Alert.alert("Error", "Could not open video");
-      }
-    };
-    
-
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
         onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? checkVideo(item) : ftype === "pdf" ? viewPdf(item) : navigation.navigate('Manual', { manual: item })}
-        style={[styles.itemContainer, selectedIds.includes(item.id) && ftype ==="steps" ? styles.selectedItem : selectedIds.includes(item.id) && ftype === "video" ? styles.selectedItemVideo : selectedIds.includes(item.id) && ftype === "pdf" ? styles.selectedItemPdf : null]}>
-
+        style={[styles.itemContainer, selectedIds.includes(item.id) && (ftype === "steps" ? styles.selectedItem : ftype === "video" ? styles.selectedItemVideo : styles.selectedItemPdf)]}>
         <View style={styles.card}>
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
           </View>
           <Image style={ftype === "pdf" ? styles.thumbPdf : styles.thumbImage}
-            source={ ftype === "pdf" ? require('../assets/pdfplaceholder.png') : item.videourl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be")) ? `https://i.ytimg.com/vi/${getYouTubeId(item.videoUrl)}/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDhXeuJpa20FEDzlI4ajH0Ah-KdIw` 
-            : item.videoUrl && item.videoUrl.trim().length > 0 ? require('../assets/onlinevideoicon.png') : { uri: item.thumb || require('../assets/onlinevideoicon.png') }} />
+            source={(() => {
+              if (ftype === "pdf") {
+                return require('../assets/pdfplaceholder.png');
+              }
+              
+              if (item.videoUrl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be"))) {
+                const youtubeId = getYouTubeId(item.videoUrl);
+                if (youtubeId) {
+                  return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
+                }
+              }
+              
+              if (item.videoUrl && item.videoUrl.trim().length > 0) {
+                return require('../assets/onlinevideoicon.png');
+              }
+              
+              return item.thumb ? { uri: item.thumb } : require('../assets/onlinevideoicon.png');
+            })()} />
           <View style={ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
@@ -555,16 +557,16 @@ export default function MyDojoStyles({route}) {
     };
 
 
-    if (loading && ftype=== 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
-    if (loading && ftype=== 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
-    if (loading && ftype=== 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+    if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+    if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+    if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1, marginTop: 25}}>
           <View style={{marginBottom: 19, paddingLeft: 5, paddingRight: 5, justifyContent: 'center', alignItems: 'center', opacity: 1}}>
-            <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ftype=== "video" ? require('../assets/moveslisttitle.png') : ftype === "pdf" ? require('../assets/pdfmoveslisttitle.png') : require('../assets/manualstitle.png')} /> 
+            <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ftype === "video" ? require('../assets/moveslisttitle.png') : ftype === "pdf" ? require('../assets/pdfmoveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
 
           <View style={styles.myDojoHeader}>
@@ -590,13 +592,13 @@ export default function MyDojoStyles({route}) {
             contentContainerStyle={{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
-                <View style={ftype == "steps" ? styles.sectionContainer : ftype === "pdf" ? styles.sectionContainerPdf : styles.sectionContainerVideo}>
+                <View style={ftype === "steps" ? styles.sectionContainer : ftype === "pdf" ? styles.sectionContainerPdf : styles.sectionContainerVideo}>
                   <Text style={ftype === "steps" ? styles.sectionHeader : ftype === "pdf" ? styles.sectionHeaderPdf : styles.sectionHeaderVideo}>{item.style}</Text>
                     <FlatList
                        horizontal
                        data={item.data}
                        extraData={[selectedIds, moves]}
-                       keyExtractor={m => m.id.toString()}
+                       keyExtractor={m => m.id?.toString() || Math.random().toString()}
                        renderItem={({ item: move }) => <MoveCard item={move} />}
                        contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
                        showsHorizontalScrollIndicator={false}
