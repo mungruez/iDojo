@@ -30,6 +30,7 @@ const PdfMove = ({ route, navigation }) => {
   const [lastClickTime, setLastClickTime] = useState(0);
   
   const COOLDOWN_MS = 1500; 
+  const isDisabled = Date.now() - lastClickTime < COOLDOWN_MS;
 
   const canClick = () => {
     const now = Date.now();
@@ -82,12 +83,12 @@ const PdfMove = ({ route, navigation }) => {
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Style:</Text>
             <Text style={styles.infoValue}>{pdf.style || 'Self-Defence'}</Text>
-            <TouchableOpacity onPress={toggleViewer} style={[styles.toggleBadge, useDirectLink ? styles.directBadge : styles.googleBadge, Date.now() - lastClickTime < COOLDOWN_MS && {opacity: 0.5} ]}>
+            <TouchableOpacity onPress={toggleViewer} style={[styles.toggleBadge, useDirectLink ? styles.directBadge : styles.googleBadge, isDisabled && {opacity: 0.5} ]}>
               <Text style={styles.toggleText}>
                 {useDirectLink ? 'D' : 'G'}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleRetry} style={[styles.typeBadge, Date.now() - lastClickTime < COOLDOWN_MS && {opacity: 0.5}]}>
+            <TouchableOpacity onPress={handleRetry} style={[styles.typeBadge, isDisabled && {opacity: 0.5}]}>
               <Text style={{fontSize: 14}}>🔄</Text>
               <Text style={styles.typeText}>PDF</Text>
             </TouchableOpacity>
