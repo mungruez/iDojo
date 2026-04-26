@@ -12,6 +12,7 @@ export default function FreeYourMindScreen() {
   const [faudio, setFaudio] = useState([]);
   const [playingId, setPlayingId] = useState(-1);
   const [loading, setLoading] = useState(true);
+
   const isOffline = useNetInfo().isConnected === false;
   const navigation = useNavigation();
 
@@ -115,7 +116,7 @@ export default function FreeYourMindScreen() {
         }]
 
         if (isOffline) {
-          Alert.alert("Offline", "Internet required for some audio.");
+          Alert.alert("Offline", "Internet required for featured audio.");
           setMusicFiles(mhaudio);
           return;
         } 
@@ -157,25 +158,6 @@ export default function FreeYourMindScreen() {
       setPlayingId(fileId);
     };
 
-    useEffect(() => {
-      const subscription = DeviceEventEmitter.addListener('TRACK_FINISHED', () => {
-      setPlayingId(-1);
-      });
-
-      const unsubscribeNav = navigation.addListener('beforeRemove', () => {
-        setPlayingId(-1);
-      });
-
-      fetchFeaturedAudio();
-      fetchMusicFiles();
-      setLoading(false);
-    
-      return () => {
-        subscription.remove(); 
-        unsubscribeNav();
-      };
-    }, [faudio.length, navigation])
-
 
     const fetchFvideos = async () => {
         let errorFlag = 0;
@@ -191,6 +173,7 @@ export default function FreeYourMindScreen() {
                 alert("Featured Content not Updated in a few days. Trying to update .....");
                 const currentDate = new Date().toISOString(); 
                 await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+                setLoading(false);
                 return errorFlag;
               }  
           }
@@ -198,6 +181,7 @@ export default function FreeYourMindScreen() {
           alert("Featured Content not visited for some time. Updating List...");
           const currentDate = new Date().toISOString(); 
           await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
+          setLoading(false);
           return errorFlag;
         }
     
@@ -221,16 +205,20 @@ export default function FreeYourMindScreen() {
                   } 
                 }
                 setFaudio(hAudio);
+                console.log("hAudio: "+hAudio.length+" loaded.");
+                setLoading(false);
                 return hAudio.length;
               }
             }).catch((error) => {
+              setLoading(false);
               return errorFlag;
             });
     
           } catch (error) {
             alert("Featured Content not visited for some time. Updating Videos and Audio files...");
           }
-    
+          
+        setLoading(false);
         return errorFlag;
       }
       
@@ -266,7 +254,6 @@ export default function FreeYourMindScreen() {
           } 
         }
         setFaudio(hAudio);
-    
         try {
           await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
           const currentDate = new Date().toISOString();
@@ -280,11 +267,7 @@ export default function FreeYourMindScreen() {
     
 
       const fetchFeaturedAudio = () => {
-        const savedfv=fetchFvideos();
-        if ( faudio && faudio.length > 3) { 
-          return;
-        }
-        
+        console.log("Fetching Featured Audio List from Google Sheets API...");
         try { 
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
         .then(res => res.json())
@@ -305,6 +288,34 @@ export default function FreeYourMindScreen() {
             }
         } 
       };
+
+
+      
+      useEffect(() => {
+        const subscription = DeviceEventEmitter.addListener('TRACK_FINISHED', () => {
+        setPlayingId(-1);
+        });
+
+        const unsubscribeNav = navigation.addListener('beforeRemove', () => {
+          setPlayingId(-1);
+        });
+
+        const val = fetchMusicFiles();
+        
+        if(!loading && val < 1) fetchFeaturedAudio();
+      
+        return () => {
+          subscription.remove(); 
+          unsubscribeNav();
+        };
+      }, [faudio.length, loading, navigation])
+
+
+
+      useEffect(() => {
+        fetchFvideos();
+      }, [])
+
 
     if (loading) return <ActivityIndicator size="large" color="#430d79" style={{flex:1, transform: [{scale: 2.0}]}} />;
 

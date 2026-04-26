@@ -155,7 +155,7 @@ export default function FeatureMoveList() {
     } 
     
     fetchFvideos();
-    if ( hfvideos.length > 6 ) { 
+    if ( hfvideos.length > 5 ) { 
       if(isloading) {
         setIsLoading(false);
       }

@@ -612,7 +612,7 @@ export default function MyDojoStyles({route}) {
              <View style={ftype === "steps" ? styles.batchBar  : ftype === "pdf" ? styles.batchBarPdf : styles.batchBarVideo}>
                <Text style={ftype === "steps" ? styles.batchText : ftype === "pdf" ? styles.batchTextPdf : styles.batchTextVideo}>{selectedIds.length} Selected</Text>
                <TouchableOpacity onPress={() => handleShare(selectedIds)} style={styles.shareIcon}>
-                 <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : ftype === "pdf" ? require('../assets/sharepdfmoveicon.png') : require('../assets/sharemoveicon.png') }/>         
+                 <ImageBackground style={{height: "100%", width: "100%", borderRadius: 4}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ftype === "steps" ? require('../assets/sharemanualicon.png') : ftype === "pdf" ? require('../assets/sharepdfmoveicon.png') : require('../assets/sharemoveicon.png') }/>         
                </TouchableOpacity>
                <TouchableOpacity onPress={() => myDojoHandleDelete(selectedIds)} style={styles.myDojoDiscardIcon}>
                  <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png') }/> 
@@ -777,8 +777,8 @@ redDivider: {width: '90%',height: 43, alignSelf: 'center', marginVertical: 15, s
 blueDivider: { width: '90%', height: 43, alignSelf: "center", marginVertical: 15, shadowColor: '#6b8cff', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1 },
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
-plusIcon: { height: 47, width: 47, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
+plusIcon: { height: 47, width: 45, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 12, marginBottom: 4, opacity: 1},
 editIcon: { height: 47, width: 47, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
-infoIcon: { height: 45, width: 45, marginLeft: 16, marginBottom: 9,},
+infoIcon: { height: 43, width: 43, marginLeft: 16, marginBottom: 9, opacity: 1, },
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
 });
