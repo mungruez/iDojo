@@ -258,7 +258,7 @@ export default function FreeYourMindScreen() {
           await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
           const currentDate = new Date().toISOString();
           await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
-          alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
+          alert('Welcome to the iDojo Featured Content Section. Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
         } catch (error) {
           alert("Unable to Store Featured List. Featured List only available when online. !");
         } 
