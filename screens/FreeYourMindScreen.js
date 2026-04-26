@@ -205,7 +205,6 @@ export default function FreeYourMindScreen() {
                   } 
                 }
                 setFaudio(hAudio);
-                console.log("hAudio: "+hAudio.length+" loaded.");
                 setLoading(false);
                 return hAudio.length;
               }
@@ -267,7 +266,6 @@ export default function FreeYourMindScreen() {
     
 
       const fetchFeaturedAudio = () => {
-        console.log("Fetching Featured Audio List from Google Sheets API...");
         try { 
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
         .then(res => res.json())
