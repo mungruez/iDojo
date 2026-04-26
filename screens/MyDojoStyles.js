@@ -27,7 +27,7 @@ export default function MyDojoStyles({route}) {
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
-          "Intructions: Save, Edit, Share, View, Delete and Import moves with iDojo. You may add any number of Moves your phone memory allows.\n(1) Use the red, green and blue plus buttons to add moves. You can either add video/pdf moves or, moves with an image, title and description in each steps.\n(2) Click on one of the red, green or blue buttons in the Moves List to see all moves with the same move list title. The first list title is all styles.  Red buttons in the list are for Video Moves and green buttons are for Steps Moves also called Manuals. The blue button is for PDF moves.\n(3) On the list screen press and hold a move to see the batch bar appear. Select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button below each move in the list to edit a move.\n(4) Scroll horizontally and vertically for the all styles list to view all your moves. Click the save button to save moves. on the add Move screen click +step button to add a new step to the move.",
+          "Intructions: Save, Edit, Share, View, Delete and Import moves using iDojo. You may add any number of Moves your phone memory allows.\n(1) Use the red, green and blue square, plus(+) icons in the top bar to add moves. You can either add Video/PDF moves or, Step moves with images, a title and description is required for all moves. The default list title Self defense will be provided once one is not entered on the Add Move Screen.\n(2) Click on one of the red, green or blue rectanglular buttons in the My Dojo Moves List to see all moves with the same move list title. The first list title button for each type will have All Lists in silver. Video Moves can contain an online video link or a video file from the phone. Steps Moves,also called Manuals must contain an image added from the phone. PDF moves can contain an online link to a PDF or a PDF file uploaded from the phone. A reload🔄 button is provided in the dropdown at the top when viewing online PDFs.\n(3) On the list screen press and hold a move to see the batch bar appear, after select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button at the bottom of each move card in the list to edit a move, and to view any move click on the move card.\n(4) Scroll horizontally and vertically on the all lists screen to view all your moves. On the add Move screen click the save button to save moves. When adding Steps Moves with the Add Move screen click the green +step button to add a new step to the move and click the -step icon to remove a step.",
           [
             {
               text: "OK",
@@ -680,7 +680,7 @@ export default function MyDojoStyles({route}) {
                     {item.id === 'v-all' ? 
                       ( <Image
                           resizeMode="contain"
-                          style={{ height:"45%", width:"57%", alignSelf:"center",}}
+                          style={{ height:"67%", width:"76%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
@@ -694,7 +694,7 @@ export default function MyDojoStyles({route}) {
                       {item.id === 's-all' ? 
                         ( <Image
                           resizeMode="contain"
-                          style={{height:"45%", width:"57%", alignSelf:"center",}}
+                          style={{height:"67%", width:"76%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
@@ -708,7 +708,7 @@ export default function MyDojoStyles({route}) {
                       {item.id === 'p-all' ? 
                         ( <Image
                           resizeMode="contain"
-                          style={{height: "45%", width: "57%", alignSelf: "center",}}
+                          style={{height: "67%", width: "76%", alignSelf: "center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
