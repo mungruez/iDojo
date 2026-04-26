@@ -34,14 +34,14 @@ export default function App() {
         <Stack.Screen name="FightersList"  component={FightersList} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="FeaturedList"  component={FeaturedMoveList} options={{headerShown:false,animation: 'slide_from_right'}}/>
         <Stack.Screen name="Featured"      component={FeaturedMove} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
-        <Stack.Screen name="FighterScreen" component={Fighter} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="FighterScreen" component={Fighter} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
         <Stack.Screen name="FreeYourMind"  component={FreeYourMindScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="LoginScreen"   component={LoginScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
         <Stack.Screen name="PasswordManager" component={PasswordManager} options={{headerShown:false,  animation: 'fade_from_bottom'}}/>
         <Stack.Screen name="Res"  component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="MyDojoStyles" component={MyDojoStyles} options={{headerShown:false, animation: 'slide_from_right'}}/>
-        <Stack.Screen name="AddMove" component={AddMove} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
-        <Stack.Screen name="PdfMove" component={PdfMove} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="AddMove" component={AddMove} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
+        <Stack.Screen name="PdfMove" component={PdfMove} options={{headerShown:false, animation: 'slide_from_right', detachPreviousScreen: false}}/>
       </Stack.Navigator>
      </NavigationContainer>
   );

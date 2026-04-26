@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import { View, Dimensions, Text, StyleSheet, AppState } from "react-native"; 
+import React, { useState, useEffect } from "react";
+import { View, Dimensions, Text, StyleSheet, AppState, ActivityIndicator } from "react-native"; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
 import { useIsFocused } from '@react-navigation/native';
@@ -11,6 +11,7 @@ const FeaturedMove = ({ route, navigation }) => {
   const { video } = route.params;
   const isFocused = useIsFocused(); 
   const [playing, setPlaying] = useState(true);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
@@ -36,6 +37,14 @@ const FeaturedMove = ({ route, navigation }) => {
     if (video.Link && video.Link.length >= 19) {
       player.play();
     }
+
+    player.addListener('statusChange', ({ status }) => {
+      if (status === 'readyToPlay') {
+        setLoading(false);
+      } else if (status === 'loading') {
+        setLoading(true);
+      }
+    });
   });
 
 
@@ -67,6 +76,22 @@ const FeaturedMove = ({ route, navigation }) => {
               allowsPictureinPicture
               style={{ flex: 1,marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "95%"}}
             />
+
+            {loading && (
+              <View style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'rgba(0,0,0,0.7)',
+              }}>
+                <ActivityIndicator size="large" color="#f30707" />
+                <Text style={{ color: 'white', marginTop: 10 }}>Loading...</Text>
+              </View>
+            )}
         </View>)
       }
     </SafeAreaView>

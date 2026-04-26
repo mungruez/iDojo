@@ -590,19 +590,44 @@ export default function MyDojoStyles({route}) {
             keyExtractor={(item, index) => item.id || index.toString()}
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
+            onLayout={(event) => {
+              const { width, height } = event.nativeEvent.layout;
+              if (height < 100) {
+                loadMoves(); 
+              }
+            }}
+            ListEmptyComponent={() => {
+              if (hmoves.length > 0) {
+                loadMoves();
+                return (
+                  <View style={{padding: 20, alignItems: 'center'}}>
+                    <ActivityIndicator size="large" color={ftype === "video" ? "#f30707" : ftype === "pdf" ? "#0b1461" : "#0b6112"} />
+                    <Text style={{color: 'white', marginTop: 10}}>Reloading...</Text>
+                  </View>
+                );
+              }
+              return ( <TouchableOpacity onPress={() => loadMoves()}> <Text style={{color: '#fff', fontSize: 20}}>🔄</Text> </TouchableOpacity>);
+            }}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
                 <View style={ftype === "steps" ? styles.sectionContainer : ftype === "pdf" ? styles.sectionContainerPdf : styles.sectionContainerVideo}>
                   <Text style={ftype === "steps" ? styles.sectionHeader : ftype === "pdf" ? styles.sectionHeaderPdf : styles.sectionHeaderVideo}>{item.style}</Text>
                     <FlatList
-                       horizontal
-                       data={item.data}
-                       extraData={[selectedIds, moves]}
-                       keyExtractor={m => m.id?.toString() || Math.random().toString()}
-                       renderItem={({ item: move }) => <MoveCard item={move} />}
-                       contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
-                       showsHorizontalScrollIndicator={false}
-                     />
+                      horizontal
+                      data={item.data}
+                      extraData={[selectedIds, moves]}
+                      getItemLayout={(data, index) => ({
+                        length: width * 0.7,
+                        offset: width * 0.7 * index,
+                        index,
+                      })}
+                      windowSize={38}
+                      initialNumToRender={item.data.length}
+                      keyExtractor={m => m.id?.toString() || Math.random().toString()}
+                      renderItem={({ item: move }) => <MoveCard item={move} />}
+                      contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
+                      showsHorizontalScrollIndicator={false}
+                    />
                  </View>
                ) : (<View style={styles.verticalWrapper}><MoveCard item={item} /></View>)
              )}
@@ -680,7 +705,7 @@ export default function MyDojoStyles({route}) {
                     {item.id === 'v-all' ? 
                       ( <Image
                           resizeMode="contain"
-                          style={{ height:"67%", width:"76%", alignSelf:"center",}}
+                          style={{ height:"57%", width:"63%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
@@ -694,7 +719,7 @@ export default function MyDojoStyles({route}) {
                       {item.id === 's-all' ? 
                         ( <Image
                           resizeMode="contain"
-                          style={{height:"67%", width:"76%", alignSelf:"center",}}
+                          style={{height:"57%", width:"63%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
@@ -708,7 +733,7 @@ export default function MyDojoStyles({route}) {
                       {item.id === 'p-all' ? 
                         ( <Image
                           resizeMode="contain"
-                          style={{height: "67%", width: "76%", alignSelf: "center",}}
+                          style={{height: "57%", width: "63%", alignSelf: "center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 

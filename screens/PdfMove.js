@@ -29,7 +29,7 @@ const PdfMove = ({ route, navigation }) => {
   const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
   const [lastClickTime, setLastClickTime] = useState(0);
   
-  const COOLDOWN_MS = 1500; 
+  const COOLDOWN_MS = 1900; 
 
   const canClick = () => {
     const now = Date.now();
@@ -38,11 +38,6 @@ const PdfMove = ({ route, navigation }) => {
     }
     setLastClickTime(now);
     return true;
-  };
-
-  const toggleViewer = () => {
-    if (!canClick()) return;
-    setUseDirectLink(prev => !prev);
   };
 
   const handleRetry = () => {
@@ -82,11 +77,6 @@ const PdfMove = ({ route, navigation }) => {
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Style:</Text>
             <Text style={styles.infoValue}>{pdf.style || 'Self-Defence'}</Text>
-            <TouchableOpacity onPress={toggleViewer} style={[styles.toggleBadge, useDirectLink ? styles.directBadge : styles.googleBadge]}>
-              <Text style={styles.toggleText}>
-                {useDirectLink ? 'D' : 'G'}
-              </Text>
-            </TouchableOpacity>
             <TouchableOpacity onPress={handleRetry} style={[styles.typeBadge]}>
               <Text style={{fontSize: 14}}>🔄</Text>
               <Text style={styles.typeText}>PDF</Text>
@@ -267,28 +257,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  toggleBadge: {
-  width: 30,
-  height: 30,
-  borderRadius: 15,
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginRight: 8,
-  borderWidth: 1,
-},
-directBadge: {
-  backgroundColor: '#2f9b8c', 
-  borderColor: '#9fb8af',
-},
-googleBadge: {
-  backgroundColor: '#3065b9', 
-  borderColor: '#b8c9ce',
-},
-toggleText: {
-  color: 'white',
-  fontSize: 11,
-  fontWeight: 'bold',
-},
 });
 
 export default PdfMove;

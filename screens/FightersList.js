@@ -19,6 +19,11 @@ export default function FightersList() {
     try {
       if(kplayer) {
         kplayer.play();
+      } else {
+        kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
+          kplayer.loop = false;
+          kplayer.play(); 
+        });
       }
     } catch (error) {
         alert('Error playing sound effect:'+error);
