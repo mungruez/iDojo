@@ -217,7 +217,7 @@ export default function FeatureMoveList() {
                       </View> } 
 
                       <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0,}}>
+                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0,}}>
                           <View style={styles.subCardView}>
                             <View>
                             <Image
@@ -226,8 +226,8 @@ export default function FeatureMoveList() {
                               style={{
                                 borderRadius: 12,
                                 alignSelf: 'flex-start',
-                                marginTop:0,
-                                marginLeft:3,
+                                marginTop: 0,
+                                marginLeft: 3,
                                 height: 190,
                                 width: (Dimensions.get('window').width/100)*45,
                               }}
@@ -243,13 +243,14 @@ export default function FeatureMoveList() {
                                   backgroundColor:'#323232',
                                   justifyContent:'space-between',
                                 }}>
-                                <Text style={{color: '#9a9aa1',fontSize: 11, marginLeft: 2,}}>
+                                <Text style={{color: '#9a9aa1',fontSize: 11, marginLeft: 1,}}>
                                     {item.Type}
                                 </Text>
-
-                                <Text style={{color: '#fff',fontSize: 11, marginRight: 3,}}>
+                                
+                                { item.Type.length + item.style.length < 22 &&
+                                  ( <Text style={{color: '#fff',fontSize: 11, marginRight: 3,}}>
                                     {item.Style}
-                                </Text>
+                                  </Text> ) }
                               </View>
                             </View>
 
@@ -317,9 +318,9 @@ return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 
 
 const styles = StyleSheet.create({
   imgBackground: {
-      minWidth: '100%',
-      minHeight: '100%',
-      height: Dimensions.get('window').height,
+      minWidth: "100%",
+      minHeight: "95%",
+      height: Dimensions.get('window').height * 0.95,
       flex: 1, 
   }, 
   image: {

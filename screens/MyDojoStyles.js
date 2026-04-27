@@ -40,6 +40,80 @@ export default function MyDojoStyles({route}) {
     };
 
 
+    const parseStyles = (list) => {
+      if (!Array.isArray(list)) {
+        alert("Data is not an array, skipping parse.");
+        return;
+      }
+      let videoStyles = [], stepStyles = [], pdfStyles = [];
+      let sMoves = [{ id: "v-all", type: "video", style: "allstyles" }];
+      let bMoves = [{ id: "s-all", type: "steps", style: "allstyles" }];
+      let pMoves = [{ id: "p-all", type: "pdf", style: "allstyles" }];
+
+      list?.forEach(m => {
+        const currentStyle = m.style || "Self-Defence";
+        if (m.type === "video" && !videoStyles.includes(currentStyle)) {
+          videoStyles.push(currentStyle); 
+          sMoves.push({ ...m, style: currentStyle }); 
+        } else if (m.type === "steps" && !stepStyles.includes(currentStyle)) {
+          stepStyles.push(currentStyle); 
+          bMoves.push({ ...m, style: currentStyle });
+        } else if (m.type === "pdf" && !pdfStyles.includes(currentStyle)) {
+          pdfStyles.push(currentStyle);
+          pMoves.push({ ...m, style: currentStyle });
+        }
+      });
+
+      if(sMoves.length > 1 && bMoves.length > 1 && pMoves.length > 1) {
+        setSMoves([...sMoves, ...bMoves, ...pMoves]);
+      } else if(sMoves.length > 1 && bMoves.length > 1) {
+        setSMoves([...sMoves, ...bMoves]);
+      } else if(sMoves.length > 1 && pMoves.length > 1) {
+        setSMoves([...sMoves, ...pMoves]);
+      } else if(bMoves.length > 1 && pMoves.length > 1) {
+        setSMoves([...bMoves, ...pMoves]);
+      } else if (sMoves.length > 1) {
+        setSMoves(sMoves);
+      } else if (bMoves.length > 1) {
+        setSMoves(bMoves);
+      } else if (pMoves.length > 1) {
+        setSMoves(pMoves);
+      } else {
+        setSMoves([]);
+      }
+    };
+    
+
+    const parseHMoves = (movesList) => {
+      let hMoves = [];
+      let stylesSeen = [];
+      for (let mNum = 0; mNum < movesList.length; mNum++) {
+        const move = movesList[mNum];
+        const currentStyle = move.style || "Self-Defence"; 
+        let mIndex = stylesSeen.indexOf(currentStyle);
+
+        if (mIndex < 0) {
+          stylesSeen.push(currentStyle);
+          hMoves.push({
+            style: currentStyle,
+            data: [move],
+          });
+        } else {
+          hMoves[mIndex].data.push(move);
+        }
+      }
+      return hMoves;
+    };
+
+
+    const getMoves = (mstyle, mtype, movesList) => {
+      if(mtype !== "video" && mtype !== "steps" && mtype !== "pdf") return [];
+      let sMoves = movesList.filter(m => m.type === mtype && (mstyle === "allstyles" || m.style === mstyle));
+      if(mstyle === "allstyles") return parseHMoves(sMoves);
+      return sMoves;
+    }
+
+
     const loadMoves = async () => {
       try {
         const fileUri = `${FileSystem.documentDirectory}moves.json`;
@@ -275,80 +349,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-  
-    const parseStyles = (list) => {
-      if (!Array.isArray(list)) {
-        alert("Data is not an array, skipping parse.");
-        return;
-      }
-      let videoStyles = [], stepStyles = [], pdfStyles = [];
-      let sMoves = [{ id: "v-all", type: "video", style: "allstyles" }];
-      let bMoves = [{ id: "s-all", type: "steps", style: "allstyles" }];
-      let pMoves = [{ id: "p-all", type: "pdf", style: "allstyles" }];
-
-      list?.forEach(m => {
-        const currentStyle = m.style || "Self-Defence";
-        if (m.type === "video" && !videoStyles.includes(currentStyle)) {
-          videoStyles.push(currentStyle); 
-          sMoves.push({ ...m, style: currentStyle }); 
-        } else if (m.type === "steps" && !stepStyles.includes(currentStyle)) {
-          stepStyles.push(currentStyle); 
-          bMoves.push({ ...m, style: currentStyle });
-        } else if (m.type === "pdf" && !pdfStyles.includes(currentStyle)) {
-          pdfStyles.push(currentStyle);
-          pMoves.push({ ...m, style: currentStyle });
-        }
-      });
-
-      if(sMoves.length > 1 && bMoves.length > 1 && pMoves.length > 1) {
-        setSMoves([...sMoves, ...bMoves, ...pMoves]);
-      } else if(sMoves.length > 1 && bMoves.length > 1) {
-        setSMoves([...sMoves, ...bMoves]);
-      } else if(sMoves.length > 1 && pMoves.length > 1) {
-        setSMoves([...sMoves, ...pMoves]);
-      } else if(bMoves.length > 1 && pMoves.length > 1) {
-        setSMoves([...bMoves, ...pMoves]);
-      } else if (sMoves.length > 1) {
-        setSMoves(sMoves);
-      } else if (bMoves.length > 1) {
-        setSMoves(bMoves);
-      } else if (pMoves.length > 1) {
-        setSMoves(pMoves);
-      } else {
-        setSMoves([]);
-      }
-    };
-    
-
-    const parseHMoves = (movesList) => {
-      let hMoves = [];
-      let stylesSeen = [];
-      for (let mNum = 0; mNum < movesList.length; mNum++) {
-        const move = movesList[mNum];
-        const currentStyle = move.style || "Self-Defence"; 
-        let mIndex = stylesSeen.indexOf(currentStyle);
-
-        if (mIndex < 0) {
-          stylesSeen.push(currentStyle);
-          hMoves.push({
-            style: currentStyle,
-            data: [move],
-          });
-        } else {
-          hMoves[mIndex].data.push(move);
-        }
-      }
-      return hMoves;
-    };
-
-
-    const getMoves = (mstyle, type, movesList) => {
-      if(type !== "video" && type !== "steps" && type !== "pdf") return [];
-      let sMoves = movesList.filter(m => m.type === type && (mstyle === "allstyles" || m.style === mstyle));
-      if(mstyle === "allstyles") return parseHMoves(sMoves);
-      return sMoves;
-    }
-
 
     const viewPdf = async (move) => {
       if (isOffline) {
@@ -515,7 +515,7 @@ export default function MyDojoStyles({route}) {
         style={[styles.itemContainer, selectedIds.includes(item.id) && (ftype === "steps" ? styles.selectedItem : ftype === "video" ? styles.selectedItemVideo : styles.selectedItemPdf)]}>
         <View style={styles.card}>
           <View style={styles.titleBanner}>
-            <Text numberOfLines={1} style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
+            <Text numberOfLines={1} ellipsizeMode="clip" style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
           </View>
           <Image style={ftype === "pdf" ? styles.thumbPdf : styles.thumbImage}
             source={(() => {
@@ -584,7 +584,8 @@ export default function MyDojoStyles({route}) {
             </View>
           </View>
            
-          <FlatList
+          <View style={styles.flatlistContainer}> 
+           <FlatList
             data={hmoves}
             extraData={[selectedIds, moves]}
             keyExtractor={(item, index) => item.id || index.toString()}
@@ -598,7 +599,7 @@ export default function MyDojoStyles({route}) {
             }}
             ListEmptyComponent={() => {
               if (hmoves.length > 0) {
-                loadMoves();
+                setHMoves(getMoves(fstyle, ftype, moves));
                 return (
                   <View style={{padding: 20, alignItems: 'center'}}>
                     <ActivityIndicator size="large" color={ftype === "video" ? "#f30707" : ftype === "pdf" ? "#0b1461" : "#0b6112"} />
@@ -606,7 +607,7 @@ export default function MyDojoStyles({route}) {
                   </View>
                 );
               }
-              return ( <TouchableOpacity onPress={() => loadMoves()}> <Text style={{color: '#fff', fontSize: 20}}>🔄</Text> </TouchableOpacity>);
+              return ( <TouchableOpacity onPress={() => {loadMoves();}}> <Text style={{color: '#fff', fontSize: 20}}>🔄</Text> </TouchableOpacity>);
             }}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
@@ -616,22 +617,26 @@ export default function MyDojoStyles({route}) {
                       horizontal
                       data={item.data}
                       extraData={[selectedIds, moves]}
-                      getItemLayout={(data, index) => ({
-                        length: width * 0.7,
-                        offset: width * 0.7 * index,
-                        index,
-                      })}
+                      getItemLayout={(data, index) => {
+                        const itemWidth = Dimensions.get('window').width * 0.7;
+                        return {
+                          length: itemWidth,
+                          offset: itemWidth * index,
+                          index,
+                        };
+                      }}
                       windowSize={38}
                       initialNumToRender={item.data.length}
-                      keyExtractor={m => m.id?.toString() || Math.random().toString()}
-                      renderItem={({ item: move }) => <MoveCard item={move} />}
-                      contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
                       showsHorizontalScrollIndicator={false}
+                      keyExtractor={m => m.id?.toString() || Math.random().toString()}
+                      contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
+                      renderItem={({ item: move }) => <MoveCard item={move} />}
                     />
                  </View>
                ) : (<View style={styles.verticalWrapper}><MoveCard item={item} /></View>)
              )}
-           />
+            />
+           </View>
      
            {selectedIds.length > 0 && (
              <View style={ftype === "steps" ? styles.batchBar  : ftype === "pdf" ? styles.batchBarPdf : styles.batchBarVideo}>
@@ -708,7 +713,7 @@ export default function MyDojoStyles({route}) {
                           style={{ height:"57%", width:"63%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
-                          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
+                          <Text numberOfLines={1} ellipsizeMode="clip" style={styles.cardText}>{item.style}</Text> 
                       )}
                   </ImageBackground>
                   </TouchableOpacity>) 
@@ -722,7 +727,7 @@ export default function MyDojoStyles({route}) {
                           style={{height:"57%", width:"63%", alignSelf:"center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
-                          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
+                          <Text numberOfLines={1} ellipsizeMode="clip" style={styles.cardText}>{item.style}</Text> 
                       )}
                     </ImageBackground>
                   </TouchableOpacity> )
@@ -736,7 +741,7 @@ export default function MyDojoStyles({route}) {
                           style={{height: "57%", width: "63%", alignSelf: "center",}}
                           source={require('../assets/allstyles.png')}
                         /> ) : (
-                          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.cardText}>{item.style}</Text> 
+                          <Text numberOfLines={1} ellipsizeMode="clip" style={styles.cardText}>{item.style}</Text> 
                       )}
                     </ImageBackground>
                   </TouchableOpacity> )
@@ -755,6 +760,7 @@ export default function MyDojoStyles({route}) {
 
 
 const styles = StyleSheet.create({
+flatlistContainer: { minWidth: '100%', minHeight: '95%', height: Dimensions.get('window').height * 0.95, flex: 1 },
 imgBackground: { flex: 1, width: "100%", height: "100%" },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)', opacity: 1 },
 sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)', opacity: 1 },
@@ -769,9 +775,9 @@ selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(3
 selectedItemVideo: { borderColor: '#eb2121', borderWidth: 2, backgroundColor: 'rgba(250, 85, 85, 0.6)' },
 selectedItemPdf: { borderWidth: 2, borderColor: '#1e0899', backgroundColor: 'rgba(97, 71, 245, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 2 },
-titleText: { textAlign: 'center', fontSize: 13, fontWeight: 'bold', color: '#51fc42', alignSelf: "flex-start" },
-titleTextVideo: { textAlign: 'center', fontSize: 13, fontWeight: 'bold', color: '#fcd1d1', alignSelf: "flex-start"},
-titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 13, textAlign: "center", alignSelf: "flex-start" },
+titleText: { textAlign: 'center', fontSize: 13, fontWeight: 'bold', color: '#51fc42', alignSelf: "flex-start", overflow: "hidden" },
+titleTextVideo: { textAlign: 'center', fontSize: 13, fontWeight: 'bold', color: '#fcd1d1', alignSelf: "flex-start", overflow: "hidden"},
+titleTextPdf: { color: '#6b8cff', fontWeight: 'bold', fontSize: 13, textAlign: "center", alignSelf: "flex-start", overflow: "hidden" },
 thumbImage: { width: "100%", height: 152, backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 thumbPdf: { width: "100%", height: 76, resizeMode: 'contain', backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 myDojoDeleteIcon: {height: 49, width: 49, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },

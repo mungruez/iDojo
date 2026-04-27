@@ -360,11 +360,10 @@ export default function FreeYourMindScreen() {
                     <View style={{
                         backgroundColor: "transparent",
                         alignItems:"flex-start",
-                        height: 17,
+                        height: 19,
                         width: "95%",}}>
                         <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"\u00A0\u00A0\u00A0\u00A0"} </Text>        
-                    </View>
-                  
+                    </View>      
 
                   { playingId == file.id && (
                     <TrackPlayer track={file} />
@@ -414,7 +413,7 @@ const styles = StyleSheet.create({
       fontSize: 11,
       color: "#5b12a5ff",
       fontWeight: 'bold',
-      maxHeight: 17,
+      maxHeight: 19,
       backgroundColor: "transparent",
       width:"100%",
       textAlign: "left",

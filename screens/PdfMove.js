@@ -56,13 +56,13 @@ const PdfMove = ({ route, navigation }) => {
   
   
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232',width: '100%', height:'100%', marginTop: 12 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232', width: '100%', height:'100%', marginTop: 38 }}>
       <StatusBar barStyle="dark-content"/>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeBtn}>
           <Text style={styles.closeText}>✕</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
+        <Text style={styles.headerTitle} numberOfLines={1} ellipsizeMode="clip">
           {pdf.title}
         </Text>
         <TouchableOpacity onPress={() => setPdfDropdownVisible(!pdfDropdownVisible)} style={styles.toggleBtn}>
@@ -76,7 +76,7 @@ const PdfMove = ({ route, navigation }) => {
         <View style={styles.dropdownContainer}>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Style:</Text>
-            <Text style={styles.infoValue}>{pdf.style || 'Self-Defence'}</Text>
+            <Text numberOfLines={1} ellipsizeMode="clip" style={styles.infoValue}>{pdf.style || 'Self-Defence'}</Text>
             <TouchableOpacity onPress={handleRetry} style={[styles.typeBadge]}>
               <Text style={{fontSize: 14}}>🔄</Text>
               <Text style={styles.typeText}>PDF</Text>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#1d377e91',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 3,
     borderBottomWidth: 2,
     borderBottomColor: '#3b82f6',
   },
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   pdfContainer: {
     flex: 1,
-    margin: 7,
+    margin: 4,
     backgroundColor: 'white',
     borderRadius: 12,
     overflow: 'hidden',
