@@ -247,7 +247,7 @@ export default function FeatureMoveList() {
                                     {item.Type}
                                 </Text>
                                 
-                                { item.Type.length + item.style.length < 22 &&
+                                { item.Type.length + item.Style.length < 22 &&
                                   ( <Text style={{color: '#fff',fontSize: 11, marginRight: 3,}}>
                                     {item.Style}
                                   </Text> ) }

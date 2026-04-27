@@ -18,13 +18,15 @@ export default function ManualsScreen() {
 
   async function stopSound() {
     try {
-      if (!isMuted) {
+      if (kplayer && !isMuted) {
         if (kplayer.playing) {
           kplayer.pause();
         } else {
+          kplayer.seekTo(0);
           kplayer.play();
         }
-      } else {
+      } else if(kplayer) {
+        kplayer.seekTo(0);
         kplayer.play();
       }
     } catch (error) {
@@ -37,12 +39,8 @@ export default function ManualsScreen() {
   const navKSound = (item) => {
       try {
         if(kplayer) {
+          kplayer.seekTo(0);
           kplayer.play();
-        } else {
-          kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
-            kplayer.loop = false;
-            kplayer.play(); 
-          });
         }
       } catch (error) {
           alert("Error playing sound effect");

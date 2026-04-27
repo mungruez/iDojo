@@ -15,6 +15,15 @@ const AddMove = ({ route }) => {
   const [desc, setDesc] = useState(move?.desc || "");
   const [videoUrl, setVideoUrl] = useState(move?.videoUrl || "");
   const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+
+  const checkFStyle = (text) => {
+    const trimmed = text.trim().toLowerCase();
+    if (trimmed === "allstyles" || trimmed === "all styles") {
+      setFStyle("All Styles");
+      return;
+    }
+    setFStyle(text);
+  };
   
   const pickMedia = async (index = null) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -69,6 +78,7 @@ const AddMove = ({ route }) => {
 
   const save = async () => {
     let validatedSteps = []; 
+
     if (!title.trim()) {
       Alert.alert("Required", "Please enter a Move Title.");
       return;
@@ -79,6 +89,7 @@ const AddMove = ({ route }) => {
         Alert.alert("Missing Image", "Every step must have an image!");
         return;
       }
+
       if (steps.some(s => !s.desc || !s.desc.trim())) {
         Alert.alert("Missing Description", "Every step must have a description.");
         return;
@@ -105,6 +116,7 @@ const AddMove = ({ route }) => {
         Alert.alert("Required", "Please provide a description.");
         return;
       }
+
     }
 
     try {
@@ -177,7 +189,7 @@ const AddMove = ({ route }) => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
     >
     <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
-      <ImageBackground style={ styles.icon } resizeMode='contain' source={type=='video' && !move ? require('../assets/addmovetitle.png') : type=='video' && move ? require('../assets/editmovetitle.png') : type=='steps' && !move ? require('../assets/addmanualtitle.png') : type=='steps' && move ? require('../assets/editmanualtitle.png') : type=="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
+      <ImageBackground style={ styles.icon } resizeMode='contain' source={type ==='video' && !move ? require('../assets/addmovetitle.png') : type ==='video' && move ? require('../assets/editmovetitle.png') : type ==='steps' && !move ? require('../assets/addmanualtitle.png') : type ==='steps' && move ? require('../assets/editmanualtitle.png') : type ==="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
     </View>
     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.discardBtn}>
       <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
@@ -190,7 +202,7 @@ const AddMove = ({ route }) => {
       <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
       
       <Text style={styles.label}>Moves List Title/Styles</Text>
-      <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={setFStyle} />
+      <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={checkFStyle} />
 
       { type === "video" ? (
         <View>
@@ -205,7 +217,7 @@ const AddMove = ({ route }) => {
           <Text style={styles.label}>Move Description</Text>
           <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
         </View>
-        ) : type ===  "pdf" ? (
+        ) : type === "pdf" ? (
           <View>
             <Text style={styles.label}>PDF URL of Move</Text>
             {!vid && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}

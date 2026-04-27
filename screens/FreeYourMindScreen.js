@@ -298,9 +298,9 @@ export default function FreeYourMindScreen() {
           setPlayingId(-1);
         });
 
-        const val = fetchMusicFiles();
+        if(!loading && faudio.length < 1) fetchFeaturedAudio();
         
-        if(!loading && val < 1) fetchFeaturedAudio();
+        fetchMusicFiles();
       
         return () => {
           subscription.remove(); 
@@ -322,7 +322,7 @@ export default function FreeYourMindScreen() {
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7, opacity: 1}}>
           <View style={styles.container}>
 
-            <View style={{ marginBottom:19, paddingBottom: 7, justifyContent: "center", opacity: 1}}>
+            <View style={{ marginBottom: 19, paddingBottom: 7, justifyContent: "center", opacity: 1}}>
                 <ImageBackground style={ styles.title } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/freeyourmindtitle.png')} />
                 <StatusBar barStyle='light-content' backgroundColor='#430d79'/>
             </View>
@@ -333,7 +333,7 @@ export default function FreeYourMindScreen() {
 
             <FlatList
               data={musicFiles} 
-              style={{flex: 1, width:"94%", flexDirection: "column", alignSelf: "center", marginTop: 1, borderRadius: 50,}}
+              style={{flex: 1, width: "94%", flexDirection: "column", alignSelf: "center", marginTop: 1, borderRadius: 50,}}
               keyExtractor={(item) => item.id.toString()} 
               extraData={playingId} 
               renderItem={({ item: file }) => (
@@ -365,9 +365,7 @@ export default function FreeYourMindScreen() {
                         <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"\u00A0\u00A0\u00A0\u00A0"} </Text>        
                     </View>      
 
-                  { playingId == file.id && (
-                    <TrackPlayer track={file} />
-                  )}
+                  { playingId == file.id && ( <TrackPlayer track={file} /> ) }
                 </View>
               )}
 

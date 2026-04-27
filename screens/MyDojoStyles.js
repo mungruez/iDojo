@@ -177,7 +177,13 @@ export default function MyDojoStyles({route}) {
       const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : selectedIds;
       const cleanIdsToDelete = actualIds.map(id => String(id).trim());
       if (cleanIdsToDelete.length === 0) return;
-      Alert.alert("Delete Moves",`Remove ${cleanIdsToDelete.length} selected move(s)?`,
+
+      const isDeletingAll = actualIds.length === hmoves.length;
+  
+      Alert.alert(
+        isDeletingAll ? "Delete All Moves" : "Delete Moves",
+        isDeletingAll ? "Remove all moves in this list?" : `Remove ${cleanIdsToDelete.length} selected move(s)?`,
+
         [{ text: "Cancel", style: "cancel" },
           {text: "Delete",
           style: "destructive",
@@ -193,8 +199,15 @@ export default function MyDojoStyles({route}) {
               await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(updatedList));
               setMoves(updatedList);
               parseStyles(updatedList);
-              setHMoves(getMoves(fstyle, ftype, updatedList)); 
               setSelectedIds([]);
+              
+              if (isDeletingAll || updatedList.filter(m => m.type === ftype && (fstyle === "allstyles" || m.style === fstyle)).length < 1) {
+                setListMode(false);
+                setFStyle('Self Defense');
+                setType('select move type');
+              } else {
+                setHMoves(getMoves(fstyle, ftype, updatedList));
+              }
               
             } catch (error) {
               Alert.alert("Delete Error", error.message || "Could not remove files from storage.");
@@ -593,21 +606,18 @@ export default function MyDojoStyles({route}) {
             contentContainerStyle={{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
             onLayout={(event) => {
               const { width, height } = event.nativeEvent.layout;
-              if (height < 100) {
+              if (height < 100 || hmoves.length < 1) {
                 loadMoves(); 
               }
             }}
-            ListEmptyComponent={() => {
-              if (hmoves.length > 0) {
-                setHMoves(getMoves(fstyle, ftype, moves));
-                return (
-                  <View style={{padding: 20, alignItems: 'center'}}>
-                    <ActivityIndicator size="large" color={ftype === "video" ? "#f30707" : ftype === "pdf" ? "#0b1461" : "#0b6112"} />
-                    <Text style={{color: 'white', marginTop: 10}}>Reloading...</Text>
-                  </View>
-                );
-              }
-              return ( <TouchableOpacity onPress={() => {loadMoves();}}> <Text style={{color: '#fff', fontSize: 20}}>🔄</Text> </TouchableOpacity>);
+            ListEmptyComponent = {() => {
+              loadMoves(); 
+              return (
+                <View style={{padding: 20, alignItems: 'center'}}>
+                  <ActivityIndicator size="large" color={ftype === "video" ? "#f30707" : ftype === "pdf" ? "#0b1461" : "#0b6112"} />
+                  <Text style={{color: 'white', marginTop: 10}}>Loading moves...</Text>
+                </View>
+              );
             }}
             renderItem={({ item }) => (
               fstyle === "allstyles" ? (
@@ -760,8 +770,8 @@ export default function MyDojoStyles({route}) {
 
 
 const styles = StyleSheet.create({
-flatlistContainer: { minWidth: '100%', minHeight: '95%', height: Dimensions.get('window').height * 0.95, flex: 1 },
-imgBackground: { flex: 1, width: "100%", height: "100%" },
+flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 57 },
+imgBackground: { flex: 1, width: "100%", height: Dimensions.get('window').height * 0.95, opacity: 1 },
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)', opacity: 1 },
 sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)', opacity: 1 },
 sectionContainerPdf: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 0, 255, 0.1)', opacity: 1 },

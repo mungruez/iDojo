@@ -18,12 +18,8 @@ export default function FightersList() {
   const navKSound = (item) => {
     try {
       if(kplayer) {
+        kplayer.seekTo(0);
         kplayer.play();
-      } else {
-        kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
-          kplayer.loop = false;
-          kplayer.play(); 
-        });
       }
     } catch (error) {
         alert('Error playing sound effect:'+error);
