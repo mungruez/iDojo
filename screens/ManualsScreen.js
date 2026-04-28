@@ -18,19 +18,12 @@ export default function ManualsScreen() {
 
   async function stopSound() {
     try {
-      if (kplayer && !isMuted) {
-        if (kplayer.playing) {
-          kplayer.pause();
-        } else {
-          kplayer.seekTo(0);
-          kplayer.play();
-        }
-      } else if(kplayer) {
+      if (kplayer && isMuted && !kplayer.playing) {
         kplayer.seekTo(0);
-        kplayer.play();
+        kplayer.play();  
       }
     } catch (error) {
-        alert("Error pausing or un-pausing sound");
+      alert("Error pausing or un-pausing sound");
     }
     setIsMuted(!isMuted);
   }
@@ -38,7 +31,7 @@ export default function ManualsScreen() {
   
   const navKSound = (item) => {
       try {
-        if(kplayer) {
+        if(!isMuted && kplayer) {
           kplayer.seekTo(0);
           kplayer.play();
         }

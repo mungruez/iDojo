@@ -24,6 +24,8 @@ export default function MyDojoStyles({route}) {
     const [fstyle, setFStyle] = useState('Self Defense');
     const isOffline = useNetInfo().isConnected === false;
 
+    const isLoadingRef = React.useRef(false);
+
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
@@ -116,6 +118,10 @@ export default function MyDojoStyles({route}) {
 
     const loadMoves = async () => {
       try {
+        if (isLoadingRef.current) return; 
+        isLoadingRef.current = true;
+        setLoading(true);
+        
         const fileUri = `${FileSystem.documentDirectory}moves.json`;
         const info = await FileSystem.getInfoAsync(fileUri);
         
@@ -139,24 +145,35 @@ export default function MyDojoStyles({route}) {
       } catch (e) {
         Alert.alert("Load Failed", e.message);
       } finally {
+        isLoadingRef.current = false;
         setLoading(false);
       }
     };
 
 
     const handleSave = async (newData) => { 
-      const incomingMoves = Array.isArray(newData) ? newData : [newData];
-      const updatedList = [...moves];
-      incomingMoves.forEach(moveData => {
-        const index = updatedList.findIndex(m => m.id === moveData.id);
-        if (index > -1) {
-          updatedList[index] = moveData;
-        } else {
-          updatedList.push(moveData);
-        }
-      });
-      setMoves(updatedList);
-      await saveToStorage(updatedList); 
+      try {
+        if (isLoadingRef.current) return; 
+        isLoadingRef.current = true;
+        
+        const incomingMoves = Array.isArray(newData) ? newData : [newData];
+        const updatedList = [...moves];
+        incomingMoves.forEach(moveData => {
+          const index = updatedList.findIndex(m => m.id === moveData.id);
+          if (index > -1) {
+            updatedList[index] = moveData;
+          } else {
+            updatedList.push(moveData);
+          }
+        });
+        setMoves(updatedList);
+        await saveToStorage(updatedList); 
+      } catch (e) {
+        Alert.alert("Save Failed", e.message);
+      } finally {
+        isLoadingRef.current = false;
+        setLoading(false);
+      }
     };
 
 
@@ -438,6 +455,7 @@ export default function MyDojoStyles({route}) {
 
     useEffect(() => {
       if (route.params?.savedMove) {
+        setLoading(true);
         handleSave(route.params.savedMove);
         navigation.setParams({ savedMove: undefined });
       }
@@ -452,6 +470,7 @@ export default function MyDojoStyles({route}) {
 
     useEffect(() => {
       const subscription = DeviceEventEmitter.addListener("SAVE_MOVE_EVENT", (newMove) => {
+        setLoading(true);
         handleSave(newMove);
       });
       const unsubscribeNav = navigation.addListener("beforeRemove", () => {
@@ -570,6 +589,14 @@ export default function MyDojoStyles({route}) {
     };
 
 
+    if (listmode && hmoves.length < 1 && !loading && !isLoadingRef.current) {
+      if (moves.length > 0) {
+        setHMoves(getMoves(fstyle, ftype, moves));
+      } else {
+        loadMoves();
+      }
+    }
+
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
@@ -597,25 +624,25 @@ export default function MyDojoStyles({route}) {
             </View>
           </View>
            
-          <View style={styles.flatlistContainer}> 
+          <View style = {styles.flatlistContainer}> 
            <FlatList
-            data={hmoves}
-            extraData={[selectedIds, moves]}
-            keyExtractor={(item, index) => item.id || index.toString()}
-            style={{ flex: 1 }}
-            contentContainerStyle={{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
-            onLayout={(event) => {
-              const { width, height } = event.nativeEvent.layout;
-              if (height < 100 || hmoves.length < 1) {
-                loadMoves(); 
-              }
-            }}
+            data = {hmoves}
+            extraData = {[selectedIds, moves]}
+            keyExtractor = {(item, index) => item.id || index.toString()}
+            style = {{ flex: 1 }}
+            contentContainerStyle = {{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
             ListEmptyComponent = {() => {
-              loadMoves(); 
               return (
                 <View style={{padding: 20, alignItems: 'center'}}>
-                  <ActivityIndicator size="large" color={ftype === "video" ? "#f30707" : ftype === "pdf" ? "#0b1461" : "#0b6112"} />
-                  <Text style={{color: 'white', marginTop: 10}}>Loading moves...</Text>
+                  <Text style={{color: 'white', marginBottom: 10}}>Please Reload</Text>
+                  <TouchableOpacity 
+                    onPress={() => {
+                      if (!loading && !isLoadingRef.current) loadMoves();
+                    }}
+                    style={{padding: 10, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 8}}
+                  >
+                    <Text style={{color: '#fff', fontSize: 45}}>🔄</Text>
+                  </TouchableOpacity>
                 </View>
               );
             }}
@@ -635,12 +662,12 @@ export default function MyDojoStyles({route}) {
                           index,
                         };
                       }}
-                      windowSize={38}
-                      initialNumToRender={item.data.length}
-                      showsHorizontalScrollIndicator={false}
-                      keyExtractor={m => m.id?.toString() || Math.random().toString()}
-                      contentContainerStyle={{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
-                      renderItem={({ item: move }) => <MoveCard item={move} />}
+                      windowSize = {38}
+                      initialNumToRender = {item.data.length}
+                      showsHorizontalScrollIndicator = {false}
+                      keyExtractor = {(item, index) => item?.id?.toString() || `index-${index}` }
+                      contentContainerStyle = {{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
+                      renderItem = {({ item: move }) => <MoveCard item={move} />}
                     />
                  </View>
                ) : (<View style={styles.verticalWrapper}><MoveCard item={item} /></View>)
@@ -700,6 +727,7 @@ export default function MyDojoStyles({route}) {
            extraData={moves}
            keyExtractor={item => item.id}
            ListHeaderComponent={MyHeader}
+           contentContainerStyle = {{ paddingBottom: 19, flexGrow: 1, }}
            ItemSeparatorComponent={({ leadingItem }) => {
             const index = smoves.findIndex(m => m.id === leadingItem.id);
             if (index > 0 && smoves[index]?.type === 'video' && index+1 < smoves.length && smoves[index+1]?.id === 's-all') {
@@ -770,8 +798,8 @@ export default function MyDojoStyles({route}) {
 
 
 const styles = StyleSheet.create({
-flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 57 },
-imgBackground: { flex: 1, width: "100%", height: Dimensions.get('window').height * 0.95, opacity: 1 },
+flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },
+imgBackground: { flex: 1, opacity: 1, maxHeight: "91%", minWidth: "100%", height: Dimensions.get('window').height, marginTop: "7%",},
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 255, 65, 0.1)', opacity: 1 },
 sectionContainerVideo: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(255, 0, 0, 0.1)', opacity: 1 },
 sectionContainerPdf: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(0, 0, 255, 0.1)', opacity: 1 },
@@ -779,7 +807,7 @@ sectionHeader: { color: '#33fc4d', fontSize: 13, fontWeight: 'bold', marginBotto
 sectionHeaderVideo: { color: '#7e1311', fontSize: 13, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(255, 255, 253, 0.91)', alignSelf: "flex-start", opacity: 1, borderRadius: 7, paddingHorizontal: 4,},
 sectionHeaderPdf: { color: '#181885', fontSize: 13, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 247, 223, 0.9)', alignSelf: "flex-start", opacity: 1, borderRadius: 7, paddingHorizontal: 4,},
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
-verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 15 },
+verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 5 },
 myDojoDiscardIcon: {height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#8efaa9', borderWidth: 2, backgroundColor: 'rgba(31, 221, 79, 0.6)' },
 selectedItemVideo: { borderColor: '#eb2121', borderWidth: 2, backgroundColor: 'rgba(250, 85, 85, 0.6)' },

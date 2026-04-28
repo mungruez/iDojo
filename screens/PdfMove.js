@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     width: '96%',
-    maxHeight: height * 0.21,
+    maxHeight: height * 0.25,
     alignSelf: 'center',
     backgroundColor: '#1e293b',
     borderRadius: 10,
@@ -225,13 +225,13 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   descScroll: {
-    maxHeight: height * 0.03
+    maxHeight: height * 0.07
   },
   descText: {
     color: 'honeydew',
     fontSize: 12,
-    lineHeight: 16,
-    marginVertical: 2,
+    lineHeight: 15,
+    marginVertical: 1,
   },
   pdfContainer: {
     flex: 1,
