@@ -1223,5 +1223,5 @@ stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems:
 searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: "100%", borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
 searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11},
 searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
-clearBtn: { width: 38, height: 36, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
+clearBtn: { width: 35, height: 35, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
 });
