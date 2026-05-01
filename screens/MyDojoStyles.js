@@ -940,7 +940,7 @@ export default function MyDojoStyles({route}) {
               : ( <Text style={{ color: '#51ff00', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> ) }
             
             <View style={{flexDirection:'row'}}>
-              <TouchableOpacity onPress={() => {setListMode(false); setSelectedIds([]);} } style={styles.plusicon}>
+              <TouchableOpacity onPress={() => {setListMode(false); setSelectedIds([]);} } style={styles.plusIcon}>
                 <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/greenbackicon.png') : ftype === "pdf" ? require('../assets/bluebackicon.png') : require('../assets/redbackicon.png') }/>
               </TouchableOpacity>
     
@@ -965,9 +965,9 @@ export default function MyDojoStyles({route}) {
                     onPress={() => {
                       if (!loading && !isLoadingRef.current) loadMoves();
                     }}
-                    style={{padding: 10, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 8}}
+                    style={{padding: 5, backgroundColor: 'rgba(182, 207, 136, 0.2)', borderRadius: 8}}
                   >
-                    <ImageBackground style={{ height: 57, width: 52,}} resizeMode='contain' source={require('../assets/reloadicon.png')}/>         
+                    <ImageBackground style={{ height: 57, width: 57,}} resizeMode='contain' source={require('../assets/reloadicon.png')}/>         
                   </TouchableOpacity>
                 </View>
               );
