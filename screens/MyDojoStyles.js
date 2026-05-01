@@ -938,9 +938,10 @@ export default function MyDojoStyles({route}) {
             {ftype === "video" ? ( <Text style={{ color: '#ff8d8d', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> )
               : ftype === "pdf" ? ( <Text style={{ color: '#9afff7', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> ) 
               : ( <Text style={{ color: '#51ff00', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> ) }
+            
             <View style={{flexDirection:'row'}}>
-              <TouchableOpacity onPress={() => { setListMode(false); setSelectedIds([]); }}>
-                {ftype === "video" ? (<Text style={{color: '#ffd2d2', fontSize: 18, paddingLeft: 12}}>← BACK</Text>) : ftype === "pdf" ? (<Text style={{color: '#aed1f3', fontSize: 18, paddingLeft: 12}}>← BACK</Text>) : (<Text style={{color: '#00FF41', fontSize: 18, paddingLeft: 12}}>← BACK</Text>)}
+              <TouchableOpacity onPress={() => {setListMode(false); setSelectedIds([]);} } style={styles.plusicon}>
+                <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/greenbackicon.png') : ftype === "pdf" ? require('../assets/bluebackicon.png') : require('../assets/redbackicon.png') }/>
               </TouchableOpacity>
     
               <TouchableOpacity onPress={() => toggleListMode(null)} style={ftype === "steps" ? styles.plusIcon : styles.plusIcon}>
