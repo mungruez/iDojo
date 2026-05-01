@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 const AddMove = ({ route }) => {
   const navigation = useNavigation();
   const { move, mtype, mstyle } = route.params;
+  
   const [title, setTitle] = useState(move?.title || "");
   const [type, setType] = useState(move?.type || mtype || "select mode");
   const [fstyle, setFStyle] = useState(move?.style || mstyle || "Self Defense");
@@ -124,7 +125,6 @@ const AddMove = ({ route }) => {
       const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
 
       const videoChanged = move && (type === "video" || type === "pdf") && vid && vid !== move?.vid;
-      //const stepsChanged = move && type === 'steps' && steps.some(s => s.img && !s.img.includes('/moves/'));
       if (videoChanged) {
         await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
       } else if( !move ) {
@@ -186,7 +186,7 @@ const AddMove = ({ route }) => {
     <KeyboardAvoidingView 
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 19}
     >
     <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
       <ImageBackground style={ styles.icon } resizeMode='contain' source={type ==='video' && !move ? require('../assets/addmovetitle.png') : type ==='video' && move ? require('../assets/editmovetitle.png') : type ==='steps' && !move ? require('../assets/addmanualtitle.png') : type ==='steps' && move ? require('../assets/editmanualtitle.png') : type ==="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
@@ -203,7 +203,8 @@ const AddMove = ({ route }) => {
       
       <Text style={styles.label}>Moves List Title/Styles</Text>
       <TextInput style={type ==='video' ? styles.input : type === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={checkFStyle} />
-
+      <Text style={{color: 'white', fontSize: 18}}>🔍</Text><Text style={{color: 'white', fontSize: 18}}>🔄</Text>
+      
       { type === "video" ? (
         <View>
           <Text style={styles.label}>Move Video URL</Text>

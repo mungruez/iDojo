@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter, Platform, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter, Platform, StatusBar, ScrollView, TextInput, KeyboardAvoidingView, BackHandler } from 'react-native';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native';
 import React, { useState, useCallback, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,6 +6,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
 import { zip, unzip } from 'react-native-zip-archive';
+import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
 
 const { width } = Dimensions.get('window');
@@ -21,15 +22,26 @@ export default function MyDojoStyles({route}) {
     const [selectedIds, setSelectedIds] = useState([]);
 
     const [ftype, setType] = useState('select move type');
-    const [fstyle, setFStyle] = useState('Self Defense');
-    const isOffline = useNetInfo().isConnected === false;
+    const [fstyle, setFStyle] = useState('Enter Move Title');
 
+    const [addmode, setAddMode] = useState(false);
+    const [move, setMove] = useState(null);
+    const [title, setTitle] = useState(move?.title || "");
+    const [typeAM, setTypeAM] = useState(move?.type || "select mode");
+    const [fstyleAM, setFStyleAM] = useState(move?.style || "Enter Move Title");
+    const [vid, setVid] = useState(move?.vid || null);
+    const [desc, setDesc] = useState(move?.desc || "");
+    const [videoUrl, setVideoUrl] = useState(move?.videoUrl || "");
+    const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const isOffline = useNetInfo().isConnected === false;
     const isLoadingRef = React.useRef(false);
 
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
-          "Intructions: Save, Edit, Share, View, Delete and Import moves using iDojo. You may add any number of Moves your phone memory allows.\n(1) Use the red, green and blue square, plus(+) icons in the top bar to add moves. You can either add Video/PDF moves or, Step moves with images, a title and description is required for all moves. The default list title Self defense will be provided once one is not entered on the Add Move Screen.\n(2) Click on one of the red, green or blue rectanglular buttons in the My Dojo Moves List to see all moves with the same move list title. The first list title button for each type will have All Lists in silver. Video Moves can contain an online video link or a video file from the phone. Steps Moves,also called Manuals must contain an image added from the phone. PDF moves can contain an online link to a PDF or a PDF file uploaded from the phone. A reload🔄 button is provided in the dropdown at the top when viewing online PDFs.\n(3) On the list screen press and hold a move to see the batch bar appear, after select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button at the bottom of each move card in the list to edit a move, and to view any move click on the move card.\n(4) Scroll horizontally and vertically on the all lists screen to view all your moves. On the add Move screen click the save button to save moves. When adding Steps Moves with the Add Move screen click the green +step button to add a new step to the move and click the -step icon to remove a step.",
+          "Intructions: Save, Edit, Share, View, Delete and Import moves using iDojo. You may add any number of Moves your phone memory allows.\n(1) Use the red, green and blue square, plus(+) icons in the top bar to add moves. You can either add Video/PDF moves or, Step moves with images, a title and description is required for all moves. The default list title, Enter Move Title will be provided once one is not entered on the Add Move Screen.\n(2) Click on one of the red, green or blue rectanglular buttons in the My Dojo Moves List to see all moves with the same move list title. The first list title button for each type will have All Lists in silver. Video Moves can contain an online video link or a video file from the phone. Steps Moves,also called Manuals must contain an image added from the phone. PDF moves can contain an online link to a PDF or a PDF file uploaded from the phone. A reload🔄 button is provided in the dropdown at the top when viewing online PDFs.\n(3) On the list screen press and hold a move to see the batch bar appear, after select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button at the bottom of each move card in the list to edit a move, and to view any move click on the move card.\n(4) Scroll horizontally and vertically on the all lists screen to view all your moves. On the add Move screen click the save button to save moves. When adding Steps Moves with the Add Move screen click the green +step button to add a new step to the move and click the -step icon to remove a step.",
           [
             {
               text: "OK",
@@ -42,7 +54,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
-    const parseStyles = (list) => {
+    const parseStyles = (list, query = null) => {
       if (!Array.isArray(list)) {
         alert("Data is not an array, skipping parse.");
         return;
@@ -51,9 +63,22 @@ export default function MyDojoStyles({route}) {
       let sMoves = [{ id: "v-all", type: "video", style: "allstyles" }];
       let bMoves = [{ id: "s-all", type: "steps", style: "allstyles" }];
       let pMoves = [{ id: "p-all", type: "pdf", style: "allstyles" }];
+      
+      const q = query?.trim()?.toLowerCase();
+      const typeFilter = ['video', 'steps', 'pdf'].includes(q) ? q : null;
 
       list?.forEach(m => {
-        const currentStyle = m.style || "Self-Defence";
+        const currentStyle = m.style || "Enter Move Title";
+
+        if (typeFilter && m.type !== typeFilter) return;
+
+        const matchesSearch = !q || 
+          m.title?.trim().toLowerCase().includes(q) ||
+          m.style?.trim().toLowerCase().includes(q) ||
+          m.desc?.trim().toLowerCase().includes(q);
+        
+        if (!matchesSearch) return;
+
         if (m.type === "video" && !videoStyles.includes(currentStyle)) {
           videoStyles.push(currentStyle); 
           sMoves.push({ ...m, style: currentStyle }); 
@@ -91,7 +116,7 @@ export default function MyDojoStyles({route}) {
       let stylesSeen = [];
       for (let mNum = 0; mNum < movesList.length; mNum++) {
         const move = movesList[mNum];
-        const currentStyle = move.style || "Self-Defence"; 
+        const currentStyle = move.style || "Enter Move Title";
         let mIndex = stylesSeen.indexOf(currentStyle);
 
         if (mIndex < 0) {
@@ -137,10 +162,30 @@ export default function MyDojoStyles({route}) {
           );
 
           setMoves(movesList);
-          parseStyles(movesList);
-          setHMoves(getMoves(fstyle, ftype, movesList));
+          parseStyles(movesList, null);
+
+          if (movesList.length === 0) {
+            setListMode(false);
+            setFStyle('Enter Move Title');
+            setType('select move type');
+            setHMoves([]);
+          } else {
+            const filtered = getMoves(fstyle, ftype, movesList);
+            if (filtered.length === 0 && listmode) {
+              setHMoves([]);
+              setListMode(false);
+              setFStyle('Enter Move Title');
+              setType('select move type');
+            } else {
+              setHMoves(filtered);
+            }
+          }
         } else {
           setMoves([]);
+          setHMoves([]);
+          setListMode(false);
+          setFStyle('Enter Move Title');
+          setType('select move type');    
         }
       } catch (e) {
         Alert.alert("Load Failed", e.message);
@@ -181,7 +226,7 @@ export default function MyDojoStyles({route}) {
       try {
         const fileUri = `${FileSystem.documentDirectory}moves.json`;
         await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(list));
-        parseStyles(list);
+        parseStyles(list, null);
         setHMoves(getMoves(fstyle, ftype, list)); 
       } catch (e) {
         Alert.alert("Storage Error", e.message || "Could not save move list to disk.");
@@ -215,12 +260,12 @@ export default function MyDojoStyles({route}) {
               const fileUri = `${FileSystem.documentDirectory}moves.json`;
               await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(updatedList));
               setMoves(updatedList);
-              parseStyles(updatedList);
+              parseStyles(updatedList, null);
               setSelectedIds([]);
               
               if (isDeletingAll || updatedList.filter(m => m.type === ftype && (fstyle === "allstyles" || m.style === fstyle)).length < 1) {
                 setListMode(false);
-                setFStyle('Self Defense');
+                setFStyle('Enter Move Title');
                 setType('select move type');
               } else {
                 setHMoves(getMoves(fstyle, ftype, updatedList));
@@ -397,7 +442,7 @@ export default function MyDojoStyles({route}) {
           const pdfData = {
             id: move.id,
             title: move.title || 'PDF Document',
-            style: move.style || 'Self-Defence',
+            style: move.style || 'Enter Move Title',
             desc: move.desc || '',
             vid: viewerUrl,
             videoUrl: move.videoUrl,
@@ -452,54 +497,47 @@ export default function MyDojoStyles({route}) {
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
 
-
-    useEffect(() => {
-      if (route.params?.savedMove) {
-        setLoading(true);
-        handleSave(route.params.savedMove);
-        navigation.setParams({ savedMove: undefined });
-      }
-
-      if (route.params?.deletedId) {
-        myDojoHandleDelete(route.params.deletedId);
-        navigation.setParams({ deletedId: undefined });
-      }
-    }, [route.params?.savedMove, route.params?.deletedId]);
-
-
-
-    useEffect(() => {
-      const subscription = DeviceEventEmitter.addListener("SAVE_MOVE_EVENT", (newMove) => {
-        setLoading(true);
-        handleSave(newMove);
-      });
-      const unsubscribeNav = navigation.addListener("beforeRemove", () => {
-        // Any cleanup if needed
-      });
-
-      return () => {
-        subscription.remove();
-        unsubscribeNav();
-      };
-    }, [moves]);
-
-
-
     const toggleSelect = (id) => {
       setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };
 
-
     const toggleListMode = (mv) => {
       if(mv === null) {
         setSelectedIds([]);
-        navigation.navigate('AddMove', { move: null, mtype: ftype, mstyle: fstyle !== "allstyles" ? fstyle : 'Move List Title' });
+        setTypeAM(ftype);
+        setVideoUrl("");
+        setMove(null);
+        setTitle("");
+        setDesc("");
+        setVid("");
+        
+        if(fstyle === "allstyles" || fstyle === "all styles") {
+          setFStyleAM("Enter List Title");
+        } else {
+          setFStyleAM(fstyle);
+        }
+
+        if(ftype === "steps") setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+        setAddMode(true);
+
       } else {
+        setDesc(mv.desc || "");
+        setFStyleAM(mv.style);
         setSelectedIds([]);
-        navigation.navigate('AddMove', {move: mv});
+        setTitle(mv.title);
+        setTypeAM(mv.type);
+        setMove(mv);
+
+        if(mv.type !== "steps") {
+          setVid(mv.vid);
+          setVideoUrl(mv.videoUrl || "");
+        } else {
+          setSteps(mv.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+        }
+        setAddMode(true);
       }
     };
-     
+
 
     const getYouTubeId = (url) => {
       try {
@@ -517,6 +555,7 @@ export default function MyDojoStyles({route}) {
       }
     };
 
+
     const checkVideo = (mv) => {
       try {
         if(mv.videoUrl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
@@ -524,7 +563,7 @@ export default function MyDojoStyles({route}) {
           const mvData = {
             id: mv.id,
             Title: mv.title || "Video Move",
-            Style: mv.style || "Self-Defence",
+            Style: mv.style || "Enter Move Title",
             Desc: mv.desc || "",
             Link: getYouTubeId(mv.videoUrl),
             Type: "video",
@@ -538,6 +577,192 @@ export default function MyDojoStyles({route}) {
         Alert.alert("Error", "Could not open video");
       }
     };
+
+
+    const checkFStyle = (text) => {
+      const trimmed = text.trim().toLowerCase();
+      if (trimmed === "allstyles" || trimmed === "all styles") {
+        setFStyleAM("All Styles");
+        return;
+      }
+      setFStyleAM(text);
+    };
+    
+
+    const isValidPdfUrl = (url) => {
+      if (!url || typeof url !== 'string') return false;
+      const trimmed = url.trim().toLowerCase();
+      return (
+        (trimmed.startsWith('http://') || trimmed.startsWith('https://')) &&
+        trimmed.includes('.pdf')
+      );
+    };
+
+
+    const pickMedia = async (index = null) => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Denied", "Gallery access is needed to add moves!");
+        return;
+      }
+      
+      const isVideo = (typeAM === "video" && index === null);
+      const mediaType = isVideo ? 'videos' : 'images';
+      try {
+  
+        if(typeAM === "pdf") {
+          const result = await DocumentPicker.getDocumentAsync({
+            type: 'application/pdf',
+          });
+          if (!result.canceled && result.assets && result.assets.length > 0) setVid(result.assets[0].uri);
+  
+        } else {
+          const res = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: [mediaType],
+            allowsEditing: false,
+            quality: 1.0,
+          });
+  
+          if (!res.canceled && res.assets && res.assets.length > 0) {
+            const pickedUri = res.assets[0].uri; 
+            if (isVideo) {
+              setVid(pickedUri);
+            } else {
+              const s = [...steps];
+              s[index].img = pickedUri;
+              setSteps(s);
+            }
+          }
+        }
+      } catch (err) {
+        Alert.alert("Picker Error", "Could not open gallery.");
+      }
+    };
+  
+  
+  
+    const save = async () => {
+      let validatedSteps = []; 
+  
+      if (!title.trim()) {
+        Alert.alert("Required", "Please enter a Move Title.");
+        return;
+      }
+  
+      if (typeAM === "steps") {
+        if (steps.some(s => !s.img)) {
+          Alert.alert("Missing Image", "Every step must have an image!");
+          return;
+        }
+  
+        if (steps.some(s => !s.desc || !s.desc.trim())) {
+          Alert.alert("Missing Description", "Every step must have a description.");
+          return;
+        }
+  
+        validatedSteps = steps.map((s, i) => ({
+          ...s,
+          title: s.title.trim() || `Step ${i + 1}`
+        }));
+  
+      } else if (typeAM === "video" || typeAM === "pdf") {
+        if (!vid && !videoUrl.trim()) {
+          if(typeAM === "video") Alert.alert("Required", "Please upload a video or provide a link.");
+          if(typeAM === "pdf") Alert.alert("Required", "Please upload a pdf or provide a link.");
+          return;
+        }
+  
+        if (typeAM ==="pdf" && videoUrl && videoUrl.trim().length > 0 && !isValidPdfUrl(videoUrl)) {
+          Alert.alert("Invalid PDF URL", "URL must start with http/https and include .pdf");
+          return;
+        }
+  
+        if(!desc || !desc.trim()) {
+          Alert.alert("Required", "Please provide a description.");
+          return;
+        }
+  
+      }
+  
+      try {
+        const moveId = move?.id || Date.now().toString();
+        const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
+  
+        const videoChanged = move && (typeAM === "video" || typeAM === "pdf") && vid && vid !== move?.vid;
+        if (videoChanged) {
+          await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
+        } else if( !move ) {
+          await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
+        }
+  
+        await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+        const ensurePermanent = async (uri, fileName) => {
+          if (!uri || !uri.startsWith('file://') || uri.includes('/moves/')) return uri;
+          const destUri = `${permanentDirUri}${fileName}`;
+          try {
+            await FileSystem.copyAsync({ from: uri, to: destUri });
+            return destUri;
+          } catch (e) {
+            Alert.alert("Copy Failed", `File: ${fileName}\nError: ${e.message}`);
+            return uri;
+          }
+        };
+  
+        let finalVid = vid; 
+        let finalSteps = [...steps];
+        if ((typeAM === "video" || typeAM === "pdf") && vid) {
+          finalVid = await ensurePermanent(vid, `video_${Date.now()}.mp4`);
+        }
+        if (typeAM === 'steps') {
+          finalSteps = await Promise.all(steps.map(async (s, i) => ({
+            ...s,
+            title: s.title.trim() || `Step ${i + 1}`,
+            img: s.img && s.img.startsWith('file://') && !s.img.includes('/moves/') 
+              ? await ensurePermanent(s.img, `step_${i}_${Date.now()}.jpg`)
+              : s.img
+          })));
+        }
+      
+        const finalData = {
+          id: moveId,
+          title: title.trim(),
+          type: typeAM,
+          style: fstyleAM.trim() || "Enter Move Title",
+          steps: typeAM === "steps" ? finalSteps : [],
+          vid: typeAM === "video" || typeAM === "pdf" ? finalVid : null,
+          videoUrl: typeAM === "video" || typeAM === "pdf" ? videoUrl : '',
+          thumb: typeAM === "video" || typeAM === "pdf" ? (finalVid || videoUrl) : (finalSteps[0]?.img || null),
+          desc: desc 
+        };
+  
+        handleSave(finalData);
+        setAddMode(false);
+  
+      } catch (err) {
+        Alert.alert("Save Error", err.message || "An unknown error occurred.");
+      }
+    };
+
+
+
+    useEffect(() => {
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        if (addmode) {
+          setAddMode(false);
+          return true;
+        }
+        if (listmode) {
+          setListMode(false);
+          setAddMode(false);
+          setSelectedIds([]);
+          return true;
+        }
+        return false;
+      });
+
+      return () => backHandler.remove();
+    }, [addmode, listmode]);
+      
 
 
     const MoveCard = ({ item }) => (
@@ -557,21 +782,23 @@ export default function MyDojoStyles({route}) {
               
               if (item.videoUrl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be"))) {
                 const youtubeId = getYouTubeId(item.videoUrl);
-                if (youtubeId) {
-                  return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
+                if (youtubeId === "") {
+                  require('../assets/onlinevideoicon.png');
+                } else {
+                  return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };h
                 }
               }
               
-              if (item.videoUrl && item.videoUrl.trim().length > 0) {
-                return require('../assets/onlinevideoicon.png');
+              if (item.videoUrl && item.videoUrl.trim().length > 0 && Platform.OS !== 'ios') {
+                return { uri: item.videoUrl };
               }
               
               return item.thumb ? { uri: item.thumb } : require('../assets/onlinevideoicon.png');
             })()} />
-          <View style={ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
-            <Text style={ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
+          <View style = {ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
+            <Text style = {ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
-              <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
+              <ImageBackground style = {{ height: "100%", width: "100%", }} resizeMode = 'contain' source = { ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
             </TouchableOpacity>             
           </View>
         </View>
@@ -589,23 +816,121 @@ export default function MyDojoStyles({route}) {
     };
 
 
-    if (listmode && hmoves.length < 1 && !loading && !isLoadingRef.current) {
-      if (moves.length > 0) {
-        setHMoves(getMoves(fstyle, ftype, moves));
-      } else {
-        loadMoves();
-      }
-    }
-
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     
+    if (addmode) return (
+      <ImageBackground style={ styles.imgBackgroundAM } imageStyle={{ opacity: 0.7 }} resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
+       <StatusBar barStyle="light-content" />
+       <KeyboardAvoidingView
+         style={{ flex: 1 }}
+         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 19}
+       >
+       <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
+         <ImageBackground style={ styles.iconAM } resizeMode='contain' source={typeAM ==='video' && !move ? require('../assets/addmovetitle.png') : typeAM ==='video' && move ? require('../assets/editmovetitle.png') : typeAM ==='steps' && !move ? require('../assets/addmanualtitle.png') : typeAM ==='steps' && move ? require('../assets/editmanualtitle.png') : typeAM ==="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
+       </View>
+       <TouchableOpacity onPress={() => setAddMode(false)} style={styles.discardBtn}>
+         <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
+         <Text style={styles.discardText}>CANCEL</Text>
+       </TouchableOpacity>
+   
+       <ScrollView style={styles.containerAM} contentContainerStyle={{ paddingBottom: 100 }}>
+         <Text style={ typeAM === "steps" ? styles.headerTitle : typeAM === "video" ? styles.headerTitleVideo : styles.headerTitlePdf }>{move ? "EDIT" : "ADD"} MOVE TO YOUR DOJO</Text>
+         <Text style={styles.label}>Move Title</Text>
+         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
+         
+         <Text style={styles.label}>Moves List Title/Styles</Text>
+         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={checkFStyle} />
+   
+         { typeAM === "video" ? (
+           <View>
+             <Text style={styles.label}>Move Video URL</Text>
+             {!vid && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
+             <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
+               { vid || videoUrl ? 
+                 ( <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
+                 : ( <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} />) 
+               }
+             </TouchableOpacity>
+             <Text style={styles.label}>Move Description</Text>
+             <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+           </View>
+           ) : typeAM === "pdf" ? (
+             <View>
+               <Text style={styles.label}>PDF URL of Move</Text>
+               {!vid && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
+               <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
+                 { vid || videoUrl ? 
+                   ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
+                   : ( <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> ) 
+                 }
+               </TouchableOpacity>
+               <Text style={styles.label}>Move Description</Text>
+               <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+             </View>
+           ) : (
+           <View style={{ marginTop: 3 }}>
+             {steps.map((s, i) => (
+               <View key={s.id} style={styles.stepRow}>
+                 <Text style={styles.label}>Step Title</Text>
+                 <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
+                 <Text style={styles.label}>Step Image</Text>
+                 <TouchableOpacity onPress={() => pickMedia(i)} style={styles.stepImgContainer}>
+                   {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
+                 </TouchableOpacity>
+   
+                 <View style={{ width: '100%', marginTop: 12 }}>
+                   <Text style={styles.label}>Step Description</Text>
+                   <TextInput 
+                     style={styles.stepInput} 
+                     multiline={true} 
+                     textAlignVertical="top"
+                     underlineColorAndroid="transparent"
+                     placeholder={`Enter Step ${i+1} Description...`} value={s.desc} 
+                     onChangeText={(t) => { const ns = [...steps]; ns[i].desc = t; setSteps(ns); }} 
+                   />
+                   {steps.length > 1 && (
+                     <TouchableOpacity onPress={() => setSteps(steps.filter(st => st.id !== s.id))} style={styles.removeStepIcon}>
+                       <ImageBackground style={{ height: 91, width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removeimgicon.png')}/>
+                       <Text style={styles.removeText}> <Text style={{color: '#ff4444'}}>➖</Text> STEP</Text>
+                     </TouchableOpacity>
+                   )}
+                 </View>
+               </View>
+             ))}
+             <TouchableOpacity style={styles.addStepBtn} onPress={() => setSteps([...steps, { id: Date.now().toString(), title: '',img: null, desc: '' }])}>
+               <ImageBackground style={{width: '100%', height: 38, justifyContent: 'center',}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/addstepbtn.png')} />
+             </TouchableOpacity>
+           </View>
+         ) }
+   
+         <TouchableOpacity style={styles.saveBtn} onPress={() => save()}>
+           { typeAM === "pdf" ? ( <ImageBackground style={{ height: 43, width: "100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='stretch' source={require('../assets/bluebtnbg.png')}>
+             <Image
+               resizeMode = "contain"
+               style={{height: 38, width: 172, alignSelf:"center", opacity: 1}}
+               source={require('../assets/save.png')}
+             />
+           </ImageBackground> ) 
+           : typeAM === "video" ? ( <ImageBackground style={{ height: 57, width: "100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/savevideobtn.png')} />
+            ) 
+           : ( <ImageBackground style={{ height: 47, width: "100%",justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/savemanualbtn.png')} />
+            ) }
+         </TouchableOpacity>
+       </ScrollView>
+      </KeyboardAvoidingView>
+      </ImageBackground>
+     );   
+
+
+
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
-        <SafeAreaView style={{ flex: 1, marginTop: 25}}>
-          <View style={{marginBottom: 19, paddingLeft: 5, paddingRight: 5, justifyContent: 'center', alignItems: 'center', opacity: 1}}>
+        <SafeAreaView style={{ flex: 1}}>
+          <View style={{marginBottom: 12, paddingHorizontal: 5, justifyContent: 'center', alignItems: 'center', opacity: 1}}>
             <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ftype === "video" ? require('../assets/moveslisttitle.png') : ftype === "pdf" ? require('../assets/pdfmoveslisttitle.png') : require('../assets/manualstitle.png')} /> 
           </View>
 
@@ -633,7 +958,7 @@ export default function MyDojoStyles({route}) {
             contentContainerStyle = {{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
             ListEmptyComponent = {() => {
               return (
-                <View style={{padding: 20, alignItems: 'center'}}>
+                <View style={{padding: 19, alignItems: 'center'}}>
                   <Text style={{color: 'white', marginBottom: 10}}>Please Reload</Text>
                   <TouchableOpacity 
                     onPress={() => {
@@ -641,7 +966,7 @@ export default function MyDojoStyles({route}) {
                     }}
                     style={{padding: 10, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 8}}
                   >
-                    <Text style={{color: '#fff', fontSize: 45}}>🔄</Text>
+                    <ImageBackground style={{ height: 57, width: 52,}} resizeMode='contain' source={require('../assets/reloadicon.png')}/>         
                   </TouchableOpacity>
                 </View>
               );
@@ -692,24 +1017,40 @@ export default function MyDojoStyles({route}) {
       </ImageBackground> );
 
 
-    return (
-     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
-      <StatusBar barStyle="light-content"/>
-      <SafeAreaView style={{flex: 1, marginTop: 7}}>
-        <View style={{ marginBottom: 9, paddingLeft: 7, paddingRight: 7, opacity: 1, justifyContent: "center", alignItems: 'center'}}>
-          <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
-        </View>
 
-        <View style={styles.header}>
-           <Text style={styles.title}>MY DOJO MOVES LISTS</Text>
-            <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, height:38, width:"100%"}}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"video", mstyle: null, })} style={styles.plusIcon}>
+    return (
+      <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
+        <StatusBar barStyle="light-content"/>
+        <SafeAreaView style={{flex: 1,}}>
+          <View style={{ marginBottom: 5, paddingHorizontal: 4, opacity: 1, justifyContent: "center", alignItems: 'center'}}>
+            <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
+          </View>
+
+          <View style={styles.header}>
+            <View style={styles.searchRow}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search or type video/steps/pdf..."
+                placeholderTextColor="rgba(255, 218, 218, 0.4)"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+              />
+              <TouchableOpacity onPress={() => parseStyles(moves, searchQuery)} style={styles.searchBtn}>
+                <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/binoculasicon.png')}/>         
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {setSearchQuery(''); parseStyles(moves, null);}} style={styles.clearBtn}>
+                <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/reloadicon.png')}/>         
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, minHeight: 49, width:"100%"}}>
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("video"); setFStyleAM("Enter Move List Title"); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);} } style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"steps", mstyle: null })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("steps"); setFStyleAM("Enter Move List Title"); setDesc(""); setSelectedIds([]); setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]); setAddMode(true);}} style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmanualicon.png')}/>         
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('AddMove', { move: null, mtype:"pdf", mstyle: null })} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("pdf"); setFStyleAM("Enter Move List Title"); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);}} style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addpdfmoveicon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
@@ -719,7 +1060,7 @@ export default function MyDojoStyles({route}) {
                 <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/mydojostylesinfoicon.png')}/>         
               </TouchableOpacity>
             </View>
-        </View>
+          </View>
 
         {smoves.length > 0 ? (
           <FlatList
@@ -727,7 +1068,7 @@ export default function MyDojoStyles({route}) {
            extraData={moves}
            keyExtractor={item => item.id}
            ListHeaderComponent={MyHeader}
-           contentContainerStyle = {{ paddingBottom: 19, flexGrow: 1, }}
+           contentContainerStyle = {{ paddingBottom: 57, flexGrow: 1, }}
            ItemSeparatorComponent={({ leadingItem }) => {
             const index = smoves.findIndex(m => m.id === leadingItem.id);
             if (index > 0 && smoves[index]?.type === 'video' && index+1 < smoves.length && smoves[index+1]?.id === 's-all') {
@@ -834,11 +1175,11 @@ batchTextPdf: { color: '#2f2ff8', fontWeight: 'bold'},
 shareIcon: { height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: { flexDirection: 'column', width: "95%", minHeight: 83, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 19, },
+header: { flexDirection: 'column', width: "95%", minHeight: 95, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5, },
 myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.76)', opacity: 1 },
 title: { fontSize: 17, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#fc2626', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
-icon: { height: 60, width: '90%', alignSelf: 'center' },
+icon: { height: 57, width: '89%', alignSelf: 'center' },
 card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#bddff3', paddingHorizontal: 5,},
 greenDivider: {width: '90%', height: 43, alignSelf: 'center',marginVertical: 15,shadowColor: '#c9f5d5', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
@@ -850,4 +1191,36 @@ plusIcon: { height: 47, width: 45, backgroundColor: 'rgba(0,0,0,0.6)', borderRad
 editIcon: { height: 47, width: 47, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 43, width: 43, marginLeft: 16, marginBottom: 9, opacity: 1, },
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
+imgBackgroundAM: {  ...StyleSheet.absoluteFillObject, flex: 1, },
+iconAM: { height: 57, width: '90%', alignSelf: 'center' },
+videoIcon: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center'},
+videoIconUploaded: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
+pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
+pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
+videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
+plusIconAM: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
+plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
+containerAM: { flex: 1, opacity: 1 },
+headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#023010', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(61, 170, 91, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#014211', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
+headerTitleVideo: { fontSize: 17, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(167, 38, 57, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
+headerTitlePdf: { fontSize: 17, fontWeight: 'bold', color: '#010242', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(45, 43, 158, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#020142', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
+label: { fontWeight: 'bold', color: '#420105', marginTop: 12, fontSize: 13, marginLeft:12 },
+input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1, fontWeight: "semibold" },
+pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "semibold" },
+stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', backgroundColor: 'transparent', padding: 10, borderRadius: 10, elevation: 1 },
+stepImg: { width: '100%', height: '100%' },
+stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(80, 214, 145, 0.41)', borderRadius: 12, opacity: 1, fontWeight: "semibold"},
+removeText: { color: '#dc2626', fontSize: 10, textAlign:'center', marginTop: 1, fontWeight: 'bold', width: '100%' },
+removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
+mediaBtn: { backgroundColor: '#f0eaff', borderRadius: 10, marginTop: 15, alignItems: 'center', borderStyle: 'dashed', borderWidth: 1, borderColor: '#5b12a5' },
+mediaBtnText: { color: '#5b12a5', fontWeight: 'bold' },
+addStepBtn: {marginTop: 5, height: 41 ,width: 114, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
+saveBtn: { width: 125, height: 97, borderRadius: 15, marginTop: 7, alignSelf:'center', alignItems: 'center', justifyContent:'center', },
+discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadius: 10, justifyContent: 'center', alignItems: 'center', opacity: 1},
+discardText: { textAlign: 'center', color: '#dc2626', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
+stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
+searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: "100%", borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
+searchInput: { height: 43, width: 171, backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)',},
+searchBtn: { width: 47, height: 43, backgroundColor: '#d9ffe8d5', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
+clearBtn: { width: 43, height: 43, backgroundColor: '#333', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
 });
