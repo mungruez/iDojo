@@ -956,7 +956,7 @@ export default function MyDojoStyles({route}) {
             extraData = {[selectedIds, moves]}
             keyExtractor = {(item, index) => item.id || index.toString()}
             style = {{ flex: 1 }}
-            contentContainerStyle = {{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
+            contentContainerStyle = {{ paddingBottom: 38, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
             ListEmptyComponent = {() => {
               return (
                 <View style={{padding: 19, alignItems: 'center'}}>
@@ -1069,7 +1069,7 @@ export default function MyDojoStyles({route}) {
            extraData={moves}
            keyExtractor={item => item.id}
            ListHeaderComponent={MyHeader}
-           contentContainerStyle = {{ paddingBottom: 57, flexGrow: 1, }}
+           contentContainerStyle = {{ paddingBottom: 30, flexGrow: 1, }}
            ItemSeparatorComponent={({ leadingItem }) => {
             const index = smoves.findIndex(m => m.id === leadingItem.id);
             if (index > 0 && smoves[index]?.type === 'video' && index+1 < smoves.length && smoves[index+1]?.id === 's-all') {
