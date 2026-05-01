@@ -1021,9 +1021,9 @@ export default function MyDojoStyles({route}) {
 
     return (
       <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
-        <StatusBar barStyle="light-content"/>
+        <StatusBar barStyle="dark-content"/>
         <SafeAreaView style={{flex: 1,}}>
-          <View style={{ marginBottom: 5, paddingHorizontal: 4, opacity: 1, justifyContent: "center", alignItems: 'center'}}>
+          <View style={{ marginBottom: 5, marginTop: -19, paddingHorizontal: 4, opacity: 1, justifyContent: "center", alignItems: 'center'}}>
             <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
           </View>
 
@@ -1031,20 +1031,20 @@ export default function MyDojoStyles({route}) {
             <View style={styles.searchRow}>
               <TextInput
                 style={styles.searchInput}
-                placeholder="Search or type video/steps/pdf..."
-                placeholderTextColor="rgba(255, 218, 218, 0.4)"
+                placeholder="Search or type video/steps/pdf"
+                placeholderTextColor="rgba(88, 79, 79, 0.62)"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
               />
               <TouchableOpacity onPress={() => parseStyles(moves, searchQuery)} style={styles.searchBtn}>
-                <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/binoculasicon.png')}/>         
+                <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/binocularsicon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {setSearchQuery(''); parseStyles(moves, null);}} style={styles.clearBtn}>
                 <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/reloadicon.png')}/>         
               </TouchableOpacity>
             </View>
 
-            <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom:5, minHeight: 49, width:"100%"}}>
+            <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom: 1, minHeight: 49, width:"100%"}}>
               <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("video"); setFStyleAM("Enter Move List Title"); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);} } style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
@@ -1176,7 +1176,7 @@ batchTextPdf: { color: '#2f2ff8', fontWeight: 'bold'},
 shareIcon: { height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 container: { flex: 1, backgroundColor: '#c2cdd4' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: { flexDirection: 'column', width: "95%", minHeight: 95, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5, },
+header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5, },
 myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.76)', opacity: 1 },
 title: { fontSize: 17, fontWeight: 'bold', color: '#420105', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#fc2626', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
@@ -1190,7 +1190,7 @@ smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
 plusIcon: { height: 47, width: 45, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 12, marginBottom: 4, opacity: 1},
 editIcon: { height: 47, width: 47, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
-infoIcon: { height: 43, width: 43, marginLeft: 16, marginBottom: 9, opacity: 1, },
+infoIcon: { height: 43, width: 43, marginLeft: 16, marginBottom: 5, opacity: 1, },
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
 imgBackgroundAM: {  ...StyleSheet.absoluteFillObject, flex: 1, },
 iconAM: { height: 57, width: '90%', alignSelf: 'center' },
@@ -1221,7 +1221,7 @@ discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadi
 discardText: { textAlign: 'center', color: '#dc2626', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
 stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: "100%", borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
-searchInput: { height: 43, width: 171, backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)',},
-searchBtn: { width: 47, height: 43, backgroundColor: '#d9ffe8d5', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
-clearBtn: { width: 43, height: 43, backgroundColor: '#333', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
+searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11},
+searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
+clearBtn: { width: 38, height: 36, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
 });

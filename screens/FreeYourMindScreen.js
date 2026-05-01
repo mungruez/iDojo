@@ -174,6 +174,7 @@ export default function FreeYourMindScreen() {
                 const currentDate = new Date().toISOString(); 
                 await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
                 setLoading(false);
+                fetchFeaturedAudio();
                 return errorFlag;
               }  
           }
@@ -182,6 +183,7 @@ export default function FreeYourMindScreen() {
           const currentDate = new Date().toISOString(); 
           await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
           setLoading(false);
+          fetchFeaturedAudio();
           return errorFlag;
         }
     
@@ -210,10 +212,12 @@ export default function FreeYourMindScreen() {
               }
             }).catch((error) => {
               setLoading(false);
+              fetchFeaturedAudio();
               return errorFlag;
             });
     
           } catch (error) {
+            fetchFeaturedAudio();
             alert("Featured Content not visited for some time. Updating Videos and Audio files...");
           }
           
@@ -297,8 +301,6 @@ export default function FreeYourMindScreen() {
         const unsubscribeNav = navigation.addListener('beforeRemove', () => {
           setPlayingId(-1);
         });
-
-        if(!loading && faudio.length < 1) fetchFeaturedAudio();
         
         fetchMusicFiles();
       
