@@ -5,15 +5,15 @@ import { useState } from 'react';
 
 const { height } = Dimensions.get('window');
 
-const PdfMove = ({ route, navigation }) => {
+export default function PdfMove({ pdf, onClosePdf}) {
 
-  if (!route?.params?.pdf) {
+  if (!pdf) {
     return (
       <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e'}}>
         <StatusBar barStyle="dark-content"/>
         <Text style={{color: 'white', fontSize: 16}}>Error: No PDF data</Text>
         <TouchableOpacity 
-          onPress={() => navigation.goBack()}
+          onPress={onClosePdf}
           style={{marginTop: 20, padding: 10, backgroundColor: '#3b82f6', borderRadius: 5}}
         >
           <Text style={{color: 'white'}}>Go Back</Text>
@@ -22,7 +22,6 @@ const PdfMove = ({ route, navigation }) => {
     );
   }
 
-  const { pdf } = route.params;
   const [key, setKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [useDirectLink, setUseDirectLink] = useState(false);
@@ -59,7 +58,7 @@ const PdfMove = ({ route, navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#323232', width: '100%', height:'100%', marginTop: 38 }}>
       <StatusBar barStyle="dark-content"/>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeBtn}>
+        <TouchableOpacity onPress={onClosePdf} style={styles.closeBtn}>
           <Text style={styles.closeText}>✕</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1} ellipsizeMode="clip">
@@ -258,5 +257,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default PdfMove;

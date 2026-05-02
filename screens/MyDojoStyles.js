@@ -3,13 +3,13 @@ import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/n
 import React, { useState, useCallback, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
-import { useVideoPlayer, VideoView } from 'expo-video'; 
-import YoutubePlayer from "react-native-youtube-iframe";
 import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
+import PdfMove from './PdfMove';
+import VideoPlayer from './VideoPlayer';
 
 const { width } = Dimensions.get('window');
     
@@ -38,67 +38,11 @@ export default function MyDojoStyles({route}) {
     const [searchQuery, setSearchQuery] = useState('');
 
     const [viewmode, setViewMode] = useState(0);
-    const isFocused = useIsFocused(); 
-    const [playing, setPlaying] = useState(true);
-    const [loadingview, setLoadingview] = useState(true);
 
     const isOffline = useNetInfo().isConnected === false;
     const isLoadingRef = React.useRef(false);
 
     const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
-
-    const sourceToUse = move
-      ? move.videoUrl?.startsWith('http')
-        ? move.videoUrl
-        : move.vid
-      : '';
-
-    const shouldUsePlayer = viewmode === 1 || viewmode === 2;
-    const activeSource = shouldUsePlayer && sourceToUse ? sourceToUse : '';
-    
-    const player = useVideoPlayer(activeSource, (player) => {
-      if (!shouldUsePlayer || !activeSource) return;
-
-      player.loop = true;
-      player.play();
-
-      player.addListener('statusChange', ({ status }) => {
-        if (status === 'readyToPlay') setLoadingview(false);
-        else if (status === 'loading') setLoadingview(true);
-      });
-    });
-    
-
-    useEffect(() => {
-      const subscription = AppState.addEventListener("change", nextAppState => {
-        if (nextAppState !== "active") {
-          setPlaying(false); 
-        }
-      });
-    
-      return () => subscription.remove();
-    }, []);
-    
-    
-    useEffect(() => {
-      if (!isFocused) {
-        setPlaying(false);
-      }
-    }, [isFocused]);
-
-
-    useEffect(() => {
-      if (!player) return;
-
-      if (!shouldUsePlayer) {
-        player.pause?.();
-      }
-
-      return () => {
-        player.removeAllListeners?.();
-      };
-    }, [player, shouldUsePlayer]);
-
 
 
     const showInstructions = () => {
@@ -511,7 +455,8 @@ export default function MyDojoStyles({route}) {
             videoUrl: move.videoUrl,
             type: 'pdf'
           };
-          navigation.navigate('PdfMove', { pdf: pdfData });
+          setViewMode(4);  
+          setMove(pdfData);
           
         } catch (err) {
           Alert.alert("Error", "Failed to open PDF: " + err.message);
@@ -627,6 +572,7 @@ export default function MyDojoStyles({route}) {
             title: mv.title || "Video Move",
             style: mv.style || "Enter List Title",
             desc: mv.desc || "",
+            vid: "",
             videoUrl: getYouTubeId(mv.videoUrl),
             type: "video",
           };
@@ -635,7 +581,7 @@ export default function MyDojoStyles({route}) {
 
         } else {
           setMove(mv);
-          setViewMode(2);
+          setViewMode(1);
         }
       } catch (e) {
         Alert.alert("Error", "Could not open video");
@@ -883,6 +829,7 @@ export default function MyDojoStyles({route}) {
     );
 
 
+    
     const MyHeader = () => {
       if (smoves.length === 0) return null;
       const firstId = smoves[0].id;
@@ -893,88 +840,16 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
 
-    if(viewmode === 1) return (
-      <SafeAreaView style={{ backgroundColor:'#323232',width:'100%', height:'100%', marginTop: 38 }}>
-          <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center",fontSize: 21, marginBottom: 9 }}>
-            {move.title}
-          </Text>
-
-            {move.videoUrl?.length && move.videoUrl.length < 19 ?
-              ( <View style={{ marginTop: 2, width: width }}> 
-                  <YoutubePlayer
-                    height={width * 0.5625}
-                    play={playing && isFocused}
-                    videoId={move.videoUrl}
-                    initialPlayerParams={{
-                      controls: true,
-                      modestbranding: true,
-                      rel: false,
-                    }}
-                  />
-              </View> )
-              : ( <View style={{flex: 1, padding: 0, backgroundColor: '#323232',marginLeft: 0, marginTop: 5, marginBottom: 0, width: "100%", maxHeight: "91%" }}>
-                  <VideoView
-                    player={player}
-                    allowsTransparency={true}
-                    contentFit="contain"
-                    useNativeControls
-                    allowsPictureinPicture
-                    style={{ flex: 1,marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "95%"}}
-                  />
-
-                  {loadingview && (
-                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)' }}>
-                      <ActivityIndicator size="large" color="#f30707" />
-                      <Text style={{ color: 'white', marginTop: 10 }}>Loading...</Text>
-                    </View>
-                  )}
-              </View>)
-            }
-          </SafeAreaView> 
-    );
 
 
-
-    if(viewmode === 2) return (
-      <SafeAreaView style={{ flex: 1, backgroundColor:'#323232', width:'100%', height:'100%', marginTop:38, opacity: 1 }}>
-        <Text style={{ backgroundColor:'#2f4f4f',color: "crimson", textAlign: "center", fontSize: 21, marginBottom:9 }}>
-          {move.title}
-        </Text>
-
-        {move.title && (
-          <View style={{flex:1, padding: 0, backgroundColor:'#323232', marginLeft: 0 ,marginTop: 5, marginBottom: 0, width:"100%", maxHeight: "45%" }}>
-            <VideoView
-              player={player}
-              allowsTransparency={true}
-              contentFit="contain"
-              useNativeControls
-              allowsPictureinPicture
-              allowsPlayBackSpeed={true}
-               style={{ flex: 1, marginBottom:5, marginLeft: 1, marginRight:3, padding:0, borderColor:'#9a9aa1', borderWidth:2, width:"100%", height:"38%" }}
-            />
-
-            {loadingview && (
-              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center',alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)' }}>
-                <ActivityIndicator size="large" color="#f30707" />
-                <Text style={{ color: 'white', marginTop: 10 }}>Loading...</Text>
-              </View>
-            )}
-          </View>
-        )}
-
-        <View style={{maxHeight:"33%"}}>
-          <ScrollView>
-            <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft:12, marginRight:7, marginBottom:19,padding:9, width:"96%"}}>
-              {move.desc}
-            </Text>
-          </ScrollView>
-        </View>
-      </SafeAreaView>
-    );
+    if (viewmode === 1 || viewmode === 2) {
+      return <VideoPlayer video={move} />;
+    }
 
 
 
@@ -1014,6 +889,12 @@ export default function MyDojoStyles({route}) {
        </SafeAreaView>
       </View>
     );
+
+
+
+    if( viewmode === 4 ) return (
+      <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} />
+    )
 
 
 
