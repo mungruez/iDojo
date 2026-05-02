@@ -51,15 +51,15 @@ export default function VideoPlayer({ video }) {
 
 
   return (
-    <SafeAreaView style={{ backgroundColor:'#323232',width:'100%', height:'100%', marginTop: 38 }}>
-     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center",fontSize: 21, marginBottom: 9 }}>
+    <SafeAreaView style={{ backgroundColor: '#323232', width: '100%', height: '100%', marginTop: 38 }}>
+     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center", fontSize: 21, marginBottom: 9 }}>
       {video.title}
      </Text>
 
-       {video.videoUrl && video.videoUrl.length < 19 ?
+       { video.videoUrl && video.videoUrl.length < 19 ?
         ( <View style={styles.wvcontainer}> 
             <YoutubePlayer
-              height={deviceWidth * 0.5625}
+              height={deviceWidth * 0.57}
               play={playing && isFocused}
               videoId={video.videoUrl}
               initialPlayerParams={{
@@ -69,17 +69,17 @@ export default function VideoPlayer({ video }) {
               }}
             />
         </View> )
-        : ( <View style={{flex: 1, padding: 0,backgroundColor: '#323232',marginLeft: 0,marginTop: 5, marginBottom: 0, width: "100%", maxHeight: "91%" }}>
+        : ( <View style={{flex: 1, padding: 0, backgroundColor: '#323232', marginLeft: 0,marginTop: 5, marginBottom: 0, width: "100%", maxHeight: "45%" }}>
             <VideoView
               player={player}
               allowsTransparency={true}
               contentFit="contain"
               useNativeControls
               allowsPictureinPicture
-              style={{ flex: 1,marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "95%"}}
+              style={{ flex: 1, marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "38%%"}}
             />
 
-             {loading && (
+             { loading && (
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)' }}>
                     <ActivityIndicator size="large" color="#f30707" />
                     <Text style={{ color: 'white', marginTop: 10 }}>Loading...</Text>
@@ -88,9 +88,9 @@ export default function VideoPlayer({ video }) {
         </View>)
       }
 
-      <View style={{maxHeight:"33%"}}>
+      <View style={{maxHeight: "33%"}}>
         <ScrollView>
-          <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft:12, marginRight:7, marginBottom:19,padding:9, width:"96%"}}>
+          <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft: 12, marginRight: 7, marginBottom: 19, padding: 9, width: "96%"}}>
               {video.desc}
           </Text>
         </ScrollView>

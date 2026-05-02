@@ -856,15 +856,15 @@ export default function MyDojoStyles({route}) {
     if(viewmode == 3) return (
       <View style={{flex: 1, paddingTop: 40, backgroundColor:"#228b22", opacity: 1}}> 
        <StatusBar barStyle="light-content"/>
-       <SafeAreaView style={{ backgroundColor:'black', flex:1}}>
-        <Text style={{ backgroundColor: '#2f4f4f', color:"crimson", textAlign:"center", fontSize: 21, marginBottom: 19, marginTop: 38 }}>
+       <SafeAreaView style={{ backgroundColor:'black', flex: 1}}>
+        <Text style={{ backgroundColor: '#2f4f4f', color: "crimson", textAlign: "center", fontSize: 21, marginBottom: 19, marginTop: 38 }}>
           {move.title}
         </Text>
     
-        <View style={{backgroundColor: "black", paddingBottom: 19, flex:1}}>
+        <View style={{backgroundColor: "black", paddingBottom: 19, flex: 1}}>
           <ScrollView>
             {move.steps.map((step, index) => {
-              return ( <View key={index} style={{backgroundColor:"black", marginBottom:19}}>
+              return ( <View key={index} style={{backgroundColor: "black", marginBottom: 19}}>
                 <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
                   <Text style={styles.titletextManual}>{step.title}</Text>
                 </View>
@@ -880,7 +880,7 @@ export default function MyDojoStyles({route}) {
                      </ScrollView>
                   </View>
 
-                  {index < manual.steps.length - 1  && ( <View style={{marginTop: -7, marginBottom: 3, flex: 1}}> 
+                  { index < move.steps.length - 1  && ( <View style={{marginTop: -7, marginBottom: 3, flex: 1}}> 
                     <Image source={require('../assets/silverdivider.png')} style={styles.silverDivider} resizeMode='contain'/>
                   </View> ) } 
                 </View>
@@ -1305,7 +1305,7 @@ searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0
 searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
 silverDivider: { width: '99%', height: 49, alignSelf: "center", paddingVertical: 1, opacity: 1 },
 clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
-imgBackgroundManual: { minWidth:"100%", backgroundColor: "#233535", flex: 1, opacity: 1, margin:0, padding: 3, borderRadius: 7, borderColor: 'silver', borderWidth: 1, borderBottomWidth: 1},
+imgBackgroundManual: { minWidth: "100%", backgroundColor: "#233535", flex: 1, opacity: 1, margin: 0, padding: 3, borderRadius: 7, borderColor: 'silver', borderWidth: 1, borderBottomWidth: 1},
 desctextManual: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 2, color: 'white', padding: 5, borderColor: "silver", borderWidth: 0, borderRadius: 7, maxHeight: 411, opacity: 1 },
 titletextManual: {fontSize: 17, lineHeight: 21, fontWeight: '600', letterSpacing: 0.25, marginLeft: 7, color: 'black', opacity: 1, },
 });
