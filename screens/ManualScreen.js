@@ -26,19 +26,9 @@ export default function ManualScreen({ route, navigation }) {
               </View>
 
               <View>
-                 <Image
-                    source = { step.img }
-                    resizeMode="contain"
-                    style={{
-                    borderRadius: 19,
-                    alignSelf: 'center',
-                    margin: 0,
-                    height: 490,
-                    width: 380, 
-                    }}
-                  />
+                <Image source = { step.img } resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
                 
-                <View style={{backgroundColor: "#2f4f4f", marginTop: 5, marginBottom: 2, flex:1, padding: 3, borderColor: "white", borderWidth: 1, borderRadius: 5, borderBottomWidth: 2}}>
+                <View style={{backgroundColor: "#2f4f4f", marginTop: 5, marginBottom: 2, flex: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 5, borderBottomWidth: 2}}>
                   <ScrollView>
                     <View style={styles.imgBackground}>
                       <Text style={styles.desctext}> {step.desc} </Text>
