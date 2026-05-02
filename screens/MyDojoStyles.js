@@ -1301,7 +1301,7 @@ stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems:
 searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: "100%", borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
 searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11},
 searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
-clearBtn: { width: 35, height: 35, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
+clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
 imgBackgroundManual: { minWidth:"100%", flex: 1, opacity: 1, margin:0, padding: 0, borderRadius: 5, borderColor: 'silver', borderWidth:1, borderBottomWidth:0, borderBottomRightRadius:0, borderBottomLeftRadius:0},
 desctextManual: { fontSize: 17, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 0, color: 'white', padding: 1, borderColor: "silver", borderWidth: 0, borderRadius: 5, maxHeight: 411, opacity: 1 },
 titletextManual: {fontSize: 17, lineHeight: 21, fontWeight: '600', letterSpacing: 0.25, marginLeft: 7, color: 'black', opacity: 1, },
