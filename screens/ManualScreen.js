@@ -19,7 +19,7 @@ export default function ManualScreen({ route, navigation }) {
         <ScrollView>
           {manual.steps.map((step, index) => {
             
-            return ( <View key={index} style={{backgroundColor: "black", marginBottom: 38}}>
+            return ( <View key={index} style={{backgroundColor: "black", marginBottom: 27}}>
               
               <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
                 <Text style={styles.titletext}>{step.title}</Text>
@@ -28,7 +28,7 @@ export default function ManualScreen({ route, navigation }) {
               <View>
                 <Image source = { step.img } resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
                 
-                <View style={{backgroundColor: "#2f4f4f", marginTop: 5, marginBottom: 2, flex: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 5, borderBottomWidth: 2}}>
+                <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, flex: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 5, borderBottomWidth: 2}}>
                   <ScrollView>
                     <View style={styles.imgBackground}>
                       <Text style={styles.desctext}> {step.desc} </Text>
@@ -36,7 +36,7 @@ export default function ManualScreen({ route, navigation }) {
                   </ScrollView>
                 </View>
                 
-                {index < manual.steps.length - 1  && ( <View style={{marginTop: 2, marginBottom: 3, flex: 1, padding: 2}}> 
+                {index < manual.steps.length - 1  && ( <View style={{marginTop: -7, marginBottom: 3, flex: 1 }}> 
                   <Image source={require('../assets/silverdivider.png')} style={styles.divider} resizeMode='contain'/>
                 </View> ) } 
               </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   imgBackground: {
     minWidth: "100%",
-    backgroundColor: "#2a4242",
+    backgroundColor: "#233535",
     flex: 1,
     opacity: 1,
     margin: 0,
@@ -69,23 +69,21 @@ const styles = StyleSheet.create({
     borderRadius: 7, 
     borderColor: 'silver',
     borderWidth: 1,
-    borderBottomWidth: 0,
-    borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0
+    borderBottomWidth: 1,
   },
   desctext: {
-    fontSize: 17,
+    fontSize: 15,
     lineHeight: 21,
     fontWeight: '500',
     letterSpacing: 0.25,
     marginTop: 2,
     color: 'white',
-    padding: 2, 
+    padding: 5, 
     borderColor:"silver", 
     borderWidth: 0, 
     borderRadius: 7,
     maxHeight: 411,
     opacity: 1,
-  },divider: { width: '96%', height: 38, alignSelf: "center", paddingVertical: 3, opacity: 1 },
+  },divider: { width: '99%', height: 49, alignSelf: "center", paddingVertical: 1, opacity: 1 },
 
 })
