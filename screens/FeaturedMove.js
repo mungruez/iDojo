@@ -32,7 +32,9 @@ const FeaturedMove = ({ route, navigation }) => {
   }, [isFocused]);
 
 
-  const player = useVideoPlayer(video.Link, (player) => {
+  const isYouTube = video.Link && video.Link.length < 19; 
+  const player = useVideoPlayer(isYouTube ? '' : video.Link, (player) => {
+    if (isYouTube) return;
     player.loop = true;
     if (video.Link && video.Link.length >= 19) {
       player.play();

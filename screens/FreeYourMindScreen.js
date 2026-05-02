@@ -190,7 +190,7 @@ export default function FreeYourMindScreen() {
           let vds = [];
           try {
             AsyncStorage.getItem('xx7771xxiDojoFvideos').then((fvalue) => {
-              if (fvalue != null) {
+              if (fvalue != null && Array.isArray(faudio)) {
                 vds = JSON.parse(fvalue);
                 let hAudio = [];
                 let hid = 11;

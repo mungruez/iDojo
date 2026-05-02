@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     color: 'black',
     opacity: 1,
-    backgroundColor:"transparent"
   },
   imgBackground: {
     minWidth:"100%",
@@ -110,8 +109,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     marginTop: 0,
     color: 'white',
-    padding:1, 
-    backgroundColor:"transparent",
+    padding: 1, 
     borderColor:"silver", 
     borderWidth:0, 
     borderRadius:5,

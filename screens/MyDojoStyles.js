@@ -1,8 +1,10 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, DeviceEventEmitter, Platform, StatusBar, ScrollView, TextInput, KeyboardAvoidingView, BackHandler } from 'react-native';
-import { useNavigation, useFocusEffect  } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet, ActivityIndicator, ImageBackground, Image, Dimensions, AppState, Platform, StatusBar, ScrollView, TextInput, KeyboardAvoidingView, BackHandler } from 'react-native';
+import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import React, { useState, useCallback, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
+import { useVideoPlayer, VideoView } from 'expo-video'; 
+import YoutubePlayer from "react-native-youtube-iframe";
 import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
 import { zip, unzip } from 'react-native-zip-archive';
@@ -35,8 +37,69 @@ export default function MyDojoStyles({route}) {
     const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
     const [searchQuery, setSearchQuery] = useState('');
 
+    const [viewmode, setViewMode] = useState(0);
+    const isFocused = useIsFocused(); 
+    const [playing, setPlaying] = useState(true);
+    const [loadingview, setLoadingview] = useState(true);
+
     const isOffline = useNetInfo().isConnected === false;
     const isLoadingRef = React.useRef(false);
+
+    const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
+
+    const sourceToUse = move
+      ? move.videoUrl?.startsWith('http')
+        ? move.videoUrl
+        : move.vid
+      : '';
+
+    const shouldUsePlayer = viewmode === 1 || viewmode === 2;
+    const activeSource = shouldUsePlayer && sourceToUse ? sourceToUse : '';
+    
+    const player = useVideoPlayer(activeSource, (player) => {
+      if (!shouldUsePlayer || !activeSource) return;
+
+      player.loop = true;
+      player.play();
+
+      player.addListener('statusChange', ({ status }) => {
+        if (status === 'readyToPlay') setLoadingview(false);
+        else if (status === 'loading') setLoadingview(true);
+      });
+    });
+    
+
+    useEffect(() => {
+      const subscription = AppState.addEventListener("change", nextAppState => {
+        if (nextAppState !== "active") {
+          setPlaying(false); 
+        }
+      });
+    
+      return () => subscription.remove();
+    }, []);
+    
+    
+    useEffect(() => {
+      if (!isFocused) {
+        setPlaying(false);
+      }
+    }, [isFocused]);
+
+
+    useEffect(() => {
+      if (!player) return;
+
+      if (!shouldUsePlayer) {
+        player.pause?.();
+      }
+
+      return () => {
+        player.removeAllListeners?.();
+      };
+    }, [player, shouldUsePlayer]);
+
+
 
     const showInstructions = () => {
         Alert.alert(
@@ -426,7 +489,7 @@ export default function MyDojoStyles({route}) {
 
 
     const viewPdf = async (move) => {
-      if (isOffline) {
+      if (isOffline && !move.vid) {
         Alert.alert("No Internet", "You need an internet connection to view PDF moves.");
         return;
       }
@@ -559,23 +622,30 @@ export default function MyDojoStyles({route}) {
     const checkVideo = (mv) => {
       try {
         if(mv.videoUrl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
-          setListMode(true);
           const mvData = {
             id: mv.id,
-            Title: mv.title || "Video Move",
-            Style: mv.style || "Enter Move Title",
-            Desc: mv.desc || "",
-            Link: getYouTubeId(mv.videoUrl),
-            Type: "video",
+            title: mv.title || "Video Move",
+            style: mv.style || "Enter List Title",
+            desc: mv.desc || "",
+            videoUrl: getYouTubeId(mv.videoUrl),
+            type: "video",
           };
-          navigation.navigate('Featured', { video: mvData });
+          setMove(mvData);
+          setViewMode(1);
+
         } else {
-          setListMode(true);
-          navigation.navigate('Move', { video: mv });
+          setMove(mv);
+          setViewMode(2);
         }
       } catch (e) {
         Alert.alert("Error", "Could not open video");
       }
+    };
+
+
+    const viewManual = (mv) => {
+      setMove(mv);
+      setViewMode(3);
     };
 
 
@@ -747,13 +817,20 @@ export default function MyDojoStyles({route}) {
 
     useEffect(() => {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        if (viewmode > 0) {
+          setViewMode(0);
+          if(addmode) setAddMode(false);
+          return true;
+        }
+
         if (addmode) {
           setAddMode(false);
           return true;
         }
+
         if (listmode) {
+          if(addmode) setAddMode(false);
           setListMode(false);
-          setAddMode(false);
           setSelectedIds([]);
           return true;
         }
@@ -761,14 +838,14 @@ export default function MyDojoStyles({route}) {
       });
 
       return () => backHandler.remove();
-    }, [addmode, listmode]);
+    }, [viewmode, addmode, listmode]);
       
 
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
-        onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? checkVideo(item) : ftype === "pdf" ? viewPdf(item) : navigation.navigate('Manual', { manual: item })}
+        onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? checkVideo(item) : ftype === "pdf" ? viewPdf(item) : viewManual(item)}
         style={[styles.itemContainer, selectedIds.includes(item.id) && (ftype === "steps" ? styles.selectedItem : ftype === "video" ? styles.selectedItemVideo : styles.selectedItemPdf)]}>
         <View style={styles.card}>
           <View style={styles.titleBanner}>
@@ -785,7 +862,7 @@ export default function MyDojoStyles({route}) {
                 if (youtubeId === "") {
                   require('../assets/onlinevideoicon.png');
                 } else {
-                  return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };h
+                  return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
                 }
               }
               
@@ -819,7 +896,127 @@ export default function MyDojoStyles({route}) {
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+
+    if(viewmode === 1) return (
+      <SafeAreaView style={{ backgroundColor:'#323232',width:'100%', height:'100%', marginTop: 38 }}>
+          <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center",fontSize: 21, marginBottom: 9 }}>
+            {move.title}
+          </Text>
+
+            {move.videoUrl?.length && move.videoUrl.length < 19 ?
+              ( <View style={{ marginTop: 2, width: width }}> 
+                  <YoutubePlayer
+                    height={width * 0.5625}
+                    play={playing && isFocused}
+                    videoId={move.videoUrl}
+                    initialPlayerParams={{
+                      controls: true,
+                      modestbranding: true,
+                      rel: false,
+                    }}
+                  />
+              </View> )
+              : ( <View style={{flex: 1, padding: 0, backgroundColor: '#323232',marginLeft: 0, marginTop: 5, marginBottom: 0, width: "100%", maxHeight: "91%" }}>
+                  <VideoView
+                    player={player}
+                    allowsTransparency={true}
+                    contentFit="contain"
+                    useNativeControls
+                    allowsPictureinPicture
+                    style={{ flex: 1,marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "95%"}}
+                  />
+
+                  {loadingview && (
+                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)' }}>
+                      <ActivityIndicator size="large" color="#f30707" />
+                      <Text style={{ color: 'white', marginTop: 10 }}>Loading...</Text>
+                    </View>
+                  )}
+              </View>)
+            }
+          </SafeAreaView> 
+    );
+
+
+
+    if(viewmode === 2) return (
+      <SafeAreaView style={{ flex: 1, backgroundColor:'#323232', width:'100%', height:'100%', marginTop:38, opacity: 1 }}>
+        <Text style={{ backgroundColor:'#2f4f4f',color: "crimson", textAlign: "center", fontSize: 21, marginBottom:9 }}>
+          {move.title}
+        </Text>
+
+        {move.title && (
+          <View style={{flex:1, padding: 0, backgroundColor:'#323232', marginLeft: 0 ,marginTop: 5, marginBottom: 0, width:"100%", maxHeight: "45%" }}>
+            <VideoView
+              player={player}
+              allowsTransparency={true}
+              contentFit="contain"
+              useNativeControls
+              allowsPictureinPicture
+              allowsPlayBackSpeed={true}
+               style={{ flex: 1, marginBottom:5, marginLeft: 1, marginRight:3, padding:0, borderColor:'#9a9aa1', borderWidth:2, width:"100%", height:"38%" }}
+            />
+
+            {loadingview && (
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center',alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)' }}>
+                <ActivityIndicator size="large" color="#f30707" />
+                <Text style={{ color: 'white', marginTop: 10 }}>Loading...</Text>
+              </View>
+            )}
+          </View>
+        )}
+
+        <View style={{maxHeight:"33%"}}>
+          <ScrollView>
+            <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft:12, marginRight:7, marginBottom:19,padding:9, width:"96%"}}>
+              {move.desc}
+            </Text>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    );
+
+
+
+    if(viewmode == 3) return (
+      <View style={{flex: 1, paddingTop: 40, backgroundColor:"#228b22", opacity: 1}}> 
+       <StatusBar barStyle="light-content"/>
+       <SafeAreaView style={{ backgroundColor:'black', flex:1}}>
+        <Text style={{ backgroundColor: '#2f4f4f', color:"crimson", textAlign:"center", fontSize: 21, marginBottom: 19, marginTop: 38 }}>
+          {move.title}
+        </Text>
     
+        <View style={{backgroundColor: "black", paddingBottom: 19, flex:1}}>
+          <ScrollView>
+            {move.steps.map((step, index) => {
+              return ( <View key={index} style={{backgroundColor:"black", marginBottom:19}}>
+                <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+                  <Text style={styles.titletextManual}>{step.title}</Text>
+                </View>
+    
+                <View>
+                  <Image source = {{uri: step.img}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
+    
+                  <View style={{backgroundColor: "#2f4f4f", marginTop:5, marginBottom:8, flex:1, padding:0, borderColor:"silver", borderWidth:1, borderRadius: 5, borderBottomWidth:2}}>
+                    <ScrollView>
+                      <ImageBackground style={ styles.imgBackgroundManual } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/greentextbackground.png')}>
+                        <View style={{backgroundColor: "#2f4f4f",  borderColor:"silver", borderWidth: 0, borderRadius: 5}}>
+                          <Text style={styles.desctextManual}> {step.desc} </Text>
+                        </View>
+                      </ImageBackground>
+                    </ScrollView>
+                  </View> 
+                </View>
+              </View>);
+            })}
+          </ScrollView>
+        </View>
+       </SafeAreaView>
+      </View>
+    );
+
+
+
     if (addmode) return (
       <ImageBackground style={ styles.imgBackgroundAM } imageStyle={{ opacity: 0.7 }} resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
        <StatusBar barStyle="light-content" />
@@ -842,7 +1039,7 @@ export default function MyDojoStyles({route}) {
          <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
          
          <Text style={styles.label}>Moves List Title/Styles</Text>
-         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyle} onChangeText={checkFStyle} />
+         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyleAM} onChangeText={checkFStyle} />
    
          { typeAM === "video" ? (
            <View>
@@ -960,7 +1157,7 @@ export default function MyDojoStyles({route}) {
             ListEmptyComponent = {() => {
               return (
                 <View style={{padding: 19, alignItems: 'center'}}>
-                  <Text style={{color: 'white', marginBottom: 10}}>Please Reload</Text>
+                  <Text style={{color: 'white', marginBottom: 10, fontWeight: 'bold'}}>Please Reload</Text>
                   <TouchableOpacity 
                     onPress={() => {
                       if (!loading && !isLoadingRef.current) loadMoves();
@@ -1224,4 +1421,7 @@ searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  ga
 searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11},
 searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
 clearBtn: { width: 35, height: 35, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
+imgBackgroundManual: { minWidth:"100%", flex: 1, opacity: 1, margin:0, padding: 0, borderRadius: 5, borderColor: 'silver', borderWidth:1, borderBottomWidth:0, borderBottomRightRadius:0, borderBottomLeftRadius:0},
+desctextManual: { fontSize: 17, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 0, color: 'white', padding: 1, borderColor: "silver", borderWidth: 0, borderRadius: 5, maxHeight: 411, opacity: 1 },
+titletextManual: {fontSize: 17, lineHeight: 21, fontWeight: '600', letterSpacing: 0.25, marginLeft: 7, color: 'black', opacity: 1, },
 });

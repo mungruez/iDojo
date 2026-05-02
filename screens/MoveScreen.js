@@ -9,7 +9,7 @@ const videoSources = videos.keys().map((key) => videos(key));
 const MoveScreen = ({ route, navigation }) => {
   const { video } = route.params;
 
-  const sourceToUse = video.mid < videoSources.length ? videoSources[video.mid] : video.videoUrl.startsWith('http') ? video.videoUrl : video.vid;
+  const sourceToUse = video.mid < videoSources.length ? videoSources[video.mid] : video.videoUrl?.startsWith('http') ? video.videoUrl : video.vid;
   
   //useVideoPlayer hook init video source with move.mid or move.vid automatically unloads video when component unmounts
   const player = useVideoPlayer(sourceToUse, (player) => {

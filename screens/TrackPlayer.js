@@ -57,7 +57,7 @@ export default function TrackPlayer({ track }) {
       try {
         player.seekTo(percentage * dur);
       } catch (e) {
-        console.log("Seek error:", e);
+        //console.log("Seek error:", e);
       }
     }
   };
