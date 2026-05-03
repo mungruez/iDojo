@@ -147,7 +147,7 @@ export default function LoginScreen() {
     Alert.alert("PIN Deleted", "Successfully deleted PIN and ALL "+errorFlag+" Passwords."); 
   }
 
-  
+
 
   const checkPin = async () => {
     try{
@@ -285,7 +285,7 @@ export default function LoginScreen() {
   }
 
 
-  return ( !hasPasswords && !isOverlayVisible ? ( 
+  return ( !hasPasswords ? ( 
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)' }}>
      <StatusBar barStyle="dark-content" />
      <KeyboardAvoidingView 
