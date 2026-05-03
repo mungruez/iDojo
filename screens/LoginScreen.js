@@ -295,7 +295,7 @@ export default function LoginScreen() {
      >
       <View style={{ marginBottom: 19, paddingBottom:7, opacity: 1 }}>
         <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
-        <StatusBar style='light' />
+        <StatusBar style='dark-content' />
       </View>
       
       <View style={styles.container}>
@@ -393,11 +393,10 @@ export default function LoginScreen() {
          >
           <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
-            <StatusBar style='light' />
           </View>
+          
             <View style={styles.container}>
               <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
-              <StatusBar style='light' />
 
               <View style={styles.inputview}> 
                 <TextInput
