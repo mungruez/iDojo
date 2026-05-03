@@ -13,15 +13,16 @@ export default function Fighter({ route, navigation }) {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], width:'100%', height:'100%' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)] }}>
       <StatusBar barStyle="dark-content"/>
-      <ScrollView style={{marginBottom: 38, marginTop: 19, padding: 19}}>
 
-        <Text style={{ backgroundColor:'#2f4f4f', color: "crimson", textAlign:"center", fontSize: 21, marginBottom: 19, marginTop: 38 }}>
+      <ScrollView style={{flex: 1, marginBottom: 38, marginTop: 7, padding: 15}}>
+
+        <Text style={{ backgroundColor:'#2f4f4f', color: "crimson", textAlign:"center", fontSize: 21, marginBottom: 7, marginTop: 7, fontWeight: "500", borderRadius: 4 }}>
           {fighter.name}
         </Text>
 
-        <View style={{ marginBottom:9, textAlign:"center"}}>
+        <View style={{ marginBottom: 2, textAlign:"center"}}>
           <Image
               source={fighter.avatar}
               resizeMode="contain"
@@ -31,24 +32,36 @@ export default function Fighter({ route, navigation }) {
 
         {fighter.desc.map((quote, index) => {
           return (
-            <View key={index}>
-              <Text style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize: 16, color: "black", fontWeight: "semibold"}}>{quote}</Text>
+            <View key={index} style={{borderRadius: 7}}>
+              <Text style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize: 16, color: "black", fontWeight: "600", padding: 5}}>{quote}</Text>
+              
+              {index === fighter.desc.length - 1  && ( <View style={{marginTop: 5, marginBottom: 12, flex: 1 }}> 
+                <Image source={require('../assets/silverdivider.png')} style={styles.divider} resizeMode='contain'/>
+              </View> ) }
+
             </View>
           );
         })}
 
         {fighter.moves.map((move, index) => {
-          return (
-            <View key={move.title} style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize: 16}}>
+          return ( <View key={move.title} style={{marginBottom: 7, borderRadius: 7}}>
+            <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize: 15, borderRadius: 7, padding: 4}}>
               <Text>{move.title}</Text>
+              
               <Image
                 source={move.img}
                 resizeMode="contain"
                 style={styles.fighterImage}
               />
-              <Text style={{color: "black", fontWeight: "semibold"}}>{move.desc}</Text>
+              
+              <Text style={{color: "black", fontWeight: "600", padding: 3, fontSize: 14}}> {move.desc} </Text>
+              
+              {index < fighter.moves.length - 1  && ( <View style={{marginTop: 5, marginBottom: 7, flex: 1 }}> 
+                <Image source={require('../assets/silverdivider.png')} style={styles.divider} resizeMode='contain'/>
+              </View> ) }
+
             </View>
-          );
+          </View> );
         })}
     </ScrollView>
   </SafeAreaView>
@@ -63,14 +76,20 @@ const styles = StyleSheet.create({
     marginTop: 0,
     margin: 0,
     height: 490,
-    maxWidth: 380, 
+    width: "100%", 
   },
   fighterAvatar: {
     borderRadius: 12,
-    marginBottom: -30,
+    marginBottom: -7,
     marginTop: 0,
     marginLeft: 57,
     height: 380,
     width: 228, 
   },
+  divider: { 
+    width: '100%', 
+    height: 49, 
+    alignSelf: "center", 
+    paddingVertical: 2, 
+    opacity: 1 },
 })

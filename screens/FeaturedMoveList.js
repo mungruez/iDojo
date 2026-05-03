@@ -178,12 +178,22 @@ export default function FeatureMoveList() {
     //alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
     } catch (error) {
         if (error.message === 'Network request failed') {
-          alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing all featured content!');
+          alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content!');
         } else {
           alert('An unexpected error occurred while updating featured content: ', error);
         }
     } 
   }, []);
+
+
+
+   const checkWifi = (item) => {
+    if(isOffline) {
+      alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content! Thumbnails may show because of the cache.');
+      return;
+    }
+    navigation.navigate('Featured', {video: item});
+  }
 
 
 
@@ -196,105 +206,107 @@ export default function FeatureMoveList() {
         showsHorizontalScrollIndicator={true}
         contentContainerStyle={{ minWidth: (Dimensions.get('window').width*data.length)/2, paddingRight: 5, flexGrow: 1, }}
         renderItem={({ item, index }) => (
-                <View
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexDirection: "column",
-                    marginLeft: 9,
-                    marginRight: 7,
-                    marginTop: 9,
-                    width: (Dimensions.get('window').width*0.47),
-                    borderWidth: 0,
-                    borderRadius: 38,
-                  }}>
-              
-                { item.Title && <Pressable
-                  onPress={() => {navigation.navigate('Featured', {video: item});}}>
-                    <View key={index}> 
-                      { item.Title && <View key={item.Source} style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:38, width: (Dimensions.get('window').width*0.47),}}>
-                        <Text numberOfLines={2} style={styles.titletext}>{item.Title}</Text>
-                      </View> } 
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexDirection: "column",
+              marginLeft: 9,
+              marginRight: 7,
+              marginTop: 9,
+              width: (Dimensions.get('window').width*0.47),
+              borderWidth: 0,
+              borderRadius: 38,
+            }}>
 
-                      <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0,}}>
-                          <View style={styles.subCardView}>
-                            <View>
-                            <Image
-                              source={{uri: item.Thumb}}
-                              resizeMode="cover"
-                              style={{
-                                borderRadius: 12,
-                                alignSelf: 'flex-start',
-                                marginTop: 0,
-                                marginLeft: 3,
-                                height: 190,
-                                width: (Dimensions.get('window').width/100)*45,
-                              }}
-                            />
-                            </View>
-                            
-                            <View style={{marginLeft: 4, marginTop:1,}}>
-                              <View
-                                style={{
-                                  borderWidth: .5,
-                                  borderColor:'#228b22',
-                                  flexDirection:'row',
-                                  backgroundColor:'#323232',
-                                  justifyContent:'space-between',
-                                }}>
-                                <Text style={{color: '#9a9aa1',fontSize: 11, marginLeft: 1,}}>
-                                    {item.Type}
-                                </Text>
-                                
-                                { item.Type.length + item.Style.length < 22 &&
-                                  ( <Text style={{color: '#fff',fontSize: 11, marginRight: 3,}}>
-                                    {item.Style}
-                                  </Text> ) }
-                              </View>
-                            </View>
+              { item.Title && <Pressable
+                onPress={() => checkWifi(item) }>
+                  <View key={index}> 
+                    { item.Title && <View key={item.Source} style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:38, width: (Dimensions.get('window').width*0.47),}}>
+                      <Text numberOfLines={2} style={styles.titletext}>{item.Title}</Text>
+                    </View> } 
 
-                              <Text
-                                numberOfLines={3}
-                                ellipsizeMode='clip'
-                                style={{
-                                  fontSize: 11,
-                                  color: "#cfcfafff",
-                                  fontWeight: 'medium',
-                                  overflow:"scroll",
-                                }}>
-                                  {item.Desc}
-                              </Text>
-                            
+                    <View style={styles.mainCardView}>
+                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0,}}>
+                        <View style={styles.subCardView}>
+                          <View>
+                          <Image
+                            source={{uri: item.Thumb}}
+                            resizeMode="cover"
+                            style={{
+                              borderRadius: 12,
+                              alignSelf: 'flex-start',
+                              marginTop: 0,
+                              marginLeft: 3,
+                              height: 190,
+                              width: (Dimensions.get('window').width/100)*45,
+                            }}
+                          />
                           </View>
+                            
+                          <View style={{marginLeft: 4, marginTop:1,}}>
+                            <View
+                              style={{
+                                borderWidth: .5,
+                                borderColor:'#228b22',
+                                flexDirection:'row',
+                                backgroundColor:'#323232',
+                                justifyContent:'space-between',
+                              }}>
+                              <Text style={{color: '#9a9aa1',fontSize: 11, marginLeft: 1,}}>
+                                  {item.Type}
+                              </Text>
+                              
+                              { item.Type.length + item.Style.length < 22 &&
+                                ( <Text style={{color: '#fff',fontSize: 11, marginRight: 3,}}>
+                                  {item.Style}
+                                </Text> ) }
+                            </View>
+                          </View>
+
+                            <Text
+                              numberOfLines={3}
+                              ellipsizeMode='clip'
+                              style={{
+                                fontSize: 11,
+                                color: "#cfcfafff",
+                                fontWeight: 'medium',
+                                overflow:"scroll",
+                              }}>
+                                {item.Desc}
+                            </Text>
+                            
                         </View>
                       </View>
                     </View>
-                </Pressable>}
-
-              </View>)}
+                  </View>
+              </Pressable> }
+          </View>
+        ) }
       />
+    );
+  };
+
+
+
+  const renderVerticalItem = ({ item }) => (
+    <View>
+      <Text style={styles.sourcetext}>{item.Source}</Text>
+      <HorizontalList data={item.data} />
+    </View>
   );
-};
 
 
 
-const renderVerticalItem = ({ item }) => (
-  <View>
-    <Text style={styles.sourcetext}>{item.Source}</Text>
-    <HorizontalList data={item.data} />
-  </View>
-);
-
-
-
-return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+  return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25,}}>
 
       <View style={{ marginBottom: 7, paddingBottom:10, opacity: 1, alignItmms: "center", justifyContent: "center",}}>
         <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
       </View>
+
+      {isOffline && <Text style={{ marginTop: 19, height: "100%", width: "100%", color: 'rgb(174, 185, 185)', fontSize: 14, fontStyle: "italic", fontWeight:"bold", textAlign:"center", alignSelf: "center"}}> No Wifi Detected! Thunmbails may show however the videos wont play!</Text> }
       
       {!isloading ? ( <View style={styles.imgBackground}>
           <FlatList

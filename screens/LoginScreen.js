@@ -23,19 +23,19 @@ export default function LoginScreen() {
         if(passKey==null) {
           setHasPasswordList(false);
           await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
-          alert("Welcome to iDojo's Passwords Manager. No Saved PIN or passwords found. Please enter a PIN or Password as your Master Password for all your saved passwords. PINs or Passwords should be at least 4 characters long with no slashes. PIN can only be changed after login.");
+          Alert.alert("Welcome to iDojo's Passwords Manager", " No Saved PIN or passwords found. Please enter a PIN or Password as your Master Password for all your saved passwords. PINs or Passwords should be at least 4 characters long with no slashes. PIN can only be changed after login.");
           return;
         }
                     
         for(let pkI=0; pkI < passKey.length; pkI++) {
           if(passKey.charAt(pkI) =='x' ) {
             setHasPasswordList(true);
-            alert("Welcome to iDojo's Passwords Manager. Passwords found! No PIN found. Please enter a PIN or Password as your Master Password to view your saved passwords.");
+            Alert.alert("Welcome to iDojo's Passwords Manager", " Passwords found! No PIN found. Please enter a PIN or Password as your Master Password to view your saved passwords.");
             return;
           }
         }
 
-        alert("Welcome to iDojo's Passwords Manager. No Saved PIN or Passwords found. please enter a PIN or Password as your Master Password for all your saved passwords.");
+        Alert.alert("Welcome to iDojo's Passwords Manager", " No Saved PIN or Passwords found. please enter a PIN or Password as your Master Password for all your saved passwords.");
         setHasPasswordList(false);
         return;
 
@@ -61,11 +61,11 @@ export default function LoginScreen() {
           }
         }
 
-        alert("Welcome Back Please enter your PIN/Password to proceed to iDojo's Passwords Manager.");
+        Alert.alert("Welcome Back", " Please enter your PIN/Password to proceed to iDojo's Passwords Manager.");
         return;
       }
     } catch(error) {
-      alert("Error trying to find PIN!!!"+error);
+      Alert.alert("PIN Error", "Error trying to find PIN!!!"+error);
       return; 
     }
   }
@@ -76,25 +76,6 @@ export default function LoginScreen() {
     fetchPasswords();
   }, []);
 
-
-  const showConfirmDialog = () => {
-    Alert.alert(
-      "Confirm Reset!",
-      "Are you sure you want to: Reset All Passwords?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => setPinConfirm(""),
-          style: "cancel" 
-        },
-        {
-          text: "OK",
-          onPress: () => resetPasswords()
-        }
-      ],
-      { cancelable: false } 
-    );
-  };
 
 
   const handleGlobalTouch = (event) => {
@@ -125,7 +106,7 @@ export default function LoginScreen() {
       const passKey = await AsyncStorage.getItem('xx7771xxiDojoAESpassKey');
 
       if(passKey==null) {
-        alert("Successfully deleted PIN, found no Passwords to delete.");
+        Alert.alert("PIN Deleted","Successfully deleted PIN, found No Passwords to delete.");
         await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
         setHasPasswords(false);
         setHasPasswordList(false);
@@ -151,7 +132,7 @@ export default function LoginScreen() {
         setHasPasswordList(false);
         await AsyncStorage.clear();
         await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
-        alert("Successfully deleted PIN, found 0 Passwords to delete.");
+        Alert.alert("PIN Deleted","Successfully deleted PIN, found 0 Passwords to delete.");
         return;
       }
       
@@ -160,12 +141,15 @@ export default function LoginScreen() {
       await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
     
     } catch(error) {
-      alert("Error deleting PIN :"+error);
+      Alert.alert("Delete Error", "Error deleting the PIN :"+error);
+      setHasPasswords(false);
+      setHasPasswordList(false);
+      return
     }
 
     setHasPasswords(false);
     setHasPasswordList(false);
-    alert("Successfully deleted PIN and ALL "+errorFlag+" Passwords."); 
+    Alert.alert("PIN Deleted", "Successfully deleted PIN and ALL "+errorFlag+" Passwords."); 
   }
 
 
@@ -173,7 +157,7 @@ export default function LoginScreen() {
     try{
       
       if(pin && pin.length < 4) {
-        alert("PIN entered is too short!");
+        Alert.alert("PIN Too Short", "The PIN entered is too short!");
         setPin("");
         return;
       }
@@ -183,7 +167,7 @@ export default function LoginScreen() {
       if(pin && savedPIN) {
         const cleanPIN = savedPIN.trim();
         if(pin.length != cleanPIN.length) {
-          alert("PIN entered does not match with what is saved. Please try again.");
+          Alert.alert("PIN Does Not Match", "PIN entered does not match with what is saved. Please try again.");
           setPin("");
           return;
         }
@@ -191,7 +175,7 @@ export default function LoginScreen() {
         for (let index = 0; index < pin.length; index++) {
           if(pin[index] != cleanPIN[index]) {
             setPin("")
-            alert("PIN entered does not match with what is saved. Please try again.");
+            Alert.alert("PIN Does Not Match", "PIN entered does not match with what is saved. Please try again.");
             return;
           }
         }
@@ -202,7 +186,7 @@ export default function LoginScreen() {
         navigation.navigate('PasswordManager');
 
       } else {
-        alert("Please enter your PIN to use the Password Manager.");
+        Alert.alert("Enter PIN", "Please enter your PIN to use the Password Manager.");
         setPin("");
         if(savedPIN) {
           return;
@@ -212,18 +196,37 @@ export default function LoginScreen() {
       }
 
     } catch(error) {
-      alert("No PIN is found!! Please submit a PIN as a Master Passord for the Password Manager.");
+      Alert.alert("No PIN Found", " Please submit a PIN as a Master Passord for the Password Manager.");
       setPin("");
       setHasPasswords(false);
       return;
     }    
   }
 
+  const showConfirmDialog = () => {
+    Alert.alert(
+      "Confirm Reset!",
+      "Are you sure you want to: Reset All Passwords?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => setPinConfirm(""),
+          style: "cancel" 
+        },
+        {
+          text: "OK",
+          onPress: () => resetPasswords()
+        }
+      ],
+      { cancelable: false } 
+    );
+  };
+
 
   const savePin = async () => {
     if(pin) {
       if( (pin.length != pinConfirm.length) || (pin.length < 4) || (pinConfirm.length < 4)) {
-        alert("A PIN is too short or lengths dont match!");
+        Alert.alert("PIN Do Not Match"," A PIN is too short or lengths do not match!");
         setPin("");
         setPinConfirm("");
         return;
@@ -231,7 +234,7 @@ export default function LoginScreen() {
 
       for (let index = 0; index < pin.length; index++) {
         if(pin[index] != pinConfirm[index]) {
-          alert("PINs do not match !");
+          Alert.alert("PINs Do Not Match", "PIN and the PIN confiem do not match !");
           setPin("");
           setPinConfirm("");
           return;
@@ -375,11 +378,17 @@ export default function LoginScreen() {
                 />
               </View> 
 
-            {hasPasswordList && (<TouchableOpacity
+            { hasPasswordList && ( <TouchableOpacity
               style={{height:43, width: "61%", alignSelf:"center", backgroundColor:"transparent",}}
               onPress={openOverlay}>
                 <ImageBackground style={{ height: "100%", width: "100%",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
-            </TouchableOpacity>)} 
+            </TouchableOpacity> ) } 
+
+            { !hasPasswordList && ( <TouchableOpacity
+              style={{height:43, width: "61%", alignSelf:"center", backgroundColor:"transparent",}}
+              onPress={openOverlay}>
+                <ImageBackground style={{ height: "100%", width: "100%",}} resizeMode='contain' source={require('../assets/resetloginpin.png')} />
+            </TouchableOpacity> ) }
             
             <TouchableOpacity
               style={{height: 67, width: "80%", alignSelf: "center", backgroundColor: "transparent", marginTop: 43,}}

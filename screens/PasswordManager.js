@@ -393,7 +393,7 @@ export default function PasswordManager() {
           [
             {
               text: "CANCEL",
-              onPress: () => setPasswordNumTemp(passwordNum),
+              onPress: () => setOverlayVisible(passwordNum),
               style: "cancel" 
             },
             {
@@ -466,6 +466,7 @@ export default function PasswordManager() {
 
         setPasswords(updatedPasswords);
         setPasswordNum(numPasswords);
+        setOverlayVisible(-1);
         alert("Deleted password for Website: "+webst);
     };
 
@@ -590,7 +591,7 @@ export default function PasswordManager() {
             }
             
             if(passKey == 'o') {
-                alert("Welcome to iDojo's Passwords Manager. Enter fields and Click Add Password to add a password.");
+                Alert.alert("Welcome to iDojo's Passwords Manager"," Enter fields and Click Add Password to add a password.");
                 return errorFlag;
             }
 
@@ -632,15 +633,15 @@ export default function PasswordManager() {
 
         } catch(error) {
             if(errorFlag>1) {
-                alert("Loaded "+errorFlag+" Passwords, not All. Total Passwords unkown.");
+                Alert.alert("Loading Error","Loaded "+errorFlag+" Passwords, not All. Total Passwords unkown.");
                 return errorFlag;
             }
 
-            alert("Welcome to iDojo's Passwords Manager. No Saved Passwords found. Enter fields and Click Add Password. Click the Blue View icon to edit and copy your stored Passwords. Click the red Trash icon to delete a Password.");
+            Alert.alert("Welcome to iDojo's Passwords Manager"," No Saved Passwords found. Enter fields and Click Add Password. Click the Blue View icon to edit and copy your stored Passwords. Click the red Trash icon to delete a Password.");
             try {
                 await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
             } catch(error) {
-                alert("Unable to Save Passwords !");
+                Alert.alert("Save Error","Unable to Save Passwords !");
             }
             return errorFlag; 
         }
