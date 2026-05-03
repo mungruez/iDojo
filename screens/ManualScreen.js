@@ -39,15 +39,18 @@ export default function ManualScreen({ route, navigation }) {
                 {index < manual.steps.length - 1  && ( <View style={{marginTop: -7, marginBottom: 3, flex: 1 }}> 
                   <Image source={require('../assets/silverdivider.png')} style={styles.divider} resizeMode='contain'/>
                 </View> ) } 
+
               </View>
             </View>);
           })}
+          
         </ScrollView>
       </View>
     </SafeAreaView>
    </View>
   )
 }
+
 
 const styles = StyleSheet.create({
   titletext: {
@@ -78,12 +81,15 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     marginTop: 2,
     color: 'white',
-    padding: 5, 
-    borderColor:"silver", 
-    borderWidth: 0, 
+    padding: 5,  
     borderRadius: 7,
     maxHeight: 411,
     opacity: 1,
-  },divider: { width: '99%', height: 49, alignSelf: "center", paddingVertical: 1, opacity: 1 },
-
+  },
+  divider: { 
+    width: '99%', 
+    height: 49, 
+    alignSelf: "center", 
+    paddingVertical: 1, 
+    opacity: 1 },
 })

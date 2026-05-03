@@ -45,6 +45,7 @@ export default function MyDojoStyles({route}) {
     const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
 
+
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
@@ -203,6 +204,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     const handleSave = async (newData) => { 
       try {
         if (isLoadingRef.current) return; 
@@ -285,6 +287,7 @@ export default function MyDojoStyles({route}) {
         }
         ]);
     };
+
 
 
     const handleShare = async (selectedids) => {
@@ -501,6 +504,7 @@ export default function MyDojoStyles({route}) {
         }
       }
     };
+
 
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
@@ -812,8 +816,8 @@ export default function MyDojoStyles({route}) {
                 }
               }
               
-              if (item.videoUrl && item.videoUrl.trim().length > 0 && Platform.OS !== 'ios') {
-                return { uri: item.videoUrl };
+              if (item.videoUrl && item.videoUrl.trim().length > 0) {
+                return require('../assets/onlinevideoicon.png');
               }
               
               return item.thumb ? { uri: item.thumb } : require('../assets/onlinevideoicon.png');
@@ -852,7 +856,6 @@ export default function MyDojoStyles({route}) {
     }
 
 
-
     if(viewmode == 3) return (
       <View style={{flex: 1, paddingTop: 40, backgroundColor:"#228b22", opacity: 1}}> 
        <StatusBar barStyle="light-content"/>
@@ -865,14 +868,14 @@ export default function MyDojoStyles({route}) {
           <ScrollView>
             {move.steps.map((step, index) => {
               return ( <View key={index} style={{backgroundColor: "black", marginBottom: 19}}>
-                <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom:3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+                <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize: 19, borderColor: "silver", borderWidth: 1, borderRadius: 5,}}>
                   <Text style={styles.titletextManual}>{step.title}</Text>
                 </View>
     
                 <View>
                   <Image source = {{uri: step.img}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
 
-                  <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, flex:1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 6, borderBottomWidth: 2}}>
+                  <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, flex: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 6, borderBottomWidth: 2}}>
                     <ScrollView>
                       <View style={styles.imgBackgroundManual}>
                         <Text style={styles.desctextManual}> {step.desc} </Text>
@@ -891,7 +894,6 @@ export default function MyDojoStyles({route}) {
        </SafeAreaView>
       </View>
     );
-
 
 
     if( viewmode === 4 ) return (
@@ -1306,6 +1308,6 @@ searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 
 silverDivider: { width: '99%', height: 49, alignSelf: "center", paddingVertical: 1, opacity: 1 },
 clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
 imgBackgroundManual: { minWidth: "100%", backgroundColor: "#233535", flex: 1, opacity: 1, margin: 0, padding: 3, borderRadius: 7, borderColor: 'silver', borderWidth: 1, borderBottomWidth: 1},
-desctextManual: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 2, color: 'white', padding: 5, borderColor: "silver", borderWidth: 0, borderRadius: 7, maxHeight: 411, opacity: 1 },
+desctextManual: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 2, color: 'white', padding: 5, borderRadius: 7, maxHeight: 411, opacity: 1 },
 titletextManual: {fontSize: 17, lineHeight: 21, fontWeight: '600', letterSpacing: 0.25, marginLeft: 7, color: 'black', opacity: 1, },
 });
