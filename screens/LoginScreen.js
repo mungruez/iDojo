@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, Pressable,  UIManager, findNodeHandle, KeyboardAvoidingView, Platform} from 'react-native'
+import { StyleSheet, View, Image, TextInput, TouchableOpacity, ImageBackground, StatusBar, Alert, Pressable, KeyboardAvoidingView, Platform} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, {useState,useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +12,6 @@ export default function LoginScreen() {
   const [hasPasswordList, setHasPasswordList] = useState(false);
   const navigation = useNavigation();
 
-  const insideViewRef = React.useRef(null);
 
   const fetchPasswords = async () => {
     try {
@@ -78,19 +77,6 @@ export default function LoginScreen() {
 
 
 
-  const handleGlobalTouch = (event) => {
-    const insideViewNode = findNodeHandle(insideViewRef.current);
-    const touchedNode = event?.nativeEvent?.target;
-    if (insideViewNode && touchedNode !== insideViewNode) {
-      UIManager.viewIsDescendantOf(touchedNode, insideViewNode, (isAncestor) => {
-        if (!isAncestor) {
-          closeOverlay();
-        }
-      });
-    }
-  };
-
-
   const closeOverlay = () => {
     setOverlayVisible(false);
   };
@@ -110,7 +96,9 @@ export default function LoginScreen() {
         await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
         setHasPasswords(false);
         setHasPasswordList(false);
-        await AsyncStorage.clear();
+        if(isOverlayVisible) {
+          setOverlayVisible(false);
+        }
         return;
       }
 
@@ -127,34 +115,45 @@ export default function LoginScreen() {
         }
       }
       
-      if(errorFlag == 0) {
+      if(errorFlag < 1) {
         setHasPasswords(false);
         setHasPasswordList(false);
-        await AsyncStorage.clear();
         await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
         Alert.alert("PIN Deleted","Successfully deleted PIN, found 0 Passwords to delete.");
+        if(isOverlayVisible) {
+          setOverlayVisible(false);
+        }
         return;
       }
       
       await AsyncStorage.removeItem('xx7771xxiDojoPIN');
-      await AsyncStorage.clear();
       await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
     
     } catch(error) {
       Alert.alert("Delete Error", "Error deleting the PIN :"+error);
       setHasPasswords(false);
       setHasPasswordList(false);
+      if(isOverlayVisible) {
+        setOverlayVisible(false);
+      }
       return
     }
 
     setHasPasswords(false);
     setHasPasswordList(false);
+    if(isOverlayVisible) {
+      setOverlayVisible(false);
+    }
     Alert.alert("PIN Deleted", "Successfully deleted PIN and ALL "+errorFlag+" Passwords."); 
   }
 
+  
 
   const checkPin = async () => {
     try{
+      if(isOverlayVisible) {
+        setOverlayVisible(false);
+      }
       
       if(pin && pin.length < 4) {
         Alert.alert("PIN Too Short", "The PIN entered is too short!");
@@ -203,6 +202,7 @@ export default function LoginScreen() {
     }    
   }
 
+
   const showConfirmDialog = () => {
     Alert.alert(
       "Confirm Reset!",
@@ -210,7 +210,7 @@ export default function LoginScreen() {
       [
         {
           text: "Cancel",
-          onPress: () => setPinConfirm(""),
+          onPress: () => setOverlayVisible(false),
           style: "cancel" 
         },
         {
@@ -223,7 +223,42 @@ export default function LoginScreen() {
   };
 
 
+
+  const resetPin = async () => {
+    await AsyncStorage.removeItem('xx7771xxiDojoPIN');
+    if(isOverlayVisible > -1) {
+      setOverlayVisible(-1);
+    }
+  };
+
+
+
+  const showPinConfirmDialog = () => {
+    Alert.alert(
+      "Confirm Reset PIN!",
+      "Are you sure you want to: Reset the PIN?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => setOverlayVisible(false),
+          style: "cancel" 
+        },
+        {
+          text: "OK",
+          onPress: () => resetPin()
+        }
+      ],
+      { cancelable: false } 
+    );
+  };
+
+
+
   const savePin = async () => {
+    if(isOverlayVisible) {
+      setOverlayVisible(false);
+    }
+    
     if(pin) {
       if( (pin.length != pinConfirm.length) || (pin.length < 4) || (pinConfirm.length < 4)) {
         Alert.alert("PIN Do Not Match"," A PIN is too short or lengths do not match!");
@@ -250,15 +285,15 @@ export default function LoginScreen() {
   }
 
 
-  return ( !hasPasswords ? ( 
-    <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
-     <StatusBar barStyle="light-content" backgroundColor="#96891a"/>
+  return ( !hasPasswords && !isOverlayVisible ? ( 
+    <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)' }}>
+     <StatusBar barStyle="dark-content" />
      <KeyboardAvoidingView 
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
      >
-      <View style={{ marginBottom:19, paddingBottom:7, opacity: 1}}>
+      <View style={{ marginBottom: 19, paddingBottom:7, opacity: 1 }}>
         <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
         <StatusBar style='light' />
       </View>
@@ -301,42 +336,41 @@ export default function LoginScreen() {
      </KeyboardAvoidingView>
     </SafeAreaView>) 
 
-    : isOverlayVisible ? (<Pressable style={{flex:1,}} onPress={handleGlobalTouch}> 
-      <StatusBar style="light" backgroundColor="#96891a"/>
-        <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
-         <KeyboardAvoidingView 
-           style={{ flex: 1 }}
-           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-           keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-         >
-          <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
-            <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
-            <StatusBar barStyle="light-content" backgroundColor="#96891a"/>
-          </View>
+    : isOverlayVisible ? ( 
+        <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
+          <StatusBar style="dark-content"/>
+
+          <Pressable style={{ flex: 1 }} onPress={closeOverlay}>
+            <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingBottom: 7, opacity: 1}}>
+              <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
+            </View>
+          </Pressable>
+
           <View style={styles.container}>
-            <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
-            <StatusBar style='light' />
+            <Pressable style={{ flex: 1 }} onPress={closeOverlay}>
+              <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
+            </Pressable>
 
             <View style={styles.inputview} > 
               <TextInput
                 style={styles.textinput} 
                 placeholder="Enter PIN/Password"
-                placeholderTextColor= "#003f5c"
+                placeholderTextColor="#003f5c"
                 secureTextEntry={true}
                 value={pin}
-                onChangeText= {(pin)=>setPin(pin)}
+                onChangeText={closeOverlay}
               />
             </View> 
 
-                <View ref={insideViewRef} style={{flexDirection:"row", maxHeight:57, padding:0, width:"77%", marginTop:16,}}>
+                <View style={{flexDirection:"row", minHeight: 43, padding: 0, width:"77%"}}>
                   <TouchableOpacity
-                    style={{height:27, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
+                    style={{height: 27, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
                     onPress={showConfirmDialog}>
                       <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/confirmbutton.png')} />
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={{height:27, width:"34%", alignSelf:"center", backgroundColor:"transparent",}}
+                    style={{height: 27, width: "34%", alignSelf:"center", backgroundColor:"transparent",}}
                     onPress={closeOverlay}>
                       <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/cancelbutton.png')} />
                   </TouchableOpacity>
@@ -344,16 +378,14 @@ export default function LoginScreen() {
             
             <TouchableOpacity
               style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
-              onPress={checkPin}>
+              onPress={closeOverlay}>
                 <ImageBackground style={{height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
           </View> 
-         </KeyboardAvoidingView>
-        </SafeAreaView>
-        </Pressable>)
+        </SafeAreaView> )
 
-        : ( <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
-         <StatusBar barStyle="light-content" backgroundColor="#96891a"/>
+        : ( <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
+         <StatusBar barStyle="dark-content"/>
          <KeyboardAvoidingView 
            style={{ flex: 1 }}
            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -379,21 +411,21 @@ export default function LoginScreen() {
               </View> 
 
             { hasPasswordList && ( <TouchableOpacity
-              style={{height:43, width: "61%", alignSelf:"center", backgroundColor:"transparent",}}
+              style={{height: 43, width: "61%", alignSelf:"center"}}
               onPress={openOverlay}>
                 <ImageBackground style={{ height: "100%", width: "100%",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
             </TouchableOpacity> ) } 
 
             { !hasPasswordList && ( <TouchableOpacity
-              style={{height:43, width: "61%", alignSelf:"center", backgroundColor:"transparent",}}
+              style={{height: 43, width: "61%", alignSelf: "center"}}
               onPress={openOverlay}>
-                <ImageBackground style={{ height: "100%", width: "100%",}} resizeMode='contain' source={require('../assets/resetloginpin.png')} />
+                <ImageBackground style={{ height: "100%", width: "100%" }} resizeMode='contain' source={require('../assets/resetloginpin.png')} />
             </TouchableOpacity> ) }
             
             <TouchableOpacity
-              style={{height: 67, width: "80%", alignSelf: "center", backgroundColor: "transparent", marginTop: 43,}}
+              style={{height: 67, width: "80%", alignSelf: "center", marginTop: 43}}
               onPress={checkPin}>
-                <ImageBackground style={{height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
+                <ImageBackground style={{ height:"100%", width:"100%" }} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
             </View>
          </KeyboardAvoidingView>

@@ -161,11 +161,14 @@ export default function PasswordManager() {
 
     const resetPin = async () => {
         await AsyncStorage.removeItem('xx7771xxiDojoPIN');
+        if(isOverlayVisible > -1) {
+            setOverlayVisible(-1);
+        }
         navigation.popToTop();
     };
 
    
-
+    
 
     const encryptPassword = async (pass, passNum) => {
         if(!pass || pass.length < 4) {
@@ -393,7 +396,7 @@ export default function PasswordManager() {
           [
             {
               text: "CANCEL",
-              onPress: () => setOverlayVisible(passwordNum),
+              onPress: () => setOverlayVisible(-1),
               style: "cancel" 
             },
             {
@@ -408,7 +411,7 @@ export default function PasswordManager() {
     
     const showInstructions = () => {
         Alert.alert(
-          "iDojo Hidden Password Manager-->",
+          "iDojo Hidden Password Manager",
           "Intructions : All passwords are encrytped before saving to the phone only the owner with the PIN/Password can decrypt them for viewing in the App. No data is collected in any way by the iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes(/).\n(2) You may store as many Passwords as your phone memory allows. Uninstalling the App or Clearing the App Data will delete all your passwords.\n(3) Use the Reset PIN button at the top to reset your PIN/Password.\n(4) Use the gold Edit button to edit the password or view it for, copy and pasting.\n(5) Click gold Trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
           [
             {
