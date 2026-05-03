@@ -1020,7 +1020,7 @@ export default function MyDojoStyles({route}) {
               : ( <Text style={{ color: '#51ff00', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{fstyle === "allstyles" ? `ALL ${ftype.toUpperCase()} MOVES` : "MOVE LIST TITLE: "+fstyle} </Text> ) }
             
             <View style={{flexDirection:'row'}}>
-              <TouchableOpacity onPress={() => {setListMode(false); setSelectedIds([]);} } style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => {setListMode(false); setSelectedIds([]);} } style={styles.plusIconAM}>
                 <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/greenbackicon.png') : ftype === "pdf" ? require('../assets/bluebackicon.png') : require('../assets/redbackicon.png') }/>
               </TouchableOpacity>
     
@@ -1268,7 +1268,7 @@ redDivider: {width: '90%',height: 43, alignSelf: 'center', marginVertical: 15, s
 blueDivider: { width: '90%', height: 43, alignSelf: "center", marginVertical: 15, shadowColor: '#6b8cff', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1 },
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
-plusIcon: { height: 47, width: 45, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 12, marginBottom: 4, opacity: 1},
+plusIcon: { height: 47, width: 45, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 15, marginBottom: 2, opacity: 1},
 editIcon: { height: 47, width: 47, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 43, width: 43, marginLeft: 16, marginBottom: 5, opacity: 1, },
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
@@ -1279,7 +1279,7 @@ videoIconUploaded: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rg
 pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
 pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
 videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
-plusIconAM: { height: 38, width: 38, borderRadius: 9, marginLeft: 5 },
+plusIconAM: { height: 51, width: 46, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginRight: 19, marginBottom: 2, opacity: 1},
 plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
 containerAM: { flex: 1, opacity: 1 },
 headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#023010', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(61, 170, 91, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#014211', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
