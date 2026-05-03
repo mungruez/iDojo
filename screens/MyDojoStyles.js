@@ -1104,7 +1104,7 @@ export default function MyDojoStyles({route}) {
     return (
       <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
         <StatusBar barStyle="dark-content"/>
-        <SafeAreaView style={{flex: 1,}}>
+        <SafeAreaView style={{flex: 1}}>
           <View style={{ marginBottom: 5, marginTop: -19, paddingHorizontal: 4, opacity: 1, justifyContent: "center", alignItems: 'center'}}>
             <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/mydojostylestitle.png')} /> 
           </View>
@@ -1149,6 +1149,7 @@ export default function MyDojoStyles({route}) {
           <FlatList
            data={smoves}
            extraData={moves}
+           style={{flex:1}}
            keyExtractor={item => item.id}
            ListHeaderComponent={MyHeader}
            contentContainerStyle = {{ paddingBottom: 30, flexGrow: 1, }}

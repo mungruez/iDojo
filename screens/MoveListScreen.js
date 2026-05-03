@@ -22,6 +22,7 @@ export default function MoveListScreen() {
           <FlatList
             data={moves}
             numColumns={2}
+            style={{flex:1}}
             contentContainerStyle={{ paddingBottom: 57 }}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (

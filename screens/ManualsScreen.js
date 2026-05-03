@@ -45,7 +45,7 @@ export default function ManualsScreen() {
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='stretch' source={require('../assets/fightersbackground.jpeg')}>
       <StatusBar barStyle="light-content" backgroundColor="#269b26"  /> 
-      <SafeAreaView style={{ flex: 1, height: "100%", width: "100%", marginTop:25, backgroundColor: 'transparent',}}>
+      <SafeAreaView style={{ flex: 1, marginTop:25}}>
 
         <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0, borderRadius: 7,}}>
           
@@ -63,8 +63,8 @@ export default function ManualsScreen() {
               <FlatList
                 data={manuals}
                 numColumns={1}
-                pagingEnabled={true}
-                contentContainerStyle={{ paddingBottom: 57 }}
+                style={{flex: 1}}
+                contentContainerStyle={{ paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item, index }) => (
                   <View
