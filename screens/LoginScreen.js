@@ -71,11 +71,8 @@ export default function LoginScreen() {
   
 
   useEffect(() => {
-
     fetchPasswords();
   }, []);
-
-
 
   const closeOverlay = () => {
     setOverlayVisible(false);
@@ -323,15 +320,15 @@ export default function LoginScreen() {
             />
         </View>  
         
-          <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
-            <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
-          </TouchableOpacity> 
+        <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
+          <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
+        </TouchableOpacity> 
 
-          <TouchableOpacity
-              style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
-              onPress={savePin}>
-                <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
-            </TouchableOpacity>
+        <TouchableOpacity
+          style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
+          onPress={savePin}>
+            <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
+        </TouchableOpacity>
       </View> 
      </KeyboardAvoidingView>
     </SafeAreaView>) 
@@ -362,25 +359,25 @@ export default function LoginScreen() {
               />
             </View> 
 
-                <View style={{flexDirection:"row", minHeight: 43, maxHeight: 43, padding: 0, width:"77%"}}>
-                  <TouchableOpacity
-                    style={{ height: 30, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
-                    onPress={showConfirmDialog}>
-                      <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/confirmbutton.png')} />
-                  </TouchableOpacity>
+              <View style={{flexDirection:"row", minHeight: 43, maxHeight: 43, padding: 0, width:"77%"}}>
+                <TouchableOpacity
+                  style={{ height: 30, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
+                  onPress={showConfirmDialog}>
+                    <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/confirmbutton.png')} />
+                </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={{ height: 30, width: "34%", alignSelf:"center", backgroundColor:"transparent",}}
-                    onPress={closeOverlay}>
-                      <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/cancelbutton.png')} />
-                  </TouchableOpacity>
-                </View> 
+                 <TouchableOpacity
+                  style={{ height: 30, width: "34%", alignSelf:"center", backgroundColor:"transparent",}}
+                  onPress={closeOverlay}>
+                    <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/cancelbutton.png')} />
+                </TouchableOpacity>
+              </View> 
             
-            <TouchableOpacity
-              style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
-              onPress={closeOverlay}>
-                <ImageBackground style={{height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
+                onPress={closeOverlay}>
+                  <ImageBackground style={{height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
+              </TouchableOpacity>
           </View> 
         </SafeAreaView> )
 
