@@ -411,8 +411,8 @@ export default function PasswordManager() {
     
     const showInstructions = () => {
         Alert.alert(
-          "iDojo Hidden Password Manager",
-          "Intructions : All passwords are encrytped before saving to the phone only the owner with the PIN/Password can decrypt them for viewing in the App. No data is collected in any way by the iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes(/).\n(2) You may store as many Passwords as your phone memory allows. Uninstalling the App or Clearing the App Data will delete all your passwords.\n(3) Use the Reset PIN button at the top to reset your PIN/Password.\n(4) Use the gold Edit button to edit the password or view it for, copy and pasting.\n(5) Click gold Trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
+          "iDojo Password Manager",
+          "Intructions : All passwords are encrytped before saving to the phone only the owner with the PIN/Password can decrypt them for viewing in the App. No data is collected in any way by the iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes(/).\n(2) You may store as many Passwords as your phone memory allows. Uninstalling the App or Clearing the App Data will delete all your passwords.\n(3) Use the Reset PIN button at the top to reset your PIN/Password.\n(4) Use the gold Edit button to edit the password or view it for, copy and pasting.  No changes are required to edit a password and after editing changes cannot be undone.\n(5) Click gold Trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
           [
             {
               text: "OK",
@@ -470,6 +470,11 @@ export default function PasswordManager() {
         setPasswords(updatedPasswords);
         setPasswordNum(numPasswords);
         setOverlayVisible(-1);
+        setEditIndex(null);
+        setEditing(false);  
+        setWebsite(""); 
+        setUsername(""); 
+        setPassword("");
         alert("Deleted password for Website: "+webst);
     };
 
@@ -621,8 +626,10 @@ export default function PasswordManager() {
                 }
             }
 
-            if(pwds && pwds.length>0) {
-                alert("Found :"+pwds.length+ "Saved Passwords! Do not delete you App Data or you will loose your passwords.");
+            if(pwds && pwds.length > 0) {
+                if (pwds.length > 1) Alert.alert("Passwords Found", "Found : "+pwds.length+ " Passwords Saved! Do not delete you App Data or you will loose your passwords.");
+                if (pwds.length < 2) Alert.alert("Password Found", "Found : "+pwds.length+ " Password Saved! Do not delete you App Data or you will loose your passwords.");
+                
                 setPasswords(pwds);
                 pNum=pwds.length;
                 for(let pkI=0; pkI < passKey.length; pkI++) {
@@ -656,7 +663,7 @@ export default function PasswordManager() {
         const showSub = Keyboard.addListener(
         Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
         (e) => {
-            setBottomPadding(e.endCoordinates.height+48);
+            setBottomPadding(1);
         }
         );
         const hideSub = Keyboard.addListener(
@@ -673,10 +680,11 @@ export default function PasswordManager() {
     }, []);
 
 
-    if(isOverlayVisible !== -1) return (
+
+    if(isOverlayVisible > -1) return (
       <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
         <TouchableWithoutFeedback onPress={() => setOverlayVisible(-1)}>
-        <View style={{ marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
+        <View style={{ marginBottom: 19, paddingLeft: 1, paddingRight: 1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
         </View></TouchableWithoutFeedback>
         
@@ -768,6 +776,8 @@ export default function PasswordManager() {
       </ImageBackground>
     )
      
+
+    
     return ( 
       <ImageBackground style={[styles.imgBackground, { paddingBottom: bottomPadding, backgroundColor: 'silver', }]} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
            
@@ -862,7 +872,7 @@ export default function PasswordManager() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, // Take up the full height of the screen
+        flex: 1, 
         height: "100%",
         margin: 4, 
         marginTop: 0,
@@ -870,18 +880,17 @@ const styles = StyleSheet.create({
     content: {
         margin: 5, 
     },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection:"column",
-  },
-    
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection:"column",
+    },
     heading: {
         fontSize: 17, 
         fontWeight: "medium", 
@@ -936,43 +945,37 @@ const styles = StyleSheet.create({
     },
     listItem: {
         flexDirection: "row", 
-        justifyContent: "space-between", // Space out items evenly
-        alignItems: "center", // Center align items vertically
-        marginRight: 10, // Space to the right of the item
-        marginBottom: 10, // Space below the item
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginRight: 10, 
+        marginBottom: 10,
     },
-    // Style for the label in the list item
     listLabel: {
-        fontWeight: "bold", // Bold text
-        marginBottom: 5, // Space below the label
-        color: "#333", // Dark gray color
-        fontSize: 19, // Medium font size
+        fontWeight: "bold",
+        marginBottom: 5,
+        color: "#333",
+        fontSize: 19,
     },
-    // Style for the value in the list item
     listValue: {
-        flex: 1, // Take up available space
-        fontSize: 18, // Medium font size
-        color: "#444", // Medium gray color
-        paddingLeft: 10, // Space to the left of the value
+        flex: 1,
+        fontSize: 18,
+        color: "#444",
+        paddingLeft: 10,
     },
-    // Style for the value in the list item
     passwordlistValue: {
-        flex: 1, // Take up available space
-        fontSize: 18, // Medium font size
-        color: "#bb853aff", // Medium gray color
-        paddingLeft: 10, // Space to the left of the value
+        flex: 1,
+        fontSize: 18,
+        color: "#bb853aff",
+        paddingLeft: 10, 
     },
-    // Style for the copy icon in the list item
     copyIcon: {
-        marginRight: 10, // Space to the right of the icon
-        paddingLeft: 10, // Space to the left of the icon
+        marginRight: 10,
+        paddingLeft: 10,
     },
-    // Style for the delete button
     deleteButton: {
-        backgroundColor: "transparent", // Red background
-        borderRadius: 9, // Slightly rounded corners
-        padding: 0, // Add padding inside the button
-        marginLeft: 29, // Space to the left of the button
+        borderRadius: 9,
+        padding: 0,
+        marginLeft: 29, 
         borderWidth: .8, 
         borderColor: "goldenrod",
         elevation: 1,
@@ -980,22 +983,19 @@ const styles = StyleSheet.create({
         width: 55,
     },
     confirmButton: {
-        backgroundColor: "transparent", // Red background
-        borderRadius: 9, // Slightly rounded corners
-        padding: 0, // Add padding inside the button
-        marginLeft: 17, // Space to the left of the button
+        borderRadius: 9,
+        padding: 0,
+        marginLeft: 17,
         borderWidth: 0, 
         elevation: 0,
         height: 38,
         width: 67,
         marginTop: -7,
     },
-    // Style for the delete button
     cancelButton: {
-        backgroundColor: "transparent", // Red background
-        borderRadius: 9, // Slightly rounded corners
-        padding: 0, // Add padding inside the button
-        marginLeft: 17, // Space to the left of the button
+        borderRadius: 9,
+        padding: 0,
+        marginLeft: 17,
         borderWidth: 0, 
         elevation: 0,
         height: 38,
@@ -1003,24 +1003,20 @@ const styles = StyleSheet.create({
         marginTop: -7,
         marginBottom: -10,
     },
-    // Style for the edit button
     editButton: {
-        backgroundColor: "transparent", // Blue background
-        borderRadius: 5, // Slightly rounded corners
-        padding: 0, // Add padding inside the button
-        marginLeft: -7, // Space to the right of the button
+        borderRadius: 5,
+        padding: 0,
+        marginLeft: -7,
         marginRight: 19,
-        borderWidth: 0, // Border width
+        borderWidth: 0,
         elevation: 0,
         height: 57,
         width: 55,
     },
-    // Style for the back button
     backButton: {
-        backgroundColor: "transparent", // Red background
-        borderRadius: 9, // Slightly rounded corners
-        padding: 0, // Add padding inside the button
-        marginLeft: 43, // Space to the left of the button
+        borderRadius: 9,
+        padding: 0, 
+        marginLeft: 43, 
         borderWidth: 0, 
         elevation: 0,
         height: 70,
@@ -1028,24 +1024,20 @@ const styles = StyleSheet.create({
         marginTop: -10,
         marginRight: 5,
     },
-    // Style for the resetPin button
     resetpinButton: {
-        backgroundColor: "transparent", // Red background
-        borderRadius: 4, // Slightly rounded corners
-        padding: 0, // Add padding inside the button
-        marginLeft: 10, // Space to the left of the button
+        borderRadius: 4, 
+        padding: 0,
+        marginLeft: 10,
         borderWidth: 0,
         elevation: 0,
         height: 57,
         width: 176,
         marginTop: -7,
     },
-    // Style for the resetPin button
     infoButton: {
-        backgroundColor: "transparent", // Red background
-        borderRadius: 7, // Slightly rounded corners
-        padding: 0, // Add padding inside the button
-        marginLeft: 7, // Space to the left of the button
+        borderRadius: 7,
+        padding: 0,
+        marginLeft: 7, 
         borderWidth: 0,
         elevation: 0,
         height: 71,
@@ -1053,18 +1045,16 @@ const styles = StyleSheet.create({
         marginTop: -9,
         marginRight: 40,
     },
-    // Style for the container holding the edit and delete buttons
     buttonsContainer: {
-        flexDirection: "row", // Arrange buttons in a row
+        flexDirection: "row", 
     },
-    // Style for the input fields
     input: {
-        borderWidth: 2, // Border width
-        borderColor: "#8B7021", // Light gray border color
-        paddingVertical: 10, // Vertical padding inside the input
-        paddingHorizontal: 15, // Horizontal padding inside the input
-        marginBottom: 12, // Space below the input
-        fontSize: 16, // Medium font size
+        borderWidth: 2,
+        borderColor: "#8B7021",
+        paddingVertical: 10,
+        paddingHorizontal: 15, 
+        marginBottom: 12, 
+        fontSize: 16,
         borderRadius: 10, 
         backgroundColor: "white", 
         shadowColor: "grey", 
@@ -1072,26 +1062,26 @@ const styles = StyleSheet.create({
         shadowRadius: 10, 
         shadowOpacity: 1, 
         elevation: 4, 
-        backgroundColor: 'rgba(255, 248, 225, 0.85)', // Light cream background
-        color: '#80671c', // Dark gold text
+        backgroundColor: 'rgba(255, 248, 225, 0.85)', 
+        color: '#80671c', 
     },
     submitButton: {
         backgroundColor: "green", 
-        color: "white", // White text color
-        fontWeight: "bold", // Bold text
-        borderRadius: 17, // Rounded corners
-        paddingVertical: 15, // Vertical padding inside the button
-        paddingHorizontal: 30, // Horizontal padding inside the button
-        shadowColor: "black", // Shadow color for iOS
-        shadowOffset: { width: 2, height: 2 }, // Shadow offset for iOS
-        shadowRadius: 15, // Shadow radius for iOS
-        shadowOpacity: 1, // Shadow opacity for iOS
-        elevation: 4, // Add shadow for Android
+        color: "white",
+        fontWeight: "bold",
+        borderRadius: 17,
+        paddingVertical: 15,
+        paddingHorizontal: 30,
+        shadowColor: "black",
+        shadowOffset: { width: 2, height: 2 },
+        shadowRadius: 15,
+        shadowOpacity: 1,
+        elevation: 4,
     },
     submitButtonText: {
-        color: "#c58c3dff", // White text color
-        textAlign: "center", // Center align the text
-        fontSize: 18, // Medium font size
+        color: "#c58c3dff",
+        textAlign: "center",
+        fontSize: 18, 
         fontWeight:"bold",
     },
     imgBackground: {

@@ -337,14 +337,14 @@ export default function LoginScreen() {
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
           <StatusBar style="dark-content"/>
 
-          <Pressable style={{ flex: 1 }} onPress={closeOverlay}>
-            <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingBottom: 7, opacity: 1}}>
+          <Pressable onPress={closeOverlay}>
+            <View style={{ marginBottom: 19, paddingBottom: 7, opacity: 1}}>
               <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
             </View>
           </Pressable>
 
           <View style={styles.container}>
-            <Pressable style={{ flex: 1 }} onPress={closeOverlay}>
+            <Pressable onPress={closeOverlay}>
               <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
             </Pressable>
 
@@ -361,20 +361,20 @@ export default function LoginScreen() {
 
               <View style={{flexDirection:"row", minHeight: 43, maxHeight: 43, padding: 0, width:"77%"}}>
                 <TouchableOpacity
-                  style={{ height: 30, width:"43%", alignSelf:"center", backgroundColor:"transparent", marginLeft:19,}}
+                  style={{ height: 30, width:"43%", alignSelf:"center", marginLeft:19,}}
                   onPress={showConfirmDialog}>
                     <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/confirmbutton.png')} />
                 </TouchableOpacity>
 
                  <TouchableOpacity
-                  style={{ height: 30, width: "34%", alignSelf:"center", backgroundColor:"transparent",}}
+                  style={{ height: 30, width: "34%", alignSelf:"center" }}
                   onPress={closeOverlay}>
                     <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/cancelbutton.png')} />
                 </TouchableOpacity>
               </View> 
             
               <TouchableOpacity
-                style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
+                style={{height:67, width:"80%",alignSelf:"center", marginTop: 43,}}
                 onPress={closeOverlay}>
                   <ImageBackground style={{height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
               </TouchableOpacity>
@@ -388,7 +388,7 @@ export default function LoginScreen() {
            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
          >
-          <View style={{backgroundColor: 'transparent', marginBottom:19, paddingBottom:7, opacity: 1}}>
+          <View style={{ marginBottom:19, paddingBottom:7, opacity: 1}}>
             <ImageBackground style={ styles.loginscreentitle } resizeMode='contain' source={require('../assets/loginscreentitle.png')} />
           </View>
           
@@ -407,19 +407,19 @@ export default function LoginScreen() {
               </View> 
 
             { hasPasswordList && ( <TouchableOpacity
-              style={{minHeight: 43, maxHeight: 43, width: "61%", alignSelf:"center"}}
+              style={{minHeight: 43, maxHeight: 43, width: "61%", alignItems:"center", justifyContent: "center" }}
               onPress={openOverlay}>
-                <ImageBackground style={{ height: "100%", width: "100%",}} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
+                <ImageBackground style={{ height: "100%", width: "100%", alignSelf: "center" }} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
             </TouchableOpacity> ) } 
 
             { !hasPasswordList && ( <TouchableOpacity
-              style={{ minHeight: 43, maxHeight: 43, width: "61%", alignSelf: "center"}}
+              style={{ minHeight: 43, maxHeight: 43, width: "57%", alignItems: "center", justifyContent: "center" }}
               onPress={openOverlay}>
-                <ImageBackground style={{ height: "100%", width: "100%" }} resizeMode='contain' source={require('../assets/resetloginpin.png')} />
+                <ImageBackground style={{ height: "88%", width: "90%", alignSelf: "center" }} resizeMode='contain' source={require('../assets/resetloginpin.png')} />
             </TouchableOpacity> ) }
             
             <TouchableOpacity
-              style={{height: 67, width: "80%", alignSelf: "center", marginTop: 43}}
+              style={{height: 67, width: "80%", alignItems: "center", marginTop: 43, justifyContent: "center" }}
               onPress={checkPin}>
                 <ImageBackground style={{ height:"100%", width:"100%" }} resizeMode='contain' source={require('../assets/loginbutton.png')} />
             </TouchableOpacity>
@@ -432,7 +432,6 @@ export default function LoginScreen() {
     container: {
       justifyContent: 'center',
       flex: 1,
-      backgroundColor:'transparent',
       alignItems: "center",
     },
     image: {
@@ -461,7 +460,7 @@ export default function LoginScreen() {
     resetpasswords: {
       height: 45,
       marginBottom: 20,
-      fontWeight:"semibold",
+      fontWeight: "600",
     },
     loginbutton: {
       width:"80%",

@@ -26,7 +26,7 @@ export default function Resources() {
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
-      <StatusBar barStyle="light-content" backgroundColor="#2522ce"/>
+      <StatusBar barStyle="light-content"/>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop:7, backgroundColor: 'transparent',}}>
 
       <TouchableWithoutFeedback  activeOpacity={1} onLongPress={() => navKSound()} delayLongPress={1200} style={{ marginBottom:19, paddingTop:1, paddingBottom:7, height:76 ,width: '90%',alignSelf: 'center',zIndex: 19,elevation: 19,}}>
