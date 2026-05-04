@@ -407,7 +407,7 @@ export default function LoginScreen() {
               </View> 
 
             { hasPasswordList && ( <TouchableOpacity
-              style={{minHeight: 43, maxHeight: 43, width: "61%", alignItems:"center", justifyContent: "center" }}
+              style={{minHeight: 43, maxHeight: 43, width: "67%", alignItems:"center", justifyContent: "center" }}
               onPress={openOverlay}>
                 <ImageBackground style={{ height: "100%", width: "100%", alignSelf: "center" }} resizeMode='contain' source={require('../assets/resetpwrds.png')} />
             </TouchableOpacity> ) } 
