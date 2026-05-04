@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import HomeScreen from './screens/HomeScreen';
 import MoveListScreen from './screens/MoveListScreen'
 import MoveScreen from './screens/MoveScreen';
@@ -16,7 +15,6 @@ import FreeYourMindScreen from './screens/FreeYourMindScreen';
 import LoginScreen from './screens/LoginScreen';
 import PasswordManager from './screens/PasswordManager';
 import MyDojoStyles from './screens/MyDojoStyles';
-import AddMove from './screens/AddMove';
 import PdfMove from './screens/PdfMove';
 
 const Stack = createNativeStackNavigator();
@@ -26,21 +24,20 @@ export default function App() {
      <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home"     component={HomeScreen} options={{headerShown:false, animation: 'slide_from_left'}}/>
+        <Stack.Screen name="Home" component={HomeScreen} options={{headerShown:false, animation: 'slide_from_left'}}/>
         <Stack.Screen name="MoveList" component={MoveListScreen} options={{headerShown:false,  animation: 'slide_from_right'}}/>
-        <Stack.Screen name="Move"     component={MoveScreen} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
-        <Stack.Screen name="Manuals"  component={ManualsScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
-        <Stack.Screen name="Manual"   component={ManualScreen} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
-        <Stack.Screen name="FightersList"  component={FightersList} options={{headerShown:false, animation: 'slide_from_right'}}/>
-        <Stack.Screen name="FeaturedList"  component={FeaturedMoveList} options={{headerShown:false,animation: 'slide_from_right'}}/>
-        <Stack.Screen name="Featured"      component={FeaturedMove} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
+        <Stack.Screen name="Move" component={MoveScreen} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
+        <Stack.Screen name="Manuals" component={ManualsScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Manual" component={ManualScreen} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
+        <Stack.Screen name="FightersList" component={FightersList} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="FeaturedList" component={FeaturedMoveList} options={{headerShown:false,animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Featured" component={FeaturedMove} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
         <Stack.Screen name="FighterScreen" component={Fighter} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
-        <Stack.Screen name="FreeYourMind"  component={FreeYourMindScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
-        <Stack.Screen name="LoginScreen"   component={LoginScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
+        <Stack.Screen name="FreeYourMind" component={FreeYourMindScreen} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown:false, animation: 'slide_from_bottom'}}/>
         <Stack.Screen name="PasswordManager" component={PasswordManager} options={{headerShown:false,  animation: 'fade_from_bottom'}}/>
-        <Stack.Screen name="Res"  component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Res" component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="MyDojoStyles" component={MyDojoStyles} options={{headerShown:false, animation: 'slide_from_right'}}/>
-        <Stack.Screen name="AddMove" component={AddMove} options={{headerShown:false, animation: 'slide_from_bottom', detachPreviousScreen: false}}/>
         <Stack.Screen name="PdfMove" component={PdfMove} options={{headerShown:false, animation: 'slide_from_right', detachPreviousScreen: false}}/>
       </Stack.Navigator>
      </NavigationContainer>
