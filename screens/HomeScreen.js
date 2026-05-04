@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ImageBackground, BackHandler, StatusBar, Dimensions} from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ImageBackground, BackHandler, StatusBar, Dimensions, Alert} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useLayoutEffect, useState, useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -11,20 +11,24 @@ export default function HomeScreen() {
   const [isMuted, setIsMuted] = useState(false);
   const navigation = useNavigation();
   
+
   const player = useAudioPlayer(bgsoundFile, (player) => {
     player.loop = true; 
     player.play();
   });
 
+
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
     kplayer.loop = false; 
   });
+
 
   useLayoutEffect(()=> {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
 
 
   async function stopSound() {
@@ -41,10 +45,11 @@ export default function HomeScreen() {
         player.play();
       }
     } catch (error) {
-        alert('Error pausing or un-pausing sound:'+error);
+        Alert.alert("Sound Error", 'Error pausing or un-pausing sound:'+error);
     }
     setIsMuted(!isMuted);
   }
+
 
 
   useEffect(() => {
@@ -86,18 +91,18 @@ export default function HomeScreen() {
           setIsMuted(true);
         }
       }
-
     } catch (error) {
-        alert('Unable to pause background sound before going to next screen: '+error);
+        Alert.alert("Pause Error", ' Unable to pause background sound before going to next screen: '+error);
     }
-    
     navigation.navigate(sname);
   };
+
 
 
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
       <StatusBar barStyle="dark-content"/>
+
       <View style={{flexDirection:"row", position: "relative"}}>
           <TouchableOpacity onPress={stopSound} style={{position:"absolute", top:10, right:10, zIndex:1, height: 42, width: 38}}>
             <ImageBackground style={ styles.imgSound }  imageStyle={{ opacity: 1 }} resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         
@@ -147,44 +152,37 @@ export default function HomeScreen() {
               onPress={()=>stopSoundN('Res')}>
               <ImageBackground style={ styles.buttonres } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/bluepillresources.png')} />
             </TouchableOpacity>  
-        
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
   )
 }
 
+
 const styles = StyleSheet.create({
     button: {
       alignItems: 'center',
       flexDirection: "row",
       justifyContent: 'center',
-      paddingVertical: 0,
-      paddingHorizontal: 0,
+      padding: 0,
       borderWidth: 0,
-      borderColor:"transparent",
       borderRadius: 25,
       elevation: 0,
-      shadowColor:"transparent",
       marginBottom: 12,
       marginLeft:30,
       height: 57,
       width: 190,
       opacity: 1,
       shadowOpacity: 0,
-      backgroundColor:"transparent",
     },
     buttonres:{
       alignItems: 'center',
       flexDirection: "row",
       justifyContent: 'center',
-      paddingVertical: 0,
-      paddingHorizontal: 0,
+      padding: 0,
       borderRadius: 25,
       borderWidth:0,
-      borderColor:"transparent",
       elevation: 0,
-      backgroundColor: 'transparent',
       marginBottom: 12,
       marginLeft:25,
       height: 57,
@@ -193,22 +191,19 @@ const styles = StyleSheet.create({
       shadowOpacity: 0,
     },
     buttonimage:{  
-    alignItems: 'center',
-    flexDirection: "row",
-    justifyContent: 'center',
-    paddingVertical: 0,
-    paddingHorizontal:0,
-    borderRadius: 25,
-    elevation: 0,
-    shadowColor:"transparent",
-    shadowOpacity: 0,
-    backgroundColor: 'transparent',
-    marginBottom: 12,
-    marginTop:5,
-    marginLeft:15,
-    height: 57,
-    width: 190,
-    opacity:1,
+      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: 'center',
+      padding: 0,
+      borderRadius: 25,
+      elevation: 0,
+      shadowOpacity: 0,
+      marginBottom: 12,
+      marginTop: 5,
+      marginLeft: 15,
+      height: 57,
+      width: 190,
+      opacity: 1,
   },
     buttontext: {
       fontSize: 16,
@@ -218,7 +213,6 @@ const styles = StyleSheet.create({
       marginTop: 4,
       color: 'white',
       opacity:3,
-      backgroundColor:"transparent"
     },
     imgBackground: {
       maxHeight: "91%",
@@ -237,7 +231,7 @@ const styles = StyleSheet.create({
       height: 57,
       width: 76,
       elevation: 4,
-      marginRight:1,
+      marginRight: 1,
       opacity: 1
     },
   });

@@ -6,23 +6,27 @@ import { useAudioPlayer } from 'expo-audio';
 
 const ksoundFile = require('../assets/woosh.mp3');
 
+
 export default function Resources() {
   const navigation = useNavigation();
+
 
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
       kplayer.loop = false; 
     });
   
-    const navKSound = () => {
-      try {
-        if(kplayer) {
-          kplayer.play();
-        }
-      } catch (error) {
-          alert("Error playing sound effect");
+
+  const navKSound = () => {
+    try {
+      if(kplayer) {
+        kplayer.play();
       }
-      navigation.navigate("LoginScreen");
-    };
+    } catch (error) {
+        alert("Error playing sound effect");
+    }
+    navigation.navigate("LoginScreen");
+  };
+
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
@@ -160,9 +164,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     textDecorationColor: '#a30cc9',
     fontStyle: "italic",
-    backgroundColor: 'transparent',
-    color:'purple',
     fontSize: 19,
+    color:'purple',
     fontWeight:'600',
   },
 })

@@ -7,10 +7,14 @@ import YoutubePlayer from "react-native-youtube-iframe";
 
 const deviceWidth = Dimensions.get('window').width;
 
+
+
 export default function VideoPlayer({ video }) {
   const isFocused = useIsFocused(); 
   const [playing, setPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
+
+
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", nextAppState => {
@@ -23,11 +27,13 @@ export default function VideoPlayer({ video }) {
   }, []);
 
 
+
   useEffect(() => {
     if (!isFocused) {
       setPlaying(false);
     }
   }, [isFocused]);
+
 
 
   const isYouTube = video.videoUrl && video.videoUrl.length > 0 && video.videoUrl.length < 19; 
@@ -48,6 +54,7 @@ export default function VideoPlayer({ video }) {
       }
     });
   });
+
 
 
   return (

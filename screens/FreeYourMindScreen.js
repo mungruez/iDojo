@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ActivityIndicator, FlatList, StatusBar } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ActivityIndicator, FlatList, StatusBar, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from "@react-native-community/netinfo";
@@ -16,6 +16,8 @@ export default function FreeYourMindScreen() {
   const isOffline = useNetInfo().isConnected === false;
   const navigation = useNavigation();
 
+
+  
   const fetchMusicFiles = async () => {
         let mhaudio = [
         {
@@ -170,7 +172,7 @@ export default function FreeYourMindScreen() {
               const differenceInMs = currentDate - savedDateObj;
               if( (differenceInMs / 86400000.0) > 5.70) {
                 //console.log(`Difference in days: ${differenceInMs}`);
-                alert("Featured Content not Updated in a few days. Trying to update .....");
+                Alert.alert("Updating Content", "Featured Content not Updated in a few days. Trying to update .....");
                 const currentDate = new Date().toISOString(); 
                 await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
                 setLoading(false);
@@ -179,7 +181,7 @@ export default function FreeYourMindScreen() {
               }  
           }
         } catch (error) {
-          alert("Featured Content not visited for some time. Updating List...");
+          Alert.alert("Updating Content", "Featured Content not visited for some time. Updating List...");
           const currentDate = new Date().toISOString(); 
           await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
           setLoading(false);
@@ -218,7 +220,7 @@ export default function FreeYourMindScreen() {
     
           } catch (error) {
             fetchFeaturedAudio();
-            alert("Featured Content not visited for some time. Updating Videos and Audio files...");
+            Alert.alert("Updatinf Content", " Featured Content not visited for some time. Updating Videos and Audio files...");
           }
           
         setLoading(false);
@@ -261,9 +263,9 @@ export default function FreeYourMindScreen() {
           await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
           const currentDate = new Date().toISOString();
           await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
-          alert('Welcome to the iDojo Featured Content Section. Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
+          Alert.alert('Welcome to the Featured Content Section.',' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
         } catch (error) {
-          alert("Unable to Store Featured List. Featured List only available when online. !");
+          Alert.alert("Unable to Store Featured List.", " Featured List only available when online. !");
         } 
       };
     
@@ -279,14 +281,14 @@ export default function FreeYourMindScreen() {
             return;     
           },
           (error) => {
-            alert('A Connection error occurred while updating featured content: ', error);
+            Alert.alert("Connection Error", " A Connection error occurred while updating featured content:");
           }
         )
         } catch (error) {
             if (error.message === 'Network request failed') {
-              alert('No Internet connection detected. Due to copyright laws, Wifi is required for viewing all featured content!');
+              Alert.alert('No Internet connection detected.', ' Due to copyright laws, Wifi is required for viewing all featured content!');
             } else {
-              alert('A Connection error occurred while updating featured content: ', error);
+              Alert.alert("Connection Error", " A Connection error occurred while updating featured content.");
             }
         } 
       };
@@ -345,7 +347,6 @@ export default function FreeYourMindScreen() {
                     style={styles.playButton}>
                                   
                       <View style={{
-                        backgroundColor: "transparent",
                         alignItems:"flex-start",
                         height: 47,
                         width: "100%",}}>
@@ -360,7 +361,6 @@ export default function FreeYourMindScreen() {
                       </View>
                     </TouchableOpacity>
                     <View style={{
-                        backgroundColor: "transparent",
                         alignItems:"flex-start",
                         height: 19,
                         width: "95%",}}>
@@ -372,7 +372,7 @@ export default function FreeYourMindScreen() {
               )}
 
               ListFooterComponent={() => (
-                <View style={{ width: "100%", height: 9, justifyContent: "center", alignItems: "center", marginTop: 38, paddingBottom:4, borderRadius:12,}}>
+                <View style={{ width: "100%", height: 9, justifyContent: "center", alignItems: "center", marginTop: 38, paddingBottom: 4, borderRadius: 12,}}>
                   <Text style={{ textAlign: "center", height: 7,  color: "rgb(52, 15, 90)", fontSize: 9, borderColor: '#5f239bff', borderWidth: 2, borderRadius: 12, padding: 1 }}>
                         ____________________________
                   </Text>
@@ -388,7 +388,6 @@ export default function FreeYourMindScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "transparent",
         height: "100%",
         flex: 1,
         marginTop: 7,
@@ -414,7 +413,6 @@ const styles = StyleSheet.create({
       color: "#5b12a5ff",
       fontWeight: 'bold',
       maxHeight: 19,
-      backgroundColor: "transparent",
       width:"100%",
       textAlign: "left",
       paddingLeft: 62,
@@ -422,7 +420,6 @@ const styles = StyleSheet.create({
       overflow: "hidden",
     },
     playButton: {
-      backgroundColor: 'transparent',
       borderRadius: 50,
       width: 57,
       height: 57,
@@ -433,15 +430,13 @@ const styles = StyleSheet.create({
       marginTop: 5,
       borderColor: '#5f239bff',
       borderWidth: 0,
-     // Unified Shadow for React Native
       shadowColor: "#c494e4",
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.3,
       shadowRadius: 4.65,
-      elevation: 5, // Required for Android shadow
+      elevation: 5,
       },
     imgSound: {
-      backgroundColor: "transparent",
       height: 47,
       width: 47,
       marginTop: 7,

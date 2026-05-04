@@ -14,7 +14,6 @@ export default function ManualsScreen() {
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
       kplayer.loop = false; 
   });
-  
 
   async function stopSound() {
     try {
@@ -47,20 +46,18 @@ export default function ManualsScreen() {
       <StatusBar barStyle="light-content" backgroundColor="#269b26"  /> 
       <SafeAreaView style={{ flex: 1, marginTop:25}}>
 
-        <View style={{backgroundColor: 'black', marginBottom:19, paddingTop:0, borderRadius: 7,}}>
+        <View style={{backgroundColor: 'black', marginBottom: 19, paddingTop: 0, borderRadius: 7,}}>
           
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/manualstitle.png')} >
-            <View style={{flexDirection:"row", position: "relative", backgroundColor:"transparent", height: 47,}}>
+            <View style={{flexDirection:"row", position: "relative", height: 47,}}>
               
-              <TouchableOpacity onPress={stopSound} style={{position:"absolute", top: 38, right:9, zIndex:2, height: 42, width: 38, elevation:8, backgroundColor:"transparent", opacity:1}}>
+              <TouchableOpacity onPress={stopSound} style={{position:"absolute", top: 38, right:9, zIndex:2, height: 42, width: 38, elevation: 8, opacity: 1}}>
                 <ImageBackground style={ styles.imgSound } resizeMode='contain' source={isMuted ? require('../assets/soundoffbutton.png') : require('../assets/soundonbutton.png')}/>         
               </TouchableOpacity>  
             </View>
           </ImageBackground> 
         </View>    
-        
-       
-              <FlatList
+          <FlatList
                 data={manuals}
                 numColumns={1}
                 style={{flex: 1}}
@@ -87,7 +84,6 @@ export default function ManualsScreen() {
               
                 <Pressable
                   onPress={() => navKSound(item)}>
-
                     <View style={styles.box}>
                       <Image style={styles.image} source={item.steps[0].img} />
                       <Text style={styles.username}>{item.title}</Text>
@@ -108,7 +104,6 @@ export default function ManualsScreen() {
   </ImageBackground>
   )
 }
-
 
 const styles = StyleSheet.create({
       imgBackground: {
@@ -150,7 +145,7 @@ const styles = StyleSheet.create({
       subCardView: {
         height: 285,
         width: "100%",
-        marginLeft:-15,
+        marginLeft: -15,
         borderRadius: 8,
         backgroundColor: "slategray",
         color: 'crimson',
@@ -158,7 +153,7 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         alignSelf: 'center',
         justifyContent: 'center',
-        marginRight:9,
+        marginRight: 9,
         padding:0,
       },
       image: {

@@ -18,6 +18,7 @@ const LOCAL_AUDIO_MAP = {
   11: require('../assets/freeyourmind/theuniverseforcesyoutoletgo(part3).mp3'),
 };
 
+
 export default function TrackPlayer({ track }) {
   const isMounted = useRef(true);
   const source = track.id <= 11 ? LOCAL_AUDIO_MAP[track.id] : track.uri;
@@ -26,12 +27,14 @@ export default function TrackPlayer({ track }) {
 
   const [barWidth, setBarWidth] = useState(0);
 
+
   const formatTime = (seconds) => {
     if (!seconds && seconds !==0) return "0:00";
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
+
 
   useEffect(() => {
     if(player) {
@@ -48,6 +51,8 @@ export default function TrackPlayer({ track }) {
       }
     };
   }, [player]);
+
+
 
   const handleSliderPress = (evt) => {
     const dur = status.duration;
@@ -127,8 +132,7 @@ export default function TrackPlayer({ track }) {
 const styles = StyleSheet.create({
   row: { 
     marginTop: -43, 
-    padding: 1, 
-    backgroundColor: 'transparent', 
+    padding: 1,
     borderRadius: 7,
     borderWidth: 0, 
     alignSelf: 'center',
@@ -159,7 +163,6 @@ const styles = StyleSheet.create({
     color: "#5b12a5ff",
     fontWeight: 'bold',
     borderColor: '#8d6facff',
-    backgroundColor: 'transparent',
     borderWidth: 2,
     borderRadius: 19,
     paddingHorizontal: 8,

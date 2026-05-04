@@ -1,25 +1,30 @@
-import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, StatusBar } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image, Dimensions, StatusBar } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 import moves from '../data/moves'
 import { useNavigation } from '@react-navigation/native'
 
+
 const images = require.context('../assets/thumbnails', true, /\.png$/);
+
 const imageSources = images.keys().map((key) => images(key));
+
 
 export default function MoveListScreen() {
   const navigation = useNavigation();
 
-  return (
-    <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
-      <StatusBar barStyle="light-content" />
 
-    <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19}}>
+  
+  return (
+   <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
+    <StatusBar barStyle="light-content" />
+
+    <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, opacity: 1}}>
       <View style={{backgroundColor: '#323232', marginBottom: 19, paddingBottom: 10, opacity: 1}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/moveslisttitle.png')} />
       </View>
 
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
           <FlatList
             data={moves}
             numColumns={2}
@@ -36,80 +41,80 @@ export default function MoveListScreen() {
                   alignItems: "top",
                   marginTop: 7,
                   width: "50%",
-                  borderColor:"transparent",
                   borderWidth: 0,
                   borderRadius: 12,
                   backgroundColor:'#2f4f4f'
                 }}
               >
               
-                <Pressable
-                  onPress={() => {navigation.navigate('Move', {video: item});}}>
-                    <View style={styles.mainCardView}>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop:0}}>
-                            <View style={styles.subCardView}>
-                                <Image
-                                  source={imageSources[index]}
-                                  resizeMode="cover"
-                                  style={{
-                                    borderRadius: 12,
-                                    alignSelf: 'flex-start',
-                                    marginTop: 0,
-                                    marginLeft: 0,
-                                    height: 130,
-                                    width: 180,
-                                  }}
-                                />
-                            
+                <Pressable onPress={() => {navigation.navigate('Move', {video: item});}}>
+                  <View style={styles.mainCardView}>
 
+                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0}}>
+                        <View style={styles.subCardView}>
+
+                          <Image
+                            source={imageSources[index]}
+                            resizeMode="cover"
+                            style={{
+                              borderRadius: 12,
+                              alignSelf: 'flex-start',
+                              marginTop: 0,
+                              marginLeft: 0,
+                              height: 130,
+                              width: 180,
+                            }}
+                          />
+                            
                         <View style={{marginLeft: 12}}>
-                            <Text
-                              style={{
-                                fontSize: 14,
-                                color: "crimson",
-                                fontWeight: 'bold',
-                                textTransform: 'capitalize',
-                              }}>
-                                {item.title}
-                            </Text>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: "crimson",
+                              fontWeight: 'bold',
+                              textTransform: 'capitalize',
+                            }}>
+                              {item.title}
+                          </Text>
                             
-                            <View
-                              style={{
-                                marginTop: 3,
-                                borderWidth: .5,
-                                borderColor:'#228b22',
-                                flexDirection:'row',
-                                backgroundColor:'#323232',
-                                justifyContent:'space-between'
-                              }}>
-                                <Text
-                                    style={{
-                                       color: '#9a9aa1',
-                                       fontSize: 12,
-                                    }}>
-                                    {item.style}
-                                </Text>
-                                <Text
-                                    style={{
-                                       color: '#fff',
-                                       fontSize: 12,
-                                    }}>
-                                    {item.type}
-                                </Text>
-                            </View>
-                            </View>
+                          <View
+                            style={{
+                              marginTop: 3,
+                              borderWidth: .5,
+                              borderColor:'#228b22',
+                              flexDirection:'row',
+                              backgroundColor:'#323232',
+                              justifyContent:'space-between'
+                            }}>
+                              <Text
+                                style={{
+                                   color: '#9a9aa1',
+                                   fontSize: 12,
+                                }}>
+                                {item.style}
+                              </Text>
+
+                              <Text
+                                style={{
+                                   color: '#fff',
+                                   fontSize: 12,
+                                }}>
+                                {item.type}
+                              </Text>
+                          </View>
                         </View>
+                      </View>
                     </View>
-                </View>
-            </Pressable>
-    </View>)}
-  />
-
-  </View>
-</SafeAreaView>
-</ImageBackground>
-
+                  </View>
+                </Pressable>
+            </View>)}
+          />
+      </View>
+    </SafeAreaView>
+   </ImageBackground>
 )}
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -117,7 +122,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#acd4c4',
         marginRight: 3,
-        marginTop: 3
+        marginTop: 3,
+        opacity: 1,
     },
     title: {
         fontSize: 30, 
