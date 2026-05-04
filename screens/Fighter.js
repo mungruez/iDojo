@@ -32,10 +32,10 @@ export default function Fighter({ route, navigation }) {
 
         {fighter.desc.map((quote, index) => {
           return (
-            <View key={index} style={{borderRadius: 7}}>
-              <Text style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize: 16, color: "black", fontWeight: "600", padding: 5}}>{quote}</Text>
+            <View key={index} style={{borderRadius: 19, padding: 12}}>
+              <Text style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], fontSize: 15, color: "black", fontWeight: "600", padding: 7, borderRadius: 12}}>{quote}</Text>
               
-              {index === fighter.desc.length - 1  && ( <View style={{marginTop: 5, marginBottom: 12, flex: 1 }}> 
+              {index === fighter.desc.length - 1  && ( <View style={{marginTop: -12, marginBottom: 12, flex: 1 }}> 
                 <Image source={require('../assets/silverdivider.png')} style={styles.divider} resizeMode='contain'/>
               </View> ) }
 
@@ -54,9 +54,9 @@ export default function Fighter({ route, navigation }) {
                 style={styles.fighterImage}
               />
               
-              <Text style={{color: "black", fontWeight: "600", padding: 3, fontSize: 14}}> {move.desc} </Text>
+              <Text style={{color: "black", fontWeight: "500", padding: 7, fontSize: 14}}> {move.desc} </Text>
               
-              {index < fighter.moves.length - 1  && ( <View style={{marginTop: 5, marginBottom: 7, flex: 1 }}> 
+              {index < fighter.moves.length - 1  && ( <View style={{marginTop: -12, marginBottom: 7, flex: 1 }}> 
                 <Image source={require('../assets/silverdivider.png')} style={styles.divider} resizeMode='contain'/>
               </View> ) }
 
