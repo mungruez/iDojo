@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Dimensions, Text, StyleSheet, AppState, ActivityIndicator } from "react-native"; 
+import { View, Dimensions, Text, StyleSheet, AppState, ActivityIndicator, StatusBar } from "react-native"; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
 import { useIsFocused } from '@react-navigation/native';
@@ -33,6 +33,7 @@ const FeaturedMove = ({ route, navigation }) => {
 
 
   const isYouTube = video.Link && video.Link.length < 19; 
+
   const player = useVideoPlayer(isYouTube ? '' : video.Link, (player) => {
     if (isYouTube) return;
     player.loop = true;
@@ -50,24 +51,26 @@ const FeaturedMove = ({ route, navigation }) => {
   });
 
 
+
   return (
     <SafeAreaView style={{ backgroundColor:'#323232',width:'100%', height:'100%', marginTop: 38 }}>
-     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center",fontSize: 21, marginBottom: 9 }}>
-      {video.Title}
-     </Text>
+      <StatusBar barStyle="dark-content" />
+      <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center",fontSize: 21, marginBottom: 9 }}>
+        {video.Title}
+      </Text>
 
-       {video.Link && video.Link.length < 19 ?
+      {video.Link && video.Link.length < 19 ?
         ( <View style={styles.wvcontainer}> 
-            <YoutubePlayer
-              height={deviceWidth * 0.5625}
-              play={playing && isFocused}
-              videoId={video.Link}
-              initialPlayerParams={{
-                controls: true,
-                modestbranding: true,
-                rel: false,
-              }}
-            />
+          <YoutubePlayer
+            height={deviceWidth * 0.5625}
+            play={playing && isFocused}
+            videoId={video.Link}
+            initialPlayerParams={{
+              controls: true,
+              modestbranding: true,
+              rel: false,
+            }}
+          />
         </View> )
         : ( <View style={{flex: 1, padding: 0,backgroundColor: '#323232',marginLeft: 0,marginTop: 5, marginBottom: 0, width: "100%", maxHeight: "91%" }}>
             <VideoView
@@ -99,6 +102,7 @@ const FeaturedMove = ({ route, navigation }) => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   wvcontainer: {

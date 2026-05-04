@@ -1,4 +1,4 @@
-import { View, ScrollView, Text } from "react-native";
+import { View, ScrollView, Text, StatusBar } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
@@ -9,7 +9,7 @@ const videoSources = videos.keys().map((key) => videos(key));
 const MoveScreen = ({ route, navigation }) => {
   const { video } = route.params;
 
-  //useVideoPlayer hook init video source with move.mid or move.vid automatically unloads video when component unmounts
+  //useVideoPlayer hook init with video.mid, automatically unloads video when component unmounts
   const player = useVideoPlayer(videoSources[video.mid], (player) => {
     player.loop = true;
     player.play();
@@ -17,6 +17,7 @@ const MoveScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor:'#323232', width: '100%', height: '100%', marginTop: 38, opacity: 1 }}>
+      <StatusBar barStyle="dark-content" />
       <Text style={{ backgroundColor:'#2f4f4f', color:"crimson", textAlign:"center", fontSize: 21, marginBottom: 9 }}>
         {video.title}
       </Text>

@@ -12,9 +12,10 @@ export default function MoveListScreen() {
 
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
-      <StatusBar barStyle="light-content" backgroundColor="#dc143c" />
-    <SafeAreaView style={{ flex: 1, height: "100%", marginTop:25, backgroundColor: 'transparent',}}>
-      <View style={{backgroundColor: '#323232', marginBottom:20, paddingBottom:10, opacity: 1}}>
+      <StatusBar barStyle="light-content" />
+
+    <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19}}>
+      <View style={{backgroundColor: '#323232', marginBottom: 19, paddingBottom: 10, opacity: 1}}>
         <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/moveslisttitle.png')} />
       </View>
 
@@ -33,12 +34,11 @@ export default function MoveListScreen() {
                   justifyContent: "space-between",
                   flexDirection: "column",
                   alignItems: "top",
-                  marginTop:7,
-                  marginLeft:"1",
-                  marginRight:"1",
-                  width:"50%",
+                  marginTop: 7,
+                  width: "50%",
                   borderColor:"transparent",
-                  borderWidth:0,
+                  borderWidth: 0,
+                  borderRadius: 12,
                   backgroundColor:'#2f4f4f'
                 }}
               >
@@ -54,8 +54,8 @@ export default function MoveListScreen() {
                                   style={{
                                     borderRadius: 12,
                                     alignSelf: 'flex-start',
-                                    marginTop:0,
-                                    marginLeft:0,
+                                    marginTop: 0,
+                                    marginLeft: 0,
                                     height: 130,
                                     width: 180,
                                   }}
