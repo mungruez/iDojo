@@ -93,14 +93,14 @@ export default function VideoPlayer({ video }) {
 
 
   return (
-    <SafeAreaView style={{ backgroundColor: '#323232', width: '100%', height: '100%', marginTop: 38 }}>
+    <SafeAreaView style={{ backgroundColor: '#323232', width: '100%', height: '100%', marginTop: 19 }}>
       
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12, marginBottom: 9 }}>
-        <Text style={{ backgroundColor: '#2f4f4f', color: 'crimson', fontSize: 21, flex: 1, flexWrap: 'wrap', textAlign: 'left' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 9, marginBottom: 7 }}>
+        <Text style={{ backgroundColor: '#2f4f4f', color: 'crimson', fontSize: 21, flex: 1, flexWrap: 'wrap', textAlign: 'left', paddingleft: 3 }}>
           {video.title}
         </Text>
-        <TouchableOpacity onPress={shareVideo} style={{ marginLeft: 8, padding: 4, height: 28, width: 28, justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={require('../assets/redsharearrow.png')} style={{ width: 24, height: 24 }} resizeMode='contain' />
+        <TouchableOpacity onPress={shareVideo} style={{ marginLeft: 4, padding: 0, height: 32, width: 30, justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../assets/redsharearrow.png')} style={{ width: 30, height: 32 }} resizeMode='contain' />
         </TouchableOpacity>
       </View>
 

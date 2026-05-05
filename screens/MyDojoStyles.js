@@ -818,7 +818,8 @@ export default function MyDojoStyles({route}) {
           if (step.img && step.img.startsWith('file://')) {
             const info = await FileSystem.getInfoAsync(step.img);
             if (info.exists) {
-              imageUris.push(step.img);
+              const shareableUri = await FileSystem.getContentUriAsync(step.img);
+              imageUris.push(shareableUri);
             }
           }
         }
@@ -828,10 +829,20 @@ export default function MyDojoStyles({route}) {
           return;
         }
 
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(imageUris.length === 1 ? imageUris[0] : imageUris, {
-            mimeType: imageUris.length === 1 ? 'image/jpeg' : undefined, 
-          });
+        const shareOptions = {
+          title: 'Share Images',
+          failOnCancel: false,
+          urls: imageUris,
+          type: 'image/*',
+        };
+
+        try {
+          const ShareResponse = await Share.open(shareOptions);
+        } catch (error) {
+          if (await Sharing.isAvailableAsync()) {
+            Alert.alert("Share Single Image Only", "The device only allows sharing single images.");
+            await Sharing.shareAsync(move.steps[selectedids[0]].img);
+          }
         }
         
         setSelectedSingles([]);
@@ -934,7 +945,7 @@ export default function MyDojoStyles({route}) {
                   <TouchableOpacity 
                     onLongPress={() => toggleSelectSingle(index) }
                     onPress={() => selectedSingles.length > 0 && toggleSelectSingle(index)}
-                    style={[styles.itemContainer, selectedSingles.includes(index) && styles.selectedItem ]}>
+                    style={[styles.itemContainerVM, selectedSingles.includes(index) && styles.selectedItem ]}>
                       <Image source = {{uri: step.img}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
                   </TouchableOpacity> 
 
@@ -1304,6 +1315,7 @@ sectionContainerPdf: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba
 sectionHeader: { color: '#33fc4d', fontSize: 13, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(37, 37, 37, 0.76)', alignSelf: "flex-start", opacity: 1, borderRadius: 7, paddingHorizontal: 4,},
 sectionHeaderVideo: { color: '#7e1311', fontSize: 13, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(255, 255, 253, 0.91)', alignSelf: "flex-start", opacity: 1, borderRadius: 7, paddingHorizontal: 4,},
 sectionHeaderPdf: { color: '#181885', fontSize: 13, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(247, 247, 223, 0.9)', alignSelf: "flex-start", opacity: 1, borderRadius: 7, paddingHorizontal: 4,},
+itemContainerVM: { width: width * 0.98, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 5 },
 myDojoDiscardIcon: {height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
@@ -1382,6 +1394,6 @@ searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 
 silverDivider: { width: '99%', height: 49, alignSelf: "center", paddingVertical: 1, opacity: 1 },
 clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
 imgBackgroundManual: { minWidth: "100%", backgroundColor: "#233535", flex: 1, opacity: 1, margin: 0, padding: 3, borderRadius: 7, borderColor: 'silver', borderWidth: 1, borderBottomWidth: 1},
-desctextManual: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 2, color: 'white', padding: 5, borderRadius: 7, maxHeight: 411, opacity: 1 },
+desctextManual: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 2, color: 'white', padding: 5, borderRadius: 7, opacity: 1 },
 titletextManual: {fontSize: 17, lineHeight: 21, fontWeight: '600', letterSpacing: 0.25, marginLeft: 7, color: 'black', opacity: 1, },
 });

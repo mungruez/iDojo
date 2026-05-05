@@ -24,13 +24,13 @@ export default function ManualScreen({ route, navigation }) {
           showsVerticalScrollIndicator={false}
           initialNumToRender={19}
           renderItem={({ item: step, index }) => (
-            <View style={{backgroundColor: "black", marginBottom: 19}}>
+            <View style={{backgroundColor: "black", marginBottom: 1}}>
               <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize: 19, borderColor:"silver", borderWidth: 1, borderRadius: 5,}}>
                 <Text style={styles.titletext}>{step.title}</Text>
               </View>
 
               <View>
-                <Image source = { step.img } resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
+                <Image source = { step.img } resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: "100%" }} />
                 
                 <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 5, borderBottomWidth: 2}}>
                   <View style={styles.imgBackground}>
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     borderColor: 'silver',
     borderWidth: 1,
     borderBottomWidth: 1,
+    flex: 1,
   },
   desctext: {
     fontSize: 15,
@@ -83,7 +84,6 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 5,  
     borderRadius: 7,
-    maxHeight: 411,
     opacity: 1,
   },
   divider: { 

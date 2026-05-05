@@ -24,6 +24,7 @@
       }
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "package": "DojoSoft.ZaakirMungrue.iDojo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/squareicon.png",
@@ -42,7 +43,23 @@
       "expo-video",
       "expo-audio",
       "expo-asset",
-      "expo-image-picker"
+      "expo-image-picker",
+       [
+        "expo-sharing",
+        {
+          "ios": {
+            "enabled": true,
+            "activationRule": {
+              "supportsImageWithMaxCount": 10
+            }
+          },
+          "android": {
+            "enabled": true,
+            "singleShareMimeTypes": ["image/*"],
+            "multipleShareMimeTypes": ["image/*"]
+          }
+        }
+      ]
     ],
     "extra": {
       "eas": {

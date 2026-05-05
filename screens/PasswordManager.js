@@ -663,7 +663,7 @@ export default function PasswordManager() {
         const showSub = Keyboard.addListener(
         Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
         (e) => {
-            if(passwords.length > 0) setBottomPadding(303);
+            setBottomPadding(e.endCoordinates.height+48);
         }
         );
         const hideSub = Keyboard.addListener(
