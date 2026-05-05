@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, StatusBar } from 'react-native'
+import { StyleSheet, Text, View, Image, FlatList, ImageBackground, StatusBar } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,25 +15,27 @@ export default function ManualScreen({ route, navigation }) {
           {manual.title}
       </Text>
 
-      <View style={{backgroundColor: "black", paddingBottom: 38, flex: 1}}>
-        <ScrollView>
-          {manual.steps.map((step, index) => {
-            
-            return ( <View key={index} style={{backgroundColor: "black", marginBottom: 27}}>
-              
-              <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize:19, borderColor:"silver", borderWidth:1, borderRadius:5,}}>
+      <View style={{backgroundColor: "black", paddingBottom: 5, flex: 1}}>
+        <FlatList
+          data={manual.steps}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: 12 }}
+          keyExtractor={ (item, index) => index.toString() }
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={19}
+          renderItem={({ item: step, index }) => (
+            <View style={{backgroundColor: "black", marginBottom: 19}}>
+              <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize: 19, borderColor:"silver", borderWidth: 1, borderRadius: 5,}}>
                 <Text style={styles.titletext}>{step.title}</Text>
               </View>
 
               <View>
                 <Image source = { step.img } resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
                 
-                <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, flex: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 5, borderBottomWidth: 2}}>
-                  <ScrollView>
-                    <View style={styles.imgBackground}>
-                      <Text style={styles.desctext}> {step.desc} </Text>
-                    </View>
-                  </ScrollView>
+                <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 5, borderBottomWidth: 2}}>
+                  <View style={styles.imgBackground}>
+                    <Text style={styles.desctext}> {step.desc} </Text>
+                  </View>
                 </View>
                 
                 {index < manual.steps.length - 1  && ( <View style={{marginTop: -7, marginBottom: 3, flex: 1 }}> 
@@ -41,10 +43,9 @@ export default function ManualScreen({ route, navigation }) {
                 </View> ) } 
 
               </View>
-            </View>);
-          })}
-          
-        </ScrollView>
+            </View>
+          )}
+        />
       </View>
     </SafeAreaView>
    </View>
@@ -65,7 +66,6 @@ const styles = StyleSheet.create({
   imgBackground: {
     minWidth: "100%",
     backgroundColor: "#233535",
-    flex: 1,
     opacity: 1,
     margin: 0,
     padding: 3,

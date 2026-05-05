@@ -22,6 +22,7 @@ export default function MyDojoStyles({route}) {
     const [listmode, setListMode] = useState(false);
     const [hmoves, setHMoves] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
+    const [selectedSingles, setSelectedSingles] = useState([]);
 
     const [ftype, setType] = useState('select move type');
     const [fstyle, setFStyle] = useState('Enter Move Title');
@@ -789,6 +790,55 @@ export default function MyDojoStyles({route}) {
 
       return () => backHandler.remove();
     }, [viewmode, addmode, listmode]);
+
+
+
+
+    const toggleSelectSingle = (index) => {
+      setSelectedSingles(prev => prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]);
+    };
+
+
+    const handleShareSingles = async (selectedids) => {
+      if (isOffline) {
+        Alert.alert("No Internet", "You need an internet connection to share images.");
+        return;
+      }
+
+      if (!selectedids?.length) return;
+      setLoading(true);
+
+      try {
+        const selectedSteps = selectedids.map(index => move.steps[index]).filter(step => step);
+
+        const imageUris = [];
+        for (const step of selectedSteps) {
+          if (step.img && step.img.startsWith('file://')) {
+            const info = await FileSystem.getInfoAsync(step.img);
+            if (info.exists) {
+              imageUris.push(step.img);
+            }
+          }
+        }
+
+        if (imageUris.length === 0) {
+          Alert.alert("No Images", "No valid images found to share.");
+          return;
+        }
+
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(imageUris.length === 1 ? imageUris[0] : imageUris, {
+            mimeType: imageUris.length === 1 ? 'image/jpeg' : undefined, 
+          });
+        }
+        
+        setSelectedSingles([]);
+      } catch (err) {
+        Alert.alert("Error", "Could not share images.");
+      } finally {
+        setLoading(false);
+      }  
+    }
       
 
 
@@ -810,7 +860,7 @@ export default function MyDojoStyles({route}) {
               if (item.videoUrl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be"))) {
                 const youtubeId = getYouTubeId(item.videoUrl);
                 if (youtubeId === "") {
-                  require('../assets/onlinevideoicon.png');
+                  return require('../assets/onlinevideoicon.png');
                 } else {
                   return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
                 }
@@ -865,32 +915,53 @@ export default function MyDojoStyles({route}) {
         </Text>
     
         <View style={{backgroundColor: "black", paddingBottom: 19, flex: 1}}>
-          <ScrollView>
-            {move.steps.map((step, index) => {
-              return ( <View key={index} style={{backgroundColor: "black", marginBottom: 19}}>
-                <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize: 19, borderColor: "silver", borderWidth: 1, borderRadius: 5,}}>
+          <FlatList
+            data={move.steps}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: 57 }}
+            keyExtractor={ (item, index) => index.toString() }
+            showsVerticalScrollIndicator={false}
+            initialNumToRender={12}
+            renderItem={ ({ item: step, index }) => (
+              <View style={{backgroundColor: "black", marginBottom: 19}}>
+                <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize: 19, borderColor:"silver", borderWidth: 1, borderRadius: 5,}}>
                   <Text style={styles.titletextManual}>{step.title}</Text>
                 </View>
-    
+          
                 <View>
-                  <Image source = {{uri: step.img}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
+                  <TouchableOpacity 
+                    onLongPress={() => toggleSelectSingle(index) }
+                    onPress={() => selectedSingles.length > 0 && toggleSelectSingle(index)}
+                    style={[styles.itemContainer, selectedSingles.includes(index) && styles.selectedItem ]}>
+                      <Image source = {{uri: step.img}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
+                  </TouchableOpacity> 
 
                   <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, flex: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 6, borderBottomWidth: 2}}>
-                    <ScrollView>
-                      <View style={styles.imgBackgroundManual}>
-                        <Text style={styles.desctextManual}> {step.desc} </Text>
-                      </View>
-                     </ScrollView>
+                    <View style={styles.imgBackgroundManual}>
+                      <Text style={styles.desctextManual}> {step.desc} </Text>
+                    </View>
                   </View>
-
-                  { index < move.steps.length - 1  && ( <View style={{marginTop: -7, marginBottom: 3, flex: 1}}> 
+                          
+                  {index < move.steps.length - 1  && ( <View style={{marginTop: -7, marginBottom: 3, flex: 1 }}> 
                     <Image source={require('../assets/silverdivider.png')} style={styles.silverDivider} resizeMode='contain'/>
                   </View> ) } 
                 </View>
-              </View>);
-            })}
-          </ScrollView>
+              </View>
+            ) }
+          />
         </View>
+
+        { selectedSingles.length > 0 && (
+          <View style={styles.batchBar}>
+            <Text style={ styles.batchText }>{selectedSingles.length} Selected</Text>
+            <TouchableOpacity onPress={() => handleShareSingles(selectedSingles)} style={styles.shareIcon}>
+              <ImageBackground style={{height: "100%", width: "100%", borderRadius: 4}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ require('../assets/sharemanualicon.png') }/>         
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSelectedSingles([])} style={styles.myDojoDeleteIcon}>
+              <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ require('../assets/deletemanualicon.png') }/>         
+            </TouchableOpacity>
+          </View> )
+        }
        </SafeAreaView>
       </View>
     );
