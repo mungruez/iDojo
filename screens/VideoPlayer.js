@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, Dimensions, Text, StyleSheet, AppState, ActivityIndicator } from "react-native"; 
+import { View, ScrollView, Dimensions, Text, StyleSheet, AppState, ActivityIndicator, TouchableOpacity, Image, Alert, Share } from "react-native"; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
 import { useIsFocused } from '@react-navigation/native';
 import YoutubePlayer from "react-native-youtube-iframe";
+import * as Sharing from 'expo-sharing';
 
 const deviceWidth = Dimensions.get('window').width;
-
 
 
 export default function VideoPlayer({ video }) {
   const isFocused = useIsFocused(); 
   const [playing, setPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
-
 
 
   useEffect(() => {
@@ -25,7 +24,6 @@ export default function VideoPlayer({ video }) {
 
     return () => subscription.remove();
   }, []);
-
 
 
   useEffect(() => {
@@ -57,13 +55,56 @@ export default function VideoPlayer({ video }) {
 
 
 
+  const shareVideo = async () => {
+    try {
+      if (!video) {
+        Alert.alert('Share Error', 'No video available to share.');
+        return;
+      }
+
+      if (isYouTube) {
+        const youtubeUrl = `https://youtu.be/${video.videoUrl}`;
+        await Share.share({ title: video.title, message: youtubeUrl, url: youtubeUrl });
+        return;
+      }
+
+      const uri = video.vid?.startsWith('file://') ? video.vid : video.videoUrl;
+      if (!uri) {
+        Alert.alert('Share Error', 'No video source available to share.');
+        return;
+      }
+
+      if (uri.startsWith('file://')) {
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(uri, {
+            mimeType: 'video/mp4',
+            dialogTitle: `Share ${video.title}`,
+          });
+        } else {
+          Alert.alert('Share Error', 'Sharing is not available on this device.');
+        }
+      } else {
+        await Share.share({ title: video.title, message: uri, url: uri });
+      }
+    } catch (error) {
+      Alert.alert('Share Error', error.message || 'Could not share video.');
+    }
+  };
+
+
   return (
     <SafeAreaView style={{ backgroundColor: '#323232', width: '100%', height: '100%', marginTop: 38 }}>
-     <Text style={{ backgroundColor:'#2f4f4f',color:"crimson", textAlign:"center", fontSize: 21, marginBottom: 9 }}>
-      {video.title}
-     </Text>
+      
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12, marginBottom: 9 }}>
+        <Text style={{ backgroundColor: '#2f4f4f', color: 'crimson', fontSize: 21, flex: 1, flexWrap: 'wrap', textAlign: 'left' }}>
+          {video.title}
+        </Text>
+        <TouchableOpacity onPress={shareVideo} style={{ marginLeft: 8, padding: 4, height: 28, width: 28, justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../assets/redsharearrow.png')} style={{ width: 24, height: 24 }} resizeMode='contain' />
+        </TouchableOpacity>
+      </View>
 
-       { video.videoUrl && video.videoUrl.length < 19 ?
+      { video.videoUrl && video.videoUrl.length < 19 ?
         ( <View style={styles.wvcontainer}> 
             <YoutubePlayer
               height={deviceWidth * 0.57}
@@ -91,7 +132,7 @@ export default function VideoPlayer({ video }) {
                     <ActivityIndicator size="large" color="#f30707" />
                     <Text style={{ color: 'white', marginTop: 10 }}>Loading...</Text>
                 </View>
-            )}
+            ) }
         </View>)
       }
 
