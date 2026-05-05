@@ -48,7 +48,7 @@ export default function Resources() {
 <Text style={ styles.movesList }>Moves List: </Text>
 <Text style={ styles.title }> A list of over 80 videos of moves with audio and text instructions. Each video was carefully edited to contain a description with an AI Morpheus voice and can be slowed to view the move in slow motion.</Text>
 <Text style={ styles.addMove }>Add Move: </Text>
-<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense moves to the iDojo App. You can also share the move image or images, a single video or a single pdf when viewing a move. Instuctions are provided. Awesome for sharing individual self Defence stories, albums, events and more. </Text>
+<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense moves to the iDojo App. You can also share the move image or images, a single video or a single pdf when viewing a move. Moves can only be shared and imported with the iDojo App, only single videos, images and PDFs can be shared externally. Instuctions are provided. Awesome for sharing individual self Defence stories, albums, events and more. </Text>
 <Text style={ styles.fightersList }>Fighters List: </Text>
 <Text style={ styles.title }> A first time ever list of the best fighters of all time. Each fighter was hand picked and carefully researched by DojoSoft before being added to the list. DojoSoft only considers real life, Fighting styles that effective and are practised for Self Defense. 
 </Text>
