@@ -510,10 +510,12 @@ export default function MyDojoStyles({route}) {
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
 
+
     const toggleSelect = (id) => {
       setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };
 
+    
     const toggleListMode = (mv) => {
       if(mv === null) {
         setSelectedIds([]);
