@@ -955,7 +955,7 @@ export default function MyDojoStyles({route}) {
           <View style={styles.batchBar}>
             <Text style={ styles.batchText }>{selectedSingles.length} Selected</Text>
             <TouchableOpacity onPress={() => handleShareSingles(selectedSingles)} style={styles.shareIcon}>
-              <ImageBackground style={{height: "100%", width: "100%", borderRadius: 4}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ require('../assets/sharemanualicon.png') }/>         
+              <ImageBackground style={{height: "100%", width: "100%", borderRadius: 4}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ require('../assets/greensharearrow.png') }/>         
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setSelectedSingles([])} style={styles.myDojoDeleteIcon}>
               <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ require('../assets/deletemanualicon.png') }/>         
@@ -982,7 +982,7 @@ export default function MyDojoStyles({route}) {
          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 19}
        >
        <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
-         <ImageBackground style={ styles.iconAM } resizeMode='contain' source={typeAM ==='video' && !move ? require('../assets/addmovetitle.png') : typeAM ==='video' && move ? require('../assets/editmovetitle.png') : typeAM ==='steps' && !move ? require('../assets/addmanualtitle.png') : typeAM ==='steps' && move ? require('../assets/editmanualtitle.png') : typeAM ==="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
+         <ImageBackground style={ styles.iconAM } resizeMode='contain' imageStyle={{ opacity: 1 }} source={typeAM ==='video' && !move ? require('../assets/addmovetitle.png') : typeAM ==='video' && move ? require('../assets/editmovetitle.png') : typeAM ==='steps' && !move ? require('../assets/addmanualtitle.png') : typeAM ==='steps' && move ? require('../assets/editmanualtitle.png') : typeAM ==="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
        </View>
        <TouchableOpacity onPress={() => setAddMode(false)} style={styles.discardBtn}>
          <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
