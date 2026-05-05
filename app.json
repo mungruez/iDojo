@@ -43,23 +43,7 @@
       "expo-video",
       "expo-audio",
       "expo-asset",
-      "expo-image-picker",
-       [
-        "expo-sharing",
-        {
-          "ios": {
-            "enabled": true,
-            "activationRule": {
-              "supportsImageWithMaxCount": 10
-            }
-          },
-          "android": {
-            "enabled": true,
-            "singleShareMimeTypes": ["image/*"],
-            "multipleShareMimeTypes": ["image/*"]
-          }
-        }
-      ]
+      "expo-image-picker"
     ],
     "extra": {
       "eas": {
