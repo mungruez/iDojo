@@ -7,7 +7,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
-import * as Sharing from 'expo-sharing';
+import Share from 'react-native-share';
 import PdfMove from './PdfMove';
 import VideoPlayer from './VideoPlayer';
 
@@ -22,7 +22,7 @@ export default function MyDojoStyles({route}) {
     const [listmode, setListMode] = useState(false);
     const [hmoves, setHMoves] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
-    const [selectedSingle, setSelectedSingle] = useState(null);
+    const [selectedSingles, setSelectedSingles] = useState([]);
 
     const [ftype, setType] = useState('select move type');
     const [fstyle, setFStyle] = useState('Enter Move Title');
@@ -352,12 +352,16 @@ export default function MyDojoStyles({route}) {
 
         await zip(nakedSource, nakedTarget);
 
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(zipPathUri, {
-            mimeType: 'application/zip',
-            UTI: 'public.zip-archive' 
-          });
-        }
+        const shareOptions = {
+          title: 'Share Moves',
+          url: zipPathUri,
+          type: 'application/zip',
+          failOnCancel: false,
+          useInternalStorage: Platform.OS === 'android',
+        };
+
+        await Share.open(shareOptions);
+        
         setSelectedIds([]);
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
@@ -475,29 +479,15 @@ export default function MyDojoStyles({route}) {
             return;
           }
 
-          if (Platform.OS === 'ios') {
-            await Sharing.shareAsync(move.vid, {
-              mimeType: 'application/pdf',
-              UTI: 'com.adobe.pdf'
-            });
-          } else {
-            Alert.alert(
-              "Open PDF",
-              "Select a PDF viewer app, and click View PDF",
-              [
-                { text: "Cancel", style: "cancel" },
-                {
-                  text: "Continue",
-                  onPress: async () => {
-                    await Sharing.shareAsync(move.vid, {
-                      mimeType: 'application/pdf',
-                      dialogTitle: 'Open PDF with...'
-                    });
-                  }
-                }
-              ]
-            );
-          }
+          const shareOptions = {
+            title: 'Open PDF',
+            url: move.vid,
+            type: 'application/pdf',
+            useInternalStorage: Platform.OS === 'android',
+            failOnCancel: false,
+          };
+
+          await Share.open(shareOptions);
         } catch (err) {
           Alert.alert("Error", "Could not open PDF");
         } finally {
@@ -773,7 +763,7 @@ export default function MyDojoStyles({route}) {
         if (viewmode > 0) {
           setViewMode(0);
           if(addmode) setAddMode(false);
-          if(selectedSingle) setSelectedSingle(null);
+          if(selectedSingles.length > 0) setSelectedSingles([]);
           return true;
         }
 
@@ -798,53 +788,54 @@ export default function MyDojoStyles({route}) {
 
 
     const toggleSelectSingle = (index) => {
-      setSelectedSingle(selectedSingle === index ? null : index);
+      setSelectedSingles(prev => prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]);
     };
 
 
-    const handleShareSingles = async (stepIndex) => {
-      if (!stepIndex && stepIndex !== 0) return;
+    const handleShareSingles = async (selectedids) => {
+      if (!selectedids?.length) return;
       setLoading(true);
 
       try {
-        const step = move.steps[stepIndex];
-        
-        if (!step || !step.img) {
-          Alert.alert("No Image", "This step does not have an image to share.");
-          setLoading(false);
-          return;
-        }
+        const selectedSteps = selectedids.map(index => move.steps[index]).filter(step => step);
 
-        let imagePath = step.img;
-        
-        // Verify the file exists
-        if (imagePath.startsWith('file://')) {
-          const info = await FileSystem.getInfoAsync(imagePath);
-          if (!info.exists) {
-            Alert.alert("File Not Found", "The image file no longer exists.");
-            setLoading(false);
-            return;
+        const base64ImagesArray = [];
+        for (const step of selectedSteps) {
+          if (step.img) {
+            try {
+              let imagePath = step.img;
+              
+              if (step.img.startsWith('file://')) {
+                const info = await FileSystem.getInfoAsync(step.img);
+                if (!info.exists) continue;
+                imagePath = step.img;
+              }
+              
+              const base64Data = await FileSystem.readAsStringAsync(imagePath, { encoding: FileSystem.EncodingType.Base64 });
+              base64ImagesArray.push(`data:image/png;base64,${base64Data}`);
+            } catch (error) {
+              Alert.alert("Error converting image to base64:", error.message);
+            }
           }
         }
 
-        // Check if sharing is available
-        const isAvailable = await Sharing.isAvailableAsync();
-        if (!isAvailable) {
-          Alert.alert("Sharing Not Available", "Your device does not support sharing.");
-          setLoading(false);
+        if (base64ImagesArray.length === 0) {
+          Alert.alert("No Images", "No valid images found to share.");
           return;
         }
 
-        // Share the image using expo-sharing
-        await Sharing.shareAsync(imagePath, {
-          mimeType: 'image/*',
-          dialogTitle: 'Share Step Image',
-        });
+        const shareOptions = {
+          title: 'Share Images',
+          urls: base64ImagesArray,
+          type: 'image/*',
+        };
+
+        await Share.open(shareOptions);
         
       } catch (error) {
-        Alert.alert("Sharing Error", "Could not share the image: " + error.message);
+        Alert.alert("Sharing Error", "Could not share images: " + error.message);
       } finally {
-        setSelectedSingle(null);
+        setSelectedSingles([]);
         setLoading(false);
       }  
     }
@@ -940,8 +931,8 @@ export default function MyDojoStyles({route}) {
                 <View>
                   <TouchableOpacity 
                     onLongPress={() => toggleSelectSingle(index) }
-                    onPress={() => selectedSingle !== null && toggleSelectSingle(index)}
-                    style={[styles.itemContainerVM, selectedSingle === index && styles.selectedItem ]}>
+                    onPress={() => selectedSingles.length > 0 && toggleSelectSingle(index)}
+                    style={[styles.itemContainerVM, selectedSingles.includes(index) && styles.selectedItem ]}>
                       <Image source = {{uri: step.img}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
                   </TouchableOpacity> 
 
@@ -960,13 +951,13 @@ export default function MyDojoStyles({route}) {
           />
         </View>
 
-        { selectedSingle !== null && (
+        { selectedSingles.length > 0 && (
           <View style={styles.batchBar}>
-            <Text style={ styles.batchText }>Image Selected</Text>
-            <TouchableOpacity onPress={() => handleShareSingles(selectedSingle)} style={styles.shareIcon}>
+            <Text style={ styles.batchText }>{selectedSingles.length} Selected</Text>
+            <TouchableOpacity onPress={() => handleShareSingles(selectedSingles)} style={styles.shareIcon}>
               <ImageBackground style={{height: "100%", width: "100%", borderRadius: 4}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ require('../assets/greensharearrow.png') }/>         
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedSingle(null)} style={styles.myDojoDeleteIcon}>
+            <TouchableOpacity onPress={() => setSelectedSingles([])} style={styles.myDojoDeleteIcon}>
               <ImageBackground style={{height: "100%", width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={ require('../assets/deletemanualicon.png') }/>         
             </TouchableOpacity>
           </View> )

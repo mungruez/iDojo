@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
 import { useIsFocused } from '@react-navigation/native';
 import YoutubePlayer from "react-native-youtube-iframe";
-import * as Sharing from 'expo-sharing';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -62,30 +61,35 @@ export default function VideoPlayer({ video }) {
         return;
       }
 
+      let shareOptions = {};
+
       if (isYouTube) {
         const youtubeUrl = `https://youtu.be/${video.videoUrl}`;
-        await Share.share({ title: video.title, message: youtubeUrl, url: youtubeUrl });
-        return;
-      }
-
-      const uri = video.vid?.startsWith('file://') ? video.vid : video.videoUrl;
-      if (!uri) {
+        shareOptions = {
+          title: video.title,
+          url: youtubeUrl,
+          failOnCancel: false,
+        };
+      } else if (video.vid && video.vid.startsWith('file://')) {
+        shareOptions = {
+          title: video.title,
+          url: video.vid,
+          type: 'video/mp4',
+          useInternalStorage: Platform.OS === 'android',
+          failOnCancel: false,
+        };
+      } else if (video.videoUrl && video.videoUrl.length > 7) {
+        shareOptions = {
+          title: video.title,
+          url: video.videoUrl,
+          failOnCancel: false,
+        };
+      } else {
         Alert.alert('Share Error', 'No video source available to share.');
         return;
       }
 
-      if (uri.startsWith('file://')) {
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(uri, {
-            mimeType: 'video/mp4',
-            dialogTitle: `Share ${video.title}`,
-          });
-        } else {
-          Alert.alert('Share Error', 'Sharing is not available on this device.');
-        }
-      } else {
-        await Share.share({ title: video.title, message: uri, url: uri });
-      }
+      await Share.open(shareOptions);
     } catch (error) {
       Alert.alert('Share Error', error.message || 'Could not share video.');
     }
