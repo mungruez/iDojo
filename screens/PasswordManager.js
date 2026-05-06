@@ -169,7 +169,6 @@ export default function PasswordManager() {
     };
 
    
-    
 
     const encryptPassword = async (pass, passNum) => {
         if(!pass || pass.length < 4) {
@@ -211,7 +210,7 @@ export default function PasswordManager() {
             }
         }
         
-        await AsyncStorage.setItem('xx7771xxiDojoPassword'+passwordNum, ""+enc);
+        await AsyncStorage.setItem('xx7771xxiDojoPassword'+passNum, ""+enc);
         return enc;
     };
 
@@ -310,15 +309,16 @@ export default function PasswordManager() {
         } else {
             let passNum = passwordNum +1;
             let newPassNum = passwordNum;
+
             try {
                 let placed=-1;
                 let passKey = await AsyncStorage.getItem('xx7771xxiDojoAESpassKey');
-                if(passkey) {
+                if(passKey) {
                     passKey+="";
                 } else {
                     passKey = "o";
                 }
-
+  
                 for(let pki=0; passKey && pki < passKey.length; pki++) {
                     
                     if(placed<0 && passKey.charAt(pki) =='o' ) {    
@@ -368,7 +368,6 @@ export default function PasswordManager() {
                     newPassNum = passNum-1;
                    await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', passKey+""); 
                 }
-
             } catch(error) {
                 Alert.alert("Unable To Save", "Unable to Save Password! "+error);
             }
@@ -462,7 +461,7 @@ export default function PasswordManager() {
                 await AsyncStorage.removeItem('xx7771xxiDojoWebsite' +passNum);
                 await AsyncStorage.removeItem('xx7771xxiDojoUsername'+passNum);
             }
-
+      
             if(passNum == passKey.length-1) { 
                 passKey = passKey.substring(0, passKey.length-1);
                 numPasswords = passKey.length;
@@ -482,7 +481,7 @@ export default function PasswordManager() {
         } catch(error) {
             Alert.alert("Delete Error", "Error Deleting the Password: "+error); 
         }
-
+        
         setPasswords(updatedPasswords);
         setPasswordNum(numPasswords);
         setOverlayVisible(-1);
@@ -648,7 +647,6 @@ export default function PasswordManager() {
             if(pwds && pwds.length > 0) {
                 if (pwds.length > 1) Alert.alert("Passwords Found", "Found : "+pwds.length+ " Passwords Saved! Do not delete you App Data or you will loose your passwords.");
                 if (pwds.length < 2) Alert.alert("Password Found", "Found : "+pwds.length+ " Password Saved! Do not delete you App Data or you will loose your passwords.");
-                
                 setPasswords(pwds);
                 pNum=pwds.length;
                 for(let pkI=0; pkI < passKey.length; pkI++) {
@@ -944,7 +942,6 @@ const styles = StyleSheet.create({
     },
     table: {
         flexDirection: "row", 
-        backgroundColor: "transparent", 
         borderRadius: 12, 
         elevation: 4, 
         marginBottom: 7, 

@@ -219,7 +219,7 @@ export default function LoginScreen() {
   const showConfirmDialog = () => {
     Alert.alert(
       "Confirm Reset!",
-      "Are you sure you want to: Reset All Passwords?",
+      "Are you sure you want to: Reset PIN/All Passwords?",
       [
         {
           text: "Cancel",
