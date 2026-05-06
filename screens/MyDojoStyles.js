@@ -799,7 +799,7 @@ export default function MyDojoStyles({route}) {
       try {
         const selectedSteps = selectedids.map(index => move.steps[index]).filter(step => step);
 
-        const base64ImagesArray = [];
+        const imageUrisArray = [];
         for (const step of selectedSteps) {
           if (step.img) {
             try {
@@ -811,22 +811,23 @@ export default function MyDojoStyles({route}) {
                 imagePath = step.img;
               }
               
-              const base64Data = await FileSystem.readAsStringAsync(imagePath, { encoding: FileSystem.EncodingType.Base64 });
-              base64ImagesArray.push(`data:image/png;base64,${base64Data}`);
+              imageUrisArray.push(imagePath);
             } catch (error) {
-              Alert.alert("Error converting image to base64:", error.message);
+              Alert.alert("Error preparing image:", error.message);
             }
           }
         }
 
-        if (base64ImagesArray.length === 0) {
+        if (imageUrisArray.length === 0) {
           Alert.alert("No Images", "No valid images found to share.");
           return;
         }
 
         const shareOptions = {
           title: 'Share Images',
-          urls: base64ImagesArray,
+          urls: imageUrisArray,
+          failOnCancel: false,
+          useInternalStorage: Platform.OS === 'android',
           type: 'image/*',
         };
 
