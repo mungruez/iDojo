@@ -277,7 +277,13 @@ export default function PasswordManager() {
 
     const savePassword = async () => {
         if (!website || !username || !password) {
-            Alert.alert("Fill in the Fields","Please fill in all fields."); 
+            Alert.alert("Incomplete Fields","Please fill in all fields."); 
+            return;
+        }
+        
+        const hasEitherSlash = password.includes("/") || password.includes("\\");
+        if (hasEitherSlash) {
+            Alert.alert("Invalid Password","Password contains invalid characters (slashes)."); 
             return;
         }
 
