@@ -7,6 +7,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
+import Share from 'react-native-share';
 import * as Sharing from 'expo-sharing';
 import PdfMove from './PdfMove';
 import VideoPlayer from './VideoPlayer';
@@ -819,7 +820,6 @@ export default function MyDojoStyles({route}) {
             try {
               let imagePath = step.img;
               
-              // If it's a file path, use it directly; otherwise assume it's already a URI
               if (step.img.startsWith('file://')) {
                 const info = await FileSystem.getInfoAsync(step.img);
                 if (!info.exists) continue;
@@ -832,7 +832,7 @@ export default function MyDojoStyles({route}) {
                 stepIndex: selectedids[selectedSteps.indexOf(step)],
               });
             } catch (error) {
-              console.log("Error converting image to base64:", error);
+              Alert.alert("Error converting image to base64:", error.message);
             }
           }
         }
@@ -842,11 +842,9 @@ export default function MyDojoStyles({route}) {
           return;
         }
 
-        // Share the base64 images array
         const shareOptions = {
           title: 'Share Images',
           failOnCancel: false,
-          message: `Sharing ${base64ImagesArray.length} image(s)`,
           type: 'image/*',
           useInternalStorage: true,
           urls: base64ImagesArray.map(img => `data:image/png;base64,${img.base64}`),
@@ -856,15 +854,15 @@ export default function MyDojoStyles({route}) {
           const ShareResponse = await Share.open(shareOptions);
         } catch (error) {
           if (await Sharing.isAvailableAsync()) {
-            Alert.alert("Share Single Image Only", "The device only allows sharing single images.");
+            Alert.alert("Share Single Image Only", "The device only allows sharing single images. "+error.message);
             await Sharing.shareAsync(move.steps[selectedids[0]].img);
           }
         }
         
-        setSelectedSingles([]);
       } catch (err) {
-        Alert.alert("Error", "Could not share images.");
+        Alert.alert("Sharing Error", "Could not Share images."+err.message);
       } finally {
+        setSelectedSingles([]);
         setLoading(false);
       }  
     }
