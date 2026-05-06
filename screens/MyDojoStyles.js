@@ -773,6 +773,7 @@ export default function MyDojoStyles({route}) {
         if (viewmode > 0) {
           setViewMode(0);
           if(addmode) setAddMode(false);
+          if(selectedSingle) setSelectedSingle(null);
           return true;
         }
 
