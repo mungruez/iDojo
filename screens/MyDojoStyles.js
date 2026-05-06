@@ -813,27 +813,43 @@ export default function MyDojoStyles({route}) {
       try {
         const selectedSteps = selectedids.map(index => move.steps[index]).filter(step => step);
 
-        const imageUris = [];
+        const base64ImagesArray = [];
         for (const step of selectedSteps) {
-          if (step.img && step.img.startsWith('file://')) {
-            const info = await FileSystem.getInfoAsync(step.img);
-            if (info.exists) {
-              const shareableUri = await FileSystem.getContentUriAsync(step.img);
-              imageUris.push(shareableUri);
+          if (step.img) {
+            try {
+              let imagePath = step.img;
+              
+              // If it's a file path, use it directly; otherwise assume it's already a URI
+              if (step.img.startsWith('file://')) {
+                const info = await FileSystem.getInfoAsync(step.img);
+                if (!info.exists) continue;
+                imagePath = step.img;
+              }
+              
+              const base64Data = await FileSystem.readAsStringAsync(imagePath, { encoding: FileSystem.EncodingType.Base64 });
+              base64ImagesArray.push({
+                base64: base64Data,
+                stepIndex: selectedids[selectedSteps.indexOf(step)],
+              });
+            } catch (error) {
+              console.log("Error converting image to base64:", error);
             }
           }
         }
 
-        if (imageUris.length === 0) {
+        if (base64ImagesArray.length === 0) {
           Alert.alert("No Images", "No valid images found to share.");
           return;
         }
 
+        // Share the base64 images array
         const shareOptions = {
           title: 'Share Images',
           failOnCancel: false,
-          urls: imageUris,
+          message: `Sharing ${base64ImagesArray.length} image(s)`,
           type: 'image/*',
+          useInternalStorage: true,
+          urls: base64ImagesArray.map(img => `data:image/png;base64,${img.base64}`),
         };
 
         try {

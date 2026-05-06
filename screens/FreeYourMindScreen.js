@@ -364,7 +364,7 @@ export default function FreeYourMindScreen() {
                         alignItems:"flex-start",
                         height: 19,
                         width: "95%",}}>
-                        <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : file.filename+"\u00A0\u00A0\u00A0\u00A0"} </Text>        
+                        <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : `${file.filename}     `} </Text>        
                     </View>      
 
                   { playingId == file.id && ( <TrackPlayer track={file} /> ) }
