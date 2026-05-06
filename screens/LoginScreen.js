@@ -56,11 +56,13 @@ export default function LoginScreen() {
         for(let pkI=0; pkI < passKey.length; pkI++) {
           if(passKey.charAt(pkI) =='x' ) {
             setHasPasswordList(true);
+            Alert.alert("Welcome Back", " Please enter your PIN/Password to proceed to iDojo's Passwords Manager.");
             return;
           }
         }
-
-        Alert.alert("Welcome Back", " Please enter your PIN/Password to proceed to iDojo's Passwords Manager.");
+        
+        setHasPasswordList(flsea);
+        Alert.alert("Welcome Back", "You have no saved passwords. Please enter your PIN/Password to proceed to iDojo's Passwords Manager.");
         return;
       }
     } catch(error) {
@@ -116,7 +118,7 @@ export default function LoginScreen() {
         setHasPasswords(false);
         setHasPasswordList(false);
         await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
-        Alert.alert("PIN Deleted","Successfully deleted PIN, found 0 Passwords to delete.");
+        Alert.alert("No Passwords To Delete","Found 0 Passwords to delete.");
         if(isOverlayVisible) {
           setOverlayVisible(false);
         }
@@ -127,7 +129,7 @@ export default function LoginScreen() {
       await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
     
     } catch(error) {
-      Alert.alert("Delete Error", "Error deleting the PIN :"+error);
+      Alert.alert("Delete Error", "Error deleting Passwords, try clearing app data:"+error);
       setHasPasswords(false);
       setHasPasswordList(false);
       if(isOverlayVisible) {
@@ -148,13 +150,12 @@ export default function LoginScreen() {
 
   const checkPin = async () => {
     try{
-      if(isOverlayVisible) {
-        setOverlayVisible(false);
-      }
-      
       if(pin && pin.length < 4) {
         Alert.alert("PIN Too Short", "The PIN entered is too short!");
         setPin("");
+        if(isOverlayVisible) {
+          setOverlayVisible(false);
+        }  
         return;
       }
 
@@ -165,12 +166,18 @@ export default function LoginScreen() {
         if(pin.length != cleanPIN.length) {
           Alert.alert("PIN Does Not Match", "PIN entered does not match with what is saved. Please try again.");
           setPin("");
+          if(isOverlayVisible) {
+            setOverlayVisible(false);
+          }
           return;
         }
 
         for (let index = 0; index < pin.length; index++) {
           if(pin[index] != cleanPIN[index]) {
-            setPin("")
+            setPin("");
+            if(isOverlayVisible) {
+             setOverlayVisible(false);
+            }
             Alert.alert("PIN Does Not Match", "PIN entered does not match with what is saved. Please try again.");
             return;
           }
@@ -179,11 +186,17 @@ export default function LoginScreen() {
         setPin("");
         setPinConfirm("");
         setHasPasswords(true);
+        if(isOverlayVisible) {
+          setOverlayVisible(false);
+        }
         navigation.navigate('PasswordManager');
 
       } else {
         Alert.alert("Enter PIN", "Please enter your PIN to use the Password Manager.");
         setPin("");
+        if(isOverlayVisible) {
+          setOverlayVisible(false);
+        }
         if(savedPIN) {
           return;
         }
@@ -195,6 +208,9 @@ export default function LoginScreen() {
       Alert.alert("No PIN Found", " Please submit a PIN as a Master Passord for the Password Manager.");
       setPin("");
       setHasPasswords(false);
+      if(isOverlayVisible) {
+        setOverlayVisible(false);
+      }
       return;
     }    
   }
@@ -223,8 +239,8 @@ export default function LoginScreen() {
 
   const resetPin = async () => {
     await AsyncStorage.removeItem('xx7771xxiDojoPIN');
-    if(isOverlayVisible > -1) {
-      setOverlayVisible(-1);
+    if(isOverlayVisible) {
+      setOverlayVisible(false);
     }
   };
 
@@ -252,15 +268,14 @@ export default function LoginScreen() {
 
 
   const savePin = async () => {
-    if(isOverlayVisible) {
-      setOverlayVisible(false);
-    }
-    
     if(pin) {
       if( (pin.length != pinConfirm.length) || (pin.length < 4) || (pinConfirm.length < 4)) {
         Alert.alert("PIN Do Not Match"," A PIN is too short or lengths do not match!");
         setPin("");
         setPinConfirm("");
+        if(isOverlayVisible) {
+          setOverlayVisible(false);
+        }
         return;
       }
 
@@ -269,6 +284,9 @@ export default function LoginScreen() {
           Alert.alert("PINs Do Not Match", "PIN and the PIN confiem do not match !");
           setPin("");
           setPinConfirm("");
+          if(isOverlayVisible) {
+            setOverlayVisible(false);
+          }
           return;
         }
       }
@@ -277,6 +295,9 @@ export default function LoginScreen() {
       setPin("");
       setPinConfirm("");
       setHasPasswords(true);
+      if(isOverlayVisible) {
+        setOverlayVisible(false);
+      }
       navigation.navigate('PasswordManager');
     }  
   }

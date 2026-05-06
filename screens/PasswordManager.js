@@ -100,6 +100,7 @@ export default function PasswordManager() {
     
 
     useEffect(() => {
+        //AsyncStorage.clear();
         fetchPasswords();
         showPasswords();
     }, []);
@@ -276,12 +277,8 @@ export default function PasswordManager() {
 
 
     const savePassword = async () => {
-        if(isOverlayVisible > -1) {
-            setOverlayVisible(-1);
-        }
-
         if (!website || !username || !password) {
-            alert("Please fill in all fields."); 
+            Alert.alert("Fill in the Fields","Please fill in all fields."); 
             return;
         }
 
@@ -302,7 +299,7 @@ export default function PasswordManager() {
                 await AsyncStorage.setItem('xx7771xxiDojoUsername'+passwordNum, username);
                 encryptPassword(password, passwordNum); 
             } catch(error) {
-                alert("Unable to Save Passwords !");
+                Alert.alert("Unable To Save", "Unable to Save Passwords !");
             }
 
             setPasswordNum(passwordNumTemp);
@@ -316,7 +313,13 @@ export default function PasswordManager() {
             try {
                 let placed=-1;
                 let passKey = await AsyncStorage.getItem('xx7771xxiDojoAESpassKey');
-                for(let pki=0; pki < passKey.length; pki++) {
+                if(passkey) {
+                    passKey+="";
+                } else {
+                    passKey = "o";
+                }
+
+                for(let pki=0; passKey && pki < passKey.length; pki++) {
                     
                     if(placed<0 && passKey.charAt(pki) =='o' ) {    
                         let passKeyObj = replaceCharAt(passKey, pki, 'x');
@@ -354,10 +357,20 @@ export default function PasswordManager() {
                     }
                 }
 
-                await AsyncStorage.setItem('xx7771xxiDojoAESpassKey',passKey+"");
-                
+                if(passKey) {
+                    await AsyncStorage.setItem('xx7771xxiDojoAESpassKey',passKey+"");
+                } else {
+                    passKey = "x";
+                    await AsyncStorage.setItem('xx7771xxiDojoWebsite' +(""+(passKey.length-1)+""), website);
+                    await AsyncStorage.setItem('xx7771xxiDojoUsername'+(""+(passKey.length-1)+""), username);
+                    encryptPassword(password, passKey.length-1);
+                    passNum = passKey.length;
+                    newPassNum = passNum-1;
+                   await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', passKey+""); 
+                }
+
             } catch(error) {
-                alert("Unable to Save Passwords !"+error);
+                Alert.alert("Unable To Save", "Unable to Save Password! "+error);
             }
             
             const newPassword = {
@@ -373,6 +386,9 @@ export default function PasswordManager() {
         setWebsite(""); 
         setUsername(""); 
         setPassword("");
+         if(isOverlayVisible > -1) {
+            setOverlayVisible(-1);
+        }
     };
 
     const editPassword = (index) => {
@@ -464,7 +480,7 @@ export default function PasswordManager() {
                 }
             }
         } catch(error) {
-            alert("Error Deleting the Password: "+error); 
+            Alert.alert("Delete Error", "Error Deleting the Password: "+error); 
         }
 
         setPasswords(updatedPasswords);
@@ -475,7 +491,7 @@ export default function PasswordManager() {
         setWebsite(""); 
         setUsername(""); 
         setPassword("");
-        alert("Deleted password for Website: "+webst);
+        Alert.alert("Password Deleted!", "Deleted password for Website: "+webst);
     };
 
 
@@ -486,6 +502,9 @@ export default function PasswordManager() {
         setPassword(""); 
         setPasswordNumTemp(passwordNum);
         setPasswordNum(passwordNum);
+        if(isOverlayVisible > -1) {
+          setOverlayVisible(-1);
+        }
         setEditing(false); 
         setEditIndex(null);
     };
@@ -762,7 +781,7 @@ export default function PasswordManager() {
                 
                 <TouchableOpacity
                     style={{height:95, width:"99%", alignSelf:"center",}}
-                    onPress={savePassword}>
+                    onPress={() => setOverlayVisible(-1)}>
                     <ImageBackground style={{flex:1, height:"auto", width:"98.5%",}} resizeMode='contain' source={require('../assets/pwrdbackground.png')}>
                         <Image
                             resizeMode="contain"
@@ -779,7 +798,7 @@ export default function PasswordManager() {
 
     
     return ( 
-      <ImageBackground style={[styles.imgBackground, { paddingBottom: bottomPadding, backgroundColor: 'silver', }]} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
+      <ImageBackground style={[styles.imgBackground, { paddingBottom: bottomPadding, backgroundColor: 'rgba(34, 62, 85, 0.65)', }]} resizeMode='cover' source={require('../assets/featuredbackground.jpg')}>
            
         <View style={{backgroundColor: 'transparent', marginBottom: 19, paddingLeft:1, paddingRight:1,}}>
           <ImageBackground style={ styles.icon } resizeMode='contain' source={require('../assets/passwordsmanagertitle.png')} /> 
