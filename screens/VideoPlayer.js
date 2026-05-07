@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, Dimensions, Text, StyleSheet, AppState, ActivityIndicator, TouchableOpacity, Image, Alert, Share } from "react-native"; 
+import { View, ScrollView, Dimensions, Text, StyleSheet, AppState, ActivityIndicator, TouchableOpacity, Image, Alert, Platform } from "react-native"; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
 import { useIsFocused } from '@react-navigation/native';
 import YoutubePlayer from "react-native-youtube-iframe";
+import Share from 'react-native-share';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -75,7 +76,6 @@ export default function VideoPlayer({ video }) {
           title: video.title,
           url: video.vid,
           type: 'video/mp4',
-          useInternalStorage: Platform.OS === 'android',
           failOnCancel: false,
         };
       } else if (video.videoUrl && video.videoUrl.length > 7) {
@@ -128,7 +128,7 @@ export default function VideoPlayer({ video }) {
               contentFit="contain"
               useNativeControls
               allowsPictureinPicture
-              style={{ flex: 1, marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "38%%"}}
+              style={{ flex: 1, marginBottom: 5, marginLeft: 1, marginRight: 3, padding: 0, borderColor:'#9a9aa1', borderWidth: 2, height: "38%"}}
             />
 
              { loading && (
@@ -140,7 +140,7 @@ export default function VideoPlayer({ video }) {
         </View>)
       }
 
-      <View style={{maxHeight: "33%"}}>
+      <View style={{maxHeight: "33%", borderRadius:12}}>
         <ScrollView>
           <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft: 12, marginRight: 7, marginBottom: 19, padding: 9, width: "96%"}}>
               {video.desc}

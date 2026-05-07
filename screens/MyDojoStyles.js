@@ -483,13 +483,14 @@ export default function MyDojoStyles({route}) {
             title: 'Open PDF',
             url: move.vid,
             type: 'application/pdf',
-            useInternalStorage: Platform.OS === 'android',
             failOnCancel: false,
           };
 
           await Share.open(shareOptions);
         } catch (err) {
-          Alert.alert("Error", "Could not open PDF");
+          if (err.message && !err.message.includes('cancelled')) {
+            Alert.alert("PDF Error", "Could not open PDF");
+          }
         } finally {
           setLoading(false);
         }
@@ -820,21 +821,21 @@ export default function MyDojoStyles({route}) {
 
         if (imageUrisArray.length === 0) {
           Alert.alert("No Images", "No valid images found to share.");
+          setLoading(flase);
           return;
         }
 
-        const shareOptions = {
+        await Share.open({
           title: 'Share Images',
           urls: imageUrisArray,
-          failOnCancel: false,
-          useInternalStorage: Platform.OS === 'android',
           type: 'image/*',
-        };
-
-        await Share.open(shareOptions);
+          failOnCancel: false,
+        });
         
       } catch (error) {
-        Alert.alert("Sharing Error", "Could not share images: " + error.message);
+        if (error.message && !error.message.includes('cancelled')) {
+          Alert.alert("Sharing Error", error.message);
+        }
       } finally {
         setSelectedSingles([]);
         setLoading(false);
