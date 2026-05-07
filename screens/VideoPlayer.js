@@ -69,20 +69,17 @@ export default function VideoPlayer({ video }) {
         shareOptions = {
           title: video.title,
           url: youtubeUrl,
-          failOnCancel: false,
         };
       } else if (video.vid && video.vid.startsWith('file://')) {
         shareOptions = {
           title: video.title,
           url: video.vid,
           type: 'video/mp4',
-          failOnCancel: false,
         };
       } else if (video.videoUrl && video.videoUrl.length > 7) {
         shareOptions = {
           title: video.title,
           url: video.videoUrl,
-          failOnCancel: false,
         };
       } else {
         Alert.alert('Share Error', 'No video source available to share.');

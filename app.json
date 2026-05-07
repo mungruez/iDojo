@@ -43,7 +43,6 @@
       "expo-video",
       "expo-audio",
       "expo-asset",
-      "react-native-share",
       "expo-image-picker"
     ],
     "extra": {

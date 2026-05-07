@@ -356,7 +356,6 @@ export default function MyDojoStyles({route}) {
           title: 'Share Moves',
           url: zipPathUri,
           type: 'application/zip',
-          failOnCancel: false,
         };
 
         await Share.open(shareOptions);
@@ -488,7 +487,6 @@ export default function MyDojoStyles({route}) {
             title: 'Open PDF',
             url: move.vid,
             type: 'application/pdf',
-            failOnCancel: false,
           };
 
           await Share.open(shareOptions);
@@ -834,7 +832,6 @@ export default function MyDojoStyles({route}) {
           title: 'Share Images',
           urls: imageUrisArray,
           type: 'image/*',
-          failOnCancel: false,
         });
         
       } catch (error) {
