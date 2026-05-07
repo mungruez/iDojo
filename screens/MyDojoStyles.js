@@ -357,7 +357,6 @@ export default function MyDojoStyles({route}) {
           url: zipPathUri,
           type: 'application/zip',
           failOnCancel: false,
-          useInternalStorage: Platform.OS === 'android',
         };
 
         await Share.open(shareOptions);
@@ -427,7 +426,13 @@ export default function MyDojoStyles({route}) {
           return restored;
         });
 
-        await handleSave(finalMoves);
+        try {
+          await handleSave(finalMoves);
+          Alert.alert("Success", finalMoves.length + " moves added!");
+        } catch (saveError) {
+          Alert.alert("Save Error", saveError.message);
+          console.log(saveError);
+        }
         await FileSystem.deleteAsync(dataFilePath, { idempotent: true });
         Alert.alert("Success", `${finalMoves.length} moves added!`);
 
