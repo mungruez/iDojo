@@ -7,7 +7,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
-import Share from 'react-native-share';
+import * as Sharing from 'expo-sharing';
 import PdfMove from './PdfMove';
 import VideoPlayer from './VideoPlayer';
 
@@ -72,14 +72,15 @@ export default function MyDojoStyles({route}) {
       let sMoves = [{ id: "v-all", type: "video", style: "allstyles" }];
       let bMoves = [{ id: "s-all", type: "steps", style: "allstyles" }];
       let pMoves = [{ id: "p-all", type: "pdf", style: "allstyles" }];
+      const validList = list.filter(m => m && m.id && m.title && m.type);
       
       const q = query?.trim()?.toLowerCase();
       const typeFilter = ['video', 'steps', 'pdf'].includes(q) ? q : null;
 
-      list?.forEach(m => {
+      validList?.forEach(m => {
         const currentStyle = m.style || "Enter Move Title";
 
-        if (typeFilter && m.type !== typeFilter) return;
+        if (typeFilter && m.type.trim().toLowerCase() !== typeFilter) return;
 
         const matchesSearch = !q || 
           m.title?.trim().toLowerCase().includes(q) ||
@@ -349,17 +350,8 @@ export default function MyDojoStyles({route}) {
         await FileSystem.writeAsStringAsync(`${shareDirUri}data.json`, JSON.stringify(processedMoves));
         const nakedSource = Platform.OS === 'android' ? shareDirUri.replace('file://', '').replace(/\/$/, '') : shareDirUri;
         const nakedTarget = Platform.OS === 'android' ? zipPathUri.replace('file://', '') : zipPathUri;
-
         await zip(nakedSource, nakedTarget);
-
-        const shareOptions = {
-          title: 'Share Moves',
-          url: zipPathUri,
-          type: 'application/zip',
-        };
-
-        await Share.open(shareOptions);
-        
+        await Sharing.shareAsync(zipPathUri);        
         setSelectedIds([]);
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
@@ -483,13 +475,8 @@ export default function MyDojoStyles({route}) {
             return;
           }
 
-          const shareOptions = {
-            title: 'Open PDF',
-            url: move.vid,
-            type: 'application/pdf',
-          };
-
-          await Share.open(shareOptions);
+          await Sharing.shareAsync(move.vid);
+          
         } catch (err) {
           if (err.message && !err.message.includes('cancelled')) {
             Alert.alert("PDF Error", "Could not open PDF");
@@ -794,55 +781,42 @@ export default function MyDojoStyles({route}) {
     const toggleSelectSingle = (index) => {
       setSelectedSingles(prev => prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]);
     };
-
+  
 
     const handleShareSingles = async (selectedids) => {
       if (!selectedids?.length) return;
-      setLoading(true);
-
+      
       try {
-        const selectedSteps = selectedids.map(index => move.steps[index]).filter(step => step);
-
-        const imageUrisArray = [];
-        for (const step of selectedSteps) {
-          if (step.img) {
-            try {
-              let imagePath = step.img;
-              
-              if (step.img.startsWith('file://')) {
-                const info = await FileSystem.getInfoAsync(step.img);
-                if (!info.exists) continue;
-                imagePath = step.img;
-              }
-              
-              imageUrisArray.push(imagePath);
-            } catch (error) {
-              Alert.alert("Error preparing image:", error.message);
-            }
-          }
-        }
-
-        if (imageUrisArray.length === 0) {
-          Alert.alert("No Images", "No valid images found to share.");
-          setLoading(flase);
-          return;
-        }
-
-        await Share.open({
-          title: 'Share Images',
-          urls: imageUrisArray,
-          type: 'image/*',
-        });
+        const images = selectedids
+          .map(i => move.steps[i]?.img)
+          .filter(img => img);
         
-      } catch (error) {
-        if (error.message && !error.message.includes('cancelled')) {
-          Alert.alert("Sharing Error", error.message);
+        if (images.length === 0) return;
+
+        if(images.length === 1) {
+          await Sharing.shareAsync(images[0]);
+        } else {
+          const shareDir = `${FileSystem.cacheDirectory}images/`;
+          await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
+          
+          for (let i = 0; i < images.length; i++) {
+            const dest = `${shareDir}image_${i}.jpg`;
+            await FileSystem.copyAsync({ from: images[i], to: dest });
+          }
+          
+          const zipPath = `${FileSystem.cacheDirectory}images.zip`;
+          await zip(shareDir.replace('file://', ''), zipPath.replace('file://', ''));
+          await Sharing.shareAsync(zipPath);
+          await FileSystem.deleteAsync(shareDir);
+          await FileSystem.deleteAsync(zipPath);
         }
-      } finally {
-        setSelectedSingles([]);
-        setLoading(false);
-      }  
-    }
+      } catch (e) {
+
+        } finally {
+          setSelectedSingles([]);
+          setLoading(false);
+        }
+    };
       
 
 

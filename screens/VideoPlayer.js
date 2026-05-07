@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
 import { useIsFocused } from '@react-navigation/native';
 import YoutubePlayer from "react-native-youtube-iframe";
-import Share from 'react-native-share';
+import * as Sharing from 'expo-sharing';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -63,32 +63,19 @@ export default function VideoPlayer({ video }) {
       }
 
       let shareOptions = {};
-
       if (isYouTube) {
-        const youtubeUrl = `https://youtu.be/${video.videoUrl}`;
-        shareOptions = {
-          title: video.title,
-          url: youtubeUrl,
-        };
+        await Sharing.shareAsync(`https://youtu.be/${video.videoUrl}`);
       } else if (video.vid && video.vid.startsWith('file://')) {
-        shareOptions = {
-          title: video.title,
-          url: video.vid,
-          type: 'video/mp4',
-        };
+        await Sharing.shareAsync(video.vid);
       } else if (video.videoUrl && video.videoUrl.length > 7) {
-        shareOptions = {
-          title: video.title,
-          url: video.videoUrl,
-        };
+        await Sharing.shareAsync(video.videoUrl);
       } else {
         Alert.alert('Share Error', 'No video source available to share.');
-        return;
       }
-
-      await Share.open(shareOptions);
     } catch (error) {
-      Alert.alert('Share Error', error.message || 'Could not share video.');
+      if (!error.message?.includes('cancelled')) {
+        Alert.alert('Share Error', error.message || 'Could not share video.');
+      }
     }
   };
 
