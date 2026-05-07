@@ -168,7 +168,7 @@ export default function MyDojoStyles({route}) {
             m.id && 
             m.title && 
             m.title.trim() !== "" &&
-            (m.type === 'video' || m.type === "pdf" || (m.steps && m.steps.length > 0))
+            (m.type === 'video' || m.type === "pdf" || (m.type === "steps" && m.steps && m.steps.length > 0))
           );
 
           setMoves(movesList);
@@ -631,6 +631,9 @@ export default function MyDojoStyles({route}) {
             const pickedUri = res.assets[0].uri; 
             if (isVideo) {
               setVid(pickedUri);
+              if(videoUrl && videoUrl.trim().length > 1) {
+                setVideoUrl("");
+              }
             } else {
               const s = [...steps];
               s[index].img = pickedUri;
@@ -843,12 +846,16 @@ export default function MyDojoStyles({route}) {
                   return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
                 }
               }
-              
-              if (item.videoUrl && item.videoUrl.trim().length > 0) {
-                return require('../assets/onlinevideoicon.png');
+
+              if(item.thumb && item.thumb.trim().length > 7) {
+                return {uri: item.thumb};
+              }
+
+              if(item.vid && item.vid.trim().length > 7 && Platform.OS === "android") {
+                return {uri: item.vid};
               }
               
-              return item.thumb ? { uri: item.thumb } : require('../assets/onlinevideoicon.png');
+              return require('../assets/onlinevideoicon.png');
             })()} />
           <View style = {ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style = {ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
@@ -978,7 +985,7 @@ export default function MyDojoStyles({route}) {
          { typeAM === "video" ? (
            <View>
              <Text style={styles.label}>Move Video URL</Text>
-             {!vid && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
+             {(!vid || vid.trim().length < 7) || (videoUrl && videoUrl.trim().length > 7) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
              <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
                { vid || videoUrl ? 
                  ( <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
@@ -991,7 +998,7 @@ export default function MyDojoStyles({route}) {
            ) : typeAM === "pdf" ? (
              <View>
                <Text style={styles.label}>PDF URL of Move</Text>
-               {!vid && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
+               {(!vid || vid.trim().length < 7) || (videoUrl && videoUrl.trim().length > 7)  && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
                <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
                  { vid || videoUrl ? 
                    ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
