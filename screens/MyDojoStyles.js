@@ -392,7 +392,16 @@ export default function MyDojoStyles({route}) {
         if (!exists.exists) throw new Error("Manifest not found in zip");
 
         const content = await FileSystem.readAsStringAsync(dataFilePath);
-        const importedMoves = JSON.parse(content);
+        let importedMoves;
+        try {
+          importedMoves = JSON.parse(content);
+        } catch (parseError) {
+          throw new Error("Invalid data file in zip");
+        }
+
+        if (!Array.isArray(importedMoves) || importedMoves.length === 0) {
+          throw new Error("No moves found in zip file");
+        }
 
         const finalMoves = importedMoves.map((move, index) => {
           const fixPath = (oldPath) => {
@@ -415,20 +424,22 @@ export default function MyDojoStyles({route}) {
           }
           restored.thumb = move.type === 'video' ? (restored.vid || restored.videoUrl) : move.type === 'pdf' ? (restored.vid || restored.videoUrl): (restored.steps?.[0]?.img || null);
           return restored;
-        });
+        }).filter(m => m && m.id);
 
-        try {
-          await handleSave(finalMoves);
-          Alert.alert("Success", finalMoves.length + " moves added!");
-        } catch (saveError) {
-          Alert.alert("Save Error", saveError.message);
-          console.log(saveError);
+        if (finalMoves.length === 0) {
+          throw new Error("No valid moves to import");
         }
-        await FileSystem.deleteAsync(dataFilePath, { idempotent: true });
+        await handleSave(finalMoves);
         Alert.alert("Success", `${finalMoves.length} moves added!`);
+        await FileSystem.deleteAsync(dataFilePath, { idempotent: true });
 
       } catch (e) {
         Alert.alert("Import Failed", e.message);
+        try {
+          await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
+        } catch (cleanupError) {
+      
+        }
       } finally {
         setLoading(false);
       }
