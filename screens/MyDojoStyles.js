@@ -63,7 +63,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
-    const parseStyles = (list, query = null) => {
+    const parseStyles = (list, query) => {
       if (!Array.isArray(list)) {
         alert("Data is not an array, skipping parse.");
         return;
@@ -75,19 +75,34 @@ export default function MyDojoStyles({route}) {
       const validList = list.filter(m => m && m.id && m.title && m.type);
       
       const q = query?.trim()?.toLowerCase();
-      const typeFilter = ['video', 'steps', 'pdf'].includes(q) ? q : null;
+      const typeFilter = ['video', "steps", 'pdf'].includes(q) ? q : null;
 
       validList?.forEach(m => {
         const currentStyle = m.style || "Enter Move Title";
+        const mType = m.type.trim().toLowerCase();
 
         if (typeFilter && m.type.trim().toLowerCase() !== typeFilter) return;
+         const isCategorySearch = ['video', 'steps', 'pdf'].includes(q);
+        let matches = false;
 
-        const matchesSearch = !q || 
-          m.title?.trim().toLowerCase().includes(q) ||
-          m.style?.trim().toLowerCase().includes(q) ||
-          m.desc?.trim().toLowerCase().includes(q);
+        if (isCategorySearch) {
+          matches = mType.includes(q);
+        } else if (mType === "steps" && q) {
+          const mainMatch = m.title?.toLowerCase().includes(q) || m.desc?.toLowerCase().includes(q) || m.style?.toLowerCase().includes(q);
+          const nestedMatch = m.steps?.some(step => 
+            step.title?.toLowerCase().includes(q) || 
+            step.desc?.toLowerCase().includes(q)
+          );
+
+          matches = mainMatch || nestedMatch;
+        } else {
+          matches = !q || 
+            m.title?.toLowerCase().includes(q) ||
+            m.style?.toLowerCase().includes(q) ||
+            m.desc?.toLowerCase().includes(q);
+        }
         
-        if (!matchesSearch) return;
+        if (!matches) return;
 
         if (m.type === "video" && !videoStyles.includes(currentStyle)) {
           videoStyles.push(currentStyle); 
@@ -486,7 +501,11 @@ export default function MyDojoStyles({route}) {
             return;
           }
 
-          await Sharing.shareAsync(move.vid);
+          await Sharing.shareAsync(move.vid, {
+            mimeType: 'application/pdf',
+            UTI: 'com.adobe.pdf',
+            dialogTitle: `Open ${move.title}`,
+          });
           
         } catch (err) {
           if (err.message && !err.message.includes('cancelled')) {
@@ -508,38 +527,38 @@ export default function MyDojoStyles({route}) {
     };
 
     
-    const toggleListMode = (mv) => {
+    const toggleAddMode = (mv, mvtype, mvstyle) => {
       if(mv === null) {
         setSelectedIds([]);
-        setTypeAM(ftype);
+        setTypeAM(mvtype);
         setVideoUrl("");
         setMove(null);
         setTitle("");
         setDesc("");
         setVid("");
         
-        if(fstyle === "allstyles" || fstyle === "all styles") {
+        if(mvstyle === "allstyles" || mvstyle === "all styles") {
           setFStyleAM("Enter List Title");
         } else {
-          setFStyleAM(fstyle);
+          setFStyleAM(mvstyle);
         }
 
-        if(ftype === "steps") setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+        if(mvtype === "steps") setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
         setAddMode(true);
 
       } else {
         setDesc(mv.desc || "");
-        setFStyleAM(mv.style);
+        setFStyleAM(mvstyle);
         setSelectedIds([]);
         setTitle(mv.title);
-        setTypeAM(mv.type);
+        setTypeAM(mvtype);
         setMove(mv);
 
-        if(mv.type !== "steps") {
+        if(mvtype !== "steps") {
           setVid(mv.vid);
           setVideoUrl(mv.videoUrl || "");
         } else {
-          setSteps(mv.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+          setSteps(mvsteps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
         }
         setAddMode(true);
       }
@@ -729,8 +748,10 @@ export default function MyDojoStyles({route}) {
         let finalVid = vid; 
         let finalSteps = [...steps];
         if ((typeAM === "video" || typeAM === "pdf") && vid) {
-          finalVid = await ensurePermanent(vid, `video_${Date.now()}.mp4`);
+          const ext = typeAM === 'pdf' ? '.pdf' : '.mp4';
+            finalVid = await ensurePermanent(vid, `file_${Date.now()}${ext}`);
         }
+        
         if (typeAM === 'steps') {
           finalSteps = await Promise.all(steps.map(async (s, i) => ({
             ...s,
@@ -870,7 +891,7 @@ export default function MyDojoStyles({route}) {
             })()} />
           <View style = {ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style = {ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
-            <TouchableOpacity onPress={() => toggleListMode(item)} style={styles.editIcon}>
+            <TouchableOpacity onPress={() => toggleAddMode(item, ftype, item.style)} style={styles.editIcon}>
               <ImageBackground style = {{ height: "100%", width: "100%", }} resizeMode = 'contain' source = { ftype === 'steps' ? require('../assets/editmanualicon.png') : ftype  === "video" ? require('../assets/editmoveicon.png') : require('../assets/editpdficon.png')}/>         
             </TouchableOpacity>             
           </View>
@@ -996,7 +1017,7 @@ export default function MyDojoStyles({route}) {
          { typeAM === "video" ? (
            <View>
              <Text style={styles.label}>Move Video URL</Text>
-             {(!vid || vid.trim().length < 7) || (videoUrl && videoUrl.trim().length > 7) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} />}
+             { (!vid || vid.trim().length < 7 || move?.videoUrl) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} /> }
              <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
                { vid || videoUrl ? 
                  ( <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
@@ -1009,7 +1030,7 @@ export default function MyDojoStyles({route}) {
            ) : typeAM === "pdf" ? (
              <View>
                <Text style={styles.label}>PDF URL of Move</Text>
-               {(!vid || vid.trim().length < 7) || (videoUrl && videoUrl.trim().length > 7)  && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
+               { (!vid || vid.trim().length < 7 || move?.videoUrl) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
                <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
                  { vid || videoUrl ? 
                    ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
@@ -1093,7 +1114,7 @@ export default function MyDojoStyles({route}) {
                 <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/greenbackicon.png') : ftype === "pdf" ? require('../assets/bluebackicon.png') : require('../assets/redbackicon.png') }/>
               </TouchableOpacity>
     
-              <TouchableOpacity onPress={() => toggleListMode(null)} style={ftype === "steps" ? styles.plusIcon : styles.plusIcon}>
+              <TouchableOpacity onPress={() => toggleAddMode(null, ftype, fstyle)} style={ftype === "steps" ? styles.plusIcon : styles.plusIcon}>
                 <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ftype === "steps" ? require('../assets/addmanualicon.png') : ftype === "pdf" ? require('../assets/addpdfmoveicon.png') : require('../assets/addmoveicon.png') }/>         
               </TouchableOpacity>
             </View>
@@ -1247,7 +1268,7 @@ export default function MyDojoStyles({route}) {
                       )}
                   </ImageBackground>
                   </TouchableOpacity>) 
-                  : item && item.style && item.type==="steps" ? ( <TouchableOpacity
+                  : item && item.style && item.type === "steps" ? ( <TouchableOpacity
                     style={{ width: '79%', height: 43 }}
                     onPress={() => { setType(item.type); setFStyle(item.style); setHMoves(getMoves(item.style, item.type, moves)); setListMode(true); }}>
                     <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/greenbtnbg.png')}>
@@ -1261,7 +1282,7 @@ export default function MyDojoStyles({route}) {
                       )}
                     </ImageBackground>
                   </TouchableOpacity> )
-                  : item && item.style && item.type==="pdf" && ( <TouchableOpacity
+                  : item && item.style && item.type === "pdf" && ( <TouchableOpacity
                     style={{ width: "79%", height: 43 }}
                     onPress={() => { setType(item.type); setFStyle(item.style); setHMoves(getMoves(item.style, item.type, moves)); setListMode(true); }}>
                     <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/bluebtnbg.png')}>
