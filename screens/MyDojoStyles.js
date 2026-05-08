@@ -260,7 +260,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const myDojoHandleDelete = async (idsFromArg = []) => {
       const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : selectedIds;
       const cleanIdsToDelete = actualIds.map(id => String(id).trim());
@@ -321,7 +320,7 @@ export default function MyDojoStyles({route}) {
           : hmoves.filter(m => selectedids.includes(m.id));
 
         const shareDirUri = `${FileSystem.cacheDirectory}share_batch/`;
-        const zipPathUri = `${FileSystem.cacheDirectory}Dojo_Export.zip`;
+        const zipPathUri = `${FileSystem.cacheDirectory}iDojo_Export.zip`;
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.makeDirectoryAsync(shareDirUri, { intermediates: true });
 
@@ -366,7 +365,10 @@ export default function MyDojoStyles({route}) {
         const nakedSource = Platform.OS === 'android' ? shareDirUri.replace('file://', '').replace(/\/$/, '') : shareDirUri;
         const nakedTarget = Platform.OS === 'android' ? zipPathUri.replace('file://', '') : zipPathUri;
         await zip(nakedSource, nakedTarget);
-        await Sharing.shareAsync(zipPathUri);        
+        await Sharing.shareAsync(zipPathUri, {
+          mimeType: 'application/zip',
+          dialogTitle: 'Share iDojo Zip'
+        });        
         setSelectedIds([]);
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
@@ -384,7 +386,7 @@ export default function MyDojoStyles({route}) {
     const handleImport = async () => {
       try {
         const res = await DocumentPicker.getDocumentAsync({ 
-          type: ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'], 
+          type: ['application/zip', 'application/x-zip-compressed'], 
           copyToCacheDirectory: true 
         });
 
@@ -392,12 +394,18 @@ export default function MyDojoStyles({route}) {
         setLoading(true);
 
         const zipUri = res.assets ? res.assets[0].uri : res.uri;
+        const asset = res.assets[0];
+        if (!asset.name.toLowerCase().endsWith('.zip')) {
+          throw new Error("Please select a valid .zip export file.");
+        }
         const importId = Date.now().toString();
         const permanentDirUri = `${FileSystem.documentDirectory}imported_${importId}/`;
 
+        const tempZipPath = `${FileSystem.cacheDirectory}import_temp.zip`;
+        await FileSystem.copyAsync({ from: asset.uri, to: tempZipPath });
         await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
 
-        const nakedZip = Platform.OS === 'android' ? zipUri.replace('file://', '') : zipUri;
+        const nakedZip = Platform.OS === 'android' ? tempZipPath.replace('file://', '') : tempZipPath;
         const nakedDest = Platform.OS === 'android' ? permanentDirUri.replace('file://', '').replace(/\/$/, '') : permanentDirUri;
 
         await unzip(nakedZip, nakedDest);
@@ -437,7 +445,8 @@ export default function MyDojoStyles({route}) {
               ...step, img: fixPath(step.img)
             }));
           }
-          restored.thumb = move.type === 'video' ? (restored.vid || restored.videoUrl) : move.type === 'pdf' ? (restored.vid || restored.videoUrl): (restored.steps?.[0]?.img || null);
+          
+          restored.thumb = (move.type === 'video' || move.type === 'pdf') ? (restored.vid || restored.videoUrl) : (restored.steps?.[0]?.img || null);
           return restored;
         }).filter(m => m && m.id);
 
@@ -446,6 +455,7 @@ export default function MyDojoStyles({route}) {
         }
         await handleSave(finalMoves);
         Alert.alert("Success", `${finalMoves.length} moves added!`);
+        await FileSystem.deleteAsync(tempZipPath, { idempotent: true });
         await FileSystem.deleteAsync(dataFilePath, { idempotent: true });
 
       } catch (e) {
@@ -457,6 +467,7 @@ export default function MyDojoStyles({route}) {
         }
       } finally {
         setLoading(false);
+        try { await FileSystem.deleteAsync(tempZipPath, { idempotent: true }); } catch (err) {}
       }
     };
 
@@ -516,7 +527,6 @@ export default function MyDojoStyles({route}) {
         }
       }
     };
-
 
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
