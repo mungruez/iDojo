@@ -426,6 +426,14 @@ export default function MyDojoStyles({route}) {
           throw new Error("No moves found in zip file");
         }
 
+        importedMoves = importedMoves.filter(m => 
+          m && 
+          m.id && 
+          m.title && 
+          m.title.trim() !== "" &&
+          (m.type === 'video' || m.type === "pdf" || (m.type === "steps" && m.steps && m.steps.length > 0))
+        );
+
         const finalMoves = importedMoves.map((move, index) => {
           const fixPath = (oldPath) => {
             if (!oldPath || typeof oldPath !== 'string' || oldPath.startsWith('http')) return oldPath;
@@ -892,7 +900,7 @@ export default function MyDojoStyles({route}) {
               if(item.videoUrl && item.videoUrl.trim().length > 7) {
                 return require('../assets/onlinevideoicon.png');
               }
-              
+
               if(item.vid && item.vid.trim().length > 7 && Platform.OS === "android") {
                 return {uri: item.vid};
               }
