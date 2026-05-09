@@ -3,13 +3,13 @@ import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/n
 import React, { useState, useCallback, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
-import * as FileSystem from 'expo-file-system/legacy';
 import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system/legacy';
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
-import PdfMove from './PdfMove';
 import VideoPlayer from './VideoPlayer';
+import PdfMove from './PdfMove';
 
 const { width } = Dimensions.get('window');
     
@@ -384,6 +384,9 @@ export default function MyDojoStyles({route}) {
 
 
     const handleImport = async () => {
+      let permanentDirUri = null; 
+      let tempZipPath = null;
+
       try {
         const res = await DocumentPicker.getDocumentAsync({ 
           type: ['application/zip', 'application/x-zip-compressed'], 
@@ -393,15 +396,17 @@ export default function MyDojoStyles({route}) {
         if (res.canceled) return;
         setLoading(true);
 
-        const zipUri = res.assets ? res.assets[0].uri : res.uri;
-        const asset = res.assets[0];
-        if (!asset.name.toLowerCase().endsWith('.zip')) {
+        const asset = res.assets?.[0];
+        if (!asset) throw new Error("No file selected");
+        if (!asset.uri) throw new Error("Invalid file URI");
+        if (!asset.name?.toLowerCase().endsWith('.zip')) {
           throw new Error("Please select a valid .zip export file.");
         }
-        const importId = Date.now().toString();
-        const permanentDirUri = `${FileSystem.documentDirectory}imported_${importId}/`;
 
-        const tempZipPath = `${FileSystem.cacheDirectory}import_temp.zip`;
+        const importId = Date.now().toString();
+        permanentDirUri = `${FileSystem.documentDirectory}imported_${importId}/`;
+        tempZipPath = `${FileSystem.cacheDirectory}import_temp_${importId}.zip`;
+
         await FileSystem.copyAsync({ from: asset.uri, to: tempZipPath });
         await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
 
@@ -426,13 +431,13 @@ export default function MyDojoStyles({route}) {
           throw new Error("No moves found in zip file");
         }
 
-        importedMoves = importedMoves.filter(m => 
-          m && 
-          m.id && 
-          m.title && 
-          m.title.trim() !== "" &&
-          (m.type === 'video' || m.type === "pdf" || (m.type === "steps" && m.steps && m.steps.length > 0))
-        );
+        importedMoves = importedMoves.filter(m => {
+          if (!m || typeof m !== 'object') return false;
+          if (!m.id || typeof m.title !== 'string' || m.title.trim() === "") return false;
+          if (!['video', 'pdf', 'steps'].includes(m.type)) return false;
+          if (m.type === 'steps' && (!Array.isArray(m.steps) || m.steps.length === 0)) return false;
+          return true;
+        });
 
         const finalMoves = importedMoves.map((move, index) => {
           const fixPath = (oldPath) => {
@@ -444,38 +449,46 @@ export default function MyDojoStyles({route}) {
           const restored = {
             ...move,
             id: `move_${importId}_${index}_${Math.random().toString(36).substr(2, 4)}`,
-            vid: move.type === 'video' || move.type === "pdf" ? fixPath(move.vid || move.videoUrl) : null,
-            videoUrl: move.type === 'video' || move.type === "pdf" ? fixPath(move.videoUrl || move.vid) : '',
+            vid: (move.type === 'video' || move.type === "pdf") ? fixPath(move.vid || move.videoUrl) : null,
+            videoUrl: (move.type === 'video' || move.type === "pdf") ? fixPath(move.videoUrl || move.vid) : '',
           };
 
           if (move.type === 'steps' && Array.isArray(move.steps)) {
             restored.steps = move.steps.map(step => ({
-              ...step, img: fixPath(step.img)
+              ...step, 
+              img: fixPath(step?.img)
             }));
           }
+
+          const firstStepImg = (restored.steps?.length > 0) ? restored.steps[0]?.img : null;
+          restored.thumb = (move.type === 'video' || move.type === 'pdf') 
+            ? (restored.vid || restored.videoUrl) 
+            : firstStepImg;
           
-          restored.thumb = (move.type === 'video' || move.type === 'pdf') ? (restored.vid || restored.videoUrl) : (restored.steps?.[0]?.img || null);
           return restored;
         }).filter(m => m && m.id);
 
         if (finalMoves.length === 0) {
           throw new Error("No valid moves to import");
         }
+
         await handleSave(finalMoves);
         Alert.alert("Success", `${finalMoves.length} moves added!`);
-        await FileSystem.deleteAsync(tempZipPath, { idempotent: true });
-        await FileSystem.deleteAsync(dataFilePath, { idempotent: true });
 
       } catch (e) {
         Alert.alert("Import Failed", e.message);
-        try {
-          await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
-        } catch (cleanupError) {
-      
+        if (permanentDirUri) {
+          try {
+            await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
+          } catch (cleanupError) {}
         }
       } finally {
         setLoading(false);
-        try { await FileSystem.deleteAsync(tempZipPath, { idempotent: true }); } catch (err) {}
+        if (tempZipPath) {
+          try { 
+            await FileSystem.deleteAsync(tempZipPath, { idempotent: true }); 
+          } catch (err) {}
+        }
       }
     };
 
@@ -879,9 +892,11 @@ export default function MyDojoStyles({route}) {
         onPress={() => selectedIds.length > 0 ? toggleSelect(item.id) : ftype === "video" ? checkVideo(item) : ftype === "pdf" ? viewPdf(item) : viewManual(item)}
         style={[styles.itemContainer, selectedIds.includes(item.id) && (ftype === "steps" ? styles.selectedItem : ftype === "video" ? styles.selectedItemVideo : styles.selectedItemPdf)]}>
         <View style={styles.card}>
+
           <View style={styles.titleBanner}>
             <Text numberOfLines={1} ellipsizeMode="clip" style={ftype === 'video' ? styles.titleTextVideo : ftype === "pdf" ? styles.titleTextPdf : styles.titleText}>{item.title}</Text>
           </View>
+
           <Image style={ftype === "pdf" ? styles.thumbPdf : styles.thumbImage}
             source={(() => {
               if (ftype === "pdf") {
@@ -911,6 +926,7 @@ export default function MyDojoStyles({route}) {
 
               return require('../assets/onlinevideoicon.png');
             })()} />
+
           <View style = {ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
             <Text style = {ftype === 'video' ? styles.typePillVideo : ftype === "pdf" ? styles.typePillPdf : styles.typePill}>{item.type}</Text>
             <TouchableOpacity onPress={() => toggleAddMode(item, ftype, item.style)} style={styles.editIcon}>
