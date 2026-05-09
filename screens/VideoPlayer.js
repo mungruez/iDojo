@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, Dimensions, Text, StyleSheet, AppState, ActivityIndicator, TouchableOpacity, Image, Alert, Platform } from "react-native"; 
+import { View, ScrollView, Dimensions, Text, StyleSheet, AppState, ActivityIndicator, TouchableOpacity, Image, Alert, Platform, Share } from "react-native"; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVideoPlayer, VideoView } from 'expo-video'; 
 import { useIsFocused } from '@react-navigation/native';
@@ -62,19 +62,18 @@ export default function VideoPlayer({ video }) {
         return;
       }
 
-      let shareOptions = {};
       if (isYouTube) {
-        await Sharing.shareAsync(`https://youtu.be/${video.videoUrl}`);
-      } else if (video.vid && video.vid.startsWith('file://')) {
+        await Share.share({ url: `https://youtu.be{video.videoUrl}` });
+      } else if (video.vid?.startsWith('file://')) {
         await Sharing.shareAsync(video.vid);
-      } else if (video.videoUrl && video.videoUrl.length > 7) {
-        await Sharing.shareAsync(video.videoUrl);
+      } else if (video.videoUrl?.startsWith('http')) {
+        await Share.share({ url: video.videoUrl });
       } else {
-        Alert.alert('Share Error', 'No video source available to share.');
+        Alert.alert('Share Error', 'No valid video source found.');
       }
     } catch (error) {
       if (!error.message?.includes('cancelled')) {
-        Alert.alert('Share Error', error.message || 'Could not share video.');
+        Alert.alert('Share Error', error.message);
       }
     }
   };

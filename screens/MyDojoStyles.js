@@ -568,7 +568,7 @@ export default function MyDojoStyles({route}) {
           setVid(mv.vid);
           setVideoUrl(mv.videoUrl || "");
         } else {
-          setSteps(mvsteps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+          setSteps(mv.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
         }
         setAddMode(true);
       }
