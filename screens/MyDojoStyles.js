@@ -889,14 +889,18 @@ export default function MyDojoStyles({route}) {
                 }
               }
 
-              if(item.thumb && item.thumb.trim().length > 7) {
-                return {uri: item.thumb};
+              if(item.videoUrl && item.videoUrl.trim().length > 7) {
+                return require('../assets/onlinevideoicon.png');
               }
-
+              
               if(item.vid && item.vid.trim().length > 7 && Platform.OS === "android") {
                 return {uri: item.vid};
               }
               
+              if(item.thumb && item.thumb.trim().length > 7) {
+                return {uri: item.thumb};
+              }
+
               return require('../assets/onlinevideoicon.png');
             })()} />
           <View style = {ftype === "steps" ? styles.pillRow : ftype === "pdf" ? styles.pillRowPdf : styles.pillRowVideo}>
