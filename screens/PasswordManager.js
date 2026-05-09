@@ -69,7 +69,7 @@ export default function PasswordManager() {
                 }
             }
             
-            if(placed==index) {
+            if(placed == index) {
                 return {ans: ans, placed: index}
             }
 
@@ -77,21 +77,21 @@ export default function PasswordManager() {
                 ans += "x";
                 return {ans: ans, placed: ans.length-1};
             } 
-        } else if(replacement=='o') {
+        } else if(replacement == 'o') {
             for(let i=0; i<str.length; i++) {
                 if(i == index && placed<0 && str.charAt(index)=='x') {
-                        ans+="o";
-                        placed=index;
+                    ans+="o";
+                    placed=index;
                 } else {
                     ans+=str.charAt(i);
                 }
             }   
             
-            if(placed==index) {
+            if(placed == index) {
                 return {ans: ans, placed: index}
             }
 
-            if(placed<0) {
+            if(placed < 0) {
                 return {ans: ans, placed: ans.length};
             }    
         }
@@ -100,7 +100,6 @@ export default function PasswordManager() {
     
 
     useEffect(() => {
-        //AsyncStorage.clear();
         fetchPasswords();
         showPasswords();
     }, []);
@@ -396,6 +395,7 @@ export default function PasswordManager() {
         }
     };
 
+
     const editPassword = (index) => {
         setEditing(true);
         setEditIndex(index); 
@@ -433,7 +433,7 @@ export default function PasswordManager() {
     const showInstructions = () => {
         Alert.alert(
           "iDojo Password Manager",
-          "Intructions : All passwords are encrytped before saving to the phone only the owner with the PIN/Password can decrypt them for viewing in the App. No data is collected in any way by the iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes(/).\n(2) You may store as many Passwords as your phone memory allows. Uninstalling the App or Clearing the App Data will delete all your passwords.\n(3) Use the Reset PIN button at the top to reset your PIN/Password.\n(4) Use the gold Edit button to edit the password or view it for, copy and pasting.  No changes are required to edit a password and after editing changes cannot be undone.\n(5) Click gold Trash icon and then confirm to delete a Password.\n(6) Scroll horizontally left and right to view all your passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
+          "Intructions : All passwords are encrytped before saving to the phone only the owner with the PIN/Password can decrypt them for viewing in the App. No data is collected in any way by the iDojo App.\n(1) Passwords may be any length and may contain all charcters available on a normal keyboard except slashes(/).\n(2) You may store as many Passwords as your phone memory allows. Uninstalling the App or Clearing the App Data will Delete all your Passwords.\n(3) Use the Reset PIN button at the top to reset your PIN/Password.\n(4) Use the gold Edit button to edit the password or view it for, copy and pasting.  No changes are required to edit a password.\n(5) Click gold Trash icon and then confirm to Delete a Password. After Deleting changes cannot be undone.\n(6) Scroll horizontally left and right to view all your Passwords.\n(7) Click the golden vault icon to Close the Password Manager. Thank you for purchasing iDojo the invisible button is intended to inovate and its location is kept secret please enjoy.",
           [
             {
               text: "OK",
@@ -496,7 +496,7 @@ export default function PasswordManager() {
         setWebsite(""); 
         setUsername(""); 
         setPassword("");
-        Alert.alert("Password Deleted!", "Deleted password for Website: "+webst);
+        Alert.alert("Password Permanently Deleted!", "Permanently Deleted Password for Website: "+webst);
     };
 
 
@@ -519,11 +519,9 @@ export default function PasswordManager() {
         let str = "";
         if(pass) {
           let end = pass.length;
-          
           if(pass.length > 12) {
             end = 10;
           }
-          
           for(let index=0; index < end; index++) {
             str+="*";
           }
@@ -536,10 +534,8 @@ export default function PasswordManager() {
         let str = "";
         if(txt) {
           let end = txt.length;
-          
           if(end > 19) {
             end = 19;
-          
             for(let index=0; index < end-4; index++) {
               str+=txt[index];
             }
@@ -617,7 +613,6 @@ export default function PasswordManager() {
             let passKey = await AsyncStorage.getItem('xx7771xxiDojoAESpassKey');
             if(passKey==null) {
                 showInstructions();
-                //alert("Welcome to iDojo's Passwords Manager.  No Saved Passwords found. Enter fields and Click Add Password. Click the Blue View icon to edit and copy your stored Passwords. Click the red Trash icon to delete a Password.");
                 await AsyncStorage.setItem('xx7771xxiDojoAESpassKey', 'o');
                 return errorFlag;
             }
@@ -680,7 +675,6 @@ export default function PasswordManager() {
         }
     }
 
-    
 
     useEffect(() => {
         const showSub = Keyboard.addListener(
@@ -1107,14 +1101,14 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
     },
     imgBackground: {
-      height: "100%",
-      width: "100%",
-      flex: 1, 
+        height: "100%",
+        width: "100%",
+        flex: 1, 
     },
-      icon: {
+    icon: {
         marginTop:19,
         height: 76,
         opacity: 1,
         textAlign: "center" 
-      },
+    },
 });
