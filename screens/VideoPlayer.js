@@ -55,26 +55,35 @@ export default function VideoPlayer({ video }) {
 
 
 
-  const shareVideo = async () => {
+  const handleShare = async () => {
     try {
-      if (!video) {
-        Alert.alert('Share Error', 'No video available to share.');
+      if (!video.vid && !video.videoUrl) return;
+      
+      if (video.videoUrl.startsWith('http')) {
+        await Sharing.shareAsync(video.videoUrl, {
+          dialogTitle: 'Share Video Link',
+          UTI: 'public.url', 
+          mimeType: 'text/plain', 
+        });
         return;
       }
-
-      if (isYouTube) {
-        await Share.share({ url: `https://youtu.be{video.videoUrl}` });
-      } else if (video.vid?.startsWith('file://')) {
-        await Sharing.shareAsync(video.vid);
-      } else if (video.videoUrl?.startsWith('http')) {
-        await Share.share({ url: video.videoUrl });
-      } else {
-        Alert.alert('Share Error', 'No valid video source found.');
+      
+      const fileUri = video.vid.startsWith('file://') ? video.vid : `file://${video.vid}`;
+      const fileInfo = await FileSystem.getInfoAsync(fileUri);
+      
+      if (!fileInfo.exists) {
+        Alert.alert("Video Not Found!", "Video file not found");
+        return;
       }
+      
+      await Sharing.shareAsync(fileUri, {
+        dialogTitle: 'Share Video',
+        UTI: 'public.movie',
+        mimeType: 'video/*',
+      });
+      
     } catch (error) {
-      if (!error.message?.includes('cancelled')) {
-        Alert.alert('Share Error', error.message);
-      }
+      Alert.alert("Share Error!', Could not share video');
     }
   };
 
@@ -84,10 +93,10 @@ export default function VideoPlayer({ video }) {
       
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 9, marginBottom: 7 }}>
         <Text style={{ backgroundColor: '#2f4f4f', color: 'crimson', fontSize: 21, flex: 1, flexWrap: 'wrap', textAlign: 'left', }}>
-          {` ${video.title}`}
+          {`  ${video.title}`}
         </Text>
-        <TouchableOpacity onPress={shareVideo} style={{ marginLeft: 4, padding: 0, height: 37, width: 34, justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={require('../assets/redsharearrow.png')} style={{ width: 34, height: 37 }} resizeMode='contain' />
+        <TouchableOpacity onPress={handleShare} style={{ marginLeft: 4, padding: 0, paddingRight: 3, height: 38, width: 35, justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../assets/redsharearrow.png')} style={{ width: 35, height: 38 }} resizeMode='contain' />
         </TouchableOpacity>
       </View>
 

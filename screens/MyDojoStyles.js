@@ -446,24 +446,30 @@ export default function MyDojoStyles({route}) {
             return `${permanentDirUri}${fileName}`;
           };
 
+          const fixedVid = (move.type === 'video' || move.type === "pdf") 
+            ? fixPath(move.vid || move.videoUrl) 
+            : null;
+            
+          const fixedVideoUrl = (move.type === 'video' || move.type === "pdf") 
+            ? fixPath(move.videoUrl || move.vid) 
+            : '';
+
           const restored = {
             ...move,
             id: `move_${importId}_${index}_${Math.random().toString(36).substr(2, 4)}`,
-            vid: (move.type === 'video' || move.type === "pdf") ? fixPath(move.vid || move.videoUrl) : null,
-            videoUrl: (move.type === 'video' || move.type === "pdf") ? fixPath(move.videoUrl || move.vid) : '',
+            vid: fixedVid,
+            videoUrl: fixedVideoUrl,
+            thumb: fixedVid || fixedVideoUrl, 
           };
 
           if (move.type === 'steps' && Array.isArray(move.steps)) {
-            restored.steps = move.steps.map(step => ({
+            restored.steps = move.steps.map((step, stepIdx) => ({
               ...step, 
-              img: fixPath(step?.img)
+              img: fixPath(step?.img),
+              id: step.id || `step_${index}_${stepIdx}`
             }));
+            restored.thumb = restored.steps?.[0]?.img || null;
           }
-
-          const firstStepImg = (restored.steps?.length > 0) ? restored.steps[0]?.img : null;
-          restored.thumb = (move.type === 'video' || move.type === 'pdf') 
-            ? (restored.vid || restored.videoUrl) 
-            : firstStepImg;
           
           return restored;
         }).filter(m => m && m.id);
@@ -902,28 +908,30 @@ export default function MyDojoStyles({route}) {
               if (ftype === "pdf") {
                 return require('../assets/pdfplaceholder.png');
               }
-              
-              if (item.videoUrl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be"))) {
-                const youtubeId = getYouTubeId(item.videoUrl);
-                if (youtubeId === "") {
-                  return require('../assets/onlinevideoicon.png');
-                } else {
-                  return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
-                }
-              }
 
-              if(item.videoUrl && item.videoUrl.trim().length > 7) {
+              if (ftype === 'video') {
+                if (item.videoUrl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be"))) {
+                  const youtubeId = getYouTubeId(item.videoUrl);
+                  if (youtubeId === "") {
+                    return require('../assets/onlinevideoicon.png');
+                  } else {
+                    return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
+                  }
+                }
+
+                if (item.thumb) {
+                  return { uri: item.thumb };
+                }
+                if (item.vid) {
+                  return { uri: item.vid };
+                }
                 return require('../assets/onlinevideoicon.png');
               }
-
-              if(item.vid && item.vid.trim().length > 7 && Platform.OS === "android") {
-                return {uri: item.vid};
+  
+              if (ftype === 'steps') {
+                if (item.thumb) return { uri: item.thumb };
+                if (item.steps?.[0]?.img) return { uri: item.steps[0].img };
               }
-              
-              if(item.thumb && item.thumb.trim().length > 7) {
-                return {uri: item.thumb};
-              }
-
               return require('../assets/onlinevideoicon.png');
             })()} />
 
