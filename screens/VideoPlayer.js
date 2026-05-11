@@ -83,7 +83,7 @@ export default function VideoPlayer({ video }) {
       });
       
     } catch (error) {
-      Alert.alert("Share Error!', Could not share video');
+      Alert.alert("Share Error!" ," Could not share Video");
     }
   };
 
