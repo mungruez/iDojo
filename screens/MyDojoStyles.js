@@ -919,12 +919,10 @@ export default function MyDojoStyles({route}) {
                   }
                 }
 
-                if (item.thumb) {
-                  return { uri: item.thumb };
-                }
                 if (item.vid) {
                   return { uri: item.vid };
                 }
+                
                 return require('../assets/onlinevideoicon.png');
               }
   
