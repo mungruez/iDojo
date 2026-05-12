@@ -55,35 +55,39 @@ export default function VideoPlayer({ video }) {
 
 
 
-  const handleShare = async () => {
+  const shareVideo = async () => {
     try {
-      if (!video.vid && !video.videoUrl) return;
-      
-      if (video.videoUrl.startsWith('http')) {
-        await Sharing.shareAsync(video.videoUrl, {
-          dialogTitle: 'Share Video Link',
-          UTI: 'public.url', 
-          mimeType: 'text/plain', 
-        });
+      if (!video) {
+        Alert.alert('Share Error', 'No video available to share.');
         return;
       }
-      
-      const fileUri = video.vid.startsWith('file://') ? video.vid : `file://${video.vid}`;
-      const fileInfo = await FileSystem.getInfoAsync(fileUri);
-      
-      if (!fileInfo.exists) {
-        Alert.alert("Video Not Found!", "Video file not found");
+
+      if (isYouTube) {
+        const youtubeUrl = `https://youtu.be/${video.videoUrl}`;
+        await Share.share({ title: video.title, message: youtubeUrl, url: youtubeUrl });
         return;
       }
-      
-      await Sharing.shareAsync(fileUri, {
-        dialogTitle: 'Share Video',
-        UTI: 'public.movie',
-        mimeType: 'video/*',
-      });
-      
+
+      const uri = video.vid?.startsWith('file://') ? video.vid : video.videoUrl;
+      if (!uri) {
+        Alert.alert('Share Error', 'No video source available to share.');
+        return;
+      }
+
+      if (uri.startsWith('file://')) {
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(uri, {
+            mimeType: 'video/*',
+            dialogTitle: `Share ${video.title}`,
+          });
+        } else {
+          Alert.alert('Share Error', 'Sharing is not available on this device.');
+        }
+      } else {
+        await Share.share({ title: video.title, message: uri, url: uri });
+      }
     } catch (error) {
-      Alert.alert("Share Error!" ," Could not share Video");
+      Alert.alert('Share Error', error.message || 'Could not share video.');
     }
   };
 
