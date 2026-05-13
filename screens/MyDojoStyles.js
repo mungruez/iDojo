@@ -68,70 +68,76 @@ export default function MyDojoStyles({route}) {
         alert("Data is not an array, skipping parse.");
         return;
       }
+
       let videoStyles = [], stepStyles = [], pdfStyles = [];
       let sMoves = [{ id: "v-all", type: "video", style: "allstyles" }];
       let bMoves = [{ id: "s-all", type: "steps", style: "allstyles" }];
       let pMoves = [{ id: "p-all", type: "pdf", style: "allstyles" }];
-      const validList = list.filter(m => m && m.id && m.title && m.type);
-      
-      const q = query?.trim()?.toLowerCase();
-      const typeFilter = ['video', "steps", 'pdf'].includes(q) ? q : null;
 
-      validList?.forEach(m => {
-        const currentStyle = m.style || "Enter Move Title";
-        const mType = m.type.trim().toLowerCase();
-
-        if (typeFilter && m.type.trim().toLowerCase() !== typeFilter) return;
-         const isCategorySearch = ['video', 'steps', 'pdf'].includes(q);
-        let matches = false;
-
-        if (isCategorySearch) {
-          matches = mType.includes(q);
-        } else if (mType === "steps" && q) {
-          const mainMatch = m.title?.toLowerCase().includes(q) || m.desc?.toLowerCase().includes(q) || m.style?.toLowerCase().includes(q);
-          const nestedMatch = m.steps?.some(step => 
-            step.title?.toLowerCase().includes(q) || 
-            step.desc?.toLowerCase().includes(q)
-          );
-
-          matches = mainMatch || nestedMatch;
-        } else {
-          matches = !q || 
-            m.title?.toLowerCase().includes(q) ||
-            m.style?.toLowerCase().includes(q) ||
-            m.desc?.toLowerCase().includes(q);
-        }
+      try {
+        const validList = list.filter(m => m && m.id && m.title && m.type);
         
-        if (!matches) return;
+        const q = query?.trim()?.toLowerCase();
+        const typeFilter = ['video', "steps", 'pdf'].includes(q) ? q : null;
 
-        if (m.type === "video" && !videoStyles.includes(currentStyle)) {
-          videoStyles.push(currentStyle); 
-          sMoves.push({ ...m, style: currentStyle }); 
-        } else if (m.type === "steps" && !stepStyles.includes(currentStyle)) {
-          stepStyles.push(currentStyle); 
-          bMoves.push({ ...m, style: currentStyle });
-        } else if (m.type === "pdf" && !pdfStyles.includes(currentStyle)) {
-          pdfStyles.push(currentStyle);
-          pMoves.push({ ...m, style: currentStyle });
+        validList?.forEach(m => {
+          const currentStyle = m.style || "Enter Move Title";
+          const mType = m.type.trim().toLowerCase();
+
+          if (typeFilter && m.type.trim().toLowerCase() !== typeFilter) return;
+          const isCategorySearch = ['video', 'steps', 'pdf'].includes(q);
+          let matches = false;
+
+          if (isCategorySearch) {
+            matches = mType.includes(q);
+          } else if (mType === "steps" && q) {
+            const mainMatch = m.title?.toLowerCase().includes(q) || m.desc?.toLowerCase().includes(q) || m.style?.toLowerCase().includes(q);
+            const nestedMatch = m.steps?.some(step => 
+              step.title?.toLowerCase().includes(q) || 
+              step.desc?.toLowerCase().includes(q)
+            );
+
+            matches = mainMatch || nestedMatch;
+          } else {
+            matches = !q || 
+              m.title?.toLowerCase().includes(q) ||
+              m.style?.toLowerCase().includes(q) ||
+              m.desc?.toLowerCase().includes(q);
+          }
+        
+          if (!matches) return;
+
+          if (m.type === "video" && !videoStyles.includes(currentStyle)) {
+            videoStyles.push(currentStyle); 
+            sMoves.push({ ...m, style: currentStyle }); 
+          } else if (m.type === "steps" && !stepStyles.includes(currentStyle)) {
+            stepStyles.push(currentStyle); 
+            bMoves.push({ ...m, style: currentStyle });
+          } else if (m.type === "pdf" && !pdfStyles.includes(currentStyle)) {
+            pdfStyles.push(currentStyle);
+            pMoves.push({ ...m, style: currentStyle });
+          }
+        });
+
+        if(sMoves.length > 1 && bMoves.length > 1 && pMoves.length > 1) {
+          setSMoves([...sMoves, ...bMoves, ...pMoves]);
+        } else if(sMoves.length > 1 && bMoves.length > 1) {
+          setSMoves([...sMoves, ...bMoves]);
+        } else if(sMoves.length > 1 && pMoves.length > 1) {
+          setSMoves([...sMoves, ...pMoves]);
+        } else if(bMoves.length > 1 && pMoves.length > 1) {
+          setSMoves([...bMoves, ...pMoves]);
+        } else if (sMoves.length > 1) {
+          setSMoves(sMoves);
+        } else if (bMoves.length > 1) {
+          setSMoves(bMoves);
+        } else if (pMoves.length > 1) {
+          setSMoves(pMoves);
+        } else {
+          setSMoves([]);
         }
-      });
-
-      if(sMoves.length > 1 && bMoves.length > 1 && pMoves.length > 1) {
-        setSMoves([...sMoves, ...bMoves, ...pMoves]);
-      } else if(sMoves.length > 1 && bMoves.length > 1) {
-        setSMoves([...sMoves, ...bMoves]);
-      } else if(sMoves.length > 1 && pMoves.length > 1) {
-        setSMoves([...sMoves, ...pMoves]);
-      } else if(bMoves.length > 1 && pMoves.length > 1) {
-        setSMoves([...bMoves, ...pMoves]);
-      } else if (sMoves.length > 1) {
-        setSMoves(sMoves);
-      } else if (bMoves.length > 1) {
-        setSMoves(bMoves);
-      } else if (pMoves.length > 1) {
-        setSMoves(pMoves);
-      } else {
-        setSMoves([]);
+      } catch (e) {
+        Alert.alert("Parse Error", "An error occurred while parsing move styles: " + e.message);
       }
     };
     
@@ -159,7 +165,8 @@ export default function MyDojoStyles({route}) {
 
 
     const getMoves = (mstyle, mtype, movesList) => {
-      if(mtype !== "video" && mtype !== "steps" && mtype !== "pdf") return [];
+      if( mtype !== "video" && mtype !== "steps" && mtype !== "pdf" ) return [];
+      if( !movesList ) return [];
       let sMoves = movesList.filter(m => m.type === mtype && (mstyle === "allstyles" || m.style === mstyle));
       if(mstyle === "allstyles") return parseHMoves(sMoves);
       return sMoves;
@@ -181,7 +188,8 @@ export default function MyDojoStyles({route}) {
           movesList = movesList.filter(m => 
             m && 
             m.id && 
-            m.title && 
+            m.title &&
+            m.type && 
             m.title.trim() !== "" &&
             (m.type === 'video' || m.type === "pdf" || (m.type === "steps" && m.steps && m.steps.length > 0))
           );
@@ -311,6 +319,7 @@ export default function MyDojoStyles({route}) {
         Alert.alert("No Internet", "You need an internet connection to share moves.");
         return;
       }
+
       try {
         if (!selectedids?.length) return;
         setLoading(true);
@@ -368,7 +377,8 @@ export default function MyDojoStyles({route}) {
         await Sharing.shareAsync(zipPathUri, {
           mimeType: 'application/zip',
           dialogTitle: 'Share iDojo Zip'
-        });        
+        }); 
+               
         setSelectedIds([]);
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.deleteAsync(zipPathUri, { idempotent: true });
@@ -912,7 +922,7 @@ export default function MyDojoStyles({route}) {
               if (ftype === 'video') {
                 if (item.videoUrl && (item.videoUrl.includes("youtube.com") || item.videoUrl.includes("youtu.be"))) {
                   const youtubeId = getYouTubeId(item.videoUrl);
-                  if (youtubeId === "") {
+                  if (isOffline || youtubeId === "") {
                     return require('../assets/onlinevideoicon.png');
                   } else {
                     return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
