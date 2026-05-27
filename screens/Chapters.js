@@ -220,6 +220,7 @@ export default function Chapters() {
     }
   };
 
+  
   const saveChaptersToStorage = async (chaptersData) => {
     try {
       const fileUri = `${FileSystem.documentDirectory}chapters.json`;
@@ -232,6 +233,7 @@ export default function Chapters() {
       throw e;
     }
   };
+
 
   const handleSaveChapter = async (newData) => {
     try {
@@ -261,6 +263,7 @@ export default function Chapters() {
     }
   };
 
+  
   const deleteChapters = async (idsFromArg = []) => {
     const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : selectedIds;
     const cleanIdsToDelete = actualIds.map(id => String(id).trim());
@@ -268,8 +271,8 @@ export default function Chapters() {
     
     const isDeletingAll = actualIds.length === hchapters.length;
     Alert.alert(
-      isDeletingAll ? "Delete All Moves" : "Delete Moves",
-      isDeletingAll ? "Remove all moves in this list?" : `Remove ${cleanIdsToDelete.length} selected move(s)?`,
+      isDeletingAll ? "Delete All Chapters" : "Delete Chapters",
+      isDeletingAll ? "Remove all Chapters in this Category?" : `Remove ${cleanIdsToDelete.length} selected Chapter(s)?`,
 
       [{ text: 'Cancel', style: 'cancel' },
         {text: 'Delete', style: 'destructive',
@@ -295,7 +298,7 @@ export default function Chapters() {
               }
 
             } catch (e) {
-              Alert.alert("Delete Error", e.message || "Could not remove files from storage.");
+              Alert.alert("Delete Error", e.message || "Could not delete files from storage.");
             }
           }
         }
@@ -617,7 +620,7 @@ export default function Chapters() {
     if (schapters.length === 0) return null;
     if (!schapters[0]) return null;
     const firstId = schapters[0].id;
-    if (firstId === "c-all") return <Image source={require('../assets/chaptersdivider.png')} style={styles.redDivider} resizeMode='contain'/>;
+    if (firstId === "c-all") return <Image source={require('../assets/chaptersdivider.png')} style={styles.goldDivider} resizeMode='contain'/>;
     return null;
   };
 
@@ -943,7 +946,7 @@ export default function Chapters() {
           <View style={styles.searchRow}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search or type video/steps/pdf"
+              placeholder="Search Chapters"
               placeholderTextColor="rgba(88, 79, 79, 0.62)"
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -1036,7 +1039,7 @@ infoText: { fontSize: 14, fontWeight: 'bold', color: '#8b6e0f', minHeight: 76, w
 icon: { height: 57, width: '89%', alignSelf: 'center' },
 card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#ccb42c', paddingHorizontal: 5,},
-divider: {width: '90%', height: 43, alignSelf: 'center',marginVertical: 15,shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5,shadowRadius: 10, backgroundColor: 'rgba(195, 209, 223, 0.4)', opacity: 1},
+goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
 plusIcon: { height: 49, width: 76, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 15, marginBottom: 2, opacity: 1},

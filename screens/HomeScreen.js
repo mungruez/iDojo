@@ -133,6 +133,11 @@ export default function HomeScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
+              onPress={()=>stopSoundN('Chapters')}>
+              <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpillchapters.png')} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
               onPress={()=>stopSoundN('FeaturedList')}>
               <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpillfeatured.png')} />
             </TouchableOpacity>

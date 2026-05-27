@@ -15,7 +15,8 @@ import FreeYourMindScreen from './screens/FreeYourMindScreen';
 import LoginScreen from './screens/LoginScreen';
 import PasswordManager from './screens/PasswordManager';
 import MyDojoStyles from './screens/MyDojoStyles';
-import PdfMove from './screens/PdfMove';
+import Chapters from './screens/Chapters';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,7 @@ export default function App() {
         <Stack.Screen name="Res" component={Resources} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="MyDojoStyles" component={MyDojoStyles} options={{headerShown:false, animation: 'slide_from_right'}}/>
         <Stack.Screen name="PdfMove" component={PdfMove} options={{headerShown:false, animation: 'slide_from_right', detachPreviousScreen: false}}/>
+        <Stack.Screen name="Chapters" component={Chapters} options={{headerShown:false, animation: 'slide_from_right'}}/>
       </Stack.Navigator>
      </NavigationContainer>
   );
