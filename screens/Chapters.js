@@ -107,16 +107,16 @@ export default function Chapters() {
   
   const parseHChapters = (chaptersList) => {
     let hChapters = [];
-    let stylesSeen = [];
+    let categoriesSeen = [];
     for (let mNum = 0; mNum < chaptersList.length; mNum++) {
       const chapter = chaptersList[mNum];
-      const currentStyle = chapter.category || "Enter Move Title";
-      let mIndex = stylesSeen.indexOf(currentStyle);
+      const currentCategory = chapter.category || "Enter Chapter Category";
+      let mIndex = categoriesSeen.indexOf(currentCategory);
   
       if (mIndex < 0) {
-        stylesSeen.push(currentStyle);
+        categoriesSeen.push(currentCategory);
         hChapters.push({
-          category: currentStyle,
+          category: currentCategory,
           data: [chapter],
         });
       } else {
