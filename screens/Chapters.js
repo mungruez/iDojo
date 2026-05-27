@@ -683,7 +683,7 @@ export default function Chapters() {
         <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1}}>
           <View style={{marginBottom: 12, paddingHorizontal: 5, justifyContent: 'center', alignItems: 'center', opacity: 1}}>
-            <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ require('../assets/chapterslistttitle.png') } /> 
+            <ImageBackground style={ styles.icon } resizeMode='contain' imageStyle={{ opacity: 1 }} source={ require('../assets/chapterstitle.png') } /> 
           </View>
     
             <View style={styles.myDojoHeader}>
