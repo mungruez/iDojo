@@ -8,11 +8,29 @@ import * as Sharing from 'expo-sharing';
 
 const deviceWidth = Dimensions.get('window').width;
 
-
-export default function VideoPlayer({ video }) {
+export default function VideoPlayer({ video, isActive }) {
   const isFocused = useIsFocused(); 
   const [playing, setPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
+  
+  const isYouTube = video.videoUrl && video.videoUrl.length > 0 && video.videoUrl.length < 19; 
+
+  const player = useVideoPlayer(isYouTube ? '' : video.vid?.length > 0 ? video.vid : video.videoUrl, (player) => {
+    if (isYouTube) return;
+  
+    player.loop = true;
+    if (video.videoUrl && video.videoUrl.length >= 19) {
+      player.play();
+    }
+
+    player.addListener('statusChange', ({ status }) => {
+      if (status === 'readyToPlay') {
+        setLoading(false);
+      } else if (status === 'loading') {
+        setLoading(true);
+      }
+    });
+  });
 
 
   useEffect(() => {
@@ -33,25 +51,19 @@ export default function VideoPlayer({ video }) {
   }, [isFocused]);
 
 
-
-  const isYouTube = video.videoUrl && video.videoUrl.length > 0 && video.videoUrl.length < 19; 
-
-  const player = useVideoPlayer(isYouTube ? '' : video.vid?.length > 0 ? video.vid : video.videoUrl, (player) => {
-    if (isYouTube) return;
-  
-    player.loop = true;
-    if (video.videoUrl && video.videoUrl.length >= 19) {
-      player.play();
-    }
-
-    player.addListener('statusChange', ({ status }) => {
-      if (status === 'readyToPlay') {
-        setLoading(false);
-      } else if (status === 'loading') {
-        setLoading(true);
+  useEffect(() => {
+    if (!player) return;
+    
+    if (isActive) {
+      if(!player.playing && !loading) {
+        setPlaying(true);
+        player.play();
       }
-    });
-  });
+    } else {
+      setPlaying(false);
+      player.pause();
+    }
+  }, [isActive, player]);
 
 
 

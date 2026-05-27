@@ -1,11 +1,11 @@
 import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, Alert, StatusBar } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
-import { useState } from 'react';
+import { useState, useEffect, useRef} from 'react';
 
 const { height } = Dimensions.get('window');
 
-export default function PdfMove({ pdf, onClosePdf}) {
+export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   if (!pdf) {
     return (
@@ -27,6 +27,7 @@ export default function PdfMove({ pdf, onClosePdf}) {
   const [useDirectLink, setUseDirectLink] = useState(false);
   const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
   const [lastClickTime, setLastClickTime] = useState(0);
+  const wasActive = useRef(false);
   
   const COOLDOWN_MS = 1900; 
 
@@ -52,18 +53,25 @@ export default function PdfMove({ pdf, onClosePdf}) {
     }
     return pdf.vid;
   };
+
+  useEffect(() => {
+    if (wasActive.current && !isActive) {
+      onClosePdf?.();
+    }
+    wasActive.current = isActive;
+  }, [isActive, onClosePdf]);
   
   
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232', width: '100%', height:'100%', marginTop: 38 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232', width: '100%', height:'100%', marginTop: 0 }}>
       <StatusBar barStyle="dark-content"/>
       <View style={styles.header}>
+        
         <TouchableOpacity onPress={onClosePdf} style={styles.closeBtn}>
           <Text style={styles.closeText}>✕</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1} ellipsizeMode="clip">
-          {pdf.title}
-        </Text>
+
+        <Text style={styles.headerTitle} numberOfLines={1} ellipsizeMode="clip">{pdf.title}</Text>
         <TouchableOpacity onPress={() => setPdfDropdownVisible(!pdfDropdownVisible)} style={styles.toggleBtn}>
           <Text style={styles.toggleText}>
             {!pdfDropdownVisible ? '▼' : '▲'}
