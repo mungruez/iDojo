@@ -116,7 +116,7 @@ export default function HomeScreen() {
           <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} /> 
         </View>
 
-        <ScrollView style={{ flexDirection:"column", marginTop:57}}>
+        <ScrollView style={{ flexDirection:"column", marginTop: 30}}>
             <TouchableOpacity
               onPress={()=>stopSoundN('MoveList')}>
               <ImageBackground style={ styles.button } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/redpillmoveslist.png')} />
