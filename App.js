@@ -15,6 +15,7 @@ import FreeYourMindScreen from './screens/FreeYourMindScreen';
 import LoginScreen from './screens/LoginScreen';
 import PasswordManager from './screens/PasswordManager';
 import MyDojoStyles from './screens/MyDojoStyles';
+import PdfMove from './screens/PdfMove';
 import Chapters from './screens/Chapters';
 
 

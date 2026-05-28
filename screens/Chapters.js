@@ -10,7 +10,7 @@ import * as Sharing from 'expo-sharing';
 import { zip, unzip } from 'react-native-zip-archive';
 import SectionPlayer from './SectionPlayer';
 
-const { width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.76;
 
 const SECTION_TYPES = {
@@ -772,13 +772,13 @@ export default function Chapters() {
  
   if (mode === 'add') {
    return (
-    <ImageBackground source={require('../assets/chaptersbg.png')} style={styles.imgBackground} imageStyle={{ opacity: 0.7 }} resizeMode='cover' >
-      <StatusBar barStyle="light-content" />
+    <ImageBackground source={require('../assets/chaptersbg.png')} style={styles.imgBackground} imageStyle={{ opacity: 1.0 }} resizeMode='cover' >
+      <StatusBar barStyle="dark-content" />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <SafeAreaView style={{ flex: 1 , opacity: 1}}>
 
-          <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
-            <ImageBackground style={ styles.iconAM } resizeMode='contain' imageStyle={{ opacity: 1 }} source={chapterId ? require('../assets/editchaptertitle.png')  : require('../assets/addchaptertitle.png') } /> 
+          <View style={{ marginBottom: 12, marginTop: 3, opacity : 1, justifyContent: 'center', alignItems: 'center',}}>
+            <ImageBackground style={ styles.iconAM } resizeMode='contain' imageStyle={{ opacity: 1 }} source={currentChapter ? require('../assets/editchaptertitle.png') : require('../assets/addchaptertitle.png') } /> 
           </View>
 
           <TouchableOpacity onPress={() => { resetForm(); setMode('list'); }} style={styles.discardBtn}>
@@ -787,28 +787,29 @@ export default function Chapters() {
           </TouchableOpacity>
 
           <ScrollView style={styles.containerAM} contentContainerStyle={{ paddingBottom: 100 }}>
-            <Text style={styles.label}>Chapter Title</Text>
+            <Text style={styles.label}>Chapter Category</Text>
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Category"
-              placeholderTextColor="rgba(249, 250, 223, 0.6)"
+              placeholderTextColor="rgba(232, 233, 195, 0.85)"
               value={chapterCategory}
               onChangeText={setChapterCategory}
             />
 
-            <Text style={styles.label}>Chapter Category</Text>
+            <Text style={styles.label}>Chapter Title</Text>
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Title"
-              placeholderTextColor="rgba(249, 250, 223, 0.6)"
+              placeholderTextColor="rgba(232, 233, 195, 0.85)"
               value={chapterTitle}
               onChangeText={setChapterTitle}
             />
             
+            <Text style={styles.label}>Chapter Description</Text>
             <TextInput
               style={[styles.input, styles.descInput]}
               placeholder="Enter Chapter Description"
-              placeholderTextColor="rgba(249, 250, 223, 0.6)"
+              placeholderTextColor="rgba(232, 233, 195, 0.85)"
               value={chapterDesc}
               onChangeText={setChapterDesc}
               multiline={true}
@@ -817,26 +818,18 @@ export default function Chapters() {
             {sections.map((section, index) => (
               <View key={section.id} style={styles.sectionCard}>
                 <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionNumber}>Section {index + 1}</Text>
-                  <TouchableOpacity onPress={() => removeSection(section.id)} style={styles.removeStepIcon}>
-                    <ImageBackground style={{ height: 91, width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removesectionicon.png')}/>
-                  </TouchableOpacity>
-                </View>
-
-                <View style={styles.typeToggleContainer}>
-                  {Object.values(SECTION_TYPES).map(type => (
-                    <TouchableOpacity
-                      key={type}
-                      style={[styles.typeBtn, section.type === type && styles.typeBtnActive]}
-                      onPress={() => updateSection(section.id, 'type', type)} >
+                  <Text style={styles.sectionHeaderText}>Section {index + 1}</Text>
+                  <TouchableOpacity
+                      style={styles.typeBtn}
+                      onPress={() => updateSection(section.id, 'type', section.type)} >
                         
-                      <Text style={[styles.typeBtnText, section.type === type && styles.typeBtnTextActive]}>
-                        {type === 'video' ? '📹' : type === 'pdf' ? '📄' : type === 'audio' ? '🎵' : '🖼️'}
+                      <Text style={styles.typeBtnText}>
+                        {section.type === 'video' ? '📹' : section.type === 'pdf' ? '📄' : section.type === 'audio' ? '🎵' : '🖼️'}
                       </Text>
                     </TouchableOpacity>
-                  ))}
                 </View>
 
+                <Text style={styles.label}>Section Title</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Enter Section Title"
@@ -871,7 +864,7 @@ export default function Chapters() {
                   ) : (
                     <View style={[styles.videoIcon, section.type === "video" ? { backgroundColor: 'rgba(212, 29, 54, 0.1)' } : section.type === "pdf" ? { backgroundColor: 'rgba(8, 169, 153, 0.1)' } : section.type === "audio" ? { backgroundColor: 'rgba(183, 0, 255, 0.1)' } : { backgroundColor: 'rgba(11, 97, 18, 0.1)' }]}>
                       <ImageBackground 
-                        style={{ alignSelf: 'center', height: 67, width: 76, opacity: 1 }} 
+                        style={{ alignSelf: 'center', height: 76, width: 83, opacity: 1 }} 
                         resizeMode='contain'
                         source={section.type === SECTION_TYPES.VIDEO ? require('../assets/uploadvideobg.png') : section.type === SECTION_TYPES.PDF ? require('../assets/uploadpdfbg.png') : section.type === SECTION_TYPES.AUDIO ? require('../assets/uploadaudiobg.png') : require('../assets/uploadimagebg.png')} />
                     </View>
@@ -880,6 +873,7 @@ export default function Chapters() {
 
                 <Text style={styles.orText}>— OR —</Text>
                 
+                <Text style={styles.label}>Section Media Url</Text>
                 <TextInput
                   style={styles.input}
                   placeholder={`Enter ${section.type} URL`}
@@ -889,6 +883,7 @@ export default function Chapters() {
                   autoCapitalize="none"
                 />
 
+                <Text style={styles.label}>Section Description</Text>
                 <TextInput
                   style={[styles.input, styles.descInput]}
                   placeholder="Enter Section Description"
@@ -898,33 +893,37 @@ export default function Chapters() {
                   multiline
                   numberOfLines={2}
                 />
+
+                <TouchableOpacity onPress={() => removeSection(section.id)} style={styles.removeStepIcon}>
+                  <ImageBackground style={{ height: 76, width: "90%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removesectionicon.png')}/>
+                </TouchableOpacity>
               </View>
             ))}
 
             <View style={styles.addSectionContainer}>
               <View style={styles.addSectionButtons}>
-                <TouchableOpacity style={[styles.addSectionBtn, { backgroundColor: '#ff525248' }]} onPress={() => addSection(SECTION_TYPES.VIDEO)}>
+                <TouchableOpacity style={styles.addSectionBtn} onPress={() => addSection(SECTION_TYPES.VIDEO)}>
                   <ImageBackground style={{ height: 38, width: "100%", justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/addvideobtn.png')} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.addSectionBtn, { backgroundColor: '#082a9967' }]} onPress={() => addSection(SECTION_TYPES.PDF)}>
+                <TouchableOpacity style={styles.addPdfSectionBtn} onPress={() => addSection(SECTION_TYPES.PDF)}>
                   <ImageBackground style={{ height: 38, width: "100%", justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/addpdfbtn.png')} />
                 </TouchableOpacity>
               </View>
 
               <View style={styles.addSectionButtons}>
-                <TouchableOpacity style={[styles.addSectionBtn, { backgroundColor: '#b700ff3b' }]} onPress={() => addSection(SECTION_TYPES.AUDIO)}>
+                <TouchableOpacity style={styles.addSectionBtn} onPress={() => addSection(SECTION_TYPES.AUDIO)}>
                   <ImageBackground style={{ height: 38, width: "100%", justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/addaudiobtn.png')} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.addSectionBtn, { backgroundColor: '#0b611248' }]} onPress={() => addSection(SECTION_TYPES.IMAGE)}>
+                <TouchableOpacity style={styles.addImgSectionBtn} onPress={() => addSection(SECTION_TYPES.IMAGE)}>
                   <ImageBackground style={{ height: 38, width: "100%", justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/addimagebtn.png')} />
                 </TouchableOpacity>
               </View>
             </View>
 
             <TouchableOpacity style={styles.saveBtn} onPress={saveChapter}>
-              <ImageBackground style={{ height: 47, width: "100%", justifyContent: 'center', opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='contain' source={require('../assets/savechapterbtn.png')} />
+              <ImageBackground style={{ height: 57, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
             </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
@@ -938,7 +937,7 @@ export default function Chapters() {
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
       <SafeAreaView style={{flex: 1}}>
-        <View style={{ marginBottom: 5, marginTop: -19, paddingHorizontal: 4, opacity: 1, justifyContent: "center", alignItems: 'center'}}>
+        <View style={{ marginBottom: 5, marginTop: -19, opacity: 1, justifyContent: "center", alignItems: 'center', textAlign: 'center' }}>
           <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/chapterstitle.png')} /> 
         </View>
 
@@ -951,17 +950,17 @@ export default function Chapters() {
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
-            <TouchableOpacity onPress={() => parseChapters(chapters, searchQuery)} style={styles.searchBtn}>
+            <TouchableOpacity onPress={() => parseCategories(chapters, searchQuery)} style={styles.searchBtn}>
               <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/binocularsicon.png')}/>         
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {setSearchQuery(''); parseChapters(chapters, null);}} style={styles.clearBtn}>
+            <TouchableOpacity onPress={() => {setSearchQuery(''); parseCategories(chapters, null);}} style={styles.clearBtn}>
               <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/reloadicon.png')}/>         
             </TouchableOpacity>
           </View>
 
-          <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom: 1, minHeight: 51, width:"100%"}}>
+          <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom: 1, minHeight: 73, width:"100%"}}>
             <TouchableOpacity onPress={() => { setCurrentChapter(null); setChapterTitle(""); setChapterCategory(""); setChapterDesc(""); setSelectedIds([]); setSections([]); setPrevMode("main"); setMode("add"); } } style={styles.plusIcon}>
-              <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addchaptericon.png')}/>         
+              <ImageBackground style={{ height:"72%", width:"96%"}} resizeMode='contain' source={require('../assets/addchaptericon.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={handleImportChapters} style={styles.importIcon}>
               <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
@@ -1016,7 +1015,10 @@ container: { flex: 1, backgroundColor: '#c2cdd4' },
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },
 imgBackground: { flex: 1, opacity: 1, maxHeight: "91%", minWidth: "100%", height: Dimensions.get('window').height, marginTop: "7%",},
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(250, 238, 69, 0.15)', opacity: 1 },
-sectionHeader: { color: '#c7a63b', fontSize: 13, fontWeight: 'bold', marginBottom: 9, textTransform: 'uppercase', letterSpacing: 1, backgroundColor: 'rgba(255, 255, 253, 0.91)', alignSelf: "flex-start", opacity: 1, borderRadius: 7, paddingHorizontal: 4,},
+sectionHeader: { marginBottom: 9, flexDirection: 'row', opacity: 1, borderRadius: 7, justifyContent: 'center', alignItems: 'center'},
+sectionHeaderText: { color: '#f3efbd', fontSize: 11, fontWeight: 'bold', backgroundColor: 'rgba(0,0,0,0.8)', textTransform: 'uppercase', letterSpacing: 1, alignSelf: "center", opacity: 1, borderRadius: 7, textAlign: 'center'},
+typeBtn: { width: 38, height: 38, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
+typeBtnText: {fontSize: 34},
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
 verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 5 },
 myDojoDiscardIcon: {height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
@@ -1036,20 +1038,21 @@ header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor:
 myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.76)', opacity: 1 },
 title: { fontSize: 17, fontWeight: 'bold', color: '#8b6e0f', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#8b6e0f', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
-icon: { height: 57, width: '89%', alignSelf: 'center' },
+icon: { height: 57, width: '89%', alignSelf: 'center', textAlign: 'center' },
 card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
+sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "100%", opacity: 1 },
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#ccb42c', paddingHorizontal: 5,},
-goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 },shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
+goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
-plusIcon: { height: 49, width: 76, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 15, marginBottom: 2, opacity: 1},
+plusIcon: { height: 72, width: 76, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 15, marginBottom: 2, opacity: 1},
 editIcon: { height: 57, width: 55, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 43, width: 43, marginLeft: 16, marginBottom: 5, opacity: 1, },
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},
 imgBackgroundAM: {  ...StyleSheet.absoluteFillObject, flex: 1, },
-iconAM: { height: 57, width: '90%', alignSelf: 'center' },
-videoIcon: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center'},
-videoIconUploaded: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
+iconAM: { height: 57, width: '90%', alignSelf: 'center', textAlign: 'center' },
+videoIcon: { height: 83, width: 83, marginLeft: 12, borderRadius: 2, marginTop: 19, justifyContent: 'center', alignItems: 'center'},
+videoIconUploaded: { height: 83, width: 83, marginLeft: 38, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
 pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
 pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
 videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
@@ -1057,21 +1060,24 @@ plusIconAM: { height: 51, width: 46, backgroundColor: 'rgba(0,0,0,0.6)', borderR
 plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
 containerAM: { flex: 1, opacity: 1 },
 headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#181503', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(219, 208, 44, 0.67)', textDecorationLine: 'underline', textDecorationColor: '#423c01', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
-label: { fontWeight: 'bold', color: '#3d3806', marginTop: 12, fontSize: 13, marginLeft:12 },
-input: { borderWidth: 1, borderColor: '#998308', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(247, 234, 61, 0.37)', opacity: 1, fontWeight: "semibold" },
+label: { fontWeight: 'bold', color: '#f3efbd', marginTop: 12, fontSize: 12, marginLeft:12 },
+input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5, marginTop: 7, backgroundColor: 'rgba(247, 234, 61, 0.37)', opacity: 1, fontWeight: "semibold", fontSize: 13 },
 pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "semibold" },
 stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', padding: 10, borderRadius: 10, elevation: 1 },
 stepImg: { width: '100%', height: '100%' },
-stepInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(80, 214, 145, 0.41)', borderRadius: 12, opacity: 1, fontWeight: "semibold"},
+chapterInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(241, 243, 227, 0.82)', borderRadius: 12, opacity: 1, fontWeight: "semibold"},
 removeText: { color: '#dc2626', fontSize: 10, textAlign:'center', marginTop: 1, fontWeight: 'bold', width: '100%' },
-removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height:107, width:95, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
-addSectionBtn: {marginTop: 5, height: 41 ,width: 114, alignSelf:'center', alignItems: 'center',justifyContent:'center', opacity: 1},
-addSectionButtons: {marginTop: 5, width: "100%", flexDirection: "row", backgroundColor: 'rgba(247, 231, 21, 0.16)', opacity: 1, alignSelf:'center', alignItems: 'center',justifyContent:'center'},
-addSectionContainer: {marginTop: 5, width: "100%", flexDirection: "column",  backgroundColor: 'rgba(247, 231, 21, 0.16)', opacity: 1, alignSelf:'center', alignItems: 'center',justifyContent:'space-between'},
+removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop:5, height: 95, width: 76, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
+addSectionBtn: {marginTop: 5, height: 47, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1},
+addPdfSectionBtn: {marginTop: 5, height: 41, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1},
+addImgSectionBtn: {marginTop: 5, height: 52, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1, marginLeft: 19},
+addSectionButtons: {marginTop: 5, width: "100%", flexDirection: "row", opacity: 1, alignSelf:'center', alignItems: 'center', justifyContent:'center'},
+addSectionContainer: {marginTop: 5, width: "100%", flexDirection: "column", opacity: 1, alignSelf:'center', alignItems: 'center', justifyContent:'space-between'},
 saveBtn: { width: 125, height: 97, borderRadius: 15, marginTop: 7, alignSelf:'center', alignItems: 'center', justifyContent:'center', },
 discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadius: 10, justifyContent: 'center', alignItems: 'center', opacity: 1},
 discardText: { textAlign: 'center', color: '#dc2626', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
-stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
+orText: { color: '#f3efbd', fontWeight: 'bold', fontSize: 15, marginTop: 19, marginBottom: 4, marginLeft: 38 },
+stepImgContainer: { width: 83, height: 83, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: "100%", borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
 searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11},
 searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
