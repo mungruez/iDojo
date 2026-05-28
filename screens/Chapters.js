@@ -807,7 +807,7 @@ export default function Chapters() {
             
             <Text style={styles.label}>Chapter Description</Text>
             <TextInput
-              style={[styles.input, styles.descInput]}
+              style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Description"
               placeholderTextColor="rgba(232, 233, 195, 0.85)"
               value={chapterDesc}
@@ -1050,7 +1050,7 @@ editIcon: { height: 57, width: 55, borderRadius: 4, marginLeft: 12, opacity: 1 }
 infoIcon: { height: 47, width: 47, marginLeft: 21, marginBottom: 5, opacity: 1 },
 importIcon: {height: 76, width: 67, borderRadius: 9, marginLeft: 12 },
 imgBackgroundAM: {  ...StyleSheet.absoluteFillObject, flex: 1 },
-iconAM: { height: 57, width: '90%', alignSelf: 'center', textAlign: 'center', marginLeft: 19, marginBottom: 3, opacity: 1 },
+iconAM: { height: 61, width: '95%', alignSelf: 'center', textAlign: 'center', marginLeft: 25, marginBottom: 3, opacity: 1 },
 videoIcon: { height: 95, width: 114, marginLeft: 12, borderRadius: 2, marginTop: 45, justifyContent: 'center', alignItems: 'center'},
 videoIconUploaded: { height: 83, width: 83, marginLeft: 38, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
 pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
@@ -1061,19 +1061,19 @@ plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
 containerAM: { flex: 1, opacity: 1 },
 headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#181503', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(219, 208, 44, 0.67)', textDecorationLine: 'underline', textDecorationColor: '#423c01', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
 label: { fontWeight: 'bold', color: '#f3efbd', marginTop: 12, fontSize: 12, marginLeft:12 },
-input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5, marginTop: 7, backgroundColor: 'rgba(247, 234, 61, 0.37)', opacity: 1, fontWeight: "bold", fontSize: 13 },
+input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5, marginTop: 7, backgroundColor: 'rgba(235, 224, 71, 0.62)', opacity: 1, fontWeight: "bold", fontSize: 13 },
 pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "bold" },
 stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', padding: 10, borderRadius: 10, elevation: 1 },
 stepImg: { width: '100%', height: '100%' },
-chapterInput: { borderWidth: 1, borderColor: '#083a1d', padding: 8, marginTop: 7, backgroundColor: 'rgba(241, 243, 227, 0.82)', borderRadius: 12, opacity: 1, fontWeight: "bold"},
+chapterInput: { borderWidth: 3, borderColor: '#ad9611', padding: 8, marginTop: 7, backgroundColor: 'rgba(241, 243, 227, 0.82)', borderRadius: 12, opacity: 1, fontWeight: "bold"},
 removeText: { color: '#dc2626', fontSize: 10, textAlign:'center', marginTop: 1, fontWeight: 'bold', width: '100%' },
 removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop: 38, marginBottom: 57, height: 95, width: 76, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
 addSectionBtn: {marginTop: 5, height: 47, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1, marginRight: 19},
-addPdfSectionBtn: {marginTop: 5, height: 41, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1},
-addImgSectionBtn: {marginTop: 24, height: 76, width: 125, opacity: 1, alignSelf:'center', alignItems: 'center', marginLeft: 25},
-addAudioSectionBtn: {marginTop: 5, height: 57, width: 133, opacity: 1, marginLeft: 7, alignSelf:'center',},
+addPdfSectionBtn: {marginTop: 5, height: 41, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1, marginLeft: 3},
+addImgSectionBtn: {marginTop: 24, height: 76, width: 125, opacity: 1, alignSelf:'center', alignItems: 'center', marginLeft: 19},
+addAudioSectionBtn: {marginTop: 5, height: 57, width: 140, opacity: 1, marginLeft: 15, alignSelf:'center',},
 addSectionButtons: {marginTop: 5, width: "100%", flexDirection: "row", opacity: 1, alignItems: 'center', justifyContent: 'center'},
-addSectionContainer: {marginTop: 5, width: "100%", flexDirection: "column", opacity: 1, justifyContent:'center', alignItems: 'center',},
+addSectionContainer: {marginTop: 38, width: "100%", flexDirection: "column", opacity: 1, justifyContent:'center', alignItems: 'center',},
 saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
 discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadius: 10, justifyContent: 'center', alignItems: 'center', opacity: 1},
 discardText: { textAlign: 'center', color: '#dc2626', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
