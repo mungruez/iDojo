@@ -1041,7 +1041,7 @@ infoText: { fontSize: 14, fontWeight: 'bold', color: '#c29d26', minHeight: 76, w
 icon: { height: 57, width: '89%', alignSelf: 'center', textAlign: 'center', marginLeft: 19, marginBottom: 3, opacity: 1 },
 card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
 sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "100%", opacity: 1 },
-cardText: { fontSize: 16, fontWeight: 'bold', color: '#ceb52a', paddingHorizontal: 5,},
+cardText: { fontSize: 16, fontWeight: 'bold', color: '#dac135', paddingHorizontal: 5,},
 goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
