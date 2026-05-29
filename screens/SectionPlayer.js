@@ -60,7 +60,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
               dialogTitle: `Share ${selectedsection.title}`,
             });
           } else {
-            Alert.alert('Share Error', 'Unknown File type. Section must be an image, audio, or pdf to share. Videos can be shared using the red arrow next to the title.');
+            Alert.alert('Share Error', 'Unknown File type. Section must be an Image, Audio, or PDF to share. Videos can be shared using the red arrow next to the title.');
           }
         } else {
             Alert.alert('Share Error', 'Sharing is not available on this device.');
@@ -191,7 +191,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
               <TrackPlayer track={{
                 id: index + 12,
                 uri: section.mediaUri || section.mediaUrl,
-                ispaused: isMuted,
+                ispaused: !isMuted,
               }} />
             </View>
           </View>

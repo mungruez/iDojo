@@ -692,7 +692,7 @@ export default function Chapters() {
               <Text style={{ color: '#caaf38', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{ chapterCategory === "allcategories" ? "ALL CATEGORIES" : "CATEGORY TITLE: "+chapterCategory}</Text>
                 
               <View style={{flexDirection:'row'}}>
-                <TouchableOpacity onPress={() => {setMode("main"); setPrevMode("main"); setSelectedIds([]);} } style={styles.plusIconAM}>
+                <TouchableOpacity onPress={() => { setSelectedIds([]); setPrevMode("main"); setMode("main");} } style={styles.plusIconAM}>
                   <ImageBackground style={{ height: "100%", width: "100%", }} resizeMode='contain' source={ require('../assets/backgold.png') }/>
                 </TouchableOpacity>
         
@@ -793,7 +793,7 @@ export default function Chapters() {
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Category"
-              placeholderTextColor="rgba(232, 233, 195, 0.85)"
+              placeholderTextColor="rgba(190, 190, 114, 0.76)"
               value={chapterCategory}
               onChangeText={setChapterCategory}
             />
@@ -802,7 +802,7 @@ export default function Chapters() {
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Title"
-              placeholderTextColor="rgba(232, 233, 195, 0.85)"
+              placeholderTextColor="rgba(190, 190, 114, 0.76)"
               value={chapterTitle}
               onChangeText={setChapterTitle}
             />
@@ -811,7 +811,7 @@ export default function Chapters() {
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Description"
-              placeholderTextColor="rgba(232, 233, 195, 0.85)"
+              placeholderTextColor="rgba(190, 190, 114, 0.76)"
               value={chapterDesc}
               onChangeText={setChapterDesc}
               multiline={true}
@@ -864,7 +864,7 @@ export default function Chapters() {
                       <Text style={styles.changeMediaText}>Change</Text>
                     </View>
                   ) : (
-                    <View style={[styles.videoIcon, section.type === "video" ? { backgroundColor: 'rgba(212, 29, 54, 0.1)' } : section.type === "pdf" ? { backgroundColor: 'rgba(8, 169, 153, 0.1)' } : section.type === "audio" ? { backgroundColor: 'rgba(183, 0, 255, 0.1)' } : { backgroundColor: 'rgba(11, 97, 18, 0.1)' }]}>
+                    <View style={styles.videoIcon}>
                       <ImageBackground 
                         style={{ alignSelf: 'center', height: 95, width: 114, opacity: 1 }} 
                         resizeMode='contain'
@@ -875,7 +875,7 @@ export default function Chapters() {
 
                 <Text style={styles.orText}>— OR —</Text>
                 
-                <Text style={styles.label}>Section Media Url</Text>
+                <Text style={styles.label}>{`Section ${section.type} URL`}</Text>
                 <TextInput
                   style={styles.input}
                   placeholder={`Enter ${section.type} URL`}
@@ -1042,7 +1042,7 @@ title: { fontSize: 17, fontWeight: 'bold', color: '#a08016', height: 38, width: 
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#c29d26', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 57, width: '89%', alignSelf: 'center', textAlign: 'center', marginLeft: 19, marginBottom: 3, opacity: 1 },
 card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
-sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "100%", opacity: 1 },
+sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "95%", opacity: 1, borderBottomWidth: 2, borderBottomColor: '#f3efbd' },
 cardText: { fontSize: 16, fontWeight: 'bold', color: '#dac135', paddingHorizontal: 5,},
 goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
 smallGap: {height: 12,},
@@ -1067,7 +1067,7 @@ input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5,
 pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "bold" },
 stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', padding: 10, borderRadius: 10, elevation: 1 },
 stepImg: { width: '100%', height: '100%' },
-chapterInput: { borderWidth: 3, borderColor: '#ad9611', padding: 8, marginTop: 7, backgroundColor: 'rgba(241, 243, 227, 0.82)', borderRadius: 12, opacity: 1, fontWeight: "bold"},
+chapterInput: { borderWidth: 3, borderColor: '#ad9611', padding: 8, marginTop: 7, backgroundColor: 'rgba(241, 243, 227, 0.82)', borderRadius: 12, opacity: 1, fontWeight: "bold", fontSize: 13},
 removeText: { color: '#dc2626', fontSize: 10, textAlign:'center', marginTop: 1, fontWeight: 'bold', width: '100%' },
 removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop: 38, marginBottom: 57, height: 95, width: 76, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
 addSectionBtn: {marginTop: 5, height: 47, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1, marginRight: 19},
@@ -1079,7 +1079,7 @@ addSectionContainer: {marginTop: 38, width: "100%", flexDirection: "column", opa
 saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
 discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadius: 10, justifyContent: 'center', alignItems: 'center', opacity: 1},
 discardText: { textAlign: 'center', color: '#dc2626', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
-orText: { color: '#f3efbd', fontWeight: 'bold', fontSize: 15, marginTop: 19, marginBottom: 4, marginLeft: 38 },
+orText: { color: '#f3efbd', fontWeight: 'bold', fontSize: 16, marginTop: 19, marginBottom: -7, marginLeft: 38 },
 stepImgContainer: { width: 95, height: 95, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: "100%", borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
 searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11},
