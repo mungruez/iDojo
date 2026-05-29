@@ -659,6 +659,7 @@ export default function Chapters() {
           data={currentChapter.sections}
           keyExtractor={(item) => item.id}
           style = {{ flex: 1 }}
+          nestedScrollEnabled={true}
           contentContainerStyle={{ paddingBottom: 30 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => (
@@ -668,6 +669,7 @@ export default function Chapters() {
               isActive={activeSectionId === item.id}
               onActivate={() => setActiveSectionId(item.id)}
               onDeactivate={() => setActiveSectionId(null)}
+              navigation={navigation}
             />
           )}
         />

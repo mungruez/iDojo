@@ -337,19 +337,14 @@ export default function FreeYourMindScreen() {
 
             <FlatList
               data={musicFiles} 
-              style={{flex: 1, width: "94%", flexDirection: "column", alignSelf: "center", marginTop: 1, borderRadius: 50,}}
+              style={{flex: 1, width: "94%", flexDirection: "column", alignSelf: "center", marginTop: 1, borderRadius: 50 }}
               keyExtractor={(item) => item.id.toString()} 
               extraData={playingId} 
               renderItem={({ item: file }) => (
                 <View style={styles.list}>
-                  <TouchableOpacity 
-                    onPress={() => (pausePlayMusic(file.id))}                              
-                    style={styles.playButton}>
+                  <TouchableOpacity onPress={() => (pausePlayMusic(file.id))} style={styles.playButton}>
                                   
-                      <View style={{
-                        alignItems:"flex-start",
-                        height: 47,
-                        width: "100%",}}>
+                      <View style={{ alignItems:"flex-start", height: 47, width: "100%",}}>
                                   
                           <ImageBackground 
                             style={ styles.imgSound }
@@ -360,10 +355,7 @@ export default function FreeYourMindScreen() {
                           </ImageBackground>
                       </View>
                     </TouchableOpacity>
-                    <View style={{
-                        alignItems:"flex-start",
-                        height: 19,
-                        width: "95%",}}>
+                    <View style={{ alignItems:"flex-start", height: 19, width: "95%" }}>
                         <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> {file.filename.length > 29 ? file.filename : `${file.filename}     `} </Text>        
                     </View>      
 
