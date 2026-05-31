@@ -1067,9 +1067,6 @@ export default function MyDojoStyles({route}) {
    
          { typeAM === "video" ? (
            <View>
-             <Text style={styles.label}>Move Video URL</Text>
-             { (!vid || move?.vid) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} /> }
-             
              { vid || !videoUrl ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
                { vid ? 
                  ( <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
@@ -1077,21 +1074,24 @@ export default function MyDojoStyles({route}) {
                }
              </TouchableOpacity> ) }
 
+             { ( !vid || move?.vid ) && <Text style={styles.label}>Video URL of Move</Text> }
+             { ( !vid || move?.vid ) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} /> }
+
              <Text style={styles.label}>Move Description</Text>
              <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
            </View>
            ) : typeAM === "pdf" ? (
              <View>
-               <Text style={styles.label}>PDF URL of Move</Text>
-               { (!vid || move?.vid) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} />}
-               
-               { vid || !videoUrl ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
-                 { vid ? 
-                   ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
+                { vid || !videoUrl ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
+                  { vid ? 
+                    ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
                    : !videoUrl && ( <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> ) 
-                 }
-               </TouchableOpacity> ) }
+                  }
+                </TouchableOpacity> ) }
 
+                { ( !vid || move?.vid ) && <Text style={styles.label}>PDF URL of Move</Text> }
+                { ( !vid || move?.vid ) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} /> }
+               
                <Text style={styles.label}>Move Description</Text>
                <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
              </View>
