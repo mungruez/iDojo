@@ -1075,7 +1075,7 @@ export default function MyDojoStyles({route}) {
              </TouchableOpacity> ) }
 
              { ( !vid || move?.vid ) && <Text style={styles.label}>Video URL of Move</Text> }
-             { ( !vid || move?.vid ) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.input} /> }
+             { ( !vid || move?.vid ) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> }
 
              <Text style={styles.label}>Move Description</Text>
              <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
@@ -1089,9 +1089,9 @@ export default function MyDojoStyles({route}) {
                   }
                 </TouchableOpacity> ) }
 
-                { ( !vid || move?.vid ) && <Text style={styles.label}>PDF URL of Move</Text> }
-                { ( !vid || move?.vid ) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={setVideoUrl} style={styles.pdfinput} /> }
-               
+                { ( !vid || move?.vid ) && <Text style={styles.label}>PDF URL of Move</Text> } 
+                { ( !vid || move?.vid ) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> }
+                 
                <Text style={styles.label}>Move Description</Text>
                <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
              </View>
