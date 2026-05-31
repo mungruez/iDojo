@@ -924,6 +924,8 @@ export default function MyDojoStyles({route}) {
                   } else {
                     return { uri: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` };
                   }
+                } else if (item.videoUrl && item.videoUrl.length > 7) {
+                  return require('../assets/onlinevideoicon.png');
                 }
 
                 if (item.vid && (item.vid.startsWith('file://') || item.vid.includes('/moves/'))) {
@@ -1063,37 +1065,40 @@ export default function MyDojoStyles({route}) {
          <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
          
          <Text style={styles.label}>Moves List Title/Styles</Text>
-         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Fighting Style" value={fstyleAM} onChangeText={checkFStyle} />
+         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Moves List Title" value={fstyleAM} onChangeText={checkFStyle} />
    
          { typeAM === "video" ? (
            <View>
-             { vid || !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}>
-               { vid ? 
-                 ( <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
-                 : !videoUrl && ( <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> )
-               }
-             </TouchableOpacity> ) }
+            { vid && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+              <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
+              </TouchableOpacity> )
+              : !videoUrl && ( 
+              <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+                <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> 
+              </TouchableOpacity> )
+            }
+                
+            { ( !vid || move?.vid ) && <Text style={styles.label}>Video URL of Move</Text> }
+            { ( !vid || move?.vid ) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> }
 
-             { ( !vid || move?.vid ) && <Text style={styles.label}>Video URL of Move</Text> }
-             { ( !vid || move?.vid ) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> }
-
-             <Text style={styles.label}>Move Description</Text>
-             <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+            <Text style={styles.label}>Move Description</Text>
+            <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
            </View>
            ) : typeAM === "pdf" ? (
              <View>
-                { vid || !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}>
-                  { vid ? 
-                    ( <ImageBackground style={{ alignSelf: 'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> )
-                   : !videoUrl && ( <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> ) 
-                  }
-                </TouchableOpacity> ) }
+               { vid && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+                   <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
+                 </TouchableOpacity> )
+               : !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+                   <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> 
+                </TouchableOpacity> )
+              }
 
-                { ( !vid || move?.vid ) && <Text style={styles.label}>PDF URL of Move</Text> } 
-                { ( !vid || move?.vid ) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> }
+              { ( !vid || move?.vid ) && <Text style={styles.label}>PDF URL of Move</Text> } 
+              { ( !vid || move?.vid ) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> }
                  
-               <Text style={styles.label}>Move Description</Text>
-               <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+              <Text style={styles.label}>Move Description</Text>
+              <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
              </View>
            ) : (
            <View style={{ marginTop: 3 }}>
@@ -1270,13 +1275,13 @@ export default function MyDojoStyles({route}) {
             </View>
 
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom: 1, minHeight: 49, width:"100%"}}>
-              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("video"); setFStyleAM("Enter Move List Title"); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);} } style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("video"); setFStyleAM(""); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);} } style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
               </TouchableOpacity> 
-              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("steps"); setFStyleAM("Enter Move List Title"); setDesc(""); setSelectedIds([]); setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]); setAddMode(true);}} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("steps"); setFStyleAM(""); setDesc(""); setSelectedIds([]); setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]); setAddMode(true);}} style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmanualicon.png')}/>         
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("pdf"); setFStyleAM("Enter Move List Title"); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);}} style={styles.plusIcon}>
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("pdf"); setFStyleAM(""); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);}} style={styles.plusIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addpdfmoveicon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
