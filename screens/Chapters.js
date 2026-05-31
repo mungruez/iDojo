@@ -71,7 +71,7 @@ export default function Chapters() {
     let cCategories = [{ id: "c-all", category: "allcategories" }];
   
     try {
-      const validList = list.filter(m => m && m.id && m.title && m.category);    
+      let validList = list.filter(m => m && m.id && m.title && m.category);    
       const q = query?.trim()?.toLowerCase();
       validList?.forEach(m => {
         const currentStyle = m.category || "Enter Category";
@@ -179,7 +179,7 @@ export default function Chapters() {
       
       if (info.exists) {
         const content = await FileSystem.readAsStringAsync(fileUri);
-        const loadedChapters = JSON.parse(content);
+        let loadedChapters = JSON.parse(content);
         loadedChapters = loadedChapters.filter(m => 
           m && 
           m.id && 
@@ -306,11 +306,6 @@ export default function Chapters() {
     );
   };
 
-
-  const viewChapter = (chapter) => {
-    setCurrentChapter(chapter);
-    setMode("view");
-  };
 
 
   const getChapterThumbnail = (chapter) => {
@@ -503,12 +498,26 @@ export default function Chapters() {
     setSections([...sections, newSection]);
   };
 
+
   const removeSection = (id) => {
     setSections(sections.filter(s => s.id !== id));
   };
 
+
   const updateSection = (id, field, value) => {
     setSections(sections.map(s => s.id === id ? { ...s, [field]: value } : s));
+  };
+
+  
+   const toggleSelect = (id) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  };
+
+
+  const viewChapter = (chapter) => {
+    setCurrentChapter(chapter);
+    setVcDropdownVisible(false);  
+    setMode("view");
   };
 
 
@@ -583,12 +592,6 @@ export default function Chapters() {
 
 
 
-
-  const toggleSelect = (id) => {
-    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
-  };
-
-
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
       onLongPress={() => toggleSelect(item.id)}
@@ -605,7 +608,7 @@ export default function Chapters() {
                 return getChapterThumbnail(item);
           })() } />
   
-          <View style = {styles.pillRowVideo}>
+          <View style = {styles.pillRow}>
             <Text style = {styles.typePill}>Chapter</Text>
             <TouchableOpacity onPress={() => populateForEdit(item, item.category)} style={styles.editIcon}>
               <ImageBackground style = {{ height: "100%", width: "100%", }} resizeMode = 'contain' source = { require('../assets/editicongold.png') }/>         
@@ -637,23 +640,23 @@ export default function Chapters() {
               {!vcDropdownVisible ? '▼' : '▲'}
             </Text>
           </TouchableOpacity>
+        </View>
 
-          { vcDropdownVisible && (
-            <View style={styles.vcDropdownContainer}>
-              <View style={styles.vcInfoRow}>
-                <Text style={styles.vcInfoLabel}>{`Content: ${currentChapter.sections.length} Sections`}</Text>
-              </View>
-                { currentChapter.description && (
-                  <View style={styles.vcDescSection}>
-                    <Text style={styles.vcDescLabel}>Description:</Text>
-                    <ScrollView style={styles.vcDescScroll}>
-                      <Text style={styles.vcDescText}>{currentChapter.description}</Text>
-                    </ScrollView>
-                  </View>
-                ) }
+        { vcDropdownVisible && (
+          <View style={styles.vcDropdownContainer}>
+            <View style={styles.vcInfoRow}>
+              <Text style={styles.vcInfoLabel}>{`Content: ${currentChapter.sections.length} Sections`}</Text>
             </View>
-          ) }
-        </View>  
+              { currentChapter.description && (
+                <View style={styles.vcDescSection}>
+                  <Text style={styles.vcDescLabel}>Description:</Text>
+                  <ScrollView style={styles.vcDescScroll}>
+                    <Text style={styles.vcDescText}>{currentChapter.description}</Text>
+                  </ScrollView>
+                </View>
+              ) }
+          </View>
+        ) }
 
         <FlatList
           data={currentChapter.sections}
@@ -670,6 +673,7 @@ export default function Chapters() {
               onActivate={() => setActiveSectionId(item.id)}
               onDeactivate={() => setActiveSectionId(null)}
               navigation={navigation}
+              isOffline={isOffline}
             />
           )}
         />
@@ -863,7 +867,7 @@ export default function Chapters() {
                       )}
                       <Text style={styles.changeMediaText}>Change</Text>
                     </View>
-                  ) : (
+                  ) : !section.mediaUrl && (
                     <View style={styles.videoIcon}>
                       <ImageBackground 
                         style={{ alignSelf: 'center', height: 95, width: 114, opacity: 1 }} 
@@ -873,17 +877,37 @@ export default function Chapters() {
                   )}
                 </TouchableOpacity>
 
-                <Text style={styles.orText}>— OR —</Text>
+                {section.mediaUrl && (
+                  <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { updateSection(section.id, 'mediaUrl', ''); }}>
+                    <Text style={{fontSize: 38}}>📁</Text>
+                    <Text style={styles.toggleModeText}>Or Upload</Text>
+                  </TouchableOpacity>
+                )}
+
+                {section.mediaUri && (
+                  <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { updateSection(section.id, 'mediaUri', null); }}>
+                    <Text style={{fontSize: 38}}>🔗</Text>
+                    <Text style={styles.toggleModeText}>Or Link</Text>
+                  </TouchableOpacity>
+                )}
+
+                {!section.mediaUri && !section.mediaUrl && (
+                  <Text style={styles.orText}>— OR —</Text>
+                )}
                 
-                <Text style={styles.label}>{`Section ${section.type} URL`}</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder={`Enter ${section.type} URL`}
-                  placeholderTextColor="#726b6b"
-                  value={section.mediaUrl}
-                  onChangeText={(text) => updateSection(section.id, 'mediaUrl', text)}
-                  autoCapitalize="none"
-                />
+                {!section.mediaUri && (
+                  <>
+                    <Text style={styles.label}>{`Section ${section.type} URL`}</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder={`Enter ${section.type} URL`}
+                      placeholderTextColor="#726b6b"
+                      value={section.mediaUrl}
+                      onChangeText={(text) => updateSection(section.id, 'mediaUrl', text)}
+                      autoCapitalize="none"
+                    />
+                  </>
+                )}
 
                 <Text style={styles.label}>Section Description</Text>
                 <TextInput
@@ -988,12 +1012,12 @@ export default function Chapters() {
             <View style={styles.card}>
               { item && item.category && 
                 ( <TouchableOpacity
-                  style={{ width: '79%', height: 43 }}
+                  style={{ width: '76%', height: 57 }}
                   onPress={() => { setHChapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setMode("list"); }}>
                   {item.id === 'c-all' ? 
-                    ( <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/allcategoriesbtn.png')} />
+                    ( <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
-                      <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='stretch' source={require('../assets/goldwhitebtn.png')}>
+                      <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/goldwhitebtn.png')}>
                         <Text numberOfLines={1} ellipsizeMode="clip" style={styles.cardText}>{item.category}</Text> 
                       </ImageBackground>
                   )}
@@ -1026,12 +1050,12 @@ verticalWrapper: { width: width * 0.9, alignSelf: 'center', marginBottom: 5 },
 myDojoDiscardIcon: {height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 selectedItem: { borderColor: '#f6f876', borderWidth: 2, backgroundColor: 'rgba(202, 176, 26, 0.6)' },
 titleBanner: {width: '100%', padding: 5, borderRadius: 5, marginTop: 2 },
-titleText: { textAlign: 'center', fontSize: 13, fontWeight: 'bold', color: '#8b6e0f', alignSelf: "flex-start", overflow: "hidden" },
+titleText: { textAlign: 'center', fontSize: 13, fontWeight: 'bold', color: '#dabe42', alignSelf: "flex-start", overflow: "hidden" },
 thumbImage: { width: "100%", height: 152, backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 thumbPdf: { width: "100%", height: 76, resizeMode: 'contain', backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 myDojoDeleteIcon: {height: 49, width: 49, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
 pillRow: { backgroundColor: 'rgba(43, 37, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8, borderRadius: 9, opacity: 1 },
-typePill: { backgroundColor: 'rgba(203, 212, 206, 0.38)', color: '#8b6e0f', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
+typePill: { backgroundColor: 'rgba(190, 190, 190, 0.19)', color: '#e6cc5a', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#b39514', elevation: 10 },
 batchText: { color: '#b39020', fontWeight: 'bold'},
 shareIcon: { height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
@@ -1042,8 +1066,8 @@ title: { fontSize: 17, fontWeight: 'bold', color: '#a08016', height: 38, width: 
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#c29d26', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 57, width: '89%', alignSelf: 'center', textAlign: 'center', marginLeft: 19, marginBottom: 3, opacity: 1 },
 card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
-sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "95%", opacity: 1, borderBottomWidth: 2, borderBottomColor: '#f3efbd' },
-cardText: { fontSize: 16, fontWeight: 'bold', color: '#dac135', paddingHorizontal: 5,},
+sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', alignSelf: "center", backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "95%", opacity: 1, borderBottomWidth: .5, borderBottomColor: '#f3efbd' },
+cardText: { fontSize: 16, fontWeight: 'bold', color: '#5a4f0f', paddingHorizontal: 5,},
 goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
@@ -1060,7 +1084,7 @@ pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4
 videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
 plusIconAM: { height: 51, width: 46, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginRight: 19, marginBottom: 2, opacity: 1},
 plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
-containerAM: { flex: 1, opacity: 1 },
+containerAM: { flex: 1, opacity: 1, justifyContent: 'center', alignItems: 'center', width: "100%", paddingHorizontal: 19 },
 headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#181503', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(219, 208, 44, 0.67)', textDecorationLine: 'underline', textDecorationColor: '#423c01', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
 label: { fontWeight: 'bold', color: '#f3efbd', marginTop: 12, fontSize: 12, marginLeft:12 },
 input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5, marginTop: 7, backgroundColor: 'rgba(235, 224, 71, 0.62)', opacity: 1, fontWeight: "bold", fontSize: 13 },
@@ -1090,8 +1114,8 @@ vcToggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#3b82f
 vcToggleText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
 vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderBottomWidth: 2, borderBottomColor: '#99840f' },
 vcTitle: { flex: 1, color: 'white', fontSize: 12, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
-vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden'},
-vcInfoRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4},
+vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row"},
+vcInfoRow: { alignItems: 'center', marginBottom: 4},
 vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "95%"},
 vcInfoText: { color: '#cbd5e1', fontSize: 11, fontWeight: 'bold' },
 vcDescSection: { backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#99840f' },
@@ -1100,4 +1124,6 @@ vcDescScroll: { maxHeight: height * 0.09 },
 vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
+toggleModeBtn: { alignSelf: 'flex-start', marginTop: -5, marginBottom: 15, paddingVertical: 7, paddingHorizontal: 12, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
+toggleModeText: { color: '#f3efbd', fontSize: 13, fontWeight: '600' },
 });

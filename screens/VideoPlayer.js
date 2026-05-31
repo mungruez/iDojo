@@ -13,6 +13,7 @@ export default function VideoPlayer({ video, isActive }) {
   const [playing, setPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
   
+
   const isYouTube = video.videoUrl && video.videoUrl.length > 0 && video.videoUrl.length < 19; 
 
   const player = useVideoPlayer(isYouTube ? '' : video.vid?.length > 0 ? video.vid : video.videoUrl, (player) => {
@@ -33,6 +34,7 @@ export default function VideoPlayer({ video, isActive }) {
   });
 
 
+
   useEffect(() => {
     const subscription = AppState.addEventListener("change", nextAppState => {
       if (nextAppState !== "active") {
@@ -44,11 +46,13 @@ export default function VideoPlayer({ video, isActive }) {
   }, []);
 
 
+
   useEffect(() => {
     if (!isFocused) {
       setPlaying(false);
     }
   }, [isFocused]);
+
 
 
   useEffect(() => {
@@ -64,7 +68,6 @@ export default function VideoPlayer({ video, isActive }) {
       player.pause();
     }
   }, [isActive, player]);
-
 
 
   const shareVideo = async () => {
@@ -111,7 +114,7 @@ export default function VideoPlayer({ video, isActive }) {
         <Text style={{ backgroundColor: '#2f4f4f', color: 'crimson', fontSize: 21, flex: 1, flexWrap: 'wrap', textAlign: 'left', }}>
           {`  ${video.title}`}
         </Text>
-        <TouchableOpacity onPress={handleShare} style={{ marginLeft: 4, padding: 0, paddingRight: 3, height: 38, width: 35, justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity onPress={shareVideo} style={{ marginLeft: 4, padding: 0, paddingRight: 3, height: 38, width: 35, justifyContent: 'center', alignItems: 'center' }}>
           <Image source={require('../assets/redsharearrow.png')} style={{ width: 35, height: 38 }} resizeMode='contain' />
         </TouchableOpacity>
       </View>
@@ -149,7 +152,7 @@ export default function VideoPlayer({ video, isActive }) {
       }
 
       <View style={{maxHeight: "33%", borderRadius:12}}>
-        <ScrollView>
+        <ScrollView nestedScrollEnabled={true}>
           <Text style={{backgroundColor:'#323232', color:"#fff", marginLeft: 12, marginRight: 7, marginBottom: 19, padding: 9, width: "96%"}}>
               {video.desc}
           </Text>
@@ -158,6 +161,7 @@ export default function VideoPlayer({ video, isActive }) {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   wvcontainer: {

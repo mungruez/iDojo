@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image,TouchableOpacity, StyleSheet, Dimensions, ScrollView, Alert, Share, DeviceEventEmitter } from 'react-native';
+import { View, Text, Image,TouchableOpacity, StyleSheet, Dimensions, ScrollView, Alert, Share, DeviceEventEmitter, ImageBackground } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 import VideoPlayer from './VideoPlayer';
 import TrackPlayer from './TrackPlayer';
 import PdfMove from './PdfMove';
@@ -7,7 +8,7 @@ import * as Sharing from 'expo-sharing';
 
 const { width, height } = Dimensions.get('window');
 
-export default function SectionPlayer({ section, index, isActive, onActivate, onDeactivate, navigation}) {
+export default function SectionPlayer({ section, index, isActive, onActivate, onDeactivate, navigation, isOffline}) {
   const [isFullscreen, setIsFullscreen] = useState(false); 
   const [isMuted, setIsMuted] = useState(false);
 
@@ -21,7 +22,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     }
   };
 
-
   const getTypeIcon = () => {
     switch (section.type) {
       case 'video': return '📹';
@@ -33,10 +33,37 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
+  const openPdf = async (selectedsection) => {
+    if (!selectedsection || !selectedsection.mediaUri) {
+      Alert.alert("Error", "No PDF file found.");
+      return;
+    }
+
+    try {
+      const fileInfo = await FileSystem.getInfoAsync(selectedsection.mediaUri);
+      if (!fileInfo.exists) {
+        Alert.alert("Error", "PDF file not found");
+        return;
+      }
+  
+      await Sharing.shareAsync(selectedsection.mediaUri, {
+        mimeType: 'application/pdf',
+        UTI: 'com.adobe.pdf',
+        dialogTitle: `Open ${selectedsection.title}`,
+      });
+            
+    } catch (err) {
+      if (err.message && !err.message.includes('cancelled')) {
+        Alert.alert("PDF Error", "Could not open PDF");
+      }
+    }
+  };
+
+
   const handleShareSection = async (selectedsection) => {
     if (!selectedsection) return;
     try {
-      const image = selectedsection.mediaUri ? selectedsection.mediaUri : selectedsection.mediaUrl ? selectedsection.mediaUrl : "";
+      const image = selectedsection.mediaUri || selectedsection.mediaUrl || "";
       if (!image || image.length === 0) {
         Alert.alert('No Media to Share', 'This section does not have a valid media URL or URI to share.');
         return;
@@ -66,14 +93,17 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
             Alert.alert('Share Error', 'Sharing is not available on this device.');
         }
       } else {
-         await Share.share({ title: selectedsection.title, message: image, url: image });
+        if (isOffline) {
+          Alert.alert("No Internet", "You need an internet connection to share PDF Urls.");
+          return;
+        }
+        await Share.share({ title: selectedsection.title, message: image, url: image });
       }
 
     } catch (e) {
       Alert.alert('Sharing Failed', 'An error occurred while trying to share the media: '+e.message);
     }
   };
-
 
 
   const getThumbnail = () => {
@@ -111,7 +141,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     };
   }, [navigation])
 
-
   
   if (isActive) {
     return (
@@ -122,9 +151,10 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         contentContainerStyle={{ padding: 19, paddingBottom: 40 }}
      >
       <View style={[styles.activeCard, { borderColor: getTypeColor() }, isFullscreen && styles.fullscreenCard]}>
+
         <View style={styles.activeHeader}>
           { isFullscreen && section.type !== 'video' ? (
-            <TouchableOpacity onPress={() => handleShareSection(section)} style={styles.iconBtn}>
+            <TouchableOpacity onPress={() => handleShareSection(section)} style={styles.shareiconBtn}>
               <Image source={section.type === 'pdf' ? require('../assets/bluesharearrow.png') : section.type === 'image' ? require('../assets/grnsharearrow.png') : require('../assets/purplesharearrow.png')} style={{ width: "100%", height: "100%" }} resizeMode='contain' />
             </TouchableOpacity>
             )  : ( <Text style={styles.activeSectionLabel}>Section {index + 1}: {section.type.toUpperCase()}</Text> ) 
@@ -132,16 +162,16 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity onPress={() => setIsFullscreen(!isFullscreen)} style={styles.iconBtn}>
-              <Text style={styles.iconText}>{isFullscreen ? '⛶ Exit' : ' ⛶ '}</Text>
+              <Text style={[styles.iconText, isFullscreen && { paddingBottom: 4 }]}>{isFullscreen ? '-' : '⛶'}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onDeactivate} style={styles.iconBtn}>
-              <Text style={styles.iconText}> ✕</Text>
+              <Text style={styles.iconText}>✕</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         { section.type === 'video' && (
-          <View style={[ styles.videoContainer, isFullscreen && { height: height * 0.83 } ]}>
+          <View style={[ styles.videoContainer, isFullscreen && { minHeight: height * 0.83 } ]}>
             <VideoPlayer
               video={{
                 title: section.title,
@@ -154,24 +184,30 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
           </View>
         )}
 
-        { section.type === 'pdf' && (
-          <View style={[styles.pdfContainer, isFullscreen && { height: height * 0.83 }]}>
+        { section.type === 'pdf' && section.mediaUrl ? (
+          <View style={[styles.pdfContainer, isFullscreen && { minHeight: height * 0.83 }]}>
             <PdfMove
               pdf={{
                 title: section.title,
                 style: 'Chapter',
                 desc: section.description,
-                videoUrl: section.mediaUrl,
-                vid: section.mediaUri,
+                videoUrl: section.mediaUri,
+                vid: section.mediaUrl,
               }}
               isActive={isActive}
               onClosePdf={() => {onDeactivate();}} 
             />
           </View>
-        )}
+        ) : section.type === 'pdf' && (
+          <View style={[styles.pdfContainer, isFullscreen && { minHeight: height * 0.38 }]}> 
+            <TouchableOpacity onPress={() => openPdf(section)} style={styles.openPdfButton}>
+              <Text style={{ color: 'honeydew', fontSize: 16, fontWeight: 'bold', letterSpacing: 1 }}>OPEN PDF</Text>
+            </TouchableOpacity>  
+          </View>
+        ) }
 
         { section.type === 'audio' && (
-          <View style={[styles.audioContainer, isFullscreen && { height: height * 0.83 } ]}>
+          <View style={[styles.audioContainer, isFullscreen && { minHeight: height * 0.83 } ]}>
 
             <View style={styles.trackPlayerContainer}>
               <TouchableOpacity onPress={() => (setIsMuted(!isMuted))} style={styles.playButton}>
@@ -198,12 +234,12 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         ) }
 
         { section.type === 'image' && (
-          <View style={styles.imageContainer}>
+          <View style={[styles.imageContainer, isFullscreen && { minHeight: height * 0.83 } ]}>
             <Text style={styles.activeTitle}>{section.title}</Text>
 
             <Image
               source={{ uri: section.mediaUri || section.mediaUrl }}
-              style={[ styles.inlineImage, isFullscreen && { height: height * 0.83 } ]}
+              style={[styles.inlineImage, isFullscreen ? { flex: 1 } : { height: 266 }]}
               resizeMode="contain"
             />
           </View>
@@ -256,19 +292,20 @@ const styles = StyleSheet.create({
   activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 12, marginVertical: 8, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },
   activeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12, backgroundColor: 'rgba(255,255,255,0.1)' },
   activeSectionLabel: { color: '#87940e', fontWeight: 'bold', fontSize: 11 },
-  iconBtn: { width: 38, height: 38, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
-  iconText: { color: 'white', fontSize: 19 },
-  activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 12, paddingTop: 8 },
+  iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8, borderColor: '#d4af37', borderWidth: 1.5  },
+  iconText: { color: 'rgb(228, 19, 19)', fontSize: 18,  textAlignVertical: 'center', textAlign: "center", alignSelf: 'center', includeFontPadding: false },
+  shareiconBtn: { width: 47, height: 47, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
+  activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 5, paddingTop: 8 },
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
   pdfContainer: { height: 411, backgroundColor: '#1a1a2e' },
   audioContainer: { backgroundColor: 'rgba(225, 0, 255, 0.1)', padding: 7, margin: 12, borderRadius: 12, alignItems: 'center'},
   imageContainer: { backgroundColor: '#237c2a5d', alignItems: 'center', padding: 3, opacity: 1 },
-  inlineImage: { width: '100%', height: 266, borderRadius: 8 },
-  fullscreenCard: { marginHorizontal: 0, height: height * 0.92 },
+  inlineImage: { width: '100%', borderRadius: 8 },
+  fullscreenCard: { marginHorizontal: 0, minHeight: height * 0.92 },
   fullscreenText: { color: 'white', fontWeight: 'bold' },
-  fullscreenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.92 },
+  fullscreenView: { flex: 1, marginHorizontal: 0, minHeight: height * 0.92 },
   screenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.76 },
-  thumbnailCard: { backgroundColor: 'rgba(255,255,255,0.95)', marginHorizontal: 12, marginVertical: 7, borderRadius: 12, borderWidth: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
+  thumbnailCard: { backgroundColor: 'rgba(255,255,255,0.95)', marginHorizontal: 12, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
   thumbnailRow: { flexDirection: 'row', height: 133 },
   visualBox: { width: 140, position: 'relative' },
   thumbImg: { width: '100%', height: '100%' },
@@ -280,28 +317,13 @@ const styles = StyleSheet.create({
   typeBadge: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginBottom: 3 },
   typeText: { color: 'honeydew', fontSize: 9, fontWeight: 'bold' },
   sectionDesc: { color: '#b6b9c0', fontSize: 12, lineHeight: 16 },
-  spDescSection: { backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#99840f' },
+  spDescSection: { backgroundColor: '#1e293b', padding: 7, borderRadius: 12, borderWidth: 1, borderColor: '#99840f', marginBottom: 5 },
   spDescLabel: { color: '#8d7f30', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
   spDescScroll: { maxHeight: height * 0.09 },
   spDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
   trackPlayerContainer: { minHeight: 67, width: "94%", backgroundColor: "#C0C0C0", borderRadius: 50, padding: 0, borderColor: '#5f239bff', borderWidth: 5 },
   fileName: { fontSize: 11, color: "#5b12a5ff", fontWeight: 'bold', maxHeight: 19, width: "100%", textAlign: "left", paddingLeft: 62, marginTop: -57, overflow: "hidden" },
-  playButton: {
-      borderRadius: 50,
-      width: 57,
-      height: 57,
-      padding: 5,
-      marginLeft: 7,
-      marginBottom: 5,
-      marginRight: 10,
-      marginTop: 5,
-      borderColor: '#5f239bff',
-      borderWidth: 0,
-      shadowColor: "#c494e4",
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 4.65,
-      elevation: 5,
-  },
+  playButton: { borderRadius: 50, width: 57, height: 57, padding: 5, marginLeft: 7, marginBottom: 5, marginRight: 10, marginTop: 5, borderColor: '#5f239bff', borderWidth: 0, shadowColor: "#c494e4", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 4.65, elevation: 5 },
+  openPdfButton: { backgroundColor: '#191ba3', paddingVertical: 12, paddingHorizontal: 27, borderRadius: 25, borderWidth: 2, borderColor: '#d4af37', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 5, elevation: 8, alignSelf: 'center', marginVertical: 19 },
   imgSound: { height: 47, width: 47, marginTop: 7 }
 });

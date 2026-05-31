@@ -970,7 +970,7 @@ export default function MyDojoStyles({route}) {
 
 
     if (viewmode === 1 || viewmode === 2) {
-      return <VideoPlayer video={move} isActive={true}/>;
+      return <VideoPlayer video={move} isActive={true} />;
     }
 
 
@@ -1036,7 +1036,7 @@ export default function MyDojoStyles({route}) {
 
 
     if( viewmode === 4 ) return (
-      <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} />
+      <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
     )
 
 

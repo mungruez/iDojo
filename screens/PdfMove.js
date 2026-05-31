@@ -117,7 +117,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
             Alert.alert("PDF Error", "Could not load PDF");
           }}
           onHttpError={() => { 
-            Alert.alert("PDF Error", "Failed to load. Try D/G toggle or reload PDF");
+            Alert.alert("PDF Error", "Failed to load. Try reloading PDF");
           }}
           javaScriptEnabled={true}
           domStorageEnabled={true}
