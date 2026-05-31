@@ -792,7 +792,7 @@ export default function Chapters() {
             <Text style={styles.discardText}>CANCEL</Text>
           </TouchableOpacity>
 
-          <ScrollView style={styles.containerAM} contentContainerStyle={{ paddingBottom: 100 }}>
+          <ScrollView style={styles.containerAM} contentContainerStyle={{ alignItems: "center", justifyContent: "center", paddingBottom: 100 }}>
             <Text style={styles.label}>Chapter Category</Text>
             <TextInput
               style={[styles.input, styles.chapterInput]}
@@ -865,7 +865,7 @@ export default function Chapters() {
                           </Text>
                         </View>
                       )}
-                      <Text style={styles.changeMediaText}>Change</Text>
+                      <Text style={{alignSelf: "center", fontSize: 10, color: "#f3efbd", marginTop: -12, fontWeight: "bold", backgroundColor: 'rgba(212, 175, 55, 0.12)', }}>CHANGE</Text>
                     </View>
                   ) : !section.mediaUrl && (
                     <View style={styles.videoIcon}>
@@ -877,16 +877,9 @@ export default function Chapters() {
                   )}
                 </TouchableOpacity>
 
-                {section.mediaUrl && (
-                  <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { updateSection(section.id, 'mediaUrl', ''); }}>
-                    <Text style={{fontSize: 38}}>📁</Text>
-                    <Text style={styles.toggleModeText}>Or Upload</Text>
-                  </TouchableOpacity>
-                )}
-
                 {section.mediaUri && (
                   <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { updateSection(section.id, 'mediaUri', null); }}>
-                    <Text style={{fontSize: 38}}>🔗</Text>
+                    <Text style={{fontSize: 23, marginTop: -7}}>🔗</Text>
                     <Text style={styles.toggleModeText}>Or Link</Text>
                   </TouchableOpacity>
                 )}
@@ -907,6 +900,13 @@ export default function Chapters() {
                       autoCapitalize="none"
                     />
                   </>
+                )}
+
+                {section.mediaUrl && (
+                  <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { updateSection(section.id, 'mediaUrl', ''); }}>
+                    <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
+                    <Text style={styles.toggleModeText}> Or Upload</Text>
+                  </TouchableOpacity>
                 )}
 
                 <Text style={styles.label}>Section Description</Text>
@@ -1078,13 +1078,13 @@ importIcon: {height: 76, width: 67, borderRadius: 9, marginLeft: 12 },
 imgBackgroundAM: {  ...StyleSheet.absoluteFillObject, flex: 1 },
 iconAM: { height: 61, width: '95%', alignSelf: 'center', textAlign: 'center', marginLeft: 25, marginBottom: 3, opacity: 1 },
 videoIcon: { height: 95, width: 114, marginLeft: 12, borderRadius: 2, marginTop: 45, justifyContent: 'center', alignItems: 'center'},
-videoIconUploaded: { height: 83, width: 83, marginLeft: 38, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
+videoIconUploaded: { height: 114, width: 95, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10, marginTop: 57, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
 pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
 pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
 videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
 plusIconAM: { height: 51, width: 46, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginRight: 19, marginBottom: 2, opacity: 1},
 plusIconText: { color: '#420105', fontWeight: 'bold', fontSize: 10 },
-containerAM: { flex: 1, opacity: 1, justifyContent: 'center', alignItems: 'center', width: "100%", paddingHorizontal: 19 },
+containerAM: { flex: 1, opacity: 1, width: "100%", paddingHorizontal: 19 },
 headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#181503', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(219, 208, 44, 0.67)', textDecorationLine: 'underline', textDecorationColor: '#423c01', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
 label: { fontWeight: 'bold', color: '#f3efbd', marginTop: 12, fontSize: 12, marginLeft:12 },
 input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5, marginTop: 7, backgroundColor: 'rgba(235, 224, 71, 0.62)', opacity: 1, fontWeight: "bold", fontSize: 13 },
@@ -1124,6 +1124,6 @@ vcDescScroll: { maxHeight: height * 0.09 },
 vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
-toggleModeBtn: { alignSelf: 'flex-start', marginTop: -5, marginBottom: 15, paddingVertical: 7, paddingHorizontal: 12, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
-toggleModeText: { color: '#f3efbd', fontSize: 13, fontWeight: '600' },
+toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
+toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 });
