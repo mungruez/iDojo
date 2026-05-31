@@ -15,7 +15,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   const getTypeColor = () => {
     switch (section.type) {
       case 'video': return '#bb182e';
-      case 'pdf': return '#191ba3';
+      case 'pdf': return '#181ab3';
       case 'audio': return '#7317b1';
       case 'image': return '#166d1c';
       default: return '#4b4141';
@@ -110,18 +110,22 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     if (section.type === 'image') {
       return section.mediaUri || section.mediaUrl;
     }
+
     if (section.type === 'video') {
-      if (
-        section.mediaUrl?.includes('youtube.com') ||
-        section.mediaUrl?.includes('youtu.be')
-      ) {
+      if ( section.mediaUrl?.includes('youtube.com') || section.mediaUrl?.includes('youtu.be') ) {
         const id = section.mediaUrl.match(
           /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
         )?.[1];
         return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
       }
-      return section.mediaUri;
+
+      if ( section.mediaUri ) {
+        return section.mediaUri;
+      }
+
+      return require('../assets/onlinevideoicon.png');
     }
+
     return null;
   };
 
@@ -266,19 +270,19 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     >
       <View style={styles.thumbnailRow}>
         
-        <View style={styles.visualBox}>
+        <View style={[styles.visualBox,  { borderRightColor: getTypeColor(), borderRightWidth: 1.5 } ]}>
           {getThumbnail() ? (
             <Image source={{ uri: getThumbnail() }} style={styles.thumbImg} />
           ) : (
-            <View style={[ styles.thumbPlaceholder, { backgroundColor: getTypeColor() } ]} >
+            <View style={[ styles.thumbPlaceholder, section.type === "pdf" ? { backgroundColor: 'rgba(9, 4, 46, 0.76)'} : {backgroundColor: 'rgba(27, 7, 57, 0.76)'} ]} >
               <Text style={styles.thumbIcon}>{getTypeIcon()}</Text>
             </View>
           )}
         </View>
 
         <View style={styles.infoBox}>
-          <Text style={styles.sectionNum}>SECTION {index + 1}</Text>
-          <Text style={styles.sectionTitle} numberOfLines={2}>{section.title}</Text>
+          <Text style={styles.sectionNum} numberOfLines={1}>SECTION {index + 1}</Text>
+          <Text style={styles.sectionTitle} numberOfLines={2} ellipsizeMode='tail'>{section.title}</Text>
           <View style={[styles.typeBadge, { backgroundColor: getTypeColor() }]}>
             <Text style={styles.typeText}>{section.type.toUpperCase()}</Text>
           </View>
@@ -310,9 +314,9 @@ const styles = StyleSheet.create({
   visualBox: { width: 140, position: 'relative' },
   thumbImg: { width: '100%', height: '100%' },
   thumbPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
-  thumbIcon: { fontSize: 40, opacity: 0.4 },
+  thumbIcon: { fontSize: 40, opacity: 1 },
   infoBox: { flex: 1, padding: 7, justifyContent: 'center' },
-  sectionNum: { color: '#87940e', fontSize: 10, fontWeight: 'bold', marginBottom: 4 },
+  sectionNum: { color: '#5f5905', fontSize: 10, fontWeight: 'bold', marginBottom: 4 },
   sectionTitle: { color: '#52530e', fontSize: 12, fontWeight: 'bold', marginBottom: 5 },
   typeBadge: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginBottom: 3 },
   typeText: { color: 'honeydew', fontSize: 9, fontWeight: 'bold' },

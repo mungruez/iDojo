@@ -613,7 +613,7 @@ export default function MyDojoStyles({route}) {
       try {
         if (!url || typeof url !== 'string') return "";
         if (url.length < 19) return "";
-        if (!url.includes('/') && !url.includes('.')) return url;
+        if (!url.includes('/') && !url.includes('.')) return "";
         
         const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
         const match = url.match(regExp);
@@ -926,7 +926,7 @@ export default function MyDojoStyles({route}) {
                   }
                 }
 
-                if (item.vid) {
+                if (item.vid && (item.vid.startsWith('file://') || item.vid.includes('/moves/'))) {
                   return { uri: item.vid };
                 }
                 
