@@ -563,13 +563,15 @@ export default function Chapters() {
       Alert.alert('Required', 'Please enter a Chapter Title');
       return;
     }
+
     if (sections.length === 0) {
-      Alert.alert('Required', 'Add at least one section');
+      Alert.alert('Required', 'Add at least one Section');
       return;
     }
+
     for (const section of sections) {
       if (!section.title.trim()) {
-        Alert.alert('Required', 'All sections need a Title');
+        Alert.alert('Required', 'All Sections need a Title');
         return;
       }
       if (!section.mediaUri && !section.mediaUrl.trim()) {
@@ -578,16 +580,56 @@ export default function Chapters() {
       }
     }
 
-    const chapterData = {
-      id: chapterId || Date.now().toString(),
-      title: chapterTitle.trim(),
-      category: chapterCategory.trim(),
-      description: chapterDesc.trim(),
-      sections: sections,
-      updatedAt: new Date().toISOString(),
-    };
+    try {
+      const chaptId = currentChapter?.id || Date.now().toString();
+      const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
 
-    await handleSaveChapter(chapterData);
+      if (currentChapter) {
+        await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
+      }
+      
+      await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+      const ensurePermanent = async (uri, fileName) => {
+        if (!uri || !uri.startsWith('file://') || uri.includes('/chapters/')) return uri;
+        const destUri = `${permanentDirUri}${fileName}`;
+        try {
+          await FileSystem.copyAsync({ from: uri, to: destUri });
+          return destUri;
+        } catch (e) {
+          Alert.alert("Copy Failed", `File: ${fileName}\nError: ${e.message}`);
+          return uri;
+        }
+      };
+
+      const processedSections = await Promise.all(
+        sections.map(async (section) => {
+          const newSection = { ...section };
+          
+          if (section.mediaUri) {
+            const ext = section.type === 'pdf' ? '.pdf' : section.type === 'audio' ? '.m4a' : section.type === 'image' ? '.jpg' : '.mp4';
+            newSection.mediaUri = await ensurePermanent(section.mediaUri, `section_${section.id}_${Date.now()}${ext}`);
+          }
+          
+          return newSection;
+        })
+      );
+    
+      const chapterData = {
+        id: chapterId || Date.now().toString(),
+        title: chapterTitle.trim(),
+        category: chapterCategory.trim(),
+        description: chapterDesc,
+        sections: sections,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await handleSaveChapter(chapterData);
+      resetForm();
+      setMode(prevMode);
+
+    } catch (err) {
+      Alert.alert("Save Error", err.message || "Failed to save Chapter");
+    }
   };
 
 
@@ -787,7 +829,7 @@ export default function Chapters() {
             <ImageBackground style={ styles.iconAM } resizeMode='contain' imageStyle={{ opacity: 1 }} source={currentChapter ? require('../assets/editchaptertitle.png') : require('../assets/addchaptertitle.png') } /> 
           </View>
 
-          <TouchableOpacity onPress={() => { resetForm(); setMode('list'); }} style={styles.discardBtn}>
+          <TouchableOpacity onPress={() => { resetForm(); setMode(prevMode); }} style={styles.discardBtn}>
             <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
             <Text style={styles.discardText}>CANCEL</Text>
           </TouchableOpacity>
