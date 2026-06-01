@@ -685,7 +685,7 @@ export default function Chapters() {
 
   if (mode === 'list') {
     return (
-      <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' imageStyle={{ opacity: 0.7 }} source={require('../assets/chapterslistbg.png')}>
+      <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' imageStyle={{ opacity: 0.9 }} source={require('../assets/chapterslistbg.png')}>
         <StatusBar barStyle="light-content"/>
         <SafeAreaView style={{ flex: 1}}>
           <View style={{marginBottom: 12, paddingHorizontal: 5, justifyContent: 'center', alignItems: 'center', opacity: 1}}>
@@ -693,7 +693,7 @@ export default function Chapters() {
           </View>
     
             <View style={styles.myDojoHeader}>
-              <Text style={{ color: '#caaf38', fontSize: 12, flex: 1, textTransform: 'uppercase' }}>{ chapterCategory === "allcategories" ? "ALL CATEGORIES" : "CATEGORY TITLE: "+chapterCategory}</Text>
+              <Text style={{ color: '#caaf38', fontSize: 12, flex: 1, textTransform: 'uppercase', fontWeight: "500" }}>{ chapterCategory === "allcategories" ? "ALL CATEGORIES" : "CATEGORY: "+chapterCategory}</Text>
                 
               <View style={{flexDirection:'row'}}>
                 <TouchableOpacity onPress={() => { setSelectedIds([]); setPrevMode("main"); setMode("main");} } style={styles.plusIconAM}>
@@ -716,7 +716,7 @@ export default function Chapters() {
               ListEmptyComponent = {() => {
                 return (
                   <View style={{padding: 19, alignItems: 'center'}}>
-                    <Text style={{color: 'white', marginBottom: 10, fontWeight: 'bold', fontSize: 15}}>Please Reload</Text>
+                    <Text style = {{ color: '#f3efbd', marginBottom: 19, fontWeight: 'bold', fontSize: 16 }}>Please Reload</Text>
                     <TouchableOpacity 
                       onPress={() => {
                         if (!loading && !isLoadingRef.current) loadChapters();
