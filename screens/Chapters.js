@@ -326,7 +326,7 @@ export default function Chapters() {
         if (section.mediaUri) return section.mediaUri;
       }
     }
-    return require('../assets/onlinevideoicon.png');
+    return require('../assets/chapterplaceholder.png');
   };
 
 
