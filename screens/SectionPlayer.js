@@ -211,7 +211,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         ) }
 
         { section.type === 'audio' && (
-          <View style={[styles.audioContainer, isFullscreen && { minHeight: height * 0.83 } ]}>
+          <View style={[styles.audioContainer, isFullscreen && { minHeight: height * 0.38 } ]}>
 
             <View style={styles.trackPlayerContainer}>
               <TouchableOpacity onPress={() => (setIsMuted(!isMuted))} style={styles.playButton}>
@@ -224,8 +224,9 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
                   </ImageBackground>
                 </View>
               </TouchableOpacity>
+
                 <View style={{ alignItems:"flex-start", height: 19, width: "95%" }}>
-                    <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> { section.title.length > 29 ? section.title : `${section.title}     `} </Text>        
+                  <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> { section.title.length > 29 ? section.title : `${section.title}     `} </Text>        
                 </View>      
             
               <TrackPlayer track={{
@@ -247,7 +248,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
               resizeMode="contain"
             />
           </View>
-        )}
+        ) }
 
         { section.description && (section.type === 'image' || section.type === 'audio') && (
           <View style={styles.spDescSection}>
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   shareiconBtn: { width: 47, height: 47, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 5, paddingTop: 8 },
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
-  pdfContainer: { height: 411, backgroundColor: '#1a1a2e' },
+  pdfContainer: { height: 411, backgroundColor: '#0c153baf' },
   audioContainer: { backgroundColor: 'rgba(225, 0, 255, 0.1)', padding: 7, margin: 12, borderRadius: 12, alignItems: 'center'},
   imageContainer: { backgroundColor: '#237c2a5d', alignItems: 'center', padding: 3, opacity: 1 },
   inlineImage: { width: '100%', borderRadius: 8 },
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
   fullscreenText: { color: 'white', fontWeight: 'bold' },
   fullscreenView: { flex: 1, marginHorizontal: 0, minHeight: height * 0.92 },
   screenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.76 },
-  thumbnailCard: { backgroundColor: 'rgba(255,255,255,0.95)', marginHorizontal: 12, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
+  thumbnailCard: { backgroundColor: 'rgba(241, 255, 250, 0.84)', marginHorizontal: 12, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
   thumbnailRow: { flexDirection: 'row', height: 133 },
   visualBox: { width: 140, position: 'relative' },
   thumbImg: { width: '100%', height: '100%' },
