@@ -128,7 +128,7 @@ export default function Chapters() {
   
   
   const getChapters = (cat, chaptersList) => {
-    if( !chaptersList ) return [];
+    if( !cat || !chaptersList ) return [];
     let sChapters = chaptersList.filter(m => (cat === "allcategories" || m.category === cat));
     if(cat === "allcategories") return parseHChapters(sChapters);
     return sChapters;
@@ -265,7 +265,7 @@ export default function Chapters() {
 
   
   const deleteChapters = async (idsFromArg = []) => {
-    const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : selectedIds;
+    const actualIds = Array.isArray(idsFromArg) && idsFromArg.length > 0 ? idsFromArg : (selectedIds || []);
     const cleanIdsToDelete = actualIds.map(id => String(id).trim());
     if (cleanIdsToDelete.length === 0) return;
     
@@ -281,7 +281,11 @@ export default function Chapters() {
               const chaptersToDelete = chapters.filter(m => cleanIdsToDelete.includes(String(m.id)));
               for (const chapter of chaptersToDelete) {
                 const folderUri = `${FileSystem.documentDirectory}chapters/${chapter.id}/`;
-                await FileSystem.deleteAsync(folderUri, { idempotent: true });
+                try {
+                  await FileSystem.deleteAsync(folderUri, { idempotent: true });
+                } catch (err) {
+                    Alert.alert("Delete Error", e.message || "Could not delete file from storage.");
+                }
               }
               const updatedList = chapters.filter(m => !cleanIdsToDelete.includes(String(m.id)));
               const fileUri = `${FileSystem.documentDirectory}chapters.json`;
@@ -328,53 +332,118 @@ export default function Chapters() {
 
 
   const shareChapters = async (chapterIds) => {
+    if (isOffline) {
+      Alert.alert("No Internet", "You need an internet connection to share chapters.");
+      return;
+    }
+
     if (!chapterIds?.length) return;
+    
+    let shareDir = null;
+    let zipPath = null;
+    let shareSuccess = false;
     
     try {
       setLoading(true);
-      const shareDir = `${FileSystem.cacheDirectory}chapters_export_${Date.now()}/`;
+      
+      shareDir = `${FileSystem.cacheDirectory}chapters_export_${Date.now()}/`;
+      zipPath = `${FileSystem.cacheDirectory}iDojo_Chapters_${Date.now()}.zip`;
+      
+      await FileSystem.deleteAsync(shareDir, { idempotent: true });
       await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
+      
       const chaptersToShare = chapters.filter(c => chapterIds.includes(c.id));
       for (let i = 0; i < chaptersToShare.length; i++) {
-        const chapter = chaptersToShare[i];
-        const chapterDir = `${shareDir}chapter_${i}/`;
-        await FileSystem.makeDirectoryAsync(chapterDir, { intermediates: true });
+        await FileSystem.makeDirectoryAsync(`${shareDir}chapter_${i}/`, { intermediates: true });
+      }
+
+      const exportPromises = chaptersToShare.map(async (chapter, chapterIdx) => {
+        const chapterCopy = { 
+          ...chapter, 
+          sections: chapter.sections.map(s => ({...s}))
+        };
         
-        for (let j = 0; j < chapter.sections.length; j++) {
-          const section = chapter.sections[j];
+        const chapterDir = `${shareDir}chapter_${chapterIdx}/`;
+        const sectionPromises = chapter.sections.map(async (section, sectionIdx) => {
+          const sectionCopy = { ...section };
+          
           if (section.mediaUri && section.mediaUri.startsWith('file://')) {
-            const ext = section.mediaUri.split('.').pop();
-            const dest = `${chapterDir}section_${j}.${ext}`;
-            await FileSystem.copyAsync({ from: section.mediaUri, to: dest });
-            section.mediaUri = `section_${j}.${ext}`;
+            const info = await FileSystem.getInfoAsync(section.mediaUri);
+            if (!info.exists) {
+              console.log(`File missing: ${section.mediaUri}`);
+              sectionCopy.mediaUri = null; 
+            } else {
+              const fileName = `${chapterIdx}_${sectionIdx}_${section.mediaUri.split('/').pop()}`;
+              const dest = `${chapterDir}${fileName}`;
+              
+              try {
+                await FileSystem.copyAsync({ from: section.mediaUri, to: dest });
+                const destInfo = await FileSystem.getInfoAsync(dest);
+                if (!destInfo.exists) {
+                  throw new Error(`Copy failed: ${fileName}`);
+                }
+                sectionCopy.mediaUri = fileName;
+              } catch (e) {
+                console.log(`Copy error: ${e.message}`);
+                sectionCopy.mediaUri = null;
+              }
+            }
           }
-        }
+          
+          return sectionCopy; 
+        });
+        
+        chapterCopy.sections = await Promise.all(sectionPromises); 
         
         await FileSystem.writeAsStringAsync(
           `${chapterDir}chapter.json`, 
-          JSON.stringify(chapter)
+          JSON.stringify(chapterCopy)
         );
-      }
+        
+        return chapterCopy;
+      });
+      
+      await Promise.all(exportPromises);
+      
       const manifest = {
         app: 'iDojo',
         version: 1,
         count: chaptersToShare.length,
         exportDate: new Date().toISOString()
       };
-      await FileSystem.writeAsStringAsync(`${shareDir}manifest.json`, JSON.stringify(manifest));
-      const zipPath = `${FileSystem.cacheDirectory}iDojo_Chapters_${Date.now()}.zip`;
-      await zip(shareDir.replace('file://', ''), zipPath.replace('file://', ''));
+      
+      await FileSystem.writeAsStringAsync(
+        `${shareDir}manifest.json`, 
+        JSON.stringify(manifest)
+      );
+      
+      const nakedSource = Platform.OS === 'android' 
+        ? shareDir.replace('file://', '').replace(/\/$/, '') 
+        : shareDir;
+      const nakedTarget = Platform.OS === 'android' 
+        ? zipPath.replace('file://', '') 
+        : zipPath;
+        
+      await zip(nakedSource, nakedTarget);
+      
       await Sharing.shareAsync(zipPath, {
-        dialogTitle: `Share ${chaptersToShare.length} Chapters`,
+        dialogTitle: `Share ${chaptersToShare.length} Chapter(s)`,
         mimeType: 'application/zip'
       });
-      await FileSystem.deleteAsync(shareDir, { idempotent: true });
+      
+      shareSuccess = true;
       
     } catch (e) {
-      Alert.alert('Share Error', e.message);
+      Alert.alert('Share Error', e.message || 'Failed to share chapters');
     } finally {
       setLoading(false);
-      setSelectedIds([]);
+      if (shareSuccess) setSelectedIds([]);
+      if (shareDir) {
+        try { await FileSystem.deleteAsync(shareDir, { idempotent: true }); } catch (e) {}
+      }
+      if (zipPath) {
+        try { await FileSystem.deleteAsync(zipPath, { idempotent: true }); } catch (e) {}
+      }
     }
   };
 
@@ -382,33 +451,53 @@ export default function Chapters() {
   
   const handleImportChapters = async () => {
     let extractDir = null;
-    
+    let tempZipPath = null;
+
     try {
       const res = await DocumentPicker.getDocumentAsync({ 
-        type: 'application/zip',
+        type: ['application/zip', 'application/x-zip-compressed'],
         copyToCacheDirectory: true 
       });
       
       if (res.canceled) return;
       setLoading(true);
       
-      const zipUri = res.assets[0].uri;
+      const asset = res.assets?.[0];
+      if (!asset) throw new Error("No file selected");
+      if (!asset.uri) throw new Error("Invalid file URI");
+      if (!asset.name?.toLowerCase().endsWith('.zip')) {
+        throw new Error("Please select a valid .zip export file.");
+      }
+      
       const importId = Date.now().toString();
       extractDir = `${FileSystem.documentDirectory}imported_chapters_${importId}/`;
+      tempZipPath = `${FileSystem.cacheDirectory}import_chapter_temp_${importId}.zip`;
       
+      await FileSystem.copyAsync({ from: asset.uri, to: tempZipPath });
       await FileSystem.makeDirectoryAsync(extractDir, { intermediates: true });
-      await unzip(zipUri.replace('file://', ''), extractDir.replace('file://', ''));
+      
+      const nakedZip = Platform.OS === 'android' ? tempZipPath.replace('file://', '') : tempZipPath;
+      const nakedDest = Platform.OS === 'android' ? extractDir.replace('file://', '').replace(/\/$/, '') : extractDir;
+      
+      await unzip(nakedZip, nakedDest);
+      const fixPath = (oldPath) => {
+        if (!oldPath || typeof oldPath !== 'string' || oldPath.startsWith('http')) return oldPath;
+        const fileName = oldPath.split('/').pop();
+        return `${extractDir}${fileName}`;
+      };
       
       let manifest = { count: 1 };
       try {
         const manifestContent = await FileSystem.readAsStringAsync(`${extractDir}manifest.json`);
         manifest = JSON.parse(manifestContent);
       } catch (e) {
-      
+        
       }
       
-      const importedChapters = [];
-      const chapterDirs = manifest.count > 1 ? Array.from({length: manifest.count}, (_, i) => `chapter_${i}/`) : [''];
+      const rawChapters = [];
+      const chapterDirs = manifest.count > 1 
+        ? Array.from({length: manifest.count}, (_, i) => `chapter_${i}/`) 
+        : [''];
       
       for (const dir of chapterDirs) {
         const chapterPath = `${extractDir}${dir}chapter.json`;
@@ -416,32 +505,66 @@ export default function Chapters() {
         if (!info.exists) continue;
         
         const content = await FileSystem.readAsStringAsync(chapterPath);
-        const chapter = JSON.parse(content);
+        let chapter;
+        try {
+          chapter = JSON.parse(content);
+        } catch (parseError) {
+          continue;
+        }
 
-        const chapterMediaDir = `${extractDir}${dir}`;
-        chapter.sections.forEach((section, idx) => {
-          if (section.mediaUri && !section.mediaUri.startsWith('http')) {
-            section.mediaUri = `${chapterMediaDir}${section.mediaUri}`;
+        if (!chapter || typeof chapter !== 'object') continue;
+        if (!chapter.title?.trim()) continue;
+        if (!Array.isArray(chapter.sections)) continue;
+        const chapterDir = `${extractDir}${dir}`;
+        const fixChapterPath = (oldPath) => {
+          if (!oldPath || typeof oldPath !== 'string' || oldPath.startsWith('http')) return oldPath;
+          const fileName = oldPath.split('/').pop();
+          return `${chapterDir}${fileName}`;
+        };
+        
+        chapter.sections.forEach((section) => {
+          if (!section) return;
+          section.mediaUri = fixChapterPath(section.mediaUri);
+          section.mediaUrl = fixChapterPath(section.mediaUrl);
+          if (section.mediaUri && section.mediaUrl && !section.mediaUrl.startsWith('http')) {
+            section.mediaUrl = '';
           }
         });
         
-        chapter.id = `chapter_${importId}_${Math.random().toString(36).substr(2, 4)}`;
-        importedChapters.push(chapter);
+        rawChapters.push(chapter);
       }
       
-      if (importedChapters.length === 0) throw new Error('No valid Chapters found');
+      if (rawChapters.length === 0) {
+        throw new Error('No valid chapters found in zip file');
+      }
       
-      const updatedList = [...chapters, ...importedChapters];
-      await saveChaptersToStorage(updatedList);
+      const finalChapters = rawChapters.map((chapter, index) => ({
+        ...chapter,
+        id: `chapter_${importId}_${index}_${Math.random().toString(36).substring(2, 6)}`,
+        updatedAt: new Date().toISOString()
+      })).filter(c => c.sections.length > 0);
       
-      Alert.alert('Success', `${importedChapters.length} Chapters imported!`);
+      if (finalChapters.length === 0) {
+        throw new Error("No valid chapters to import");
+      }
+      
+      const updatedList = [...chapters, ...finalChapters];
+      await handleSaveChapter(updatedList);
+      setChapters(updatedList);
+      parseCategories(updatedList, null);
+      setHchapters(getChapters(chapterCategory, updatedList));  
+      
+      Alert.alert('Success', `${finalChapters.length} chapter(s) imported!`);
       
     } catch (e) {
-      Alert.alert('Import Failed', e.message);
+      Alert.alert('Import Failed', e.message || 'Failed to import chapters');
+      if (extractDir) {
+        try { await FileSystem.deleteAsync(extractDir, { idempotent: true }); } catch (e) {}
+      }
     } finally {
       setLoading(false);
-      if (extractDir) {
-        try { await FileSystem.deleteAsync(extractDir, { idempotent: true }); } catch (err) {}
+      if (tempZipPath) {
+        try { await FileSystem.deleteAsync(tempZipPath, { idempotent: true }); } catch (e) {}
       }
     }
   };
