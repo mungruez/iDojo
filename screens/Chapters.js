@@ -1013,7 +1013,7 @@ export default function Chapters() {
               { item && item.category && 
                 ( <TouchableOpacity
                   style={{ width: '76%', height: 57 }}
-                  onPress={() => { setHChapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setMode("list"); }}>
+                  onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setMode("list"); }}>
                   {item.id === 'c-all' ? 
                     ( <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
