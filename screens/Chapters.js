@@ -1177,7 +1177,7 @@ export default function Chapters() {
             <View style={styles.card}>
               { item && item.category && 
                 ( <TouchableOpacity
-                  style={{ width: '76%', height: 57 }}
+                  style={{ width: '77.7%', height: 57 }}
                   onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setMode("list"); }}>
                   {item.id === 'c-all' ? 
                     ( <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
@@ -1275,10 +1275,10 @@ searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0
 searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
 silverDivider: { width: '99%', height: 49, alignSelf: "center", paddingVertical: 1, opacity: 1 },
 clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
-vcToggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#3b82f6', justifyContent: 'center', alignItems: 'center',},
+vcToggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#8d7f30', justifyContent: 'center', alignItems: 'center',},
 vcToggleText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
 vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderBottomWidth: 2, borderBottomColor: '#99840f' },
-vcTitle: { flex: 1, color: 'white', fontSize: 12, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
+vcTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
 vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row"},
 vcInfoRow: { alignItems: 'center', marginBottom: 4},
 vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "95%"},
