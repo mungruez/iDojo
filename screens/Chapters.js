@@ -62,7 +62,7 @@ export default function Chapters() {
 
 
   const parseCategories = (list, query) => {
-    if (!Array.isArray(list)) {
+    if ( !Array.isArray(list) ) {
       Alert.alert("Data Error", "Data is not an array, skipping parse.");
       return;
     }
@@ -73,6 +73,7 @@ export default function Chapters() {
     try {
       let validList = list.filter(m => m && m.id && m.title && m.category);    
       const q = query?.trim()?.toLowerCase();
+
       validList?.forEach(m => {
         const currentStyle = m.category || "Enter Category";
         const mType = m.category.trim().toLowerCase();
@@ -82,6 +83,7 @@ export default function Chapters() {
           s.title?.toLowerCase().includes(q) || 
           s.description?.toLowerCase().includes(q)
         );
+
         const mainMatch = !q || 
           m.title?.toLowerCase().includes(q) ||
           m.category?.toLowerCase().includes(q) ||
@@ -133,6 +135,7 @@ export default function Chapters() {
     if(cat === "allcategories") return parseHChapters(sChapters);
     return sChapters;
   }
+
 
   useFocusEffect(
     useCallback(() => {
@@ -209,7 +212,7 @@ export default function Chapters() {
         setChapters([]);
         setHchapters([]);
         setMode("main");
-        setChapterCategory('Enter Category');
+        setChapterCategory("");
       }
     } catch (e) {
       Alert.alert("Load Failed", e.message);
@@ -313,7 +316,8 @@ export default function Chapters() {
 
 
   const getChapterThumbnail = (chapter) => {
-    if (!chapter.sections?.length) return null;
+    if (!chapter || !chapter.sections ) return require('../assets/chapterplaceholder.png');
+
     for (const section of chapter.sections) {
       if (section.type === 'image' && (section.mediaUri || section.mediaUrl)) {
         return section.mediaUri || section.mediaUrl;
@@ -579,7 +583,7 @@ export default function Chapters() {
       setChapterId(Date.now().toString());
 
       if(mvcat === "allcategories") {
-        setChapterCategory("Enter Chapter Category");
+        setChapterCategory("");
       } else {
         setChapterCategory(mvcat);
       }
@@ -603,7 +607,7 @@ export default function Chapters() {
   const resetForm = () => {
     setChapterId(Date.now().toString());
     setChapterTitle('');
-    setChapterCategory(chapterCategory || "Enter Chapter Category");
+    setChapterCategory(chapterCategory || "");
     setChapterDesc('');
     setSections([]);
   };
@@ -769,9 +773,8 @@ export default function Chapters() {
           </View>
   
           <Image style={styles.thumbImage}
-              source={ (() => {
-                return getChapterThumbnail(item);
-          })() } />
+            resizeMode='contain'
+            source={ (() => { return getChapterThumbnail(item); })() } />
   
           <View style = {styles.pillRow}>
             <Text style = {styles.typePill}>Chapter</Text>

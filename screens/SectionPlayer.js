@@ -11,8 +11,8 @@ const { width, height } = Dimensions.get('window');
 export default function SectionPlayer({ section, index, isActive, onActivate, onDeactivate, navigation, isOffline}) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [musicFile, setMusicFile] = useState(section.type === "audio" ? { id: index + 12, uri: section.mediaUri, ispaused: false } : null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [musicFile, setMusicFile] = useState(section.type === "audio" ? { id: index + 19, uri: section.mediaUri || section.mediaUrl, ispaused: true } : null);
+  const [isMuted, setIsMuted] = useState(true);
 
   const getTypeColor = () => {
     switch (section.type) {
@@ -62,6 +62,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
+
   const handleShareSection = async (selectedsection) => {
     if (!selectedsection) return;
     try {
@@ -108,6 +109,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
+
   const getThumbnail = () => {
     if (section.type === 'image') {
       return section.mediaUri || section.mediaUrl;
@@ -135,10 +137,12 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener('TRACK_FINISHED', () => {
       setIsFinished(true);
+      setIsMuted(true);
     });
     
     const unsubscribeNav = navigation.addListener('beforeRemove', () => {
       setIsFinished(true);
+      setIsMuted(true);
     });
           
     return () => {
@@ -146,6 +150,29 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       unsubscribeNav();
     };
   }, [navigation])
+
+
+
+  const playPauseAudio = () => {
+    if ( isFinished ) {
+      if ( section.mediaUri ) {
+        setMusicFile({id: index + 19, uri: section.mediaUri, ispaused: false});
+      } else {
+        setMusicFile({id: index + 19, uri: section.mediaUrl, ispaused: false});
+      }
+      setIsMuted(false);
+      setIsFinished(false);
+      return;
+    }
+
+    if ( section.mediaUri ) {
+      setMusicFile({id: index + 19, uri: section.mediaUri, ispaused: !isMuted});
+    } else {
+      setMusicFile({id: index + 19, uri: section.mediaUrl, ispaused: !isMuted});
+    } 
+    setIsMuted(!isMuted);
+  };
+
 
   
   if (isActive) {
@@ -216,13 +243,13 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
           <View style={[styles.audioContainer, isFullscreen && { minHeight: height * 0.38 } ]}>
 
             <View style={styles.trackPlayerContainer}>
-              <TouchableOpacity onPress={() => { setMusicFile({id: index + 12, uri: section.mediaUri, ispaused: !isMuted}); setIsMuted(!isMuted); }} style={styles.playButton}>
+              <TouchableOpacity onPress={() => playPauseAudio()} style={styles.playButton}>
                 <View style={{ alignItems:"flex-start", height: 47, width: "100%",}}>
                   <ImageBackground 
                     style={ styles.imgSound }
                     imageStyle={{ opacity: 1 }}
                     resizeMode='contain' 
-                    source={ isMuted ? require('../assets/fympausebutton.png') : require('../assets/fymplaybutton.png')}>
+                    source={ !isMuted ? require('../assets/fympausebutton.png') : require('../assets/fymplaybutton.png')}>
                   </ImageBackground>
                 </View>
               </TouchableOpacity>
@@ -231,7 +258,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
                   <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> { section.title.length > 29 ? section.title : `${section.title}     `} </Text>        
                 </View>      
             
-              { !isFinished&& ( <TrackPlayer track={{musicFile}} /> ) }
+              { !isFinished && ( <TrackPlayer track={{musicFile}} /> ) }
             </View>
           </View>
         ) }
@@ -290,6 +317,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     </TouchableOpacity>
   );
 }
+
 
 const styles = StyleSheet.create({
   activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 12, marginVertical: 8, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },
