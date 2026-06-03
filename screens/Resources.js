@@ -47,14 +47,18 @@ export default function Resources() {
 </Text>
 <Text style={ styles.movesList }>Moves List: </Text>
 <Text style={ styles.title }> A list of over 80 videos of moves with audio and text instructions. Each video was carefully edited to contain a description with an AI Morpheus voice and can be slowed to view the move in slow motion.</Text>
-<Text style={ styles.addMove }>Add Move: </Text>
-<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense moves to the iDojo App. You can also share the move image or images, a single video or a single pdf when viewing a move. Moves can only be shared and imported with the iDojo App, only single videos, images and PDFs can be shared externally. Instuctions are provided. Awesome for sharing individual self Defence stories, albums, events and more. </Text>
-<Text style={ styles.fightersList }>Fighters List: </Text>
-<Text style={ styles.title }> A first time ever list of the best fighters of all time. Each fighter was hand picked and carefully researched by DojoSoft before being added to the list. DojoSoft only considers real life, Fighting styles that effective and are practised for Self Defense. 
-</Text>
 <Text style={ styles.manuals }>Manuals: </Text>
 <Text style={ styles.title }>A list of over 100 moves for Self Defense training. Each move has step by step instructions with images to make learning moves easier. 
 </Text>
+<Text style={ styles.addMove }>Add Move: </Text>
+<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense moves to the iDojo App. You can also share the move image or images, a single video or a single pdf when viewing a move. Moves can only be shared and imported with the iDojo App, only single videos, images and PDFs can be shared externally. Instuctions are provided. Awesome for sharing individual self Defence stories, albums, events and more. </Text>
+<Text style={ styles.chapters }>Chapters: </Text>
+<Text style={ styles.title }>Add, Share, Edit, View, Delete and Import your own Chapters to the iDojo App. A Chapters is a collection of videos, audios, images and PDFs in any number and in any order. You can also share individual Chapter image, a single video or a single pdf when viewing a chapter. Chapters can be shared and imported with the iDojo App and our free wheeShare App. Only single videos, images and PDFs can be shared externally. Instuctions are provided. Awesome for sharing lessons, courses, albums, events and more.
+</Text>
+<Text style={ styles.fightersList }>Fighters List: </Text>
+<Text style={ styles.title }> A first time ever list of the best fighters of all time. Each fighter was hand picked and carefully researched by DojoSoft before being added to the list. DojoSoft only considers real life, Fighting styles that effective and are practised for Self Defense. 
+</Text>
+
 <Text style={ styles.featured }>Featured: </Text>
 <Text style={ styles.title }>DojoSoft's hand picked list of online videos and shorts for Self Defense. Whether your looking for one to one paid training or just a quick watch and learn this iDojo's Featured List has it. Each video must meet certain criteria in order to be considered effective Self Defense. WiFi is necessary for this section as Featured videos are copyrighted. Please contact us on social media to have your suggested videos in our Featured List.
 </Text>
@@ -141,6 +145,14 @@ const styles = StyleSheet.create({
     textDecorationColor: '#b8ca12',
     fontStyle: "italic",
     color:'yellow',
+    fontSize: 19,
+    fontWeight:'600',
+  },
+  chapters: {
+    textDecorationLine: 'underline',
+    textDecorationColor: '#948b0b',
+    fontStyle: "italic",
+    color:'green',
     fontSize: 19,
     fontWeight:'600',
   },
