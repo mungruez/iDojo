@@ -112,19 +112,19 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
   const getThumbnail = () => {
     if (section.type === 'image') {
-      return section.mediaUri || section.mediaUrl;
+      if( section.mediaUri ) return section.mediaUri;
+      if( !isOffline ) return section.mediaUrl;
     }
 
     if (section.type === 'video') {
+      if( section.mediaUri ) return section.mediaUri;
+      if( isOffline ) return require('../assets/onlinevideoicon.png');
+
       if ( section.mediaUrl?.includes('youtube.com') || section.mediaUrl?.includes('youtu.be') ) {
         const id = section.mediaUrl.match(
           /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
         )?.[1];
         return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
-      }
-
-      if ( section.mediaUri ) {
-        return section.mediaUri;
       }
 
       return require('../assets/onlinevideoicon.png');

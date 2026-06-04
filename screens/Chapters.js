@@ -60,7 +60,6 @@ export default function Chapters() {
   };
 
 
-
   const parseCategories = (list, query) => {
     if ( !Array.isArray(list) ) {
       Alert.alert("Data Error", "Data is not an array, skipping parse.");
@@ -135,39 +134,6 @@ export default function Chapters() {
     if(cat === "allcategories") return parseHChapters(sChapters);
     return sChapters;
   }
-
-
-  useFocusEffect(
-    useCallback(() => {
-      loadChapters();
-    }, [])
-  );
-
-
-  useEffect(() => {
-      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-        if (mode === "view") {
-          setMode("list");
-          return true;
-        }
-
-        if (mode === "add") {
-          if(prevMode === "list") setMode("list");
-          else setMode("main");
-          return true;
-        }
-
-        if (mode === "list") {
-          setMode("main");
-          setChapterCategory("");
-          setSelectedIds([]);
-          return true;
-        }
-        return false;
-      });
-
-      return () => backHandler.remove();
-    }, [mode]);
 
 
 
@@ -311,26 +277,6 @@ export default function Chapters() {
         }
       ]
     );
-  };
-
-
-
-  const getChapterThumbnail = (chapter) => {
-    if (!chapter || !chapter.sections ) return require('../assets/chapterplaceholder.png');
-
-    for (const section of chapter.sections) {
-      if (section.type === 'image' && (section.mediaUri || section.mediaUrl)) {
-        return section.mediaUri || section.mediaUrl;
-      }
-      if (section.type === 'video') {
-        if (section.mediaUrl?.includes('youtube.com') || section.mediaUrl?.includes('youtu.be')) {
-          const id = section.mediaUrl.match(/(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/)?.[1];
-          if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-        }
-        if (section.mediaUri) return section.mediaUri;
-      }
-    }
-    return require('../assets/chapterplaceholder.png');
   };
 
 
@@ -685,6 +631,7 @@ export default function Chapters() {
   };
 
 
+
   const saveChapter = async () => {
     if (!chapterTitle.trim()) {
       Alert.alert('Required', 'Please enter a Chapter Title');
@@ -758,6 +705,65 @@ export default function Chapters() {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
     }
   };
+
+
+
+  const getChapterThumbnail = (chapter) => {
+    if (!chapter || !chapter.sections ) return require('../assets/chapterplaceholder.png');
+
+    for (const section of chapter.sections) {
+      if (section.type === 'image' && (section.mediaUri || section.mediaUrl)) {
+        if(section.mediaUri) return section.mediaUri 
+        if(!isOffline && section.mediaUrl) return section.mediaUrl;
+      }
+
+      if (section.type === 'video') {
+        if (section.mediaUri) return section.mediaUri;
+
+        if( isOffline ) return require('../assets/chapterplaceholder.png');;
+
+        if (section.mediaUrl?.includes('youtube.com') || section.mediaUrl?.includes('youtu.be')) {
+          const id = section.mediaUrl.match(/(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/)?.[1];
+          if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+        }
+      }
+    }
+    return require('../assets/chapterplaceholder.png');
+  };
+
+
+  
+  useFocusEffect(
+    useCallback(() => {
+      loadChapters();
+    }, [])
+  );
+
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (mode === "view") {
+        setMode("list");
+        return true;
+      }
+
+      if (mode === "add") {
+        if(prevMode === "list") setMode("list");
+        else setMode("main");
+        return true;
+      }
+
+      if (mode === "list") {
+        setMode("main");
+        setChapterCategory("");
+        setSelectedIds([]);
+        return true;
+      }
+      return false;
+    });
+
+    return () => backHandler.remove();
+  }, [mode]);
 
 
 
