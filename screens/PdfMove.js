@@ -129,6 +129,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

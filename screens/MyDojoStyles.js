@@ -46,11 +46,10 @@ export default function MyDojoStyles({route}) {
     const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
 
-
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
-          "Intructions: Save, Edit, View, Share, Delete and Import Moves using iDojo. You may add any number of Moves your phone memory allows. Click the binoculars to search Moves or type video/steps/pdf to filter by type.\n(1) Use the red, green and blue, plus(+) icons in the top menu bar to add Moves. You can either add Video/PDF Moves or, Step Moves with an image in each step, a title and description is required for all Moves. The default list title is allstyles and will be used when a list title is not entered when Adding or Editing the Move.\n(2) Click on one of the red, green or blue rectanglular buttons in the My Dojo Moves List to see all moves with the same Move list title. The first list title button for each type will have All Lists in silver. Video Moves can contain an online video link or a video file from the phone. Steps Moves,also called Manuals must contain an image added from the phone. PDF moves can contain an online link to a PDF or a PDF file uploaded from the phone. A reload🔄 button is provided in the dropdown at the top when viewing online PDFs.\n(3) On the list screen press and hold a move card to see the batch bar appear, after select all moves to share or delete and click on the share or delete button in the batch bar to share or delete moves. Use the Edit button at the bottom of each move card in the list to edit a move, and to view any move just click on the move card. When viewing a video move click the red arrow to the right to the title to share the individual video. When viewing a Steps Move press and hold on any image to see the batch bar appear, then select the images to share and click the green arrow icon in the batch bar to share image or images. When viewing a PDf it is automatically shared and if opend with a PDF viewer it will view the PDF and shared if opened with other options such as email, WhatsApp, etc. Moves can only be shared and imported with the idojo App, only single videos, images and PDFs can be shared externally.\n(4) Scroll horizontally and vertically on the All Lists screen to view all your moves. On the add Move screen click the save button to save moves. When adding Steps Moves with the Add Move screen click the green +step button to add a new step to the move and click the -step icon to remove a step.",
+          "Intructions: Save, Edit, View, Share, Delete and Import Moves using iDojo. You may add any number of Moves your phone memory allows. Click the binoculars icon in the top menu bar to search Moves or type video/steps/pdf to filter by type.\n(1) Use the red, green and blue, plus(+) icons in the top menu bar to add Moves. You can either add Video/PDF Moves or, Step Moves with an image in each step, a title and description is required for all Moves. The default list title is allstyles and will be used when a list title is not entered when Adding or Editing a Move.\n(2) Click on one of the red, green or blue rectanglular buttons in the My Dojo Moves List to see all moves with the same Move list title. The first list title button for each type will have All Lists in silver. Video Moves can contain an online video link or a video file from the phone. Steps Moves,also called Manuals must contain an image added from the phone. PDF moves can contain an online link to a PDF or a PDF file uploaded from the phone. A reload🔄 button is provided in the dropdown at the top when viewing online PDFs.\n(3) On the list screen press and hold a Move card to see the batch bar appear then, select all moves to share or delete and click on the share or delete button in the batch bar to share or delete Moves. Use the Edit button at the bottom of each Move card in the list to edit a Move, and to view any move just click on the move card. When viewing a video move click the red arrow to the right of the video title to share the individual video. When viewing a Steps Move press and hold on any image to see the batch bar appear, then select the images to share and click the green arrow icon in the batch bar to share image or images, a single image can be shared as an image, a batch must be shared as a zip file. When viewing a PDf it is expected to be opended with a PDF viewer on the phone, the PDF will be shared if opened with other options such as email, WhatsApp, etc. Moves can only be shared and imported with the iDojo App, only single videos, images and PDFs can be shared externally.\n(4) Scroll horizontally and vertically on the All Lists screen to view all your Moves. On the add Move screen click the save button to save Moves. When adding Steps Moves with the Add Move screen click the green +step button to add a new step to the Move and click the -step icon to remove a step.",
           [ { text: "OK",
               onPress: () => setListMode(false),
               style: "cancel" 
@@ -60,10 +59,9 @@ export default function MyDojoStyles({route}) {
         );
     };
 
-
     const parseStyles = (list, query) => {
       if (!Array.isArray(list)) {
-        Alert.alert("Data Error", "Data is not an array, skipping parse.");
+        Alert.alert("Data Error", "Data is not an array, skipping loading.");
         return;
       }
 
@@ -135,7 +133,7 @@ export default function MyDojoStyles({route}) {
           setSMoves([]);
         }
       } catch (e) {
-        Alert.alert("Parse Error", "An error occurred while parsing move styles: " + e.message);
+        Alert.alert("Parse Error", "An error occurred while parsing Move styles: " + e.message);
       }
     };
     
@@ -227,7 +225,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const saveToStorage = async (list) => {
       try {
         const fileUri = `${FileSystem.documentDirectory}moves.json`;
@@ -235,7 +232,7 @@ export default function MyDojoStyles({route}) {
         parseStyles(list, null);
         setHMoves(getMoves(fstyle, ftype, list)); 
       } catch (e) {
-        Alert.alert("Save Error", e.message || "Could not save move list to file.");
+        Alert.alert("Save Error", e.message || "Could not save Move list to file.");
       }
     };
 
@@ -275,7 +272,7 @@ export default function MyDojoStyles({route}) {
       const isDeletingAll = actualIds.length === hmoves.length;
       Alert.alert(
         isDeletingAll ? "Delete All Moves" : "Delete Moves",
-        isDeletingAll ? "Remove all moves in this list?" : `Remove ${cleanIdsToDelete.length} selected move(s)?`,
+        isDeletingAll ? "Remove all Moves in this list?" : `Remove ${cleanIdsToDelete.length} selected Move(s)?`,
 
         [{ text: "Cancel", style: "cancel" },
           {text: "Delete", style: "destructive",
@@ -296,13 +293,13 @@ export default function MyDojoStyles({route}) {
               if (isDeletingAll || updatedList.filter(m => m.type === ftype && (fstyle === "allstyles" || m.style === fstyle)).length < 1) {
                 setListMode(false);
                 setFStyle('Enter Move Title');
-                setType('select move type');
+                setType('select Move type');
               } else {
                 setHMoves(getMoves(fstyle, ftype, updatedList));
               }
               
             } catch (error) {
-              Alert.alert("Delete Error", error.message || "Could not remove files from storage.");
+              Alert.alert("Delete Error", error.message || "Could not delete files from storage.");
             }
           }
         }
@@ -313,7 +310,7 @@ export default function MyDojoStyles({route}) {
 
     const handleShare = async (selectedids) => {
       if (isOffline) {
-        Alert.alert("No Internet", "You need an internet connection to share moves.");
+        Alert.alert("No Internet", "You need an internet connection to share Moves.");
         return;
       }
 
@@ -386,7 +383,6 @@ export default function MyDojoStyles({route}) {
         setLoading(false);
       }
     };
-
 
 
 
@@ -482,11 +478,11 @@ export default function MyDojoStyles({route}) {
         }).filter(m => m && m.id);
 
         if (finalMoves.length === 0) {
-          throw new Error("No valid moves to import");
+          throw new Error("No valid Moves to import");
         }
 
         await handleSave(finalMoves);
-        Alert.alert("Success", `${finalMoves.length} moves added!`);
+        Alert.alert("Success", `${finalMoves.length} Moves added!`);
 
       } catch (e) {
         Alert.alert("Import Failed", e.message);
@@ -506,10 +502,9 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const viewPdf = async (move) => {
       if (isOffline && !move.vid) {
-        Alert.alert("No Internet", "You need an internet connection to view PDF moves.");
+        Alert.alert("No Internet", "You need an internet connection to view PDF Moves.");
         return;
       }
 
@@ -565,12 +560,10 @@ export default function MyDojoStyles({route}) {
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
 
-
     const toggleSelect = (id) => {
       setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };
 
-    
     const toggleAddMode = (mv, mvtype, mvstyle) => {
       if(mv === null) {
         setSelectedIds([]);
@@ -953,7 +946,6 @@ export default function MyDojoStyles({route}) {
     );
 
 
-    
     const MyHeader = () => {
       if (smoves.length === 0) return null;
       const firstId = smoves[0].id;
@@ -964,17 +956,13 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
 
-
-
     if (viewmode === 1 || viewmode === 2) {
       return <VideoPlayer video={move} isActive={true} />;
     }
-
 
     if(viewmode == 3) return (
       <View style={{flex: 1, paddingTop: 40, backgroundColor:"#228b22", opacity: 1}}> 
@@ -1040,8 +1028,6 @@ export default function MyDojoStyles({route}) {
     if( viewmode === 4 ) return (
       <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
     )
-
-
 
     if (addmode) return (
       <ImageBackground style={ styles.imgBackgroundAM } imageStyle={{ opacity: 0.7 }} resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
@@ -1155,7 +1141,6 @@ export default function MyDojoStyles({route}) {
      );   
 
 
-
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
@@ -1246,7 +1231,6 @@ export default function MyDojoStyles({route}) {
              </View> ) }
         </SafeAreaView>
       </ImageBackground> );
-
 
 
     return (
@@ -1368,7 +1352,6 @@ export default function MyDojoStyles({route}) {
      </ImageBackground>
     );
 }
-
 
 const styles = StyleSheet.create({
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },
