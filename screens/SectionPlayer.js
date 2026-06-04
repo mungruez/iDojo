@@ -302,7 +302,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
             <Image source={{ uri: getThumbnail() }} style={styles.thumbImg} />
           ) : (
             <View style={[ styles.thumbPlaceholder, section.type === "pdf" ? { backgroundColor: 'rgba(9, 4, 46, 0.76)'} : {backgroundColor: 'rgba(27, 7, 57, 0.76)'} ]} >
-              <Text style={styles.thumbIcon}>{getTypeIcon()}</Text>
+              <Text style={ section.type === "pdf" ? styles.thumbIconPdf : styles.thumbIcon}>{getTypeIcon()}</Text>
             </View>
           )}
         </View>
@@ -344,7 +344,8 @@ const styles = StyleSheet.create({
   visualBox: { width: 140, position: 'relative' },
   thumbImg: { width: '100%', height: '100%' },
   thumbPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
-  thumbIcon: { fontSize: 47, opacity: 1 },
+  thumbIcon: { fontSize: 42, opacity: 1 },
+  thumbIconPdf: { fontSize: 47, opacity: 1 },
   infoBox: { flex: 1, padding: 7, justifyContent: 'center' },
   sectionNum: { color: '#5f5905', fontSize: 10, fontWeight: 'bold', marginBottom: 4 },
   sectionTitle: { color: '#8d7f30', fontSize: 12, fontWeight: 'bold', marginBottom: 5 },
