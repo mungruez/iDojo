@@ -195,10 +195,11 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity onPress={() => setIsFullscreen(!isFullscreen)} style={styles.iconBtn}>
-              <Text style={[styles.iconText, isFullscreen && { paddingBottom: 4 }]}>{isFullscreen ? '-' : '⛶'}</Text>
+              {isFullscreen ? ( <Image source={require('../assets/goldminusicon.png')} style={{width: 21, height: 8}} resizeMode="contain" /> )
+                : ( <Text style={isFullscreen ? styles.iconImage : styles.iconText}>'⛶'</Text> ) } 
             </TouchableOpacity>
             <TouchableOpacity onPress={onDeactivate} style={styles.iconBtn}>
-              <Text style={styles.iconText}>✕</Text>
+              <Image source={require('../assets/redgoldcloseicon.png')} style={styles.iconImage} resizeMode="contain" />
             </TouchableOpacity>
           </View>
         </View>
@@ -325,6 +326,7 @@ const styles = StyleSheet.create({
   activeSectionLabel: { color: '#8d7f30', fontWeight: 'bold', fontSize: 11 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8, borderColor: '#d4af37', borderWidth: 1.5  },
   iconText: { color: 'rgb(228, 19, 19)', fontSize: 18,  textAlignVertical: 'center', textAlign: "center", alignSelf: 'center', includeFontPadding: false },
+  iconImage: { width: 22, height: 22 },
   shareiconBtn: { width: 51, height: 51, borderRadius: 24, backgroundColor: 'rgba(0,0,0,0.95)',  borderColor: '#d4af37', borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 5, paddingTop: 8 },
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
