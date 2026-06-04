@@ -5,15 +5,15 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 
 const videos = require.context('../assets/videos', true, /\.mp4$/);
 
-const videoSources = videos.keys().map((key) => videos(key));
 
+const videoSources = videos.keys().map((key) => videos(key));
 
 
 const MoveScreen = ({ route, navigation }) => {
   const { video } = route.params;
 
+  
 
-  //useVideoPlayer hook init with video.mid, automatically unloads video when component unmounts
   const player = useVideoPlayer(videoSources[video.mid], (player) => {
     player.loop = true;
     player.play();

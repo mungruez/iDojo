@@ -15,6 +15,7 @@ export default function ManualsScreen() {
       kplayer.loop = false; 
   });
 
+  
   async function stopSound() {
     try {
       if (kplayer && isMuted && !kplayer.playing) {
@@ -104,6 +105,7 @@ export default function ManualsScreen() {
   </ImageBackground>
   )
 }
+
 
 const styles = StyleSheet.create({
       imgBackground: {

@@ -115,7 +115,6 @@ export default function MoveListScreen() {
 )}
 
 
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',

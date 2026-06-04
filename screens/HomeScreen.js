@@ -17,7 +17,6 @@ export default function HomeScreen() {
     player.play();
   });
 
-
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
     kplayer.loop = false; 
   });
@@ -28,7 +27,6 @@ export default function HomeScreen() {
       headerShown: false,
     });
   }, []);
-
 
 
   async function stopSound() {
@@ -49,8 +47,6 @@ export default function HomeScreen() {
     }
     setIsMuted(!isMuted);
   }
-
-
 
   useEffect(() => {
     if(player && !player.playing && !isMuted) {
@@ -78,7 +74,6 @@ export default function HomeScreen() {
   }, [player]); 
 
 
-
   const stopSoundN = async (sname) => {
     try {
       if(!isMuted) {
@@ -96,8 +91,6 @@ export default function HomeScreen() {
     }
     navigation.navigate(sname);
   };
-
-
 
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 0.9 }} resizeMode='cover' source={require('../assets/dojo1.jpeg')}>
@@ -163,80 +156,54 @@ export default function HomeScreen() {
   )
 }
 
-
 const styles = StyleSheet.create({
-    button: {
-      alignItems: 'center',
-      flexDirection: "row",
-      justifyContent: 'center',
-      padding: 0,
-      borderWidth: 0,
-      borderRadius: 25,
-      elevation: 0,
-      marginBottom: 12,
-      marginLeft:30,
-      height: 57,
-      width: 190,
-      opacity: 1,
-      shadowOpacity: 0,
-    },
-    buttonres:{
-      alignItems: 'center',
-      flexDirection: "row",
-      justifyContent: 'center',
-      padding: 0,
-      borderRadius: 25,
-      borderWidth:0,
-      elevation: 0,
-      marginBottom: 12,
-      marginLeft:25,
-      height: 57,
-      width: 193,
-      opacity: 1,
-      shadowOpacity: 0,
-    },
-    buttonimage:{  
-      alignItems: 'center',
-      flexDirection: "row",
-      justifyContent: 'center',
-      padding: 0,
-      borderRadius: 25,
-      elevation: 0,
-      shadowOpacity: 0,
-      marginBottom: 12,
-      marginTop: 5,
-      marginLeft: 15,
-      height: 57,
-      width: 190,
-      opacity: 1,
+  button: {
+    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: 'center',
+    padding: 0,
+    borderWidth: 0,
+    borderRadius: 25,
+    elevation: 0,
+    marginBottom: 12,
+    marginLeft:30,
+    height: 57,
+    width: 190,
+    opacity: 1,
+    shadowOpacity: 0,
   },
-    buttontext: {
-      fontSize: 16,
-      lineHeight: 21,
-      fontWeight: '800',
-      letterSpacing: 0.25,
-      marginTop: 4,
-      color: 'white',
-      opacity:3,
-    },
-    imgBackground: {
-      maxHeight: "91%",
-      minWidth: "100%",
-      height: Dimensions.get('window').height,
-      flex: 1,
-      marginTop: "7%", 
-    },
-    imgSound: {
-      height: "100%",
-      width: "100%",
-      flex: 1,
-      opacity: 1 
-    },
-    icon: {
-      height: 57,
-      width: 76,
-      elevation: 4,
-      marginRight: 1,
-      opacity: 1
-    },
-  });
+  buttonres:{
+    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: 'center',
+    padding: 0,
+    borderRadius: 25,
+    borderWidth:0,
+    elevation: 0,
+    marginBottom: 12,
+    marginLeft:25,
+    height: 57,
+    width: 193,
+    opacity: 1,
+    shadowOpacity: 0,
+  },
+  buttonimage:{  
+    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: 'center',
+    padding: 0,
+    borderRadius: 25,
+    elevation: 0,
+    shadowOpacity: 0,
+    marginBottom: 12,
+    marginTop: 5,
+    marginLeft: 15,
+    height: 57,
+    width: 190,
+    opacity: 1,
+  },
+  buttontext: { fontSize: 16, lineHeight: 21, fontWeight: '800', letterSpacing: 0.25, marginTop: 4, color: 'white', opacity:3 },
+  imgBackground: { maxHeight: "91%", minWidth: "100%", height: Dimensions.get('window').height, flex: 1, marginTop: "7%" },
+  imgSound: { height: "100%", width: "100%", flex: 1, opacity: 1 },
+  icon: { height: 57, width: 76, elevation: 4, marginRight: 1, opacity: 1 },
+});

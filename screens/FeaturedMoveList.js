@@ -135,11 +135,9 @@ export default function FeatureMoveList() {
       }
     }
     setHfvideos(hVideos);
-    //console.log("hvideos: "+hVideos[0].data.length);
 
     try {
       await AsyncStorage.setItem('xx7771xxiDojoFvideos', JSON.stringify(vds));
-      //Save Date Stamp as ISO string
       const currentDate = new Date().toISOString();
       await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
     } catch (error) {
@@ -175,7 +173,6 @@ export default function FeatureMoveList() {
         setIsLoading(false);
       }
     )
-    //alert('Welcome to the iDojo Featured Content Section. Fvideoes DateStamp :'+currentDate+' Featured Content updated successfully! with: '+vds.length+' featured videos and free your mind audio files.');
     } catch (error) {
         if (error.message === 'Network request failed') {
           alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content!');
@@ -288,14 +285,12 @@ export default function FeatureMoveList() {
   };
 
 
-
   const renderVerticalItem = ({ item }) => (
     <View>
       <Text style={styles.sourcetext}>{item.Source}</Text>
       <HorizontalList data={item.data} />
     </View>
   );
-
 
 
   return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>

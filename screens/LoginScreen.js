@@ -266,7 +266,6 @@ export default function LoginScreen() {
   };
 
 
-
   const savePin = async () => {
     if(pin) {
       if( (pin.length != pinConfirm.length) || (pin.length < 4) || (pinConfirm.length < 4)) {

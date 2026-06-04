@@ -16,7 +16,6 @@ export default function FreeYourMindScreen() {
   const isOffline = useNetInfo().isConnected === false;
   const navigation = useNavigation();
 
-
   
   const fetchMusicFiles = async () => {
         let mhaudio = [
@@ -164,14 +163,12 @@ export default function FreeYourMindScreen() {
     const fetchFvideos = async () => {
         let errorFlag = 0;
         try {
-        //Memory cleared if Diff in current and last updated dates > 2.28 days
           const savedDate = await AsyncStorage.getItem('xx7771xxiDojoFvideosDateStamp');
           if (savedDate) {
               const currentDate = new Date();
               const savedDateObj = new Date(savedDate);
               const differenceInMs = currentDate - savedDateObj;
               if( (differenceInMs / 86400000.0) > 5.70) {
-                //console.log(`Difference in days: ${differenceInMs}`);
                 Alert.alert("Updating Content", "Featured Content not Updated in a few days. Trying to update .....");
                 const currentDate = new Date().toISOString(); 
                 await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
@@ -268,8 +265,7 @@ export default function FreeYourMindScreen() {
           Alert.alert("Unable to Store Featured List.", " Featured List only available when online. !");
         } 
       };
-    
-    
+      
 
       const fetchFeaturedAudio = () => {
         try { 
@@ -294,7 +290,6 @@ export default function FreeYourMindScreen() {
       };
 
 
-      
       useEffect(() => {
         const subscription = DeviceEventEmitter.addListener('TRACK_FINISHED', () => {
         setPlayingId(-1);
@@ -311,7 +306,6 @@ export default function FreeYourMindScreen() {
           unsubscribeNav();
         };
       }, [faudio.length, loading, navigation])
-
 
 
       useEffect(() => {
@@ -377,19 +371,9 @@ export default function FreeYourMindScreen() {
     );
 }
 
-
 const styles = StyleSheet.create({
-    container: {
-        height: "100%",
-        flex: 1,
-        marginTop: 7,
-    },
-    heading: {
-        color: "#b18bd6ff",
-        fontSize: 16,
-        textAlign: "center",
-        fontWeight: "bold",
-    },
+    container: { height: "100%", flex: 1, marginTop: 7 },
+    heading: { color: "#b18bd6ff", fontSize: 16, textAlign: "center", fontWeight: "bold" },
     list: {
       marginTop: 22,
       minHeight: 67,
@@ -428,21 +412,7 @@ const styles = StyleSheet.create({
       shadowRadius: 4.65,
       elevation: 5,
       },
-    imgSound: {
-      height: 47,
-      width: 47,
-      marginTop: 7,
-    },
-      title: {
-        height: 57,
-        opacity: 1,
-        marginTop: 38, 
-      },
-    imgBackground: {
-      marginBottom: "5%",
-      maxHeight: "95%",
-      width: "100%",
-      flex: 1,
-      borderRadius: 50,
-    },
+    imgSound: { height: 47, width: 47, marginTop: 7 },
+    title: { height: 57, opacity: 1, marginTop: 38 },
+    imgBackground: { marginBottom: "5%", maxHeight: "95%", width: "100%", flex: 1, borderRadius: 50 },
 });

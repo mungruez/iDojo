@@ -59,26 +59,17 @@ export default function FightersList() {
               
                 <Pressable onPress={() => navKSound(item)} style={styles.mainCardView}>
                     <View style={styles.subCardView}>
+
                       <Image
                         source={item.avatar}
                         resizeMode="contain"
-                          style={{
-                            borderRadius: 12,
-                            alignSelf: 'flex-start',
-                            margin: 0,
-                            height: 133,
-                            width: "100%",
-                          }}
+                          style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }}
                         />
 
                         <View style={{marginLeft: 12, marginBottom: 7}}>
+                          
                           <Text
-                              style={{
-                                fontSize: 14,
-                                color: "gold",
-                                fontWeight: 'bold',
-                                textTransform: 'capitalize',
-                              }}>
+                              style={{ fontSize: 14, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>
                                 {item.name}
                           </Text>
                             
@@ -96,10 +87,7 @@ export default function FightersList() {
                                 paddingVertical: 2,
                               }}>
                                 <Text
-                                    style={{
-                                       color: '#9a9aa1',
-                                       fontSize: 12,
-                                    }}>
+                                    style={{ color: '#9a9aa1', fontSize: 12 }}>
                                     {item.style}
                                 </Text>
                             </View>
