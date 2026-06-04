@@ -195,7 +195,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity onPress={() => setIsFullscreen(!isFullscreen)} style={styles.iconBtn}>
-              {isFullscreen ? ( <Image source={require('../assets/goldminusicon.png')} style={{width: 21, height: 8}} resizeMode="contain" /> )
+              {isFullscreen ? ( <Image source={require('../assets/goldminusicon.png')} style={{width: 21, height: 7}} resizeMode="stretch" /> )
                 : ( <Text style={isFullscreen ? styles.iconImage : styles.iconText}>'⛶'</Text> ) } 
             </TouchableOpacity>
             <TouchableOpacity onPress={onDeactivate} style={styles.iconBtn}>
