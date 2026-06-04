@@ -59,7 +59,6 @@ export default function Chapters() {
     );
   };
 
-
   const parseCategories = (list, query) => {
     if ( !Array.isArray(list) ) {
       Alert.alert("Data Error", "Data is not an array, skipping parse.");
@@ -105,7 +104,6 @@ export default function Chapters() {
     }
   };
       
-  
   const parseHChapters = (chaptersList) => {
     let hChapters = [];
     let categoriesSeen = [];
@@ -127,15 +125,12 @@ export default function Chapters() {
     return hChapters;
   };
   
-  
   const getChapters = (cat, chaptersList) => {
     if( !cat || !chaptersList ) return [];
     let sChapters = chaptersList.filter(m => (cat === "allcategories" || m.category === cat));
     if(cat === "allcategories") return parseHChapters(sChapters);
     return sChapters;
   }
-
-
 
   const loadChapters = async () => {
     try {
@@ -398,7 +393,6 @@ export default function Chapters() {
   };
 
 
-  
   const handleImportChapters = async () => {
     let extractDir = null;
     let tempZipPath = null;
@@ -631,7 +625,6 @@ export default function Chapters() {
   };
 
 
-
   const saveChapter = async () => {
     if (!chapterTitle.trim()) {
       Alert.alert('Required', 'Please enter a Chapter Title');
@@ -707,7 +700,6 @@ export default function Chapters() {
   };
 
 
-
   const getChapterThumbnail = (chapter) => {
     if (!chapter || !chapter.sections ) return require('../assets/chapterplaceholder.png');
 
@@ -731,14 +723,11 @@ export default function Chapters() {
     return require('../assets/chapterplaceholder.png');
   };
 
-
-  
   useFocusEffect(
     useCallback(() => {
       loadChapters();
     }, [])
   );
-
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {

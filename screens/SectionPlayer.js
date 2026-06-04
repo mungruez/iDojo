@@ -34,7 +34,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     }
   };
 
-
   const openPdf = async () => {
     if (!section || !section.mediaUri) {
       Alert.alert("Error", "No PDF Section found.");
@@ -60,7 +59,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       }
     }
   };
-
 
 
   const handleShareSection = async (selectedsection) => {
@@ -107,7 +105,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       Alert.alert('Sharing Failed', 'An error occurred while trying to share the media: '+e.message);
     }
   };
-
 
 
   const getThumbnail = () => {
