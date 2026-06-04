@@ -124,7 +124,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         const id = section.mediaUrl.match(
           /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
         )?.[1];
-        return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+        return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : require('../assets/onlinevideoicon.png');
       }
 
       return require('../assets/onlinevideoicon.png');
