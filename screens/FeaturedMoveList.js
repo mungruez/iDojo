@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator  } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator, Alert  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,10 +13,28 @@ export default function FeatureMoveList() {
 
   const isOffline = useNetInfo().isConnected === false;
   
+
+  const isSameDayUTC = (inputDate) => {
+    if (!inputDate || typeof inputDate !== "string") {
+      return false;
+    }
+
+    var parsed = new Date(inputDate);
+    if (isNaN(parsed.getTime())) {
+      return false;
+    }
+
+    var today = new Date();
+    return (
+      parsed.getUTCFullYear() === today.getUTCFullYear() &&
+      parsed.getUTCMonth() === today.getUTCMonth() &&
+      parsed.getUTCDate() === today.getUTCDate()
+    );
+  }
+
   const fetchFvideos = async () => {
     let errorFlag = 0;
     try {
-    //Memory cleared if Diff in current and last updated dates > 2.28 days
       const savedDate = await AsyncStorage.getItem('xx7771xxiDojoFvideosDateStamp');
       if (savedDate) {
           const currentDate = new Date();
@@ -24,14 +42,14 @@ export default function FeatureMoveList() {
           const differenceInMs = currentDate - savedDateObj;
           
           if( (differenceInMs / 86400000.0) > 5.70) {
-            alert("Featured Videos not Updated in a few days. Trying to update .....");
+            Alert.alert("Featured Content","Featured Videos not Updated in a few days. Trying to update .....");
             const currentDate = new Date().toISOString(); 
             await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
             return errorFlag;
           }  
       }
     } catch (error) {
-      alert("Featured Videos not visited for some time. Updating List...");
+      Alert.alert("Featured Content","Featured Videos not visited for some time. Updating List...");
       const currentDate = new Date().toISOString(); 
       await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
       return errorFlag;
@@ -47,6 +65,9 @@ export default function FeatureMoveList() {
             let hstyle = "";
             let hsource ="";
             for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+              if( vds[fvNum].Source === "iDojoMoveOfTheDay" && !isSameDayUTC(vds[fvNum].Type) ) {
+                continue;
+              }
               if(vds[fvNum].Vend < 0 || vds[fvNum].Vend == 7777777) {
     
                 if(hlist.length > 0) {
@@ -81,7 +102,7 @@ export default function FeatureMoveList() {
         });
 
       } catch (error) {
-        alert("Featured Videos not visited for some time. Updating List...");
+        Alert.alert("Featured Content","Featured Videos not visited for some time. Updating List...");
       }
 
     return errorFlag;
@@ -104,11 +125,15 @@ export default function FeatureMoveList() {
       vds.push(fVideo);
     }
 
-    let hVideos = [];
     let hlist = [];
+    let hVideos = [];
     let hstyle = "";
-    let hsource ="";
+    let hsource = "";
     for (let fvNum = 0; fvNum < vds.length; fvNum++) {
+      if( vds[fvNum].Source === "iDojoMoveOfTheDay" && !isSameDayUTC(vds[fvNum].Type) ) {
+        continue;
+      }
+
       if(vds[fvNum].Vend < 0 || vds[fvNum].Vend == 7777777) {
 
         if(hlist.length > 0) {
@@ -141,18 +166,22 @@ export default function FeatureMoveList() {
       const currentDate = new Date().toISOString();
       await AsyncStorage.setItem('xx7771xxiDojoFvideosDateStamp', currentDate);
     } catch (error) {
-      alert("Unable to Store Featured List. Featured List only available when online. !");
+      Alert.alert("Featured Content","Unable to Store Featured List. Featured List only available when online. !");
     } 
   };
 
 
   useEffect(() => {
     if (isOffline) {
-      alert("Offline", "Internet required for featured content.");
+      Alert.alert("Offline", "Internet required for featured content.");
+      if(isloading) {
+        setIsLoading(false);
+      }
       return;
     } 
     
     fetchFvideos();
+
     if ( hfvideos.length > 5 ) { 
       if(isloading) {
         setIsLoading(false);
@@ -161,23 +190,23 @@ export default function FeatureMoveList() {
     }
     
     try { 
-    fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
-    .then(res => res.json())
-    .then(
-      (result) => {
-        parseFvideos(result.values); 
-        setIsLoading(false);
-        return;     
-      },
-      (error) => {
-        setIsLoading(false);
-      }
-    )
+      fetch("https://sheets.googleapis.com/v4/spreadsheets/1bigTkraeJ23fgTyvmFX9_-0t5OgZPh9kCyaS6hVrHXA/values/iDojoFeaturedVideos?valueRenderOption=FORMATTED_VALUE&key=AIzaSyC6hYTt4MgX6PsHyUM1I1BPVY9CkeN35WU")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          parseFvideos(result.values); 
+          setIsLoading(false);
+          return;     
+        },
+        (error) => {
+          setIsLoading(false);
+        }
+      )
     } catch (error) {
         if (error.message === 'Network request failed') {
-          alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content!');
+          Alert.alert("Connection Error",'No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content!');
         } else {
-          alert('An unexpected error occurred while updating featured content: ', error);
+          Alert.alert("Featured Content",'An unexpected error occurred while updating featured content: ', error);
         }
     } 
   }, []);
@@ -186,7 +215,7 @@ export default function FeatureMoveList() {
 
    const checkWifi = (item) => {
     if(isOffline) {
-      alert('No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content! Thumbnails may show because of the cache.');
+      Alert.alert("Connection Error","No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content! Thumbnails may show because of the cache.");
       return;
     }
     navigation.navigate('Featured', {video: item});
@@ -294,21 +323,21 @@ export default function FeatureMoveList() {
 
 
   return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
-    <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25,}}>
+    <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25 }}>
 
-      <View style={{ marginBottom: 7, paddingBottom:10, opacity: 1, alignItmms: "center", justifyContent: "center",}}>
+      <View style={{ marginBottom: 7, paddingBottom:10, opacity: 1, alignItmms: "center", justifyContent: "center" }}>
         <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/featuredtitle.png')} />
         <StatusBar style='light' />
       </View>
 
-      {isOffline && <Text style={{ marginTop: 19, height: "100%", width: "100%", color: 'rgb(174, 185, 185)', fontSize: 14, fontStyle: "italic", fontWeight:"bold", textAlign:"center", alignSelf: "center"}}> No Wifi Detected! Thunmbails may show however the videos wont play!</Text> }
+      {isOffline ? (<Text style={{ marginTop: 19, height: "100%", width: "100%", color: 'rgb(174, 185, 185)', fontSize: 14, fontStyle: "italic", fontWeight:"bold", textAlign:"center", alignSelf: "center"}}> No Wifi Detected! Internet is required for viewing Featured videos!</Text> )
       
-      {!isloading ? ( <View style={styles.imgBackground}>
+      : !isloading ? ( <View style={styles.imgBackground}>
           <FlatList
             data={hfvideos}
             renderItem={renderVerticalItem}
             keyExtractor={(item) => item.Source}
-            contentContainerStyle={{ flex : 1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop: 7, }}
+            contentContainerStyle={{ flex : 1, paddingBottom: 57, minHeight: 411*hfvideos.length, marginTop: 7 }}
             showsVerticalScrollIndicator={false}
             />
         </View> )

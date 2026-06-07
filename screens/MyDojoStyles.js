@@ -560,9 +560,11 @@ export default function MyDojoStyles({route}) {
 
     useFocusEffect(useCallback(() => { loadMoves(); }, []));
 
+
     const toggleSelect = (id) => {
       setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };
+
 
     const toggleAddMode = (mv, mvtype, mvstyle) => {
       if(mv === null) {
@@ -600,6 +602,7 @@ export default function MyDojoStyles({route}) {
         setAddMode(true);
       }
     };
+
 
 
     const getYouTubeId = (url) => {
@@ -891,7 +894,6 @@ export default function MyDojoStyles({route}) {
     };
       
 
-
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
         onLongPress={() => toggleSelect(item.id)}
@@ -945,7 +947,6 @@ export default function MyDojoStyles({route}) {
       </TouchableOpacity>
     );
 
-
     const MyHeader = () => {
       if (smoves.length === 0) return null;
       const firstId = smoves[0].id;
@@ -955,10 +956,10 @@ export default function MyDojoStyles({route}) {
       return null;
     };
 
-
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+
 
     if (viewmode === 1 || viewmode === 2) {
       return <VideoPlayer video={move} isActive={true} />;
@@ -1024,7 +1025,6 @@ export default function MyDojoStyles({route}) {
       </View>
     );
 
-
     if( viewmode === 4 ) return (
       <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
     )
@@ -1055,40 +1055,76 @@ export default function MyDojoStyles({route}) {
    
          { typeAM === "video" ? (
            <View>
-            { vid && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
-              <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
+            { vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+              <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
               </TouchableOpacity> )
               : !videoUrl && ( 
               <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
                 <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> 
               </TouchableOpacity> )
             }
+
+            { vid && (
+              <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { setVid(''); }}>
+                <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
+                <Text style={styles.toggleModeText}>Or Link</Text>
+              </TouchableOpacity>
+            )}
+
+            {!vid && !videoUrl && (
+              <Text style={styles.orText}>— OR —</Text>
+            )}
                 
-            { ( !vid || move?.vid ) && <Text style={styles.label}>Video URL of Move</Text> }
-            { ( !vid || move?.vid ) && <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> }
+            { !vid && ( <Text style={styles.label}>Video URL of Move</Text> ) }
+            { !vid && ( <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> ) }
+
+            { videoUrl && (
+              <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
+                <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
+                <Text style={styles.toggleModeText}> Or Upload</Text>
+              </TouchableOpacity>
+            )}
 
             <Text style={styles.label}>Move Description</Text>
             <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
            </View>
            ) : typeAM === "pdf" ? (
              <View>
-               { vid && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
-                   <ImageBackground style={{ alignSelf:'center', height: 57, width: 57, }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
+               { vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+                   <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
                  </TouchableOpacity> )
                : !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
                    <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> 
                 </TouchableOpacity> )
               }
 
-              { ( !vid || move?.vid ) && <Text style={styles.label}>PDF URL of Move</Text> } 
-              { ( !vid || move?.vid ) && <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> }
-                 
+              { vid && (
+                <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { setVid(''); }}>
+                  <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
+                  <Text style={styles.toggleModeText}>Or Link</Text>
+                </TouchableOpacity>
+              ) }
+
+              { !vid && !videoUrl && (
+                <Text style={styles.orText}>— OR —</Text>
+              ) } 
+
+              { !vid && ( <Text style={styles.label}>PDF URL of Move</Text> ) }
+              { !vid && ( <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> ) }
+
+              { videoUrl && (
+                <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
+                  <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
+                  <Text style={styles.toggleModeText}> Or Upload</Text>
+                </TouchableOpacity>
+              ) }
+
               <Text style={styles.label}>Move Description</Text>
               <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
              </View>
            ) : (
            <View style={{ marginTop: 3 }}>
-             {steps.map((s, i) => (
+             { steps.map((s, i) => (
                <View key={s.id} style={styles.stepRow}>
                  <Text style={styles.label}>Step Title</Text>
                  <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
@@ -1107,12 +1143,12 @@ export default function MyDojoStyles({route}) {
                      placeholder={`Enter Step ${i+1} Description...`} value={s.desc} 
                      onChangeText={(t) => { const ns = [...steps]; ns[i].desc = t; setSteps(ns); }} 
                    />
-                   {steps.length > 1 && (
+                   { steps.length > 1 && (
                      <TouchableOpacity onPress={() => setSteps(steps.filter(st => st.id !== s.id))} style={styles.removeStepIcon}>
                        <ImageBackground style={{ height: 91, width: "100%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removeimgicon.png')}/>
                        <Text style={styles.removeText}> <Text style={{color: '#ff4444'}}>➖</Text> STEP</Text>
                      </TouchableOpacity>
-                   )}
+                   ) }
                  </View>
                </View>
              ))}
@@ -1231,7 +1267,6 @@ export default function MyDojoStyles({route}) {
              </View> ) }
         </SafeAreaView>
       </ImageBackground> );
-
 
     return (
       <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
@@ -1410,7 +1445,7 @@ importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBotto
 imgBackgroundAM: {  ...StyleSheet.absoluteFillObject, flex: 1, },
 iconAM: { height: 57, width: '90%', alignSelf: 'center' },
 videoIcon: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center'},
-videoIconUploaded: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10,marginTop: 5,justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
+videoIconUploaded: { height: 76, width: 76, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10, marginTop: 5, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#f84444', borderStyle: 'dashed'},
 pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
 pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
 videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
@@ -1420,7 +1455,7 @@ containerAM: { flex: 1, opacity: 1 },
 headerTitle: { fontSize: 17, fontWeight: 'bold', color: '#023010', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(61, 170, 91, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#014211', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
 headerTitleVideo: { fontSize: 17, fontWeight: 'bold', color: '#420105', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(167, 38, 57, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#420105', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
 headerTitlePdf: { fontSize: 17, fontWeight: 'bold', color: '#010242', marginTop:7, marginBottom: 3, marginLeft: 43, backgroundColor: 'rgba(45, 43, 158, 0.2)', textDecorationLine: 'underline', textDecorationColor: '#020142', textDecorationStyle: 'solid', borderRadius: 7, alignSelf: "flex-start", paddingHorizontal: 4, paddingVertical: 1,},
-label: { fontWeight: 'bold', color: '#420105', marginTop: 12, fontSize: 13, marginLeft:12 },
+label: { fontWeight: 'bold', color: '#420105', marginTop: 12, fontSize: 13, marginLeft: 12 },
 input: { borderWidth: 1, borderColor: '#990808', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(212, 29, 54, 0.1)', opacity: 1, fontWeight: "semibold" },
 pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "semibold" },
 stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', padding: 10, borderRadius: 10, elevation: 1 },
@@ -1441,4 +1476,7 @@ clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8
 imgBackgroundManual: { minWidth: "100%", backgroundColor: "#233535", flex: 1, opacity: 1, margin: 0, padding: 3, borderRadius: 7, borderColor: 'silver', borderWidth: 1, borderBottomWidth: 1},
 desctextManual: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 2, color: 'white', padding: 5, borderRadius: 7, opacity: 1 },
 titletextManual: {fontSize: 17, lineHeight: 21, fontWeight: '600', letterSpacing: 0.25, marginLeft: 7, color: 'black', opacity: 1, },
+orText: { color: '#420105', fontWeight: 'bold', fontSize: 15, marginTop: 12, marginBottom: -7, marginLeft: 38 },
+toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
+toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 });
