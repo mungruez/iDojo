@@ -20,17 +20,21 @@ export default function FeatureMoveList() {
     }
 
     var parsed = new Date(inputDate);
+
     if (isNaN(parsed.getTime())) {
       return false;
     }
 
     var today = new Date();
+
     return (
       parsed.getUTCFullYear() === today.getUTCFullYear() &&
       parsed.getUTCMonth() === today.getUTCMonth() &&
       parsed.getUTCDate() === today.getUTCDate()
     );
   }
+
+
 
   const fetchFvideos = async () => {
     let errorFlag = 0;
@@ -109,6 +113,7 @@ export default function FeatureMoveList() {
   }
   
 
+
   const parseFvideos = async (vidArr) => {
     let vds =[];
     for (let fvNum = 1; fvNum < vidArr.length; fvNum++) {
@@ -169,6 +174,7 @@ export default function FeatureMoveList() {
       Alert.alert("Featured Content","Unable to Store Featured List. Featured List only available when online. !");
     } 
   };
+
 
 
   useEffect(() => {
@@ -314,12 +320,14 @@ export default function FeatureMoveList() {
   };
 
 
+
   const renderVerticalItem = ({ item }) => (
     <View>
       <Text style={styles.sourcetext}>{item.Source}</Text>
       <HorizontalList data={item.data} />
     </View>
   );
+
 
 
   return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
@@ -350,6 +358,7 @@ export default function FeatureMoveList() {
     </SafeAreaView>
   </ImageBackground>)
 }
+
 
 
 const styles = StyleSheet.create({
