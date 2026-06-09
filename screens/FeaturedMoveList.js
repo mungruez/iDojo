@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator, Alert  } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator, Alert, Animated  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,6 +9,12 @@ import { useNavigation } from '@react-navigation/native'
 export default function FeatureMoveList() {
   const [isloading, setIsLoading] = useState(true);
   const [hfvideos, setHfvideos] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const panelAnim = useRef(new Animated.Value(0)).current;
+
+  const SCREEN_WIDTH = Dimensions.get('window').width*.47;
+
   const navigation = useNavigation();
 
   const isOffline = useNetInfo().isConnected === false;
@@ -229,6 +235,36 @@ export default function FeatureMoveList() {
 
 
 
+  const togglePanel = (item) => {
+    if(isOffline) {
+      Alert.alert("Connection Error","No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content! Thumbnails may show because of the cache.");
+      return;
+    }
+    const nextOpenState = !isOpen;
+    const toValue = nextOpenState ? 1 : 0;
+    
+    setIsOpen(nextOpenState);
+    
+    Animated.timing(panelAnim, {
+      toValue: toValue,
+      duration: 1200,
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished && nextOpenState && navigation) {
+        navigation.navigate('Featured', {video: item}); 
+      }
+    });
+  };
+
+
+
+  const translateX = panelAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, (-1*SCREEN_WIDTH)], 
+  });
+
+
+
   const HorizontalList = ({ data }) => {
     return (
       <FlatList
@@ -251,15 +287,15 @@ export default function FeatureMoveList() {
               borderRadius: 38,
             }}>
 
-              { item.Title && <Pressable
+              { item.Source !== "iDojoMoveOfTheDay" ? ( <Pressable
                 onPress={() => checkWifi(item) }>
                   <View key={index}> 
-                    { item.Title && <View key={item.Source} style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight:38, width: (Dimensions.get('window').width*0.47),}}>
+                    { item.Title && <View style={{ backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight: 38, width: (Dimensions.get('window').width*0.47) }}>
                       <Text numberOfLines={2} style={styles.titletext}>{item.Title}</Text>
                     </View> } 
 
                     <View style={styles.mainCardView}>
-                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0,}}>
+                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0 }}>
                         <View style={styles.subCardView}>
                           <View>
                           <Image
@@ -312,7 +348,57 @@ export default function FeatureMoveList() {
                       </View>
                     </View>
                   </View>
-              </Pressable> }
+              </Pressable> ) : ( 
+                <Pressable onPress={() => togglePanel(item)} style={{ zIndex: 2 }}>
+                  <View> 
+                    { item.Title && <View style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight: 38, width: (Dimensions.get('window').width*0.47) }}>
+                      <Text numberOfLines={2} style={styles.titletext}>{item.Title}</Text>
+                    </View> } 
+
+                    <View style={styles.mainCardView}>
+                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0 }}>
+                        <View style={styles.subCardView}>
+                          <View style={styles.backendImageContainer}>
+                            <Image 
+                              source={{uri: item.Thumb}}
+                              resizeMode="cover"
+                              style={{
+                                borderRadius: 12,
+                                alignSelf: 'flex-start',
+                                marginTop: 0,
+                                marginLeft: 3,
+                                height: "100",
+                                width: (Dimensions.get('window').width/100)*45,
+                              }}
+                            />
+                          </View>
+
+                          <Animated.View 
+                            style={[
+                              styles.slidingPanel, 
+                              { transform: [{ translateX }] }
+                            ]}
+                          >
+                            <Image
+                              source={require('../assets/moveoftheday.jpg')} 
+                              resizeMode="cover"
+                              style={{
+                                borderRadius: 12,
+                                alignSelf: 'flex-start',
+                                marginTop: 0,
+                                marginLeft: 3,
+                                height: "100%",
+                                width: (Dimensions.get('window').width/100)*45,
+                              }}
+                            />
+                          </Animated.View>
+
+                          <Text style={{ color: '#fff', fontSize: 11, fontWeight: 'bold', position: 'absolute', bottom: 19, alignSelf: 'center', }}>{isOpen ? item.Type : item.Style}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+              </Pressable> ) }
           </View>
         ) }
       />
@@ -433,5 +519,14 @@ const styles = StyleSheet.create({
         height: 57,
         opacity: 1,
         elevation: 2,
-      }
+      },
+  backendImageContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  slidingPanel: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
 })
