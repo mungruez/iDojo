@@ -1093,13 +1093,13 @@ export default function MyDojoStyles({route}) {
                { vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
                  </TouchableOpacity> )
-               : !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
-                   <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> 
+               : !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+                   <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> 
                 </TouchableOpacity> )
               }
 
               { vid && (
-                <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { setVid(''); }}>
+                <TouchableOpacity style={styles.toggleModePdfBtn} onPress={() => { setVid(''); }}>
                   <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
                   <Text style={styles.toggleModeText}>Or Link</Text>
                 </TouchableOpacity>
@@ -1113,7 +1113,7 @@ export default function MyDojoStyles({route}) {
               { !vid && ( <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> ) }
 
               { videoUrl && (
-                <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
+                <TouchableOpacity style={[styles.toggleModePdfBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
                   <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
                   <Text style={styles.toggleModeText}> Or Upload</Text>
                 </TouchableOpacity>
@@ -1477,6 +1477,7 @@ imgBackgroundManual: { minWidth: "100%", backgroundColor: "#233535", flex: 1, op
 desctextManual: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: 0.25, marginTop: 2, color: 'white', padding: 5, borderRadius: 7, opacity: 1 },
 titletextManual: {fontSize: 17, lineHeight: 21, fontWeight: '600', letterSpacing: 0.25, marginLeft: 7, color: 'black', opacity: 1, },
 orText: { color: '#420105', fontWeight: 'bold', fontSize: 15, marginTop: 12, marginBottom: -7, marginLeft: 38 },
-toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
-toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
+toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 29, 54, 0.1)', borderRadius: 6, borderWidth: 1,  borderColor: '#990808', flexDirection: "row" },
+toggleModePdfBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5,  backgroundColor: 'rgba(28, 142, 218, 0.17)', borderRadius: 6, borderWidth: 1, borderColor: '#436fff', flexDirection: "row" },
+toggleModeText: { color: '#420105', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 });
