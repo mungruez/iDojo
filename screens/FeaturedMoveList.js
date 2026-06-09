@@ -415,7 +415,6 @@ export default function FeatureMoveList() {
   );
 
 
-
   return ( <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/dojo4.jpeg')}>
     <SafeAreaView style={{ flex: 1, height: Dimensions.get('window').height, marginTop:25 }}>
 
@@ -444,7 +443,6 @@ export default function FeatureMoveList() {
     </SafeAreaView>
   </ImageBackground>)
 }
-
 
 
 const styles = StyleSheet.create({
@@ -515,11 +513,7 @@ const styles = StyleSheet.create({
         padding: 3,
         flex: 1,
       }, 
-      icon: {
-        height: 57,
-        opacity: 1,
-        elevation: 2,
-      },
+  icon: { height: 57, opacity: 1, elevation: 2 },
   backendImageContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',

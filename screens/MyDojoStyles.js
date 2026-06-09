@@ -1176,7 +1176,6 @@ export default function MyDojoStyles({route}) {
       </ImageBackground>
      );   
 
-
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
