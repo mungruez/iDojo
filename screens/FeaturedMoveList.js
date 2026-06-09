@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dim
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 export default function FeatureMoveList() {
@@ -75,7 +75,7 @@ export default function FeatureMoveList() {
             let hstyle = "";
             let hsource ="";
             for (let fvNum = 0; fvNum < vds.length; fvNum++) {
-              if( vds[fvNum].Source === "iDojoMoveOfTheDay" && !isSameDayUTC(vds[fvNum].Type) ) {
+              if( vds[fvNum].Style === "iDojoMoveOfTheDay" && !isSameDayUTC(vds[fvNum].Type) ) {
                 continue;
               }
               if(vds[fvNum].Vend < 0 || vds[fvNum].Vend == 7777777) {
@@ -141,7 +141,7 @@ export default function FeatureMoveList() {
     let hstyle = "";
     let hsource = "";
     for (let fvNum = 0; fvNum < vds.length; fvNum++) {
-      if( vds[fvNum].Source === "iDojoMoveOfTheDay" && !isSameDayUTC(vds[fvNum].Type) ) {
+      if( vds[fvNum].Style === "iDojoMoveOfTheDay" && !isSameDayUTC(vds[fvNum].Type) ) {
         continue;
       }
 
@@ -287,7 +287,7 @@ export default function FeatureMoveList() {
               borderRadius: 38,
             }}>
 
-              { item.Source !== "iDojoMoveOfTheDay" ? ( <Pressable
+              { item.Style !== "iDojoMoveOfTheDay" ? ( <Pressable
                 onPress={() => checkWifi(item) }>
                   <View key={index}> 
                     { item.Title && <View style={{ backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight: 38, width: (Dimensions.get('window').width*0.47) }}>
@@ -351,8 +351,8 @@ export default function FeatureMoveList() {
               </Pressable> ) : ( 
                 <Pressable onPress={() => togglePanel(item)} style={{ zIndex: 2 }}>
                   <View> 
-                    { item.Title && <View style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight: 38, width: (Dimensions.get('window').width*0.47) }}>
-                      <Text numberOfLines={2} style={styles.titletext}>{item.Title}</Text>
+                    { item.Title && <View style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight: 38, width: (Dimensions.get('window').width*0.47), textAlign: "flex-start" }}>
+                      <Text numberOfLines={2} style={styles.titletext}>{item.Title.trim()}</Text>
                     </View> } 
 
                     <View style={styles.mainCardView}>
@@ -363,11 +363,11 @@ export default function FeatureMoveList() {
                               source={{uri: item.Thumb}}
                               resizeMode="cover"
                               style={{
-                                borderRadius: 12,
+                                borderRadius: 7,
                                 alignSelf: 'flex-start',
-                                marginTop: 0,
-                                marginLeft: 3,
-                                height: "100%",
+                                marginTop: -12,
+                                marginLeft: 0,
+                                height: "93%",
                                 width: (Dimensions.get('window').width/100)*45,
                               }}
                             />
@@ -381,19 +381,19 @@ export default function FeatureMoveList() {
                           >
                             <Image
                               source={require('../assets/moveoftheday.jpg')} 
-                              resizeMode="cover"
+                              resizeMode="stretch"
                               style={{
-                                borderRadius: 12,
-                                alignSelf: 'flex-start',
+                                borderRadius: 7,
+                                alignSelf: 'center',
                                 marginTop: 0,
-                                marginLeft: 3,
-                                height: "100%",
-                                width: (Dimensions.get('window').width/100)*45,
+                                marginLeft: 0,
+                                height: "89%",
+                                width: (Dimensions.get('window').width/100)*46,
                               }}
                             />
                           </Animated.View>
 
-                          <Text style={{ color: '#fff', fontSize: 11, fontWeight: 'bold', position: 'absolute', bottom: 19, alignSelf: 'center', }}>{isOpen ? item.Type : item.Style}</Text>
+                          <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold', position: 'absolute', bottom: 5, alignSelf: 'center', zIndex: 2}}>{isOpen ? item.Style : item.Type}</Text>
                         </View>
                       </View>
                     </View>
