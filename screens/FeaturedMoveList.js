@@ -349,14 +349,14 @@ export default function FeatureMoveList() {
                     </View>
                   </View>
               </Pressable> ) : ( 
-                <Pressable onPress={() => togglePanel(item)} style={{ zIndex: 2 }}>
+                <Pressable onPress={() => togglePanel(item)} style={{ zIndex: 2, }}>
                   <View> 
                     { item.Title && <View style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight: 38, width: (Dimensions.get('window').width*0.47), textAlign: "flex-start" }}>
                       <Text numberOfLines={2} style={styles.titletext}>{item.Title.trim()}</Text>
                     </View> } 
 
                     <View style={styles.mainCardView}>
-                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0 }}>
+                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0,  overflow: 'hidden' }}>
                         <View style={styles.subCardView}>
                           <View style={styles.backendImageContainer}>
                             <Image 
