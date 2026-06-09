@@ -1065,7 +1065,7 @@ export default function MyDojoStyles({route}) {
             }
 
             { vid && (
-              <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { setVid(''); }}>
+              <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 5, alignSelf: "flex-start", marginLeft: 12}]} onPress={() => { setVid(''); }}>
                 <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
                 <Text style={styles.toggleModeText}>Or Link</Text>
               </TouchableOpacity>
@@ -1099,7 +1099,7 @@ export default function MyDojoStyles({route}) {
               }
 
               { vid && (
-                <TouchableOpacity style={styles.toggleModePdfBtn} onPress={() => { setVid(''); }}>
+                <TouchableOpacity style={[styles.toggleModePdfBtn, {marginTop: 5, alignSelf: "flex-start", marginLeft: 12}]} onPress={() => { setVid(''); }}>
                   <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
                   <Text style={styles.toggleModeText}>Or Link</Text>
                 </TouchableOpacity>
