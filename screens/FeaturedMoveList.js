@@ -367,7 +367,7 @@ export default function FeatureMoveList() {
                                 alignSelf: 'flex-start',
                                 marginTop: 0,
                                 marginLeft: 3,
-                                height: "100",
+                                height: "100%",
                                 width: (Dimensions.get('window').width/100)*45,
                               }}
                             />
@@ -524,9 +524,15 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
   slidingPanel: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
+    position: 'absolute', 
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 })
