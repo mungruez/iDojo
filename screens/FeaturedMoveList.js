@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator, Alert, Animated  } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Pressable, ImageBackground, Image,Dimensions, ActivityIndicator, Alert, Animated, TouchableOpacity  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -250,8 +250,8 @@ export default function FeatureMoveList() {
       duration: 1200,
       useNativeDriver: true,
     }).start(({ finished }) => {
-      if (finished && nextOpenState && navigation) {
-        navigation.navigate('Featured', {video: item}); 
+      if (finished && nextOpenState) {
+        
       }
     });
   };
@@ -349,16 +349,25 @@ export default function FeatureMoveList() {
                     </View>
                   </View>
               </Pressable> ) : ( 
-                <Pressable onPress={() => togglePanel(item)} style={{ zIndex: 2, }}>
+                <Pressable onPress={() => togglePanel(item)} style={{ zIndex: 2 }}>
                   <View> 
                     { item.Title && <View style={{backgroundColor: 'silver', marginLeft: 6, marginBottom: 2, borderColor:"silver", borderWidth:1, borderRadius:5, flexDirection:"column", minHeight: 38, width: (Dimensions.get('window').width*0.47), textAlign: "flex-start" }}>
                       <Text numberOfLines={2} style={styles.titletext}>{item.Title.trim()}</Text>
                     </View> } 
 
                     <View style={styles.mainCardView}>
-                      <View style={{flexDirection: 'column', alignItems: 'flex-start', marginTop: 0,  overflow: 'hidden' }}>
+                      <View style={{flexDirection: 'column', alignItems: 'center', marginTop: 0,  overflow: 'hidden' }}>
                         <View style={styles.subCardView}>
-                          <View style={styles.backendImageContainer}>
+                          <TouchableOpacity  style={styles.backendImageContainer} 
+                            onPress={(e) => {
+                              e.stopPropagation();
+                                if (isOpen) {
+                                  togglePanel(item);
+                                } else {
+                                  checkWifi(item);
+                                }
+                              }} >
+
                             <Image 
                               source={{uri: item.Thumb}}
                               resizeMode="cover"
@@ -371,14 +380,9 @@ export default function FeatureMoveList() {
                                 width: (Dimensions.get('window').width/100)*45,
                               }}
                             />
-                          </View>
+                          </TouchableOpacity>
 
-                          <Animated.View 
-                            style={[
-                              styles.slidingPanel, 
-                              { transform: [{ translateX }] }
-                            ]}
-                          >
+                          <Animated.View style={[ styles.slidingPanel, { transform: [{ translateX }] }]}>
                             <Image
                               source={require('../assets/moveoftheday.jpg')} 
                               resizeMode="stretch"
@@ -392,8 +396,9 @@ export default function FeatureMoveList() {
                               }}
                             />
                           </Animated.View>
-
-                          <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold', position: 'absolute', bottom: 5, alignSelf: 'center', zIndex: 2}}>{isOpen ? item.Style : item.Type}</Text>
+                          <TouchableOpacity style={[{ position: 'absolute', bottom: 5, alignItems: 'center',  alignItems: 'center', justifyContent:"center", zIndex: 5 }, isOpen && {backgroundColor: 'rgba(0, 0, 0, 0.38)', paddingVertical: 7, paddingHorizontal: 12, borderRadius: 5, borderWidth: .5, borderColor: "#94cccc"} ]} hitSlop={{ top: 15, bottom: 15, left: 25, right: 25 }} onPress={(e) => { e.stopPropagation(); togglePanel(item);}} >
+                            <Text style={[{ color: '#fff', fontSize: 11, fontWeight: 'bold', alignSelf: 'center' }, isOpen && {fontSize: 16} ]}>{isOpen ? "➔ " : item.Type.slice(0,10)}</Text>
+                          </TouchableOpacity>
                         </View>
                       </View>
                     </View>
@@ -473,46 +478,45 @@ const styles = StyleSheet.create({
       paddingRight: 3,
       borderRadius: 5,
     }, 
-    titletext: {
-      fontSize: 12,
-      fontWeight: '600',
-      marginLeft: 5,
-      color: 'black',
-    },
-      mainCardView: {
-        height: 273,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: "#2f4f4f",
-        borderRadius: 12,
-        shadowColor: "#000",
-        shadowOffset: {width: 0, height: 0},
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        elevation: 8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding:1,
-        marginTop: 1,
-        marginBottom: 1,
-        marginLeft: 5,
-        marginRight: 5,
-        borderColor: "#228b22",
-        borderWidth: 1,
-        width: ((Dimensions.get('window').width/100)*47)+5,
-      },
-      subCardView: {
-        minHeight: 257,
-        width: (Dimensions.get('window').width*0.47),
-        borderRadius: 8,
-        backgroundColor: "slategray",
-        color: 'crimson',
-        borderWidth: 0,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        padding: 3,
-        flex: 1,
-      }, 
+  titletext: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginLeft: 5,
+    color: 'black',
+  },
+  mainCardView: {
+    height: 273,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#2f4f4f",
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 1,
+    shadowRadius: 5,
+    elevation: 8,
+    flexDirection: 'row',
+    padding: 1,
+    marginTop: 1,
+    marginBottom: 1,
+    marginLeft: 5,
+    marginRight: 5,
+    borderColor: "#228b22",
+    borderWidth: 1,
+    width: ((Dimensions.get('window').width/100)*47)+5,
+  },
+  subCardView: {
+    minHeight: 257,
+    width: (Dimensions.get('window').width*0.47),
+    borderRadius: 8,
+    backgroundColor: "slategray",
+    color: 'crimson',
+    borderWidth: 0,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    padding: 3,
+    flex: 1,
+  }, 
   icon: { height: 57, opacity: 1, elevation: 2 },
   backendImageContainer: {
     ...StyleSheet.absoluteFillObject,
