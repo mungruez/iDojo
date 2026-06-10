@@ -361,7 +361,7 @@ export default function FeatureMoveList() {
                           <TouchableOpacity  style={styles.backendImageContainer} 
                             onPress={(e) => {
                               e.stopPropagation();
-                                if (isOpen) {
+                                if (!isOpen) {
                                   togglePanel(item);
                                 } else {
                                   checkWifi(item);
@@ -373,10 +373,10 @@ export default function FeatureMoveList() {
                               resizeMode="cover"
                               style={{
                                 borderRadius: 7,
-                                alignSelf: 'flex-start',
-                                marginTop: -12,
+                                alignSelf: 'center',
+                                marginTop: -31,
                                 marginLeft: 0,
-                                height: "93%",
+                                height: "95%",
                                 width: (Dimensions.get('window').width/100)*45,
                               }}
                             />
@@ -391,14 +391,14 @@ export default function FeatureMoveList() {
                                 alignSelf: 'center',
                                 marginTop: 0,
                                 marginLeft: 0,
-                                height: "89%",
+                                height: "83%",
                                 width: (Dimensions.get('window').width/100)*46,
                               }}
                             />
                           </Animated.View>
 
-                          <TouchableOpacity style={[{ position: 'absolute', bottom: 5, alignItems: 'center',  alignItems: 'center', justifyContent:"center", zIndex: 5 }, isOpen && {height: 30, backgroundColor: 'rgba(0, 0, 0, 0.38)', paddingVertical: 7, paddingHorizontal: 12, borderRadius: 15, borderWidth: .5, borderColor: "#94cccc"} ]} hitSlop={{ top: 15, bottom: 15, left: 25, right: 25 }} onPress={(e) => { e.stopPropagation(); togglePanel(item);}} >
-                            <Text style={[{ color: '#fff', fontSize: 11, fontWeight: 'bold', alignSelf: 'center' }, isOpen && {fontSize: 16} ]}>{isOpen ? "➔" : item.Type.slice(0,10)}</Text>
+                          <TouchableOpacity style={[{ position: 'absolute', bottom: 5, alignItems: 'center',  alignItems: 'center', justifyContent:"center", zIndex: 5 }, isOpen && {height: 38, marginLeft: 3,  backgroundColor: 'rgba(0, 0, 0, 0.38)', paddingTop: 4, paddingHorizontal: 12, borderRadius: 15, borderWidth: .5, borderColor: "#94cccc", paddingBottom: 9} ]} hitSlop={{ top: 15, bottom: 15, left: 25, right: 25 }} onPress={(e) => { e.stopPropagation(); togglePanel(item);}} >
+                            <Text style={[{ color: '#fff', fontSize: 11, fontWeight: 'bold', alignSelf: 'center', marginLeft: 14, marginBottom: 7}, isOpen && {fontSize: 17, marginLeft: 0, marginBottom: 0} ]}>{isOpen ? "➔" : item.Type.slice(0,10)}</Text>
                           </TouchableOpacity>
                         </View>
                       </View>
