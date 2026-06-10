@@ -397,7 +397,7 @@ export default function FeatureMoveList() {
                             />
                           </Animated.View>
 
-                          <TouchableOpacity style={[{ position: 'absolute', bottom: 5, alignItems: 'center',  alignItems: 'center', justifyContent:"center", zIndex: 5 }, isOpen && {backgroundColor: 'rgba(0, 0, 0, 0.38)', paddingVertical: 7, paddingHorizontal: 12, borderRadius: 5, borderWidth: .5, borderColor: "#94cccc"} ]} hitSlop={{ top: 15, bottom: 15, left: 25, right: 25 }} onPress={(e) => { e.stopPropagation(); togglePanel(item);}} >
+                          <TouchableOpacity style={[{ position: 'absolute', bottom: 5, alignItems: 'center',  alignItems: 'center', justifyContent:"center", zIndex: 5 }, isOpen && {height: 30, backgroundColor: 'rgba(0, 0, 0, 0.38)', paddingVertical: 7, paddingHorizontal: 12, borderRadius: 15, borderWidth: .5, borderColor: "#94cccc"} ]} hitSlop={{ top: 15, bottom: 15, left: 25, right: 25 }} onPress={(e) => { e.stopPropagation(); togglePanel(item);}} >
                             <Text style={[{ color: '#fff', fontSize: 11, fontWeight: 'bold', alignSelf: 'center' }, isOpen && {fontSize: 16} ]}>{isOpen ? "➔" : item.Type.slice(0,10)}</Text>
                           </TouchableOpacity>
                         </View>
