@@ -1180,7 +1180,7 @@ export default function Chapters() {
                   {item.id === 'c-all' ? 
                     ( <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center" }} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
-                      <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center", flex: 1 }} resizeMode='contain' source={require('../assets/goldwhitebtn.png')}>
+                      <ImageBackground style={{ width: "100%", height: "98%", alignSelf: "center", justifyContent: "center", alignItems: "center", flex: 1 }} resizeMode='contain' source={require('../assets/goldwhitebtn.png')}>
                           <Text numberOfLines={1} ellipsizeMode="clip" style={[styles.cardText, { width: '100%', textAlign: 'center' }]}>{item.category}</Text>
                       </ImageBackground>
                   )}
@@ -1228,7 +1228,7 @@ myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItem
 title: { fontSize: 17, fontWeight: 'bold', color: '#a08016', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#c29d26', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 57, width: '89%', alignSelf: 'center', textAlign: 'center', marginLeft: 19, marginBottom: 3, opacity: 1 },
-card: {  marginVertical: 1, alignSelf: 'center', borderRadius: 10, width: "100%", opacity: 1, alignItems: "center", justifyContent: "center", flex: 1 },
+card: {  marginVertical: -4, alignSelf: 'center', borderRadius: 10, width: "100%", opacity: 1, alignItems: "center", justifyContent: "center", flex: 1 },
 sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', alignSelf: "center", backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "95%", opacity: 1, borderBottomWidth: .5, borderBottomColor: '#f3efbd' },
 cardText: { width: "100%", fontSize: 16, fontWeight: '800', color: '#5a4f07', paddingHorizontal: 5, opacity: 1, textAlign: "center", textShadowColor: '#f3efbd', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 7 },
 goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
