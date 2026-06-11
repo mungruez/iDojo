@@ -1125,7 +1125,7 @@ export default function Chapters() {
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, width: "100%", height: "100%", marginTop: 0}}>
         <View style={{ marginBottom: 5, marginTop: -19, opacity: 1, justifyContent: "center", alignItems: 'center', textAlign: 'center' }}>
           <ImageBackground style={styles.icon} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/chapterstitle.png')} /> 
         </View>
@@ -1167,7 +1167,7 @@ export default function Chapters() {
            style={{flex: 1}}
            keyExtractor={item => item.id}
            ListHeaderComponent={MyHeader}
-           contentContainerStyle = {{ paddingBottom: 30, flexGrow: 1, }}
+           contentContainerStyle = {{ paddingBottom: 30, flexGrow: 1 }}
            ItemSeparatorComponent={({ leadingItem }) => {
             return <View style={styles.smallGap} />;
            }}
@@ -1175,13 +1175,13 @@ export default function Chapters() {
             <View style={styles.card}>
               { item && item.category && 
                 ( <TouchableOpacity
-                  style={{ width: '77.7%', height: 57 }}
+                  style={{width: "100%", flex: 1, height: 67, alignItems: "center", justifyContent: "center", opacity: 1, alignSelf:"center" }}
                   onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setMode("list"); }}>
                   {item.id === 'c-all' ? 
-                    ( <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
+                    ( <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center" }} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
-                      <ImageBackground style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain' source={require('../assets/goldwhitebtn.png')}>
-                        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.cardText}>{item.category}</Text> 
+                      <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center", flex: 1 }} resizeMode='contain' source={require('../assets/goldwhitebtn.png')}>
+                          <Text numberOfLines={1} ellipsizeMode="clip" style={[styles.cardText, { width: '100%', textAlign: 'center' }]}>{item.category}</Text>
                       </ImageBackground>
                   )}
                 </TouchableOpacity>) 
@@ -1228,9 +1228,9 @@ myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItem
 title: { fontSize: 17, fontWeight: 'bold', color: '#a08016', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#c29d26', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
 icon: { height: 57, width: '89%', alignSelf: 'center', textAlign: 'center', marginLeft: 19, marginBottom: 3, opacity: 1 },
-card: { marginHorizontal: 12, marginVertical: 5, alignItems: 'center', borderRadius: 10, width: "100%", opacity: 1 },
+card: {  marginVertical: 1, alignSelf: 'center', borderRadius: 10, width: "100%", opacity: 1, alignItems: "center", justifyContent: "center", flex: 1 },
 sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', alignSelf: "center", backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "95%", opacity: 1, borderBottomWidth: .5, borderBottomColor: '#f3efbd' },
-cardText: { fontSize: 16, fontWeight: 'bold', color: '#5a4f0f', paddingHorizontal: 5,},
+cardText: { width: "100%", fontSize: 16, fontWeight: '800', color: '#5a4f07', paddingHorizontal: 5, opacity: 1, textAlign: "center", textShadowColor: '#f3efbd', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 7 },
 goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
@@ -1275,7 +1275,7 @@ silverDivider: { width: '99%', height: 49, alignSelf: "center", paddingVertical:
 clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center',},
 vcToggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#8d7f30', justifyContent: 'center', alignItems: 'center',},
 vcToggleText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
-vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderBottomWidth: 2, borderBottomColor: '#99840f' },
+vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderWidth: 2, borderColor: '#99840f', borderBottomWidth: 2.5, borderBottomColor: '#99840f', borderRadius: 10, marginBottom: 2 },
 vcTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
 vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row"},
 vcInfoRow: { alignItems: 'center', marginBottom: 4},
