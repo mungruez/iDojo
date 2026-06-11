@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image,TouchableOpacity, StyleSheet, Dimensions, ScrollView, Alert, Share, DeviceEventEmitter, ImageBackground } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import VideoPlayer from './VideoPlayer';
@@ -11,8 +11,9 @@ const { width, height } = Dimensions.get('window');
 export default function SectionPlayer({ section, index, isActive, onActivate, onDeactivate, navigation, isOffline}) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [musicFile, setMusicFile] = useState(section.type === "audio" ? { id: index + 19, uri: section.mediaUri || section.mediaUrl, ispaused: false } : null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [musicFile, setMusicFile] = useState(section.type === "audio" ? { id: 12, uri: section.mediaUri || section.mediaUrl, ispaused: true } : null);
+  const [isMuted, setIsMuted] = useState(true);
+  const wasActive = useRef(false);
 
   const getTypeColor = () => {
     switch (section.type) {
@@ -33,6 +34,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       default: return '📎';
     }
   };
+
 
   const openPdf = async () => {
     if (!section || !section.mediaUri) {
@@ -59,6 +61,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       }
     }
   };
+
 
 
   const handleShareSection = async (selectedsection) => {
@@ -107,6 +110,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
+
   const getThumbnail = () => {
     if (section.type === 'image') {
       if( section.mediaUri ) return section.mediaUri;
@@ -131,6 +135,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
+
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener('TRACK_FINISHED', () => {
       setIsFinished(true);
@@ -150,6 +155,19 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
 
 
+  useEffect(() => {
+    if (section && section.type === "audio") {
+      if ( wasActive.current && !isActive ) {
+        setMusicFile({id: 12, uri: section.mediaUrl, ispaused: true});
+        setIsFinished(false);
+        setIsMuted(true);
+      }
+      wasActive.current = isActive;
+    }
+  }, [isActive]);
+
+
+
   const playPauseAudio = () => {
     if ( isFinished ) {
       if ( section.mediaUri ) {
@@ -164,6 +182,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
     if ( section.mediaUri ) {
       setMusicFile({id: index + 19, uri: section.mediaUri, ispaused: !isMuted});
+      console.log("Playing from URI: ", section.mediaUri, musicFile.ispaused ? "Paused" : "Playing");
     } else {
       setMusicFile({id: index + 19, uri: section.mediaUrl, ispaused: !isMuted});
     } 
@@ -185,7 +204,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         <View style={styles.activeHeader}>
           { isFullscreen && section.type !== 'video' ? (
             <TouchableOpacity onPress={() => handleShareSection(section)} style={styles.shareiconBtn}>
-              <Image source={section.type === 'pdf' ? require('../assets/bluesharearrow.png') : section.type === 'image' ? require('../assets/grnsharearrow.png') : require('../assets/purplesharearrow.png')} style={{ width: "82%", height: "82%" }} resizeMode='contain' />
+              <Image source={section.type === 'pdf' ? require('../assets/bluesharearrow.png') : section.type === 'image' ? require('../assets/grnsharearrow.png') : require('../assets/purplesharearrow.png')} style={{ width: "71%", height: "71%" }} resizeMode='contain' />
             </TouchableOpacity>
             )  : ( <Text style={styles.activeSectionLabel}>Section {index + 1}: {section.type.toUpperCase()}</Text> ) 
           }
@@ -256,7 +275,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
                   <Text style={styles.fileName} numberOfLines={2} ellipsizeMode='tail'> { section.title.length > 29 ? section.title : `${section.title}     `} </Text>        
                 </View>      
             
-              { !isFinished && ( <TrackPlayer track={{musicFile}} /> ) }
+              { !isFinished && musicFile && musicFile.id !== 12 && ( <TrackPlayer track={musicFile} /> ) }
             </View>
           </View>
         ) }
@@ -329,7 +348,7 @@ const styles = StyleSheet.create({
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
   pdfContainer: { minHeight: height * 0.83, backgroundColor: '#0c153baf' },
   pdfContainerBtn: { height: 228, backgroundColor: '#0c153baf' },
-  audioContainer: { backgroundColor: 'rgba(225, 0, 255, 0.1)', padding: 2, margin: 0, borderRadius: 12, alignItems: 'center'},
+  audioContainer: { height: 133, backgroundColor: 'rgba(225, 0, 255, 0.1)', padding: 2, margin: 0, borderRadius: 12, alignItems: 'center'},
   imageContainer: { backgroundColor: '#237c2a5d', alignItems: 'center', padding: 3, opacity: 1 },
   inlineImage: { width: '100%', borderRadius: 8 },
   fullscreenCard: { marginHorizontal: 0, minHeight: height * 0.92 },
@@ -353,7 +372,7 @@ const styles = StyleSheet.create({
   spDescLabel: { color: '#8d7f30', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
   spDescScroll: { maxHeight: height * 0.09 },
   spDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
-  trackPlayerContainer: { minHeight: 76, width: "98%", backgroundColor: "#C0C0C0", borderRadius: 50, padding: 0, borderColor: '#5f239bff', borderWidth: 4 },
+  trackPlayerContainer: { minHeight: 114, width: "98%", backgroundColor: "#C0C0C0", borderRadius: 50, padding: 0, borderColor: '#5f239bff', borderWidth: 4 },
   fileName: { fontSize: 11, color: "#5b12a5ff", fontWeight: 'bold', maxHeight: 19, width: "100%", textAlign: "left", paddingLeft: 62, marginTop: -57, overflow: "hidden" },
   playButton: { borderRadius: 50, width: 57, height: 57, padding: 5, marginLeft: 4, marginBottom: 12, marginRight: 10, marginTop: 1, borderColor: '#5f239bff', borderWidth: 0, shadowColor: "#c494e4", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 4.65, elevation: 5 },
   openPdfButton: { backgroundColor: '#191ba3', paddingVertical: 12, paddingHorizontal: 27, borderRadius: 25, borderWidth: 2, borderColor: '#d4af37', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 5, elevation: 8, alignSelf: 'center', marginVertical: 19 },
