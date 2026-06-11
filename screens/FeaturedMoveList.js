@@ -246,7 +246,7 @@ export default function FeatureMoveList() {
     
     Animated.timing(panelAnim, {
       toValue: toValue,
-      duration: 1000,
+      duration: 950,
       useNativeDriver: true,
     }).start(({ finished }) => {
       if ( finished ) {
