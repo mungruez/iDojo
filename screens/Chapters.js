@@ -1175,7 +1175,7 @@ export default function Chapters() {
             <View style={styles.card}>
               { item && item.category && 
                 ( <TouchableOpacity
-                  style={{width: "100%", flex: 1, height: 67, alignItems: "center", justifyContent: "center", opacity: 1, alignSelf:"center" }}
+                  style={{width: "67%", flex: 1, height: 67, alignItems: "center", justifyContent: "center", opacity: 1, alignSelf:"center" }}
                   onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setMode("list"); }}>
                   {item.id === 'c-all' ? 
                     ( <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center" }} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
