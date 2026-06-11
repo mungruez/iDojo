@@ -246,10 +246,10 @@ export default function FeatureMoveList() {
     
     Animated.timing(panelAnim, {
       toValue: toValue,
-      duration: 1200,
+      duration: 1000,
       useNativeDriver: true,
     }).start(({ finished }) => {
-      if (finished && nextOpenState) {
+      if ( finished ) {
         setIsOpen(nextOpenState);
       }
     });
@@ -375,11 +375,16 @@ export default function FeatureMoveList() {
                                 borderRadius: 7,
                                 alignSelf: 'center',
                                 marginTop: -31,
+                                marginBottom: 12,
                                 marginLeft: 0,
                                 height: "95%",
                                 width: (Dimensions.get('window').width/100)*45,
                               }}
                             />
+
+                            <TouchableOpacity style={{ position: 'absolute', bottom: -14, alignItems: 'center',  alignItems: 'center', justifyContent:"center", zIndex: 5, height: 38, backgroundColor: 'rgba(0, 0, 0, 0.38)', paddingTop: 0, paddingHorizontal: 15, borderRadius: 15, borderWidth: .5, borderColor: "#94cccc", paddingBottom: 3}} hitSlop={{ top: 12, bottom: 12, left: 19, right: 19 }} onPress={(e) => { e.stopPropagation(); togglePanel(item);}} >
+                              <Text style={{ color: '#fff', fontWeight: 'bold', alignSelf: 'center',fontSize: 19, marginLeft: 0, marginTop: 0}}>➔</Text>
+                            </TouchableOpacity>
                           </TouchableOpacity>
 
                           <Animated.View style={[ styles.slidingPanel, { transform: [{ translateX }] }]}>
@@ -395,11 +400,11 @@ export default function FeatureMoveList() {
                                 width: (Dimensions.get('window').width/100)*46,
                               }}
                             />
-                          </Animated.View>
 
-                          <TouchableOpacity style={[{ position: 'absolute', bottom: 5, alignItems: 'center',  alignItems: 'center', justifyContent:"center", zIndex: 5 }, isOpen && {height: 38, marginLeft: 3,  backgroundColor: 'rgba(0, 0, 0, 0.38)', paddingTop: 4, paddingHorizontal: 12, borderRadius: 15, borderWidth: .5, borderColor: "#94cccc", paddingBottom: 9} ]} hitSlop={{ top: 15, bottom: 15, left: 25, right: 25 }} onPress={(e) => { e.stopPropagation(); togglePanel(item);}} >
-                            <Text style={[{ color: '#fff', fontSize: 11, fontWeight: 'bold', alignSelf: 'center', marginLeft: 14, marginBottom: 7}, isOpen && {fontSize: 17, marginLeft: 0, marginBottom: 0} ]}>{isOpen ? "➔" : item.Type.slice(0,10)}</Text>
-                          </TouchableOpacity>
+                            <View style={{ height: 40, width: (Dimensions.get('window').width/100)*46, position: 'absolute', bottom: 4, alignItems: 'center',  alignItems: 'center', justifyContent: "center", zIndex: 5, backgroundColor: "slategray" }} >
+                              <Text style={{ color: '#fff', fontSize: 11, fontWeight: 'bold', marginBottom: 1, paddingVertical: 9, marginTop: 5}}>{item.Type.slice(0,10)}</Text>
+                            </View>
+                          </Animated.View>
                         </View>
                       </View>
                     </View>
