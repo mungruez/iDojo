@@ -11,8 +11,8 @@ const { width, height } = Dimensions.get('window');
 export default function SectionPlayer({ section, index, isActive, onActivate, onDeactivate, navigation, isOffline}) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [musicFile, setMusicFile] = useState(section.type === "audio" ? { id: index + 19, uri: section.mediaUri || section.mediaUrl, ispaused: true } : null);
-  const [isMuted, setIsMuted] = useState(true);
+  const [musicFile, setMusicFile] = useState(section.type === "audio" ? { id: index + 19, uri: section.mediaUri || section.mediaUrl, ispaused: false } : null);
+  const [isMuted, setIsMuted] = useState(false);
 
   const getTypeColor = () => {
     switch (section.type) {
@@ -185,7 +185,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         <View style={styles.activeHeader}>
           { isFullscreen && section.type !== 'video' ? (
             <TouchableOpacity onPress={() => handleShareSection(section)} style={styles.shareiconBtn}>
-              <Image source={section.type === 'pdf' ? require('../assets/bluesharearrow.png') : section.type === 'image' ? require('../assets/grnsharearrow.png') : require('../assets/purplesharearrow.png')} style={{ width: "88%", height: "88%" }} resizeMode='contain' />
+              <Image source={section.type === 'pdf' ? require('../assets/bluesharearrow.png') : section.type === 'image' ? require('../assets/grnsharearrow.png') : require('../assets/purplesharearrow.png')} style={{ width: "82%", height: "82%" }} resizeMode='contain' />
             </TouchableOpacity>
             )  : ( <Text style={styles.activeSectionLabel}>Section {index + 1}: {section.type.toUpperCase()}</Text> ) 
           }
@@ -193,7 +193,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity onPress={() => setIsFullscreen(!isFullscreen)} style={styles.iconBtn}>
               {isFullscreen ? ( <Image source={require('../assets/goldminusicon.png')} style={{width: 21, height: 7}} resizeMode="stretch" /> )
-                : ( <Text style={isFullscreen ? styles.iconImage : styles.iconText}>'⛶'</Text> ) } 
+                : ( <Text style={isFullscreen ? styles.iconImage : styles.iconText}>⛶</Text> ) } 
             </TouchableOpacity>
             <TouchableOpacity onPress={onDeactivate} style={styles.iconBtn}>
               <Image source={require('../assets/redgoldcloseicon.png')} style={styles.iconImage} resizeMode="contain" />
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8, borderColor: '#d4af37', borderWidth: 1.5  },
   iconText: { color: 'rgb(228, 19, 19)', fontSize: 18,  textAlignVertical: 'center', textAlign: "center", alignSelf: 'center', includeFontPadding: false },
   iconImage: { width: 22, height: 22 },
-  shareiconBtn: { width: 51, height: 51, borderRadius: 24, backgroundColor: 'rgba(0,0,0,0.95)',  borderColor: '#d4af37', borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
+  shareiconBtn: { width: 50, height: 50, borderRadius: 24, backgroundColor: 'rgba(0,0,0,0.95)',  borderColor: '#d4af37', borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 5, paddingTop: 8 },
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
   pdfContainer: { minHeight: height * 0.83, backgroundColor: '#0c153baf' },

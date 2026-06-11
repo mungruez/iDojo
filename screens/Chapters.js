@@ -686,7 +686,7 @@ export default function Chapters() {
         title: chapterTitle.trim(),
         category: chapterCategory.trim(),
         description: chapterDesc,
-        sections: sections,
+        sections: processedSections,
         updatedAt: new Date().toISOString(),
       };
 
@@ -705,23 +705,23 @@ export default function Chapters() {
 
     for (const section of chapter.sections) {
       if (section.type === 'image' && (section.mediaUri || section.mediaUrl)) {
-        if(section.mediaUri) return section.mediaUri 
-        if(!isOffline && section.mediaUrl) return section.mediaUrl;
+        if(section.mediaUri) return { uri: section.mediaUri };
+        if(!isOffline && section.mediaUrl) return { uri: section.mediaUrl };
       }
 
       if (section.type === 'video') {
-        if (section.mediaUri) return section.mediaUri;
-
-        if( isOffline ) return require('../assets/chapterplaceholder.png');;
+        if (section.mediaUri) return { uri: section.mediaUri };
 
         if (section.mediaUrl?.includes('youtube.com') || section.mediaUrl?.includes('youtu.be')) {
           const id = section.mediaUrl.match(/(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/)?.[1];
-          if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+          if (id && !isOffline) return { uri: `https://img.youtube.com/vi/${id}/hqdefault.jpg` };
         }
       }
     }
+
     return require('../assets/chapterplaceholder.png');
   };
+
 
   useFocusEffect(
     useCallback(() => {

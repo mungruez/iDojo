@@ -235,6 +235,7 @@ export default function FeatureMoveList() {
 
 
 
+  
   const togglePanel = (item) => {
     if(isOffline) {
       Alert.alert("Connection Error","No internet connection detected. Due to copyright laws, Wifi is required for viewing Featured content! Thumbnails may show because of the cache.");
@@ -243,15 +244,13 @@ export default function FeatureMoveList() {
     const nextOpenState = !isOpen;
     const toValue = nextOpenState ? 1 : 0;
     
-    setIsOpen(nextOpenState);
-    
     Animated.timing(panelAnim, {
       toValue: toValue,
       duration: 1200,
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (finished && nextOpenState) {
-        
+        setIsOpen(nextOpenState);
       }
     });
   };
@@ -262,6 +261,7 @@ export default function FeatureMoveList() {
     inputRange: [0, 1],
     outputRange: [0, (-1*SCREEN_WIDTH)], 
   });
+
 
 
 
