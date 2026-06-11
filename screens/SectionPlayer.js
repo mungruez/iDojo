@@ -182,7 +182,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
     if ( section.mediaUri ) {
       setMusicFile({id: index + 19, uri: section.mediaUri, ispaused: !isMuted});
-      console.log("Playing from URI: ", section.mediaUri, musicFile.ispaused ? "Paused" : "Playing");
     } else {
       setMusicFile({id: index + 19, uri: section.mediaUrl, ispaused: !isMuted});
     } 
@@ -190,6 +189,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
+  
   
   if (isActive) {
     return (
