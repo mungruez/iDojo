@@ -1024,7 +1024,7 @@ export default function Chapters() {
                              section.type === SECTION_TYPES.AUDIO ? '🎵' : '📄'}
                           </Text>
                           <Text style={{fontSize: 10 }} numberOfLines={1} ellipsizeMode="clip">
-                            {section.mediaUri.split('/').pop()}
+                            {section.mediaUri.split('.').pop()}
                           </Text>
                         </View>
                       )}
@@ -1043,18 +1043,18 @@ export default function Chapters() {
                   )}
                 </TouchableOpacity>
 
-                {section.mediaUri && (
+                { section.mediaUri && (
                   <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { updateSection(section.id, 'mediaUri', null); }}>
                     <Text style={{fontSize: 23, marginTop: -7}}>🔗</Text>
                     <Text style={styles.toggleModeText}>Or Link</Text>
                   </TouchableOpacity>
-                )}
+                ) }
 
-                {!section.mediaUri && !section.mediaUrl && (
+                { !section.mediaUri && !section.mediaUrl && (
                   <Text style={styles.orText}>— OR —</Text>
-                )}
+                ) }
                 
-                {!section.mediaUri && (
+                { !section.mediaUri && (
                   <>
                     <Text style={styles.label}>{`Section ${section.type} URL`}</Text>
                     <TextInput
@@ -1066,14 +1066,14 @@ export default function Chapters() {
                       autoCapitalize="none"
                     />
                   </>
-                )}
+                ) }
 
-                {section.mediaUrl && (
+                { section.mediaUrl && (
                   <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { updateSection(section.id, 'mediaUrl', ''); }}>
                     <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
                     <Text style={styles.toggleModeText}> Or Upload</Text>
                   </TouchableOpacity>
-                )}
+                ) }
 
                 <Text style={styles.label}>Section Description</Text>
                 <TextInput
