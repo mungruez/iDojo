@@ -235,7 +235,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         )}
 
         { section.type === 'pdf' && section.mediaUrl ? (
-          <View style={[styles.pdfContainer, isFullscreen && { minHeight: height * 0.83 }]}>
+          <View style={[styles.pdfContainerOnline, isFullscreen && { minHeight: height * 0.95 }]}>
             <PdfMove
               pdf={{
                 title: section.title,
@@ -249,10 +249,15 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
             />
           </View>
         ) : section.type === 'pdf' && (
-          <View style={[styles.pdfContainer, isFullscreen && { minHeight: height * 0.38 }]}> 
+          <View style={[styles.pdfContainer, isFullscreen && { maxHeight: height * 0.83 }]}> 
             <TouchableOpacity onPress={() => openPdf()} style={styles.openPdfButton}>
               <Text style={{ color: 'honeydew', fontSize: 16, fontWeight: 'bold', letterSpacing: 1 }}>OPEN PDF</Text>
             </TouchableOpacity>  
+
+            <View style={styles.spDescSection}>
+              <Text style={styles.spDescLabel}>Description:</Text>
+                <Text style={styles.spDescText}>{section.description}</Text>
+            </View>
           </View>
         ) }
 
@@ -346,14 +351,15 @@ const styles = StyleSheet.create({
   shareiconBtn: { width: 50, height: 50, borderRadius: 24, backgroundColor: 'rgba(0,0,0,0.95)',  borderColor: '#d4af37', borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 5, paddingTop: 8 },
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
-  pdfContainer: { minHeight: height * 0.83, backgroundColor: '#0c153baf' },
-  pdfContainerBtn: { height: 228, backgroundColor: '#0c153baf' },
+  pdfContainerOnline: { minHeight: height * 0.83, backgroundColor: '#0c153baf' },
+  pdfContainer: { minHeight: height * 0.21, backgroundColor: '#0c153baf' },
+  pdfContainerBtn: { height: 228, backgroundColor: '#0c153baf', },
   audioContainer: { height: 133, backgroundColor: 'rgba(225, 0, 255, 0.1)', padding: 2, margin: 0, borderRadius: 12, alignItems: 'center'},
   imageContainer: { backgroundColor: '#237c2a5d', alignItems: 'center', padding: 3, opacity: 1 },
   inlineImage: { width: '100%', borderRadius: 8 },
-  fullscreenCard: { marginHorizontal: 0, minHeight: height * 0.92 },
+  fullscreenCard: { marginHorizontal: 0, minHeight: height * 0.83 },
   fullscreenText: { color: 'white', fontWeight: 'bold' },
-  fullscreenView: { flex: 1, marginHorizontal: 0, minHeight: height * 0.92 },
+  fullscreenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.95 },
   screenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.76 },
   thumbnailCard: { backgroundColor: 'rgba(241, 255, 250, 0.84)', marginHorizontal: 12, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
   thumbnailRow: { flexDirection: 'row', height: 133 },
@@ -368,13 +374,13 @@ const styles = StyleSheet.create({
   typeBadge: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginBottom: 3 },
   typeText: { color: 'honeydew', fontSize: 9, fontWeight: 'bold' },
   sectionDesc: { color: '#b6b9c0', fontSize: 12, lineHeight: 16 },
-  spDescSection: { backgroundColor: '#1e293b', padding: 7, borderRadius: 12, borderWidth: 1, borderColor: '#99840f', marginBottom: 5, paddingHorizontal: 5 },
+  spDescSection: { backgroundColor: '#1e293b', padding: 7, borderRadius: 12, borderWidth: 1, borderColor: '#99840f', marginBottom: 5, marginTop: 7, marginHorizontal: 5 },
   spDescLabel: { color: '#8d7f30', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
   spDescScroll: { maxHeight: height * 0.09 },
   spDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
   trackPlayerContainer: { minHeight: 114, width: "98%", backgroundColor: "#C0C0C0", borderRadius: 50, padding: 0, borderColor: '#5f239bff', borderWidth: 4 },
   fileName: { fontSize: 11, color: "#5b12a5ff", fontWeight: 'bold', maxHeight: 19, width: "100%", textAlign: "left", paddingLeft: 62, marginTop: -57, overflow: "hidden" },
   playButton: { borderRadius: 50, width: 57, height: 57, padding: 5, marginLeft: 4, marginBottom: 12, marginRight: 10, marginTop: 1, borderColor: '#5f239bff', borderWidth: 0, shadowColor: "#c494e4", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 4.65, elevation: 5 },
-  openPdfButton: { backgroundColor: '#191ba3', paddingVertical: 12, paddingHorizontal: 27, borderRadius: 25, borderWidth: 2, borderColor: '#d4af37', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 5, elevation: 8, alignSelf: 'center', marginVertical: 19 },
+  openPdfButton: { backgroundColor: '#191ba3', paddingVertical: 12, paddingHorizontal: 27, borderRadius: 25, borderWidth: 2, borderColor: '#d4af37', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 5, elevation: 8, alignSelf: 'center', marginTop: 45 },
   imgSound: { height: 47, width: 47, marginTop: 7 }
 });
