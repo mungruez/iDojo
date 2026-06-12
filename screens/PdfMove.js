@@ -55,7 +55,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     setIsLoading(true);
     setKey(prev => prev + 1);
   };
-  
+
 
   useEffect(() => {
     if (wasActive.current && !isActive) {
@@ -105,11 +105,11 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
       ) }
 
       <View style={styles.pdfContainer}>
-        <View style={styles.headerMessage}>
+        { !errorMessage && !isLoading && ( <View style={styles.headerMessage}>
           <Text style={styles.headerText}>
-            {errorMessage ? 'Error Loading File' : `Page ${currentPage} of ${totalPages || '...'}`}
+            { totalPages === 0 ? `Page ${currentPage} of ...` : `Page ${currentPage} of ${totalPages}` }
           </Text>
-        </View>
+        </View> ) }
 
         {isLoading && (
           <View style={styles.loadingOverlay}>
