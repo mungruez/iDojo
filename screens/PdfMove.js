@@ -1,7 +1,7 @@
-import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, Alert, StatusBar } from "react-native";
+import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, StatusBar, ActivityIndicator } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { WebView } from 'react-native-webview';
 import { useState, useEffect, useRef} from 'react';
+import Pdf from 'react-native-pdf';
 
 const { height } = Dimensions.get('window');
 
@@ -23,12 +23,22 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   }
 
   const [key, setKey] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [useDirectLink, setUseDirectLink] = useState(false);
   const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
   const [lastClickTime, setLastClickTime] = useState(0);
   const wasActive = useRef(false);
-  
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+
+  const pdfSource = { 
+    uri: pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : pdf.vid , 
+    cache: true 
+  };
+
+
   const COOLDOWN_MS = 1900; 
 
   const canClick = () => {
@@ -42,17 +52,10 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const handleRetry = () => {
     if (!canClick()) return;
-    setLoading(true);
+    setIsLoading(true);
     setKey(prev => prev + 1);
   };
-
-
-  const getPdfUrl = () => {
-    if (useDirectLink) {
-      return pdf.videoUrl;
-    }
-    return pdf.vid;
-  };
+  
 
   useEffect(() => {
     if (wasActive.current && !isActive) {
@@ -93,7 +96,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
           { pdf.desc && (
             <View style={styles.descSection}>
               <Text style={styles.descLabel}>Description:</Text>
-              <ScrollView style={styles.descScroll}>
+              <ScrollView nestedScrollEnabled={true} style={styles.descScroll}>
                 <Text style={styles.descText}>{pdf.desc}</Text>
               </ScrollView>
             </View>
@@ -102,28 +105,45 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
       ) }
 
       <View style={styles.pdfContainer}>
-        {loading && (
+        <View style={styles.headerMessage}>
+          <Text style={styles.headerText}>
+            {errorMessage ? 'Error Loading File' : `Page ${currentPage} of ${totalPages || '...'}`}
+          </Text>
+        </View>
+
+        {isLoading && (
           <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#0070f3" />
             <Text style={styles.loadingText}>Loading PDF...</Text>
           </View>
         )}
-        <WebView 
-          key={key}
-          source={{ uri: getPdfUrl() }}
-          style={styles.webview}
-          onLoadStart={() => setLoading(true)}
-          onLoadEnd={() => setLoading(false)}
-          onError={() => {
-            Alert.alert("PDF Error", "Could not load PDF");
-          }}
-          onHttpError={() => { 
-            Alert.alert("PDF Error", "Failed to load. Try reloading PDF");
-          }}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          cacheEnabled={false}
-          incognito={true}
-        />
+
+        <View style={styles.viewerBody}>
+          <Pdf
+            key ={key}
+            source={pdfSource}
+            trustAllCerts={false}
+            style={styles.pdfStyle}
+            onLoadComplete={(numberOfPages) => {
+              setTotalPages(numberOfPages);
+              setIsLoading(false);
+            }}
+            onPageChanged={(page) => {
+              setCurrentPage(page);
+            }}
+            onError={(error) => {
+              setErrorMessage(error.toString());
+              setIsLoading(false);
+            }}
+          />
+
+          {errorMessage && !isLoading && (
+            <View style={styles.centerOverlay}>
+              <Text style={styles.errorText}>Could not load the PDF document.</Text>
+              <Text style={styles.errorSubText}>{errorMessage}</Text>
+            </View>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -144,6 +164,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderBottomWidth: 2,
     borderBottomColor: '#3b82f6',
+  },
+   headerMessage: {
+    height: 56,
+    backgroundColor: '#c4e3fc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#c4e3fc',
+    elevation: 2, 
   },
   closeBtn: {
     width: 38,
@@ -250,9 +279,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#3b82f6',
   },
-  webview: {
-    flex: 1,
-  },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#1e293b',
@@ -264,5 +290,44 @@ const styles = StyleSheet.create({
     color: '#60a5fa',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  headerText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#0b1c2e',
+  },
+  viewerBody: {
+    flex: 1,
+    position: 'relative',
+  },
+  pdfStyle: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height - 56,
+    backgroundColor: '#c4e3fc',
+  },
+  centerOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#c4e3fc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#555555',
+  },
+  errorText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#dc3545',
+    textAlign: 'center',
+  },
+  errorSubText: {
+    fontSize: 12,
+    color: '#6c757d',
+    marginTop: 6,
+    textAlign: 'center',
   },
 });
