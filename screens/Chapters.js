@@ -986,8 +986,8 @@ export default function Chapters() {
 
             {sections.map((section, index) => (
               <View key={section.id} style={styles.sectionCard}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionHeaderText}>Section {index + 1}</Text>
+                <View style={styles.sectionHeaderAM}>
+                  <Text style={styles.sectionHeaderTextAM}>Section {index + 1}</Text>
                   <TouchableOpacity
                       style={styles.typeBtn}
                       onPress={() => updateSection(section.id, 'type', section.type)} >
@@ -1012,23 +1012,26 @@ export default function Chapters() {
                   onPress={() => pickMedia(section.id, section.type)}
                 >
                   {section.mediaUri ? (
-                    <View style={styles.videoIconUploaded}>
+                    <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
                       {section.type === SECTION_TYPES.IMAGE ? (
                           <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
                         ) : section.type === SECTION_TYPES.VIDEO && section.mediaUri ? (
                           <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
                         ) : (
-                        <View style={styles.filePreview}>
-                          <Text style={styles.fileIcon}>
+                        <View style={styles.stepImg}>
+                          <Text style={{fontSize: 45}}>
                             {section.type === SECTION_TYPES.VIDEO ? '🎬' : 
                              section.type === SECTION_TYPES.AUDIO ? '🎵' : '📄'}
                           </Text>
-                          <Text style={styles.fileName} numberOfLines={1}>
+                          <Text style={{fontSize: 10 }} numberOfLines={1} ellipsizeMode="clip">
                             {section.mediaUri.split('/').pop()}
                           </Text>
                         </View>
                       )}
-                      <Text style={{alignSelf: "center", fontSize: 10, color: "#f3efbd", marginTop: -12, fontWeight: "bold", backgroundColor: 'rgba(212, 175, 55, 0.12)', }}>CHANGE</Text>
+                      
+                      <View style={[{height: "15%", marginTop: -12, alignItems: "center", justifyContent: "cennter", backgroundColor: 'rgba(72, 243, 149, 0.57)' }, section.type === "video" && {backgroundColor: 'rgba(243, 72, 95, 0.57)' }, section.type === "pdf" && {backgroundColor: 'rgba(72, 103, 243, 0.57)'}, section.type === "audio" && {backgroundColor: 'rgba(223, 72, 243, 0.57)'} ]}>
+                        <Text style={{height: "15%", alignSelf: "center", fontSize: 10, color: "#f3efbd", fontWeight: "bold" }}>CHANGE</Text>
+                      </View>
                     </View>
                   ) : !section.mediaUrl && (
                     <View style={styles.videoIcon}>
@@ -1204,8 +1207,10 @@ container: { flex: 1, backgroundColor: '#c2cdd4' },
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },
 imgBackground: {flex: 1, opacity: 1, maxHeight: "91%", minWidth: "100%", height: Dimensions.get('window').height, marginTop: "7%",},
 sectionContainer: { marginBottom: 25, paddingLeft: 10, backgroundColor: 'rgba(250, 238, 69, 0.15)', opacity: 1 },
-sectionHeader: { marginBottom: 9, flexDirection: 'row', opacity: 1, borderRadius: 7, justifyContent: 'center', alignItems: 'center'},
+sectionHeader: { marginBottom: 9, flexDirection: 'row', opacity: 1, borderRadius: 7, justifyContent: 'center', alignItems: 'center', fontWeight: "bold",  alignSelf: "flex-start", backgroundColor: 'rgba(248, 239, 154, 0.76)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 9 },
+sectionHeaderAM: { marginBottom: 9, flexDirection: 'row', opacity: 1, borderRadius: 7, justifyContent: 'center', alignItems: 'center', fontWeight: "bold",  alignSelf: "center", color: "#584504", backgroundColor: 'rgba(136, 129, 67, 0.76)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 9, borderWidth: .5,  borderColor: '#b39514' },
 sectionHeaderText: { color: '#f3efbd', fontSize: 12, fontWeight: 'bold', backgroundColor: 'rgba(0,0,0,0.8)', textTransform: 'uppercase', letterSpacing: 1, alignSelf: "center", opacity: 1, borderRadius: 7, textAlign: 'center'},
+sectionHeaderTextAM: { color: '#020202', fontSize: 12, fontWeight: 'bold', backgroundColor: 'rgba(136, 129, 67, 0.76)', letterSpacing: 1, alignSelf: "center", opacity: 1, borderRadius: 7, textAlign: 'center', paddingHorizontal: 3},
 typeBtn: { width: 45, height: 45, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginLeft: 12, marginTop: -7},
 typeBtnText: {fontSize: 34 },
 itemContainer: { width: width * 0.7, marginRight: 15, backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden', marginBottom:12, opacity: 1},
@@ -1217,7 +1222,7 @@ titleText: { textAlign: 'center', fontSize: 13, fontWeight: 'bold', color: '#dab
 thumbImage: { width: "100%", height: 152, backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 thumbPdf: { width: "100%", height: 76, resizeMode: 'contain', backgroundColor: '#1a1a1a', justifyContent: 'center', alignItems: 'center' },
 myDojoDeleteIcon: {height: 49, width: 49, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
-pillRow: { backgroundColor: 'rgba(43, 37, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 3, marginTop: 8, borderRadius: 9, opacity: 1 },
+pillRow: { backgroundColor: 'rgba(43, 37, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12, marginTop: 5, borderRadius: 9, opacity: 1, marginBottom: 9 },
 typePill: { backgroundColor: 'rgba(190, 190, 190, 0.19)', color: '#e6cc5a', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
 batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#b39514', elevation: 10 },
 batchText: { color: '#b39020', fontWeight: 'bold'},
@@ -1241,8 +1246,11 @@ importIcon: {height: 76, width: 67, borderRadius: 9, marginLeft: 12 },
 imgBackgroundAM: {  ...StyleSheet.absoluteFillObject, flex: 1 },
 iconAM: { height: 61, width: '95%', alignSelf: 'center', textAlign: 'center', marginLeft: 25, marginBottom: 3, opacity: 1 },
 videoIcon: { height: 95, width: 114, marginLeft: 12, borderRadius: 2, marginTop: 45, justifyContent: 'center', alignItems: 'center'},
-videoIconUploaded: { height: 114, width: 95, marginLeft: 12, backgroundColor: 'rgba(72, 243, 163, 0.4)', borderRadius: 10, marginTop: 57, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#f84444',borderStyle: 'dashed'},
+videoIconUploaded: { height: 133, width: 95, marginLeft: 12, backgroundColor: 'rgba(243, 72, 95, 0.57)', borderRadius: 10, marginTop: 57, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#fa4e4e',borderStyle: 'dashed'},
+pdfIconUploaded: { height: 133, width: 95, marginLeft: 12, backgroundColor: 'rgba(72, 103, 243, 0.57)', borderRadius: 10, marginTop: 57, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#4447f8',borderStyle: 'dashed'},
 pdfIcon: { height: 76, width:76, backgroundColor: 'hsla(204, 77%, 48%, 0.17)', borderRadius: 2, marginTop: 5, justifyContent: 'center', alignItems: 'center', marginLeft: 12},
+audioIconUploaded: { height: 133, width: 95, marginLeft: 12, backgroundColor: 'rgba(223, 72, 243, 0.57)', borderRadius: 10, marginTop: 57, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#da44f8',borderStyle: 'dashed'},
+imageIconUploaded: { height: 133, width: 95, marginLeft: 12, backgroundColor: 'rgba(72, 243, 149, 0.57)', borderRadius: 10, marginTop: 57, justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: '#44f84d',borderStyle: 'dashed'},
 pdfIconText: { color: '#020142', fontWeight: 'bold', fontSize: 12, marginLeft: 4 },
 videoIconText: { color: '#420105', fontWeight: 'bold', fontSize: 12 },
 plusIconAM: { height: 51, width: 46, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginRight: 19, marginBottom: 2, opacity: 1},
@@ -1253,7 +1261,7 @@ label: { fontWeight: 'bold', color: '#f3efbd', marginTop: 12, fontSize: 12, marg
 input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5, marginTop: 7, backgroundColor: 'rgba(235, 224, 71, 0.62)', opacity: 1, fontWeight: "bold", fontSize: 13 },
 pdfinput: { borderWidth: 1, borderColor: '#436fff', borderRadius: 12, padding: 8, marginTop: 7, backgroundColor: 'rgba(28, 142, 218, 0.17)', opacity: 1, fontWeight: "bold" },
 stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', padding: 10, borderRadius: 10, elevation: 1 },
-stepImg: { width: '100%', height: '100%' },
+stepImg: { width: '100%', height: '85%' },
 chapterInput: { borderWidth: 3, borderColor: '#ad9611', padding: 8, marginTop: 7, backgroundColor: 'rgba(241, 243, 227, 0.82)', borderRadius: 12, opacity: 1, fontWeight: "bold", fontSize: 13},
 removeText: { color: '#dc2626', fontSize: 10, textAlign:'center', marginTop: 1, fontWeight: 'bold', width: '100%' },
 removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop: 38, marginBottom: 57, height: 95, width: 76, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
@@ -1267,7 +1275,7 @@ saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:
 discardBtn: { marginBottom: 9, marginLeft: 12, height: 70, width: 67, borderRadius: 10, justifyContent: 'center', alignItems: 'center', opacity: 1},
 discardText: { textAlign: 'center', color: '#dc2626', fontWeight: 'bold', fontSize: 10, marginTop: 1, height: 15, width: '100%' },
 orText: { color: '#f3efbd', fontWeight: 'bold', fontSize: 16, marginTop: 19, marginBottom: -7, marginLeft: 38 },
-stepImgContainer: { width: 95, height: 95, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
+stepImgContainer: { minWidth: 95, minHeight: 95, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4,  gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: "100%", borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
 searchInput: { height: 38, width: "70%", backgroundColor: 'rgba(255, 255, 255, 0.79)', borderRadius: 8, paddingHorizontal: 8, color: 'black', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11},
 searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center', opacity: 1, paddingHorizontal: 2},
