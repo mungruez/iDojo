@@ -35,11 +35,10 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   
   const COOLDOWN_MS = 1900;
 
-  const pdfSource = { 
-    uri: pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : pdf.vid,
-    cache: true
+  const pdfSource = {
+    uri: pdf.vid && pdf.vid.length > 0 ? pdf.vid : (pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : ''),
+    cache: true,
   };
-
 
   const canClick = () => {
     const now = Date.now();
