@@ -35,7 +35,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     }
   };
 
-
   const openPdf = async () => {
     if (!section || !section.mediaUri) {
       Alert.alert("Error", "No PDF Section found.");
@@ -61,7 +60,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       }
     }
   };
-
 
 
   const handleShareSection = async (selectedsection) => {
@@ -110,7 +108,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
-
   const getThumbnail = () => {
     if (section.type === 'image') {
       if( section.mediaUri ) return section.mediaUri;
@@ -135,7 +132,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
-
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener('TRACK_FINISHED', () => {
       setIsFinished(true);
@@ -154,7 +150,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   }, [navigation])
 
 
-
   useEffect(() => {
     if (section && section.type === "audio") {
       if ( wasActive.current && !isActive ) {
@@ -165,8 +160,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       wasActive.current = isActive;
     }
   }, [isActive]);
-
-
 
   const playPauseAudio = () => {
     if ( isFinished ) {
@@ -188,9 +181,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     setIsMuted(!isMuted);
   };
 
-
-  
-  
   if (isActive) {
     return (
      <ScrollView
@@ -297,7 +287,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     );
   }
 
-
   return (
     <TouchableOpacity
       style={[styles.thumbnailCard, { borderColor: getTypeColor() }]}
@@ -327,7 +316,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     </TouchableOpacity>
   );
 }
-
 
 const styles = StyleSheet.create({
   activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 12, marginVertical: 8, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },

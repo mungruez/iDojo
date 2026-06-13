@@ -40,6 +40,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     cache: true,
   };
 
+  
   const canClick = () => {
     const now = Date.now();
     if (now - lastClickTime < COOLDOWN_MS) {

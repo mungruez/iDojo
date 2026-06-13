@@ -502,6 +502,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     const viewPdf = async (move) => {
       if ( isOffline && !move.vid ) {
         Alert.alert("No Internet", "You need an internet connection to view PDF Moves.");
@@ -646,6 +647,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     const pickMedia = async (index = null) => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
@@ -690,6 +692,7 @@ export default function MyDojoStyles({route}) {
     };
   
   
+
   
     const save = async () => {
       let validatedSteps = []; 
@@ -796,7 +799,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     useEffect(() => {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
         if (viewmode > 0) {
@@ -822,8 +824,6 @@ export default function MyDojoStyles({route}) {
 
       return () => backHandler.remove();
     }, [viewmode, addmode, listmode]);
-
-
 
 
     const toggleSelectSingle = (index) => {
@@ -920,6 +920,7 @@ export default function MyDojoStyles({route}) {
       </TouchableOpacity>
     );
 
+
     const MyHeader = () => {
       if (smoves.length === 0) return null;
       const firstId = smoves[0].id;
@@ -929,6 +930,7 @@ export default function MyDojoStyles({route}) {
       return null;
     };
 
+
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
@@ -937,6 +939,7 @@ export default function MyDojoStyles({route}) {
     if (viewmode === 1 || viewmode === 2) {
       return <VideoPlayer video={move} isActive={true} />;
     }
+
 
     if(viewmode == 3) return (
       <View style={{flex: 1, paddingTop: 40, backgroundColor:"#228b22", opacity: 1}}> 
@@ -998,9 +1001,11 @@ export default function MyDojoStyles({route}) {
       </View>
     );
 
+
     if( viewmode === 4 ) return (
       <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
     )
+
 
     if (addmode) return (
       <ImageBackground style={ styles.imgBackgroundAM } imageStyle={{ opacity: 0.7 }} resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
@@ -1149,6 +1154,7 @@ export default function MyDojoStyles({route}) {
       </ImageBackground>
      );   
 
+
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
@@ -1239,6 +1245,7 @@ export default function MyDojoStyles({route}) {
              </View> ) }
         </SafeAreaView>
       </ImageBackground> );
+
 
     return (
       <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
@@ -1359,6 +1366,7 @@ export default function MyDojoStyles({route}) {
      </ImageBackground>
     );
 }
+
 
 const styles = StyleSheet.create({
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },

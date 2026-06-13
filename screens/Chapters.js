@@ -46,7 +46,6 @@ export default function Chapters() {
   const isOffline = useNetInfo().isConnected === false;
   const isLoadingRef = useRef(false);
 
-
   const showInstructions = () => {
     Alert.alert(
       "My Dojo Moves List",
@@ -722,7 +721,6 @@ export default function Chapters() {
     return require('../assets/chapterplaceholder.png');
   };
 
-
   useFocusEffect(
     useCallback(() => {
       loadChapters();
@@ -753,7 +751,6 @@ export default function Chapters() {
 
     return () => backHandler.remove();
   }, [mode]);
-
 
 
   const ChapterCard = ({ item }) => (
@@ -843,8 +840,6 @@ export default function Chapters() {
       </SafeAreaView>
     );
   }
-
-
 
   if (mode === 'list') {
     return (
@@ -937,7 +932,6 @@ export default function Chapters() {
       </ImageBackground>
     );
   }
-
  
   if (mode === 'add') {
    return (
@@ -1124,7 +1118,6 @@ export default function Chapters() {
    );
   }
 
-
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
@@ -1200,7 +1193,6 @@ export default function Chapters() {
      </ImageBackground>
   );
 }
-
 
 const styles = StyleSheet.create({
 container: { flex: 1, backgroundColor: '#c2cdd4' },
