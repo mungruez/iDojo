@@ -234,7 +234,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
           </View>
         )}
 
-        { section.type === 'pdf' && ( <View style={[styles.pdfContainerOnline, isFullscreen && { minHeight: height * 0.95 }]}>
+        { section.type === 'pdf' && ( <View style={[styles.pdfContainer, isFullscreen && { height: height * 0.95 }]}> 
           <PdfMove
             pdf={{
               title: section.title,
@@ -339,8 +339,7 @@ const styles = StyleSheet.create({
   shareiconBtn: { width: 50, height: 50, borderRadius: 24, backgroundColor: 'rgba(0,0,0,0.95)',  borderColor: '#d4af37', borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 5, paddingTop: 8 },
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
-  pdfContainerOnline: { minHeight: height * 0.83, backgroundColor: '#0c153baf' },
-  pdfContainer: { minHeight: height * 0.21, backgroundColor: '#0c153baf' },
+  pdfContainer: { height: height * 0.83, backgroundColor: '#0c153baf' },
   pdfContainerBtn: { height: 228, backgroundColor: '#0c153baf', },
   audioContainer: { height: 133, backgroundColor: 'rgba(225, 0, 255, 0.1)', padding: 2, margin: 0, borderRadius: 12, alignItems: 'center'},
   imageContainer: { backgroundColor: '#237c2a5d', alignItems: 'center', padding: 3, opacity: 1 },

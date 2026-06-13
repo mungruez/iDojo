@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   loadingText: { color: '#60a5fa', fontSize: 16, fontWeight: 'bold' },
   headerText: { fontSize: 11, fontWeight: '600', color: '#0b1c2e' },
   viewerBody: { flex: 1, position: 'relative' },
-  pdfStyle: { flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height - 56, backgroundColor: '#c4e3fc' },
+  pdfStyle: { flex: 1, width: '100%', backgroundColor: '#c4e3fc' },
   loadingText: { marginTop: 12, fontSize: 14, color: '#555555' },
   errorText: { fontSize: 16, fontWeight: 'bold', color: '#f73a3a', textAlign: 'center' },
   errorSubText: { fontSize: 12, color: '#c4e3fc', marginTop: 6, textAlign: 'center' },
