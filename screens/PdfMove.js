@@ -14,7 +14,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
         <Text style={{color: 'white', fontSize: 16}}>Error: No PDF data</Text>
         <TouchableOpacity 
           onPress={onClosePdf}
-          style={{marginTop: 20, padding: 10, backgroundColor: '#3b82f6', borderRadius: 5}}
+          style={{marginTop: 19, padding: 12, backgroundColor: '#3b82f6', borderRadius: 7}}
         >
           <Text style={{color: 'white'}}>Go Back</Text>
         </TouchableOpacity>
@@ -25,21 +25,20 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   const [key, setKey] = useState(0);
   const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
   const [lastClickTime, setLastClickTime] = useState(0);
-  const wasActive = useRef(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-
+  
+  const wasActive = useRef(false);
+  
+  const COOLDOWN_MS = 1900;
 
   const pdfSource = { 
     uri: pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : pdf.vid,
     cache: true
   };
-
-
-  const COOLDOWN_MS = 1900;
 
 
   const canClick = () => {
@@ -141,7 +140,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
           />
 
           {errorMessage && !isLoading && (
-            <View style={styles.centerOverlay}>
+            <View style={styles.loadingOverlay}>
               <Text style={styles.errorText}>Could not load the PDF document.</Text>
               <Text style={styles.errorSubText}>{errorMessage}</Text>
             </View>
@@ -154,183 +153,38 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0a0e27', 
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#1d377e91',
-    paddingHorizontal: 16,
-    paddingVertical: 3,
-    borderBottomWidth: 2,
-    borderBottomColor: '#3b82f6',
-  },
-   headerMessage: {
-    height: 56,
-    backgroundColor: '#c4e3fc',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#c4e3fc',
-    elevation: 2, 
-  },
-  closeBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 18,
-    backgroundColor: '#dc2626',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  closeText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  toggleBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#3b82f6',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  toggleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  headerTitle: {
-    flex: 1,
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginHorizontal: 10,
-  },
-  dropdownContainer: {
-    width: '96%',
-    maxHeight: height * 0.25,
-    alignSelf: 'center',
-    backgroundColor: '#1e293b',
-    borderRadius: 10,
-    padding: 3,
-    marginTop: 5,
-    borderWidth: 1,
-    borderColor: '#3b82f6',
-    overflow: 'hidden',
-  },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  infoLabel: {
-    color: '#67a1e7', 
-    fontSize: 12,
-    fontWeight: 'bold',
-    width: 50,
-  },
-  infoValue: {
-    color: 'white',
-    fontSize: 12,
-    flex: 1,
-  },
-  typeBadge: {
-    backgroundColor: '#3b82f6',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-    flexDirection: 'row',
-  },
-  typeText: {
-    color: 'white',
-    fontSize: 11,
-    fontWeight: 'bold',
-  },
-  descSection: {
-    backgroundColor: '#1e293b',
-    padding: 3,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#3b82f6',
-  },
-  descLabel: {
-    color: '#60a5fa',
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginBottom: 1,
-  },
-  descScroll: {
-    maxHeight: height * 0.07
-  },
-  descText: {
-    color: 'honeydew',
-    fontSize: 12,
-    lineHeight: 15,
-    marginVertical: 1,
-  },
-  pdfContainer: {
-    flex: 1,
-    margin: 4,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: '#3b82f6',
-  },
+  container: { flex: 1, backgroundColor: '#0a0e27' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1d377e91', paddingHorizontal: 16, paddingVertical: 3, borderBottomWidth: 2, borderBottomColor: '#3b82f6' },
+  headerMessage: { height: 56, backgroundColor: '#c4e3fc', justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#c4e3fc', elevation: 2 },
+  closeBtn: { width: 38, height: 38,borderRadius: 18, backgroundColor: '#dc2626', justifyContent: 'center', alignItems: 'center' },
+  closeText: { color: 'white', fontSize: 14, fontWeight: 'bold' },
+  toggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#3b82f6', justifyContent: 'center', alignItems: 'center' },
+  toggleText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
+  headerTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
+  dropdownContainer: { width: '96%', maxHeight: height * 0.25, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#3b82f6', overflow: 'hidden' },
+  infoRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
+  infoLabel: { color: '#67a1e7', fontSize: 12, fontWeight: 'bold', width: 50 },
+  infoValue: { color: 'white', fontSize: 12, flex: 1 },
+  typeBadge: { backgroundColor: '#3b82f6', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12, flexDirection: 'row' },
+  typeText: { color: 'white', fontSize: 11, fontWeight: 'bold' },
+  descSection: { backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#3b82f6' },
+  descLabel: { color: '#60a5fa', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
+  descScroll: { maxHeight: height * 0.07 },
+  descText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
+  pdfContainer: { flex: 1, margin: 4, backgroundColor: 'white', borderRadius: 12, overflow: 'hidden', borderWidth: 2, borderColor: '#3b82f6' },
+  loadingText: { color: '#60a5fa', fontSize: 16, fontWeight: 'bold' },
+  headerText: { fontSize: 11, fontWeight: '600', color: '#0b1c2e' },
+  viewerBody: { flex: 1, position: 'relative' },
+  pdfStyle: { flex: 1, width: Dimensions.get('window').width, height: Dimensions.get('window').height - 56, backgroundColor: '#c4e3fc' },
+  loadingText: { marginTop: 12, fontSize: 14, color: '#555555' },
+  errorText: { fontSize: 16, fontWeight: 'bold', color: '#f73a3a', textAlign: 'center' },
+  errorSubText: { fontSize: 12, color: '#c4e3fc', marginTop: 6, textAlign: 'center' },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#1e293b',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
-  },
-  loadingText: {
-    color: '#60a5fa',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  headerText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#0b1c2e',
-  },
-  viewerBody: {
-    flex: 1,
-    position: 'relative',
-  },
-  pdfStyle: {
-    flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height - 56,
-    backgroundColor: '#c4e3fc',
-  },
-  centerOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#c4e3fc',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: '#555555',
-  },
-  errorText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#dc3545',
-    textAlign: 'center',
-  },
-  errorSubText: {
-    fontSize: 12,
-    color: '#6c757d',
-    marginTop: 6,
-    textAlign: 'center',
-  },
+    padding: 19,
+  }
 });
