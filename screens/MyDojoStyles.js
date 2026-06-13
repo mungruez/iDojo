@@ -503,57 +503,30 @@ export default function MyDojoStyles({route}) {
 
 
     const viewPdf = async (move) => {
-      if (isOffline && !move.vid) {
+      if ( isOffline && !move.vid ) {
         Alert.alert("No Internet", "You need an internet connection to view PDF Moves.");
         return;
       }
 
-      if (!move) {
-        Alert.alert("Error", "No move data");
+      if ( !move ) {
+        Alert.alert("Unable To Open PDF", "No PDF Move data.");
         return;
       }
 
-      if (move.videoUrl && move.videoUrl.startsWith('http')) {
-        try {
-          const viewerUrl = `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(move.videoUrl)}`;
-          const pdfData = {
-            id: move.id,
-            title: move.title || 'PDF Document',
-            style: move.style || 'Enter Move Title',
-            desc: move.desc || '',
-            vid: viewerUrl,
-            videoUrl: move.videoUrl,
-            type: 'pdf'
-          };
-          setViewMode(4);  
-          setMove(pdfData);
-          
-        } catch (err) {
-          Alert.alert("Error", "Failed to open PDF: " + err.message);
-        }
-      } else if (move.vid) {
-        setLoading(true);
-        try {
-          const fileInfo = await FileSystem.getInfoAsync(move.vid);
-          if (!fileInfo.exists) {
-            Alert.alert("Error", "PDF file not found");
-            setLoading(false);
-            return;
-          }
-
-          await Sharing.shareAsync(move.vid, {
-            mimeType: 'application/pdf',
-            UTI: 'com.adobe.pdf',
-            dialogTitle: `Open ${move.title}`,
-          });
-          
-        } catch (err) {
-          if (err.message && !err.message.includes('cancelled')) {
-            Alert.alert("PDF Error", "Could not open PDF");
-          }
-        } finally {
-          setLoading(false);
-        }
+      try {
+        const pdfData = {
+          id: move.id,
+          title: move.title || 'PDF Document',
+          style: move.style || 'Move Title',
+          desc: move.desc || '',
+          vid: move.vid || null,
+          videoUrl: move.videoUrl || "",
+          type: 'pdf'
+        };
+        setViewMode(4);  
+        setMove(pdfData);
+      } catch (err) {
+        Alert.alert("Unable To Open PDF", "Failed to open PDF: " + err.message);
       }
     };
 

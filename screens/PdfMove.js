@@ -7,7 +7,7 @@ const { height } = Dimensions.get('window');
 
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
-  if (!pdf) {
+  if ( !pdf ) {
     return (
       <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e'}}>
         <StatusBar barStyle="dark-content"/>
@@ -34,12 +34,13 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
 
   const pdfSource = { 
-    uri: pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : pdf.vid , 
-    cache: true 
+    uri: pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : pdf.vid,
+    cache: true
   };
 
 
-  const COOLDOWN_MS = 1900; 
+  const COOLDOWN_MS = 1900;
+
 
   const canClick = () => {
     const now = Date.now();
@@ -49,6 +50,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     setLastClickTime(now);
     return true;
   };
+
 
   const handleRetry = () => {
     if (!canClick()) return;
@@ -107,7 +109,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
       <View style={styles.pdfContainer}>
         { !errorMessage && !isLoading && ( <View style={styles.headerMessage}>
           <Text style={styles.headerText}>
-            { totalPages === 0 ? `Page ${currentPage} of ...` : `Page ${currentPage} of ${totalPages}` }
+            { totalPages === 0 ?  `Page ${currentPage}` : `Page ${currentPage} of ${totalPages}` }
           </Text>
         </View> ) }
 
@@ -123,6 +125,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
             key ={key}
             source={pdfSource}
             trustAllCerts={false}
+            horizontal={true}
             style={styles.pdfStyle}
             onLoadComplete={(numberOfPages) => {
               setTotalPages(numberOfPages);

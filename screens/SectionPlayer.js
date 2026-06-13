@@ -234,32 +234,20 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
           </View>
         )}
 
-        { section.type === 'pdf' && section.mediaUrl ? (
-          <View style={[styles.pdfContainerOnline, isFullscreen && { minHeight: height * 0.95 }]}>
-            <PdfMove
-              pdf={{
-                title: section.title,
-                style: 'Chapter',
-                desc: section.description,
-                videoUrl: section.mediaUrl,
-                vid: `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(section.mediaUrl)}`,
-              }}
-              isActive={isActive}
-              onClosePdf={() => {onDeactivate();}} 
-            />
-          </View>
-        ) : section.type === 'pdf' && (
-          <View style={[styles.pdfContainer, isFullscreen && { maxHeight: height * 0.83 }]}> 
-            <TouchableOpacity onPress={() => openPdf()} style={styles.openPdfButton}>
-              <Text style={{ color: 'honeydew', fontSize: 16, fontWeight: 'bold', letterSpacing: 1 }}>OPEN PDF</Text>
-            </TouchableOpacity>  
-
-            <View style={styles.spDescSection}>
-              <Text style={styles.spDescLabel}>Description:</Text>
-                <Text style={styles.spDescText}>{section.description}</Text>
-            </View>
-          </View>
-        ) }
+        { section.type === 'pdf' && ( <View style={[styles.pdfContainerOnline, isFullscreen && { minHeight: height * 0.95 }]}>
+          <PdfMove
+            pdf={{
+              title: section.title,
+              style: 'Chapter',
+              desc: section.description,
+              videoUrl: section.mediaUrl,
+              vid: section.mediaUri,
+            }}
+             isActive={isActive}
+            onClosePdf={() => { onDeactivate(); }} 
+          />
+         </View> ) 
+        }
 
         { section.type === 'audio' && (
           <View style={[styles.audioContainer, isFullscreen && { minHeight: height * 0.38 } ]}>
