@@ -14,13 +14,13 @@ export default function VideoPlayer({ video, isActive }) {
   const [loading, setLoading] = useState(true);
   
 
-  const isYouTube = video.videoUrl && video.videoUrl.length > 0 && video.videoUrl.length < 19; 
+  const isYouTube = video.videoUrl && video.videoUrl.length > 7 && video.videoUrl.length < 15; 
 
-  const player = useVideoPlayer(isYouTube ? '' : video.vid?.length > 0 ? video.vid : video.videoUrl, (player) => {
+  const player = useVideoPlayer(isYouTube ? '' : video.vid && video.vid.length > 0 ? video.vid : video.videoUrl, (player) => {
     if (isYouTube) return;
   
     player.loop = true;
-    if (video.videoUrl && video.videoUrl.length >= 19) {
+    if (video.videoUrl && video.videoUrl.length > 7) {
       player.play();
     }
 

@@ -62,6 +62,25 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
+
+  const getYouTubeId = (url) => {
+    try {
+      if (!url || typeof url !== 'string') return "";
+      if (url.length < 19) return "";
+      if (!url.includes('/') && !url.includes('.')) return "";
+      
+      const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+      const match = url.match(regExp);
+      
+      return (match && match[1]) ? match[1] : "";
+        
+    } catch (e) {
+        return "";
+    }
+  };
+
+
+
   const handleShareSection = async (selectedsection) => {
     if (!selectedsection) return;
     try {
@@ -110,19 +129,19 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
   const getThumbnail = () => {
     if (section.type === 'image') {
-      if( section.mediaUri ) return section.mediaUri;
-      if( !isOffline ) return section.mediaUrl;
+      if( section.mediaUri ) return { uri: section.mediaUri };
+      if( !isOffline ) return { uri: section.mediaUrl };
     }
 
     if (section.type === 'video') {
-      if( section.mediaUri ) return section.mediaUri;
+      if( section.mediaUri ) return { uri: section.mediaUri };
       if( isOffline ) return require('../assets/onlinevideoicon.png');
 
       if ( section.mediaUrl?.includes('youtube.com') || section.mediaUrl?.includes('youtu.be') ) {
         const id = section.mediaUrl.match(
           /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
         )?.[1];
-        return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : require('../assets/onlinevideoicon.png');
+        return id ? { uri: `https://img.youtube.com/vi/${id}/hqdefault.jpg` } : require('../assets/onlinevideoicon.png');
       }
 
       return require('../assets/onlinevideoicon.png');
@@ -186,6 +205,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
      <ScrollView
         nestedScrollEnabled={true} 
         style={ isFullscreen ? styles.fullscreenView : styles.screenView }
+        scrollEnabled={section.type !== 'pdf'}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 19, paddingBottom: 40 }}
      >
@@ -212,15 +232,31 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
         { section.type === 'video' && (
           <View style={[ styles.videoContainer, isFullscreen && { minHeight: height * 0.83 } ]}>
-            <VideoPlayer
-              video={{
-                title: section.title,
-                desc: section.description,
-                videoUrl: section.mediaUrl?.length > 7 ? section.mediaUrl : '',
-                vid: section.mediaUri || section.mediaUrl,
+          { section.mediaUrl && (section.mediaUrl.includes("youtube.com") || section.mediaUrl.includes("youtu.be")) ? (
+            <VideoPlayer 
+              video = {{
+              title: section.title,
+              desc: section.description,
+              style: 'Chapter',
+              vid: "",
+              videoUrl: getYouTubeId(section.mediaUrl),
+              type: "video",
               }}
               isActive = {isActive}
-            />
+            /> ) : (
+              <VideoPlayer
+                video = {{
+                  title: section.title,
+                  desc: section.description,
+                  style: 'Chapter',
+                  vid: section.mediaUri?.length > 7 ? section.mediaUri : '',
+                  videoUrl: section.mediaUrl?.length > 7 ? section.mediaUrl : '',
+                  type: "video",
+                }}
+                isActive = {isActive}
+              />
+            )
+          }
           </View>
         )}
 
@@ -297,7 +333,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         
         <View style={[styles.visualBox,  { borderRightColor: getTypeColor(), borderRightWidth: 1.5 } ]}>
           {getThumbnail() ? (
-            <Image source={{ uri: getThumbnail() }} style={styles.thumbImg} />
+            <Image source={ getThumbnail() } style={styles.thumbImg} />
           ) : (
             <View style={[ styles.thumbPlaceholder, section.type === "pdf" ? { backgroundColor: 'rgba(19, 7, 57, 0.76)'} : {backgroundColor: 'rgba(27, 7, 57, 0.76)'} ]} >
               <Text style={ section.type === "pdf" ? styles.thumbIconPdf : styles.thumbIcon}>{getTypeIcon()}</Text>
@@ -318,7 +354,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 }
 
 const styles = StyleSheet.create({
-  activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 12, marginVertical: 8, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },
+  activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 7, marginVertical: 7, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },
   activeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12, backgroundColor: 'rgba(255,255,255,0.1)' },
   activeSectionLabel: { color: '#8d7f30', fontWeight: 'bold', fontSize: 11 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8, borderColor: '#d4af37', borderWidth: 1.5  },
@@ -327,7 +363,7 @@ const styles = StyleSheet.create({
   shareiconBtn: { width: 50, height: 50, borderRadius: 24, backgroundColor: 'rgba(0,0,0,0.95)',  borderColor: '#d4af37', borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
   activeTitle: { color: 'white', fontSize: 14, fontWeight: 'bold', padding: 5, paddingTop: 8 },
   videoContainer: { height: 380, backgroundColor: '#7a2b2b4f' },
-  pdfContainer: { height: height * 0.83, backgroundColor: '#0c153baf' },
+  pdfContainer: { height: height * 0.83, width: '100%', alignSelf: 'center', padding: 0, backgroundColor: '#0c153baf' },
   pdfContainerBtn: { height: 228, backgroundColor: '#0c153baf', },
   audioContainer: { height: 133, backgroundColor: 'rgba(225, 0, 255, 0.1)', padding: 2, margin: 0, borderRadius: 12, alignItems: 'center'},
   imageContainer: { backgroundColor: '#237c2a5d', alignItems: 'center', padding: 3, opacity: 1 },
@@ -336,7 +372,7 @@ const styles = StyleSheet.create({
   fullscreenText: { color: 'white', fontWeight: 'bold' },
   fullscreenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.95 },
   screenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.76 },
-  thumbnailCard: { backgroundColor: 'rgba(241, 255, 250, 0.84)', marginHorizontal: 12, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
+  thumbnailCard: { backgroundColor: 'rgba(241, 255, 250, 0.84)', marginHorizontal: 7, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
   thumbnailRow: { flexDirection: 'row', height: 133 },
   visualBox: { width: 140, position: 'relative' },
   thumbImg: { width: '100%', height: '100%' },

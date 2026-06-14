@@ -434,7 +434,7 @@ export default function FeatureMoveList() {
         <StatusBar style='light' />
       </View>
 
-      {isOffline ? (<Text style={{ marginTop: 19, height: "100%", width: "100%", color: 'rgb(174, 185, 185)', fontSize: 14, fontStyle: "italic", fontWeight:"bold", textAlign:"center", alignSelf: "center"}}> No Wifi Detected! Internet is required for viewing Featured videos!</Text> )
+      {isOffline ? (<Text style={{ marginTop: Dimensions.get('window').height*0.43, height: "100%", width: "100%", color: 'rgb(174, 185, 185)', fontSize: 14, fontStyle: "italic", fontWeight:"bold", textAlign:"center", alignSelf: "center"}}> No Wifi Detected! Internet is required for viewing Featured videos!</Text> )
       
       : !isloading ? ( <View style={styles.imgBackground}>
           <FlatList

@@ -5,6 +5,12 @@ import Pdf from 'react-native-pdf';
 
 const { height } = Dimensions.get('window');
 
+const { width } = Dimensions.get('window');
+const SCALE = Math.min(width / 375, 1.25);
+const ICON_SIZE = Math.round(20 * SCALE);
+const BUTTON_SIZE = Math.round(48 * SCALE);
+const TEXT_PRIMARY = Math.round(15 * SCALE);
+
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   if ( !pdf ) {
@@ -30,6 +36,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [zoomScale, setZoomScale] = useState(1);
   
   const wasActive = useRef(false);
   
@@ -57,6 +64,18 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     setKey(prev => prev + 1);
   };
 
+  const zoomStep = 0.25;
+  const handleZoomIn = () => setZoomScale(s => Math.min(s + zoomStep, 4));
+  const handleZoomOut = () => setZoomScale(s => Math.max(s - zoomStep, 0.5));
+
+  const goToNextPage = () => {
+    if (totalPages && currentPage < totalPages) setCurrentPage(p => p + 1);
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 1) setCurrentPage(p => p - 1);
+  };
+
 
   useEffect(() => {
     if (wasActive.current && !isActive) {
@@ -67,7 +86,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   
   
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232', width: '100%', height:'100%', marginTop: 0 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#323232' }}>
       <StatusBar barStyle="dark-content"/>
       <View style={styles.header}>
         
@@ -126,6 +145,8 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
             trustAllCerts={false}
             horizontal={true}
             style={styles.pdfStyle}
+            scale={zoomScale}
+            page={currentPage}
             onLoadComplete={(numberOfPages) => {
               setTotalPages(numberOfPages);
               setIsLoading(false);
@@ -145,6 +166,28 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
               <Text style={styles.errorSubText}>{errorMessage}</Text>
             </View>
           )}
+
+          <View style={styles.controls} pointerEvents={isLoading ? 'none' : 'auto'}>
+              <TouchableOpacity onPress={goToPrevPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+                <Text style={styles.controlText}>◀</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleZoomOut} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+                <Text style={styles.controlText}>−</Text>
+              </TouchableOpacity>
+
+            <View style={styles.pageIndicator}>
+              <Text style={styles.pageIndicatorText}>{currentPage}{ totalPages ? ` / ${totalPages}` : ''}</Text>
+            </View>
+
+            <TouchableOpacity onPress={handleZoomIn} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+              <Text style={styles.controlText}>＋</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={goToNextPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+              <Text style={styles.controlText}>▶</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -171,7 +214,7 @@ const styles = StyleSheet.create({
   descLabel: { color: '#60a5fa', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
   descScroll: { maxHeight: height * 0.07 },
   descText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
-  pdfContainer: { flex: 1, margin: 4, backgroundColor: 'white', borderRadius: 12, overflow: 'hidden', borderWidth: 2, borderColor: '#3b82f6' },
+  pdfContainer: { flex: 1, margin: 2, backgroundColor: 'white', borderRadius: 12, overflow: 'hidden', borderWidth: 2, borderColor: '#3b82f6' },
   loadingText: { color: '#60a5fa', fontSize: 16, fontWeight: 'bold' },
   headerText: { fontSize: 11, fontWeight: '600', color: '#0b1c2e' },
   viewerBody: { flex: 1, position: 'relative' },
@@ -187,4 +230,10 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 19,
   }
+  ,
+  controls: { position: 'absolute', bottom: 7, left: 7, right: 7, height: BUTTON_SIZE, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'rgba(7, 3, 38, 0.38)', borderRadius: 10 },
+  controlBtn: { width: BUTTON_SIZE, height: BUTTON_SIZE, borderRadius: BUTTON_SIZE / 2, backgroundColor: 'rgba(19, 12, 76, 0.38)', alignItems: 'center', justifyContent: 'center' },
+  controlText: { color: 'white', fontWeight: '600', fontSize: ICON_SIZE },
+  pageIndicator: { paddingHorizontal: 12 },
+  pageIndicatorText: { color: 'white', fontSize: TEXT_PRIMARY, fontWeight: '600' },
 });
