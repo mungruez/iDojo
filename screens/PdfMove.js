@@ -11,6 +11,7 @@ const ICON_SIZE = Math.round(20 * SCALE);
 const BUTTON_SIZE = Math.round(48 * SCALE);
 const TEXT_PRIMARY = Math.round(15 * SCALE);
 
+
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   if ( !pdf ) {
@@ -28,6 +29,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     );
   }
 
+
   const [key, setKey] = useState(0);
   const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
   const [lastClickTime, setLastClickTime] = useState(0);
@@ -42,6 +44,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   
   const COOLDOWN_MS = 1900;
 
+  
   const pdfSource = {
     uri: pdf.vid && pdf.vid.length > 0 ? pdf.vid : (pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : ''),
     cache: true,
@@ -64,13 +67,16 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     setKey(prev => prev + 1);
   };
 
+
   const zoomStep = 0.25;
   const handleZoomIn = () => setZoomScale(s => Math.min(s + zoomStep, 4));
   const handleZoomOut = () => setZoomScale(s => Math.max(s - zoomStep, 0.5));
 
+
   const goToNextPage = () => {
     if (totalPages && currentPage < totalPages) setCurrentPage(p => p + 1);
   };
+
 
   const goToPrevPage = () => {
     if (currentPage > 1) setCurrentPage(p => p - 1);
@@ -85,6 +91,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   }, [isActive, onClosePdf]);
   
   
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#323232' }}>
       <StatusBar barStyle="dark-content"/>
@@ -193,6 +200,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     </SafeAreaView>
   );
 };
+
 
 
 const styles = StyleSheet.create({
