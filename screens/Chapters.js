@@ -314,7 +314,7 @@ export default function Chapters() {
           if (section.mediaUri && section.mediaUri.startsWith('file://')) {
             const info = await FileSystem.getInfoAsync(section.mediaUri);
             if (!info.exists) {
-              console.log(`File missing: ${section.mediaUri}`);
+              Alert.alert("Missing Section  File", `Section File missing: ${section.mediaUri}`);
               sectionCopy.mediaUri = null; 
             } else {
               const fileName = `${chapterIdx}_${sectionIdx}_${section.mediaUri.split('/').pop()}`;
@@ -328,7 +328,7 @@ export default function Chapters() {
                 }
                 sectionCopy.mediaUri = fileName;
               } catch (e) {
-                console.log(`Copy error: ${e.message}`);
+                Alert.alert("Section File Copy Error", `Copy error: ${e.message}`);
                 sectionCopy.mediaUri = null;
               }
             }
@@ -490,6 +490,47 @@ export default function Chapters() {
       if (finalChapters.length === 0) {
         throw new Error("No valid chapters to import");
       }
+
+      const copyImportedChapterMedia = async (chapter) => {
+        const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chapter.id}/`;
+        await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+
+        for (const section of chapter.sections || []) {
+          if (!section) continue;
+
+          const localSource = section.mediaUri && !section.mediaUri.startsWith('http')
+            ? section.mediaUri
+            : section.mediaUrl && !section.mediaUrl.startsWith('http')
+              ? section.mediaUrl
+              : null;
+
+          if (!localSource) continue;
+          if (localSource.startsWith(permanentDirUri)) continue;
+
+          const sourceExt = localSource.includes('.')
+            ? `.${localSource.split('.').pop()}`
+            : section.type === 'pdf' ? '.pdf'
+            : section.type === 'audio' ? '.m4a'
+            : section.type === 'image' ? '.jpg'
+            : '.mp4';
+
+          const destUri = `${permanentDirUri}section_${section.id}_${Date.now()}${sourceExt}`;
+
+          try {
+            await FileSystem.copyAsync({ from: localSource, to: destUri });
+            section.mediaUri = destUri;
+            if (section.mediaUrl && !section.mediaUrl.startsWith('http')) {
+              section.mediaUrl = '';
+            }
+          } catch (copyErr) {
+            console.log('Import copy failed:', copyErr.message || copyErr);
+          }
+        }
+      };
+
+      for (const chapter of finalChapters) {
+        await copyImportedChapterMedia(chapter);
+      }
       
       const updatedList = [...chapters, ...finalChapters];
       await handleSaveChapter(updatedList);
@@ -506,6 +547,9 @@ export default function Chapters() {
       }
     } finally {
       setLoading(false);
+      if (extractDir) {
+        try { await FileSystem.deleteAsync(extractDir, { idempotent: true }); } catch (e) {}
+      }
       if (tempZipPath) {
         try { await FileSystem.deleteAsync(tempZipPath, { idempotent: true }); } catch (e) {}
       }
@@ -546,7 +590,7 @@ export default function Chapters() {
   const resetForm = () => {
     setChapterId(Date.now().toString());
     setChapterTitle('');
-    setChapterCategory(chapterCategory || "");
+    setChapterCategory(chapterCategory || "allcategories");
     setChapterDesc('');
     setSections([]);
   };
@@ -811,7 +855,7 @@ export default function Chapters() {
                 <View style={styles.vcDescSection}>
                   <Text style={styles.vcDescLabel}>Description:</Text>
                   <ScrollView style={styles.vcDescScroll}>
-                    <Text style={styles.vcDescText}>{currentChapter.description}</Text>
+                    <Text multiline={true} style={styles.vcDescText}>{currentChapter.description}</Text>
                   </ScrollView>
                 </View>
               ) }
@@ -983,13 +1027,12 @@ export default function Chapters() {
                 <View style={styles.sectionHeaderAM}>
                   <Text style={styles.sectionHeaderTextAM}>Section {index + 1}</Text>
                   <TouchableOpacity
-                      style={styles.typeBtn}
-                      onPress={() => updateSection(section.id, 'type', section.type)} >
-                        
-                      <Text style={styles.typeBtnText}>
-                        {section.type === 'video' ? '📹' : section.type === 'pdf' ? '📄' : section.type === 'audio' ? '🎵' : '🖼️'}
-                      </Text>
-                    </TouchableOpacity>
+                    style={styles.typeBtn}
+                    onPress={() => updateSection(section.id, 'type', section.type)} >
+                    <Text style={styles.typeBtnText}>
+                      {section.type === 'video' ? '📹' : section.type === 'pdf' ? '📄' : section.type === 'audio' ? '🎵' : '🖼️'}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
 
                 <Text style={styles.label}>Section Title</Text>
@@ -1080,9 +1123,36 @@ export default function Chapters() {
                   numberOfLines={3}
                 />
 
-                <TouchableOpacity onPress={() => removeSection(section.id)} style={styles.removeStepIcon}>
-                  <ImageBackground style={{ height: 76, width: "90%", }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removesectionicon.png')}/>
-                </TouchableOpacity>
+                <View style={styles.sectionFooterRow}>
+                  <View style={styles.changeTypeContainer}>
+                    <Text style={styles.changeTypeLabel}>CHANGE TO :</Text>
+                    <View style={styles.changeTypeGrid}>
+                      {[
+                        SECTION_TYPES.VIDEO,
+                        SECTION_TYPES.PDF,
+                        SECTION_TYPES.AUDIO,
+                        SECTION_TYPES.IMAGE,
+                      ].filter((type) => type !== section.type).map((type) => (
+                        <TouchableOpacity
+                          key={type}
+                          style={styles.changeTypeIconBtn}
+                          onPress={() => updateSection(section.id, 'type', type)}
+                        >
+                          <Text style={styles.changeTypeIcon}>
+                            {type === SECTION_TYPES.VIDEO ? '📹' :
+                             type === SECTION_TYPES.PDF ? '📄' :
+                             type === SECTION_TYPES.AUDIO ? '🎵' :
+                             '🖼️'}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </View>
+
+                  <TouchableOpacity onPress={() => removeSection(section.id)} style={styles.removeStepIcon}>
+                    <ImageBackground style={{ height: 76, width: "90%" }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removesectionicon.png')}/>
+                  </TouchableOpacity>
+                </View>
               </View>
             ))}
 
@@ -1256,7 +1326,7 @@ stepRow: { flexDirection: 'column', marginTop: 7, alignItems: 'center', padding:
 stepImg: { width: '100%', height: '85%', borderRadius: 5, alignSelf: 'flex-start' },
 chapterInput: { borderWidth: 3, borderColor: '#ad9611', padding: 8, marginTop: 7, backgroundColor: 'rgba(241, 243, 227, 0.82)', borderRadius: 12, opacity: 1, fontWeight: "bold", fontSize: 13},
 removeText: { color: '#dc2626', fontSize: 10, textAlign:'center', marginTop: 1, fontWeight: 'bold', width: '100%' },
-removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop: 38, marginBottom: 57, height: 95, width: 76, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
+removeStepIcon:{alignItems: 'center', justifyContent: 'center', marginTop: 0, marginBottom: 0, height: 90, width: 76, flexDirection: 'column', backgroundColor: 'rgba(255, 0, 0, 0.08)', borderRadius: 20, borderWidth: 1, borderColor: '#ff4d4d', opacity: 1},
 addSectionBtn: {marginTop: 5, height: 47, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1, marginRight: 19},
 addPdfSectionBtn: {marginTop: 5, height: 41, width: 114, alignSelf:'center', alignItems: 'center', justifyContent:'center', opacity: 1, marginLeft: 3},
 addImgSectionBtn: {marginTop: 24, height: 76, width: 125, opacity: 1, alignSelf:'center', alignItems: 'center', marginLeft: 19},
@@ -1277,16 +1347,23 @@ vcToggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#8d7f3
 vcToggleText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
 vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderWidth: 2, borderColor: '#99840f', borderBottomWidth: 2.5, borderBottomColor: '#99840f', borderRadius: 10, marginBottom: 2 },
 vcTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
-vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row"},
-vcInfoRow: { alignItems: 'center', marginBottom: 4},
-vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "95%"},
+vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row", flexWrap: 'wrap', alignItems: 'flex-start'},
+vcInfoRow: { alignItems: 'center', marginBottom: 4, flex: 1, minWidth: '45%'},
+vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "100%"},
 vcInfoText: { color: '#cbd5e1', fontSize: 11, fontWeight: 'bold' },
-vcDescSection: { backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#99840f' },
+vcDescSection: { flex: 1, minWidth: '45%', backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#99840f' },
 vcDescLabel: { color: '#8d7f30', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
-vcDescScroll: { maxHeight: height * 0.09 },
-vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
+vcDescScroll: { maxHeight: height * 0.09, width: '100%' },
+vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1, flexWrap: 'wrap', width: '100%' },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
+sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 12 },
+changeTypeContainer: { flex: 1, marginRight: 10 },
+changeTypeLabel: { color: '#f3efbd', fontSize: 12, fontWeight: '700', marginBottom: 5 },
+changeTypeGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' },
+changeTypeIconBtn: { width: 40, height: 40, margin: 3, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center' },
+changeTypeBtnActive: { backgroundColor: 'rgba(220, 210, 95, 0.18)', borderColor: '#d4af37' },
+changeTypeIcon: { color: '#f3efbd', fontSize: 38, lineHeight: 22 },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 });
