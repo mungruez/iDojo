@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet, Alert, ImageBackground, KeyboardAvoidingView, Platform, StatusBar, FlatList, Dimensions, BackHandler } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet, Alert, ImageBackground, KeyboardAvoidingView, Platform, StatusBar, FlatList, Dimensions, BackHandler, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -765,11 +765,13 @@ export default function Chapters() {
     return require('../assets/chapterplaceholder.png');
   };
 
+  
   useFocusEffect(
     useCallback(() => {
       loadChapters();
     }, [])
   );
+
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -797,6 +799,7 @@ export default function Chapters() {
   }, [mode]);
 
 
+
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
       onLongPress={() => toggleSelect(item.id)}
@@ -822,6 +825,7 @@ export default function Chapters() {
     </TouchableOpacity>
   );
   
+
       
   const MyHeader = () => {
     if (schapters.length === 0) return null;
@@ -830,6 +834,16 @@ export default function Chapters() {
     if (firstId === "c-all") return <Image source={require('../assets/chaptersdivider.png')} style={styles.goldDivider} resizeMode='contain'/>;
     return null;
   };
+
+
+
+  if (loading) return ( 
+    <View style={styles.loadingOverlay}>
+      <ActivityIndicator size="large" color="#caaf38" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />
+      <Text style={styles.loadingText}>Preparing To Share Chapter(s)...</Text>
+    </View>
+  );
+
 
 
   if (mode === 'view' && currentChapter) {
@@ -1188,6 +1202,7 @@ export default function Chapters() {
    );
   }
 
+
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
@@ -1263,6 +1278,7 @@ export default function Chapters() {
      </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
 container: { flex: 1, backgroundColor: '#c2cdd4' },
@@ -1365,4 +1381,6 @@ changeTypeIconBtn: { width: 44, height: 44, margin: 3, borderRadius: 12, backgro
 changeTypeIcon: { color: '#f3efbd', fontSize: 38, lineHeight: 42 },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
+loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
+loadingText: { color: '#f3efbd', marginTop: 12, fontWeight: '700', fontSize: 15 },
 });
