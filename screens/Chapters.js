@@ -992,6 +992,7 @@ export default function Chapters() {
     );
   }
  
+  
   if (mode === 'add') {
    return (
     <ImageBackground source={require('../assets/chaptersbg.png')} style={styles.imgBackground} imageStyle={{ opacity: 1.0 }} resizeMode='cover' >
