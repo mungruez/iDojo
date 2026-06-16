@@ -1142,8 +1142,7 @@ export default function Chapters() {
                           <Text style={styles.changeTypeIcon}>
                             {type === SECTION_TYPES.VIDEO ? '📹' :
                              type === SECTION_TYPES.PDF ? '📄' :
-                             type === SECTION_TYPES.AUDIO ? '🎵' :
-                             '🖼️'}
+                             type === SECTION_TYPES.AUDIO ? '🎵' : '🖼️'}
                           </Text>
                         </TouchableOpacity>
                       ))}
@@ -1358,7 +1357,7 @@ vcDescScroll: { maxHeight: height * 0.09, width: '100%' },
 vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1, flexWrap: 'wrap', width: '100%' },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
-sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 0, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', padding: 8 },
+sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 0, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', padding: 5 },
 changeTypeContainer: { flex: 1, marginRight: 10, marginTop: -7 },
 changeTypeLabel: { color: '#f3efbd', fontSize: 14, fontWeight: '700', marginBottom: 3 },
 changeTypeGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' },
