@@ -885,6 +885,7 @@ export default function Chapters() {
     );
   }
 
+  
   if (mode === 'list') {
     return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' imageStyle={{ opacity: 0.9 }} source={require('../assets/chapterslistbg.png')}>
@@ -1125,7 +1126,7 @@ export default function Chapters() {
 
                 <View style={styles.sectionFooterRow}>
                   <View style={styles.changeTypeContainer}>
-                    <Text style={styles.changeTypeLabel}>CHANGE TO :</Text>
+                    <Text style={styles.changeTypeLabel}>Change To:</Text>
                     <View style={styles.changeTypeGrid}>
                       {[
                         SECTION_TYPES.VIDEO,
@@ -1357,13 +1358,12 @@ vcDescScroll: { maxHeight: height * 0.09, width: '100%' },
 vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1, flexWrap: 'wrap', width: '100%' },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
-sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 12 },
-changeTypeContainer: { flex: 1, marginRight: 10 },
-changeTypeLabel: { color: '#f3efbd', fontSize: 12, fontWeight: '700', marginBottom: 5 },
+sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 0, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', padding: 8 },
+changeTypeContainer: { flex: 1, marginRight: 10, marginTop: -7 },
+changeTypeLabel: { color: '#f3efbd', fontSize: 14, fontWeight: '700', marginBottom: 3 },
 changeTypeGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' },
-changeTypeIconBtn: { width: 40, height: 40, margin: 3, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center' },
-changeTypeBtnActive: { backgroundColor: 'rgba(220, 210, 95, 0.18)', borderColor: '#d4af37' },
-changeTypeIcon: { color: '#f3efbd', fontSize: 38, lineHeight: 22 },
+changeTypeIconBtn: { width: 44, height: 44, margin: 3, borderRadius: 12, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', alignItems: 'center', justifyContent: 'center' },
+changeTypeIcon: { color: '#f3efbd', fontSize: 38, lineHeight: 42 },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 });
