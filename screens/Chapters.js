@@ -1160,7 +1160,7 @@ export default function Chapters() {
                              type === SECTION_TYPES.AUDIO ? '🎵' : '🖼️'}
                           </Text>
                         </TouchableOpacity>
-                      ))}
+                      ) ) }
                     </View>
                   </View>
 
