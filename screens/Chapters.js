@@ -35,6 +35,7 @@ export default function Chapters() {
   const [chapterId, setChapterId] = useState(null);
   const [chapterTitle, setChapterTitle] = useState("");
   const [chapterCategory, setChapterCategory] = useState("");
+  const [prevCategory, setPrevCategory] = useState("");
   const [chapterDesc, setChapterDesc] = useState("");
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -590,7 +591,11 @@ export default function Chapters() {
   const resetForm = () => {
     setChapterId(Date.now().toString());
     setChapterTitle('');
-    setChapterCategory(chapterCategory || "allcategories");
+    if(prevCategory && prevCategory === "allcategories") {
+      setChapterCategory("allcategories");
+    } else {
+      setChapterCategory(chapterCategory || "allcategories");
+    }
     setChapterDesc('');
     setSections([]);
   };
@@ -789,6 +794,7 @@ export default function Chapters() {
       if (mode === "list") {
         setMode("main");
         setChapterCategory("");
+        setPrevCategory("");
         setSelectedIds([]);
         return true;
       }
@@ -862,17 +868,20 @@ export default function Chapters() {
 
         { vcDropdownVisible && (
           <View style={styles.vcDropdownContainer}>
-            <View style={styles.vcInfoRow}>
-              <Text style={styles.vcInfoLabel}>{`Content: ${currentChapter.sections.length} Sections`}</Text>
+            <View style={{ flexDirection: 'column', width: "100%" }}>
+              <View style={styles.vcInfoRow}>
+                <Text style={styles.vcInfoLabel}>{`Content: ${currentChapter.sections.length} Sections`}</Text>
+              </View>
+
+                { currentChapter.description && (
+                  <View style={styles.vcDescSection}>
+                    <Text style={styles.vcDescLabel}>Description:</Text>
+                    <ScrollView style={styles.vcDescScroll}>
+                      <Text multiline={true} style={styles.vcDescText}>{currentChapter.description}</Text>
+                    </ScrollView>
+                  </View>
+                ) }
             </View>
-              { currentChapter.description && (
-                <View style={styles.vcDescSection}>
-                  <Text style={styles.vcDescLabel}>Description:</Text>
-                  <ScrollView style={styles.vcDescScroll}>
-                    <Text multiline={true} style={styles.vcDescText}>{currentChapter.description}</Text>
-                  </ScrollView>
-                </View>
-              ) }
           </View>
         ) }
 
@@ -1258,7 +1267,7 @@ export default function Chapters() {
               { item && item.category && 
                 ( <TouchableOpacity
                   style={{width: "67%", flex: 1, height: 67, alignItems: "center", justifyContent: "center", opacity: 1, alignSelf:"center" }}
-                  onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setMode("list"); }}>
+                  onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setPrevCategory(item.category); setMode("list"); }}>
                   {item.id === 'c-all' ? 
                     ( <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center" }} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
@@ -1365,13 +1374,13 @@ vcToggleText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
 vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderWidth: 2, borderColor: '#99840f', borderBottomWidth: 2.5, borderBottomColor: '#99840f', borderRadius: 10, marginBottom: 2 },
 vcTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
 vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row", flexWrap: 'wrap', alignItems: 'flex-start'},
-vcInfoRow: { alignItems: 'center', marginBottom: 4, flex: 1, minWidth: '45%'},
-vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "100%"},
+vcInfoRow: { alignItems: 'center', marginBottom: 4, flex: 1, width: '100%'},
+vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "100%", textAlign:"center", alignSelf: 'center'},
 vcInfoText: { color: '#cbd5e1', fontSize: 11, fontWeight: 'bold' },
-vcDescSection: { flex: 1, minWidth: '45%', backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#99840f' },
+vcDescSection: { flex: 1, width: '100%', backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#99840f' },
 vcDescLabel: { color: '#8d7f30', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
 vcDescScroll: { maxHeight: height * 0.09, width: '100%' },
-vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1, flexWrap: 'wrap', width: '100%' },
+vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1, flexWrap: 'wrap', width: '100%', padding: 4 },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
 sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 19, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', padding: 7 },
