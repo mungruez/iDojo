@@ -1253,7 +1253,7 @@ export default function Chapters() {
            ItemSeparatorComponent={({ leadingItem }) => {
             return <View style={styles.smallGap} />;
            }}
-           renderItem={({ item }) => (
+           renderItem={ ({ item }) => (
             <View style={styles.card}>
               { item && item.category && 
                 ( <TouchableOpacity
@@ -1263,10 +1263,10 @@ export default function Chapters() {
                     ( <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center" }} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
                       <ImageBackground style={{ width: "100%", height: "98%", alignSelf: "center", justifyContent: "center", alignItems: "center", flex: 1 }} resizeMode='contain' source={require('../assets/goldwhitebtn.png')}>
-                          <Text numberOfLines={1} ellipsizeMode="clip" style={[styles.cardText, { width: '100%', textAlign: 'center' }]}>{item.category}</Text>
+                          <Text numberOfLines={1} ellipsizeMode="clip" style={[styles.cardText, { width: '95%', textAlign: 'center' }]}>{ item.category.length > 25 ? item.category.substring(0, 25) : item.category }</Text>
                       </ImageBackground>
                   )}
-                </TouchableOpacity>) 
+                </TouchableOpacity> ) 
               }
             </View>
            ) }
@@ -1314,7 +1314,7 @@ infoText: { fontSize: 14, fontWeight: 'bold', color: '#c29d26', minHeight: 76, w
 icon: { height: 57, width: '89%', alignSelf: 'center', textAlign: 'center', marginLeft: 19, marginBottom: 3, opacity: 1 },
 card: {  marginVertical: -4, alignSelf: 'center', borderRadius: 10, width: "100%", opacity: 1, alignItems: "center", justifyContent: "center", flex: 1 },
 sectionCard: { padding: 12, justifyContent: 'center', alignItems: 'center', alignSelf: "center", backgroundColor: 'rgba(0,0,0,0.76)', borderRadius: 10, width: "95%", opacity: 1, borderBottomWidth: .5, borderBottomColor: '#f3efbd' },
-cardText: { width: "100%", fontSize: 16, fontWeight: '800', color: '#5a4f07', paddingHorizontal: 5, opacity: 1, textAlign: "center", textShadowColor: '#f3efbd', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 7 },
+cardText: { width: "100%", fontSize: 15, fontWeight: '800', color: '#5a4f07', paddingHorizontal: 5, opacity: 1, textAlign: "center", textShadowColor: '#f3efbd', textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 7 },
 goldDivider: {width: '57%', height: 43, alignSelf: 'center', marginVertical: 15, shadowColor: '#edf7d6', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: 10, opacity: 1},
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
@@ -1374,12 +1374,12 @@ vcDescScroll: { maxHeight: height * 0.09, width: '100%' },
 vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1, flexWrap: 'wrap', width: '100%' },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
-sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 0, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', padding: 5 },
-changeTypeContainer: { flex: 1, marginRight: 10, marginTop: -7 },
-changeTypeLabel: { color: '#f3efbd', fontSize: 14, fontWeight: '700', marginBottom: 3 },
+sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 19, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.18)', padding: 7 },
+changeTypeContainer: { flex: 1, marginRight: 10, marginTop: -9 },
+changeTypeLabel: { color: '#f3efbd', fontSize: 13, fontWeight: '700', marginBottom: 3 },
 changeTypeGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' },
-changeTypeIconBtn: { width: 44, height: 44, margin: 3, borderRadius: 12, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', alignItems: 'center', justifyContent: 'center' },
-changeTypeIcon: { color: '#f3efbd', fontSize: 38, lineHeight: 42 },
+changeTypeIconBtn: { width: 51, height: 51, marginHorizontal: 5, borderRadius: 14, padding: 3, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', alignItems: 'center', justifyContent: 'center' },
+changeTypeIcon: { color: '#f3efbd', fontSize: 37, lineHeight: 43 },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
