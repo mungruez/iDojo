@@ -204,10 +204,10 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     return (
      <ScrollView
         nestedScrollEnabled={true} 
-        style={ isFullscreen ? styles.fullscreenView : styles.screenView }
+        style={ section.type === 'pdf' ? styles.pdfscreenView : isFullscreen ? styles.fullscreenView : styles.screenView }
         scrollEnabled={section.type !== 'pdf'}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 19, paddingBottom: 40 }}
+        contentContainerStyle={{ paddingBottom: 38 }}
      >
       <View style={[styles.activeCard, { borderColor: getTypeColor() }, isFullscreen && styles.fullscreenCard]}>
 
@@ -260,7 +260,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
           </View>
         )}
 
-        { section.type === 'pdf' && ( <View style={[styles.pdfContainer, isFullscreen && { height: height * 0.95 }]}> 
+        { section.type === 'pdf' && ( <View style={[styles.pdfContainer, isFullscreen && { minHeight: height * 0.95 }]}> 
           <PdfMove
             pdf={{
               title: section.title,
@@ -371,6 +371,7 @@ const styles = StyleSheet.create({
   fullscreenCard: { marginHorizontal: 0, minHeight: height * 0.83 },
   fullscreenText: { color: 'white', fontWeight: 'bold' },
   fullscreenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.95 },
+  pdfscreenView: { flex: 1, marginHorizontal: 0, minHeight: height * 0.83 },
   screenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.76 },
   thumbnailCard: { backgroundColor: 'rgba(241, 255, 250, 0.84)', marginHorizontal: 7, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
   thumbnailRow: { flexDirection: 'row', height: 133 },

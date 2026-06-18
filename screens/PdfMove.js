@@ -132,11 +132,29 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
       ) }
 
       <View style={styles.pdfContainer}>
-        { !errorMessage && !isLoading && ( <View style={styles.headerMessage}>
-          <Text style={styles.headerText}>
-            { totalPages === 0 ?  `Page ${currentPage}` : `Page ${currentPage} of ${totalPages}` }
-          </Text>
-        </View> ) }
+        { !errorMessage && !isLoading && (
+          <View style={styles.controlsTop} pointerEvents={isLoading ? 'none' : 'auto'}>
+            <TouchableOpacity onPress={goToPrevPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+              <Text style={styles.controlText}>◀</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleZoomOut} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+              <Text style={styles.controlText}>−</Text>
+            </TouchableOpacity>
+
+            <View style={styles.pageIndicator}>
+              <Text style={styles.pageIndicatorText}>{currentPage}{ totalPages ? ` / ${totalPages}` : ''}</Text>
+            </View>
+
+            <TouchableOpacity onPress={handleZoomIn} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+              <Text style={styles.controlText}>＋</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={goToNextPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
+              <Text style={styles.controlText}>▶</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {isLoading && (
           <View style={styles.loadingOverlay}>
@@ -173,28 +191,6 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
               <Text style={styles.errorSubText}>{errorMessage}</Text>
             </View>
           )}
-
-          <View style={styles.controls} pointerEvents={isLoading ? 'none' : 'auto'}>
-              <TouchableOpacity onPress={goToPrevPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
-                <Text style={styles.controlText}>◀</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={handleZoomOut} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
-                <Text style={styles.controlText}>−</Text>
-              </TouchableOpacity>
-
-            <View style={styles.pageIndicator}>
-              <Text style={styles.pageIndicatorText}>{currentPage}{ totalPages ? ` / ${totalPages}` : ''}</Text>
-            </View>
-
-            <TouchableOpacity onPress={handleZoomIn} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
-              <Text style={styles.controlText}>＋</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={goToNextPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
-              <Text style={styles.controlText}>▶</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -225,7 +221,7 @@ const styles = StyleSheet.create({
   pdfContainer: { flex: 1, margin: 2, backgroundColor: 'white', borderRadius: 12, overflow: 'hidden', borderWidth: 2, borderColor: '#3b82f6' },
   loadingText: { color: '#60a5fa', fontSize: 16, fontWeight: 'bold' },
   headerText: { fontSize: 11, fontWeight: '600', color: '#0b1c2e' },
-  viewerBody: { flex: 1, position: 'relative' },
+  viewerBody: { flex: 1, position: 'relative', paddingTop: BUTTON_SIZE + 12 },
   pdfStyle: { flex: 1, width: '100%', backgroundColor: '#c4e3fc' },
   loadingText: { marginTop: 12, fontSize: 14, color: '#555555' },
   errorText: { fontSize: 16, fontWeight: 'bold', color: '#f73a3a', textAlign: 'center' },
@@ -239,8 +235,8 @@ const styles = StyleSheet.create({
     padding: 19,
   }
   ,
-  controls: { position: 'absolute', bottom: 7, left: 7, right: 7, height: BUTTON_SIZE, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'rgba(7, 3, 38, 0.38)', borderRadius: 10 },
-  controlBtn: { width: BUTTON_SIZE, height: BUTTON_SIZE, borderRadius: BUTTON_SIZE / 2, backgroundColor: 'rgba(19, 12, 76, 0.38)', alignItems: 'center', justifyContent: 'center' },
+  controlsTop: { position: 'absolute', top: 7, left: 7, right: 7, height: BUTTON_SIZE, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'rgba(7, 3, 38, 0.7)', borderRadius: 10, zIndex: 20, elevation: 10 },
+  controlBtn: { width: BUTTON_SIZE, height: BUTTON_SIZE, borderRadius: BUTTON_SIZE / 2, backgroundColor: 'rgba(19, 12, 76, 0.8)', alignItems: 'center', justifyContent: 'center' },
   controlText: { color: 'white', fontWeight: '600', fontSize: ICON_SIZE },
   pageIndicator: { paddingHorizontal: 12 },
   pageIndicatorText: { color: 'white', fontSize: TEXT_PRIMARY, fontWeight: '600' },

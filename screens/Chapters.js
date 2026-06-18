@@ -47,6 +47,7 @@ export default function Chapters() {
   const isOffline = useNetInfo().isConnected === false;
   const isLoadingRef = useRef(false);
 
+
   const showInstructions = () => {
     Alert.alert(
       "My Dojo Moves List",
@@ -58,6 +59,7 @@ export default function Chapters() {
       { cancelable: false } 
     );
   };
+
 
   const parseCategories = (list, query) => {
     if ( !Array.isArray(list) ) {
@@ -103,7 +105,8 @@ export default function Chapters() {
       Alert.alert("Parse Error", "An error occurred while grouping chapter category: " + e.message);
     }
   };
-      
+   
+  
   const parseHChapters = (chaptersList) => {
     let hChapters = [];
     let categoriesSeen = [];
@@ -125,12 +128,14 @@ export default function Chapters() {
     return hChapters;
   };
   
+
   const getChapters = (cat, chaptersList) => {
     if( !cat || !chaptersList ) return [];
     let sChapters = chaptersList.filter(m => (cat === "allcategories" || m.category === cat));
     if(cat === "allcategories") return parseHChapters(sChapters);
     return sChapters;
   }
+
 
   const loadChapters = async () => {
     try {
@@ -184,6 +189,7 @@ export default function Chapters() {
     }
   };
 
+
   
   const saveChaptersToStorage = async (chaptersData) => {
     try {
@@ -226,6 +232,7 @@ export default function Chapters() {
       setLoading(false);
     }
   };
+
 
   
   const deleteChapters = async (idsFromArg = []) => {
@@ -393,6 +400,7 @@ export default function Chapters() {
   };
 
 
+
   const handleImportChapters = async () => {
     let extractDir = null;
     let tempZipPath = null;
@@ -558,6 +566,7 @@ export default function Chapters() {
   };
 
 
+
   const populateForEdit = (chapter, mvcat ) => {
     if(chapter === null) {
       setSelectedIds([]);
@@ -673,6 +682,7 @@ export default function Chapters() {
   };
 
 
+
   const saveChapter = async () => {
     if (!chapterTitle.trim()) {
       Alert.alert('Required', 'Please enter a Chapter Title');
@@ -696,7 +706,7 @@ export default function Chapters() {
     }
 
     try {
-      const chaptId = currentChapter?.id || Date.now().toString();
+      const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
 
       if (currentChapter) {
@@ -730,7 +740,7 @@ export default function Chapters() {
       );
     
       const chapterData = {
-        id: chapterId || Date.now().toString(),
+        id: chaptId,
         title: chapterTitle.trim(),
         category: chapterCategory.trim(),
         description: chapterDesc,
@@ -781,6 +791,8 @@ export default function Chapters() {
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if (mode === "view") {
+        setActiveSectionId(null);
+        setCurrentChapter(null);
         setMode("list");
         return true;
       }
@@ -798,6 +810,7 @@ export default function Chapters() {
         setSelectedIds([]);
         return true;
       }
+
       return false;
     });
 
@@ -831,7 +844,6 @@ export default function Chapters() {
     </TouchableOpacity>
   );
   
-
       
   const MyHeader = () => {
     if (schapters.length === 0) return null;
@@ -842,14 +854,12 @@ export default function Chapters() {
   };
 
 
-
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <ActivityIndicator size="large" color="#caaf38" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />
       <Text style={styles.loadingText}>Preparing To Share Chapter(s)...</Text>
     </View>
   );
-
 
 
   if (mode === 'view' && currentChapter) {
