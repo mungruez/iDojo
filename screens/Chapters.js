@@ -264,9 +264,11 @@ export default function Chapters() {
               setChapters(updatedList);
               parseCategories(updatedList, null);
               setSelectedIds([]);
-                            
+              setCurrentChapter(null);
+
               if (isDeletingAll || updatedList.filter(m => (chapterCategory === "allcategories" || m.category === chapterCategory)).length < 1) {
                 setMode('main');
+                setHchapters(getChapters(chapterCategory, updatedList));
                 setChapterCategory('Enter Category');
               } else {
                 setHchapters(getChapters(chapterCategory, updatedList));
@@ -280,7 +282,6 @@ export default function Chapters() {
       ]
     );
   };
-
 
 
   const shareChapters = async (chapterIds) => {
@@ -566,7 +567,6 @@ export default function Chapters() {
   };
 
 
-
   const populateForEdit = (chapter, mvcat ) => {
     if(chapter === null) {
       setSelectedIds([]);
@@ -586,6 +586,7 @@ export default function Chapters() {
       setMode("add");
 
     } else {
+      setCurrentChapter(chapter);
       setChapterId(chapter.id);
       setChapterTitle(chapter.title);
       setChapterCategory(mvcat);
@@ -598,6 +599,7 @@ export default function Chapters() {
 
 
   const resetForm = () => {
+    setCurrentChapter(null);
     setChapterId(Date.now().toString());
     setChapterTitle('');
     if(prevCategory && prevCategory === "allcategories") {
@@ -643,6 +645,7 @@ export default function Chapters() {
     setVcDropdownVisible(false);  
     setMode("view");
   };
+
 
 
   const pickMedia = async (sectionId, type) => {
@@ -708,14 +711,10 @@ export default function Chapters() {
     try {
       const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
-
-      if (currentChapter) {
-        await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
-      }
-      
       await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+
       const ensurePermanent = async (uri, fileName) => {
-        if (!uri || !uri.startsWith('file://') || uri.includes('/chapters/')) return uri;
+        if (!uri || uri.startsWith(permanentDirUri)) return uri;
         const destUri = `${permanentDirUri}${fileName}`;
         try {
           await FileSystem.copyAsync({ from: uri, to: destUri });
@@ -756,6 +755,7 @@ export default function Chapters() {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
     }
   };
+
 
 
   const getChapterThumbnail = (chapter) => {
@@ -1397,7 +1397,7 @@ sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', align
 changeTypeContainer: { flex: 1, marginRight: 10, marginTop: -9 },
 changeTypeLabel: { color: '#f3efbd', fontSize: 13, fontWeight: '700', marginBottom: 3 },
 changeTypeGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' },
-changeTypeIconBtn: { width: 52, height: 52, marginHorizontal: 5, borderRadius: 14, padding: 6, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', alignItems: 'center', justifyContent: 'center' },
+changeTypeIconBtn: { width: 52, height: 52, marginHorizontal: 5, borderRadius: 14, padding: 10, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', alignItems: 'center', justifyContent: 'center' },
 changeTypeIcon: { color: '#f3efbd', fontSize: 36, lineHeight: 38 },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, paddingVertical: 5, paddingHorizontal: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
