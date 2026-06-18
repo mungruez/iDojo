@@ -62,7 +62,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
-
   const getYouTubeId = (url) => {
     try {
       if (!url || typeof url !== 'string') return "";
@@ -78,7 +77,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
         return "";
     }
   };
-
 
 
   const handleShareSection = async (selectedsection) => {
@@ -180,6 +178,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     }
   }, [isActive]);
 
+  
   const playPauseAudio = () => {
     if ( isFinished ) {
       if ( section.mediaUri ) {
@@ -204,7 +203,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     return (
      <ScrollView
         nestedScrollEnabled={true} 
-        style={ section.type === 'pdf' ? styles.pdfscreenView : isFullscreen ? styles.fullscreenView : styles.screenView }
+        style={ section.type === 'pdf' && isFullscreen ? styles.pdfFullscreenView : section.type === 'pdf' ? styles.pdfscreenView : isFullscreen ? styles.fullscreenView : styles.screenView }
         scrollEnabled={section.type !== 'pdf'}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 38 }}
@@ -353,6 +352,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   );
 }
 
+
 const styles = StyleSheet.create({
   activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 7, marginVertical: 7, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },
   activeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12, backgroundColor: 'rgba(255,255,255,0.1)' },
@@ -372,6 +372,7 @@ const styles = StyleSheet.create({
   fullscreenText: { color: 'white', fontWeight: 'bold' },
   fullscreenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.95 },
   pdfscreenView: { flex: 1, marginHorizontal: 0, minHeight: height * 0.83 },
+  pdfFullscreenView: { flex: 1, marginHorizontal: 0, minHeight: height * 0.95 },
   screenView: { flex: 1, marginHorizontal: 0, maxHeight: height * 0.76 },
   thumbnailCard: { backgroundColor: 'rgba(241, 255, 250, 0.84)', marginHorizontal: 7, marginVertical: 7, borderRadius: 12, borderWidth: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4, overflow: 'hidden' },
   thumbnailRow: { flexDirection: 'row', height: 133 },
