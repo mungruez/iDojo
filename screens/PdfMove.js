@@ -51,6 +51,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   };
 
   
+  
   const canClick = () => {
     const now = Date.now();
     if (now - lastClickTime < COOLDOWN_MS) {
@@ -83,6 +84,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   };
 
 
+
   useEffect(() => {
     if (wasActive.current && !isActive) {
       onClosePdf?.();
@@ -90,8 +92,8 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     wasActive.current = isActive;
   }, [isActive, onClosePdf]);
   
-  
 
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#323232' }}>
       <StatusBar barStyle="dark-content"/>
@@ -169,9 +171,12 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
             source={pdfSource}
             trustAllCerts={false}
             horizontal={true}
+            enableScale={true}
             style={styles.pdfStyle}
             scale={zoomScale}
             page={currentPage}
+            enablePaging={false}  
+            singlePage={false}
             onLoadComplete={(numberOfPages) => {
               setTotalPages(numberOfPages);
               setIsLoading(false);
@@ -196,7 +201,6 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     </SafeAreaView>
   );
 };
-
 
 
 const styles = StyleSheet.create({
