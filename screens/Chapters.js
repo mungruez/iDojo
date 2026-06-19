@@ -1397,7 +1397,7 @@ sectionFooterRow: { flexDirection: 'row', justifyContent: 'space-between', align
 changeTypeContainer: { flex: 1, marginRight: 10, marginTop: -9 },
 changeTypeLabel: { color: '#f3efbd', fontSize: 13, fontWeight: '700', marginBottom: 3 },
 changeTypeGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
-changeTypeIconBtn: { width: 55, height: 53, marginHorizontal: 5, borderRadius: 14, padding: 10, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', alignItems: 'center', justifyContent: 'center' },
+changeTypeIconBtn: { width: 53, height: 51, marginHorizontal: 5, borderRadius: 14, padding: 6, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', alignItems: 'center', justifyContent: 'center' },
 changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'center' , alignSelf: 'center' },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
