@@ -200,7 +200,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
   };
 
 
-
   if( isActive && isFullscreen && section.type === "pdf") {
     return (
       <PdfMove
@@ -212,11 +211,10 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
           vid: section.mediaUri,
         }}
         isActive={isActive}
-        onClosePdf={() => { onDeactivate(); }} 
+        onClosePdf={() => setIsFullscreen(false)} 
       /> 
     )
   }
-
 
   if (isActive) {
     return (
@@ -230,9 +228,13 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
       <View style={[styles.activeCard, { borderColor: getTypeColor() }, isFullscreen && styles.fullscreenCard]}>
 
         <View style={styles.activeHeader}>
-          { isFullscreen && section.type !== 'video' ? (
+          { section.type === "pdf" ? (
             <TouchableOpacity onPress={() => handleShareSection(section)} style={styles.shareiconBtn}>
-              <Image source={section.type === 'pdf' ? require('../assets/bluesharearrow.png') : section.type === 'image' ? require('../assets/grnsharearrow.png') : require('../assets/purplesharearrow.png')} style={{ width: "71%", height: "71%" }} resizeMode='contain' />
+              <Image source={ require('../assets/bluesharearrow.png') } style={{ width: "71%", height: "71%" }} resizeMode='contain' />
+            </TouchableOpacity>
+          ) : isFullscreen && section.type !== 'video' ? (
+            <TouchableOpacity onPress={() => handleShareSection(section)} style={styles.shareiconBtn}>
+              <Image source={ section.type === 'image' ? require('../assets/grnsharearrow.png') : require('../assets/purplesharearrow.png')} style={{ width: "71%", height: "71%" }} resizeMode='contain' />
             </TouchableOpacity>
             )  : ( <Text style={styles.activeSectionLabel}>Section {index + 1}: {section.type.toUpperCase()}</Text> ) 
           }
@@ -341,7 +343,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     );
   }
 
-  
   return (
     <TouchableOpacity
       style={[styles.thumbnailCard, { borderColor: getTypeColor() }]}
@@ -371,7 +372,6 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
     </TouchableOpacity>
   );
 }
-
 
 const styles = StyleSheet.create({
   activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 7, marginVertical: 7, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },
