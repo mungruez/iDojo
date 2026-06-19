@@ -878,7 +878,7 @@ export default function Chapters() {
 
         { vcDropdownVisible && (
           <View style={styles.vcDropdownContainer}>
-            <View style={{ flexDirection: 'column', width: "100%" }}>
+            <View style={{ flexDirection: 'column', width: "100%",height: '100%' }}>
               <View style={styles.vcInfoRow}>
                 <Text style={styles.vcInfoLabel}>{`Content: ${currentChapter.sections.length} Sections`}</Text>
               </View>
@@ -886,8 +886,8 @@ export default function Chapters() {
                 { currentChapter.description && (
                   <View style={styles.vcDescSection}>
                     <Text style={styles.vcDescLabel}>Description:</Text>
-                    <ScrollView style={styles.vcDescScroll}>
-                      <Text multiline={true} style={styles.vcDescText}>{currentChapter.description}</Text>
+                    <ScrollView nestedScrollEnabled={true} contentContainerStyle={{ flexGrow: 1 }} style={styles.vcDescScroll}>
+                      <Text style={styles.vcDescText}>{currentChapter.description}</Text>
                     </ScrollView>
                   </View>
                 ) }
@@ -1383,13 +1383,13 @@ vcToggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#8d7f3
 vcToggleText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
 vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderWidth: 2, borderColor: '#99840f', borderBottomWidth: 2.5, borderBottomColor: '#99840f', borderRadius: 10, marginBottom: 2 },
 vcTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
-vcDropdownContainer: {width: '96%', maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row", flexWrap: 'wrap', alignItems: 'flex-start'},
-vcInfoRow: { alignItems: 'center', marginBottom: 4, flex: 1, width: '100%'},
+vcDropdownContainer: {width: '96%', minHeight: height * 0.19, maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row", alignItems: 'flex-start'},
+vcInfoRow: { alignItems: 'center', marginBottom: 4, width: '100%'},
 vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "100%", textAlign:"center", alignSelf: 'center'},
 vcInfoText: { color: '#cbd5e1', fontSize: 11, fontWeight: 'bold' },
-vcDescSection: { flex: 1, width: '100%', backgroundColor: '#1e293b', padding: 3, borderRadius: 12, borderWidth: 1, borderColor: '#99840f' },
+vcDescSection: { flex: 1, width: '100%', backgroundColor: '#1e293b', padding: 3, borderRadius: 8, borderWidth: 1, borderColor: '#99840f' },
 vcDescLabel: { color: '#8d7f30', fontSize: 12, fontWeight: 'bold', marginBottom: 1 },
-vcDescScroll: { maxHeight: height * 0.09, width: '100%' },
+vcDescScroll: { maxHeight: height * 0.09, width: '100%', flex: 1 },
 vcDescText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1, flexWrap: 'wrap', width: '100%', padding: 4 },
 fullscreenClose: { position: 'absolute', top: 50, right: 20, zIndex: 100, backgroundColor: 'rgba(0,0,0,0.7)', padding: 12, borderRadius: 8 },
 fullscreenCloseText: { color: 'white', fontWeight: 'bold' },
