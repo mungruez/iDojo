@@ -224,7 +224,6 @@ export default function Chapters() {
       });
 
       await saveChaptersToStorage(updatedList);
-      resetForm();
       setMode('list');
     } catch (e) {
       Alert.alert('Save Failed', e.message);
@@ -272,8 +271,8 @@ export default function Chapters() {
                 setChapterCategory('Enter Category');
                 if( isDeletingAll && prevCategory && prevCategory === "allcategories" ) {
                   setSchapters([]);
-                  setPrevCategory("");
                 }
+                setPrevCategory("");
               } else {
                 setHchapters(getChapters(chapterCategory, updatedList));
               }
@@ -286,6 +285,7 @@ export default function Chapters() {
       ]
     );
   };
+  
 
 
   const shareChapters = async (chapterIds) => {
@@ -403,6 +403,8 @@ export default function Chapters() {
       }
     }
   };
+
+
 
 
 
@@ -616,6 +618,7 @@ export default function Chapters() {
   };
 
 
+
   const addSection = (type) => {
     const newSection = {
       id: Date.now().toString(),
@@ -642,6 +645,7 @@ export default function Chapters() {
    const toggleSelect = (id) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
+
 
 
   const viewChapter = (chapter) => {
@@ -690,6 +694,8 @@ export default function Chapters() {
 
 
 
+
+
   const saveChapter = async () => {
     if (!chapterTitle.trim()) {
       Alert.alert('Required', 'Please enter a Chapter Title');
@@ -715,10 +721,14 @@ export default function Chapters() {
     try {
       const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
+
+      if (currentChapter) {
+        await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
+      }
       await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
 
       const ensurePermanent = async (uri, fileName) => {
-        if (!uri || uri.startsWith(permanentDirUri)) return uri;
+        if (!uri || !uri.startsWith('file://') || uri.includes('/chapters/')) return uri;
         const destUri = `${permanentDirUri}${fileName}`;
         try {
           await FileSystem.copyAsync({ from: uri, to: destUri });
@@ -752,7 +762,6 @@ export default function Chapters() {
       };
 
       await handleSaveChapter(chapterData);
-      resetForm();
       setMode(prevMode);
 
     } catch (err) {
@@ -784,12 +793,14 @@ export default function Chapters() {
     return require('../assets/chapterplaceholder.png');
   };
 
+
   
   useFocusEffect(
     useCallback(() => {
       loadChapters();
     }, [])
   );
+
 
 
   useEffect(() => {
@@ -823,6 +834,7 @@ export default function Chapters() {
 
 
 
+
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
       onLongPress={() => toggleSelect(item.id)}
@@ -848,6 +860,7 @@ export default function Chapters() {
     </TouchableOpacity>
   );
   
+
       
   const MyHeader = () => {
     if (schapters.length === 0) return null;
@@ -858,12 +871,14 @@ export default function Chapters() {
   };
 
 
+
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <ActivityIndicator size="large" color="#caaf38" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />
       <Text style={styles.loadingText}>Preparing To Share Chapter(s)...</Text>
     </View>
   );
+
 
 
   if (mode === 'view' && currentChapter) {
@@ -1281,7 +1296,7 @@ export default function Chapters() {
               { item && item.category && 
                 ( <TouchableOpacity
                   style={{width: "67%", flex: 1, height: 67, alignItems: "center", justifyContent: "center", opacity: 1, alignSelf:"center" }}
-                  onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setPrevCategory(item.category); setMode("list"); }}>
+                  onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setPrevCategory(item.category); setMode("list"); setPrevMode("main"); }}>
                   {item.id === 'c-all' ? 
                     ( <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center" }} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
