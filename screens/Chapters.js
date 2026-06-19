@@ -176,6 +176,7 @@ export default function Chapters() {
 
       } else {
         setChapters([]);
+        setSchapters([]);
         setHchapters([]);
         setMode("main");
         setChapterCategory("");
@@ -268,8 +269,11 @@ export default function Chapters() {
 
               if (isDeletingAll || updatedList.filter(m => (chapterCategory === "allcategories" || m.category === chapterCategory)).length < 1) {
                 setMode('main');
-                setHchapters(getChapters(chapterCategory, updatedList));
                 setChapterCategory('Enter Category');
+                if( isDeletingAll && prevCategory && prevCategory === "allcategories" ) {
+                  setSchapters([]);
+                  setPrevCategory("");
+                }
               } else {
                 setHchapters(getChapters(chapterCategory, updatedList));
               }
