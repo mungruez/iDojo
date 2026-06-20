@@ -1439,6 +1439,6 @@ changeTypeIconBtn: { width: 53, height: 51, marginHorizontal: 5, borderRadius: 1
 changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'center' , alignSelf: 'center' },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
-loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '90%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
+loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '76%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
 loadingText: { color: '#f3efbd', marginTop: 12, fontWeight: '700', fontSize: 15 },
 });
