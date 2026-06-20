@@ -31,7 +31,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
 
   const [key, setKey] = useState(0);
-  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(true);
+  const [pdfDropdownVisible, setPdfDropdownVisible] = useState(false);
   const [lastClickTime, setLastClickTime] = useState(0);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -205,7 +205,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0e27' },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1d377e91', paddingHorizontal: 16, paddingVertical: 3, borderBottomWidth: 2, borderBottomColor: '#3b82f6' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1d377e91', paddingHorizontal: 16, paddingVertical: 3, borderBottomWidth: 2, borderBottomColor: '#3b82f6', borderTopWidth: 2 ,borderTopColor: "#3b82f6" },
   headerMessage: { height: 56, backgroundColor: '#c4e3fc', justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#c4e3fc', elevation: 2 },
   closeBtn: { width: 38, height: 38,borderRadius: 18, backgroundColor: '#dc2626', justifyContent: 'center', alignItems: 'center' },
   closeText: { color: 'white', fontSize: 14, fontWeight: 'bold' },

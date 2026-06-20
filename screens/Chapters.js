@@ -43,6 +43,7 @@ export default function Chapters() {
   const [playingAudio, setPlayingAudio] = useState(null);
   const [activeSectionId, setActiveSectionId] = useState(null);
   const [vcDropdownVisible, setVcDropdownVisible] = useState(true);
+  const [openpdfViewer, setOpenpdfViewer] = useState(false);
 
   const isOffline = useNetInfo().isConnected === false;
   const isLoadingRef = useRef(false);
@@ -718,17 +719,16 @@ export default function Chapters() {
       }
     }
 
+    const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
+    await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+
     try {
       const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
-
-      if (currentChapter) {
-        await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
-      }
       await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
 
       const ensurePermanent = async (uri, fileName) => {
-        if (!uri || !uri.startsWith('file://') || uri.includes('/chapters/')) return uri;
+        if (!uri || uri.startsWith(permanentDirUri)) return uri;
         const destUri = `${permanentDirUri}${fileName}`;
         try {
           await FileSystem.copyAsync({ from: uri, to: destUri });
@@ -806,10 +806,16 @@ export default function Chapters() {
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if (mode === "view") {
-        setActiveSectionId(null);
-        setCurrentChapter(null);
-        setMode("list");
-        return true;
+        if(openpdfViewer) {
+          setOpenpdfViewer(false);
+          return true;
+        }
+        else {
+          setActiveSectionId(null);
+          setCurrentChapter(null);
+          setMode("list");
+          return true;
+        }
       }
 
       if (mode === "add") {
@@ -832,8 +838,7 @@ export default function Chapters() {
     return () => backHandler.remove();
   }, [mode]);
 
-
-
+  
 
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
@@ -859,9 +864,8 @@ export default function Chapters() {
         </View>
     </TouchableOpacity>
   );
-  
 
-      
+     
   const MyHeader = () => {
     if (schapters.length === 0) return null;
     if (!schapters[0]) return null;
@@ -871,14 +875,28 @@ export default function Chapters() {
   };
 
 
-
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <ActivityIndicator size="large" color="#caaf38" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />
-      <Text style={styles.loadingText}>Preparing To Share Chapter(s)...</Text>
     </View>
   );
 
+
+  if( openpdfViewer && mode === 'view' && activeSectionId && currentChapter && currentChapter.sections[activeSectionId].type === "pdf" ) {
+    return (
+      <PdfMove
+        pdf={{
+          title: currentChapter.sections[activeSectionId].title,
+          style: 'Chapter',
+          desc: currentChapter.sections[activeSectionId].description,
+          videoUrl: currentChapter.sections[activeSectionId].mediaUrl,
+          vid: currentChapter.sections[activeSectionId].mediaUri,
+        }}
+        isActive={activeSectionId === currentChapter.sections[activeSectionId].id}
+        onClosePdf={() => setOpenpdfViewer(false)} 
+      />
+    )
+  }
 
 
   if (mode === 'view' && currentChapter) {
@@ -928,6 +946,7 @@ export default function Chapters() {
               isActive={activeSectionId === item.id}
               onActivate={() => setActiveSectionId(item.id)}
               onDeactivate={() => setActiveSectionId(null)}
+              onOpenpdfViewer={() => setOpenpdfViewer(true)}
               navigation={navigation}
               isOffline={isOffline}
             />
@@ -1420,6 +1439,6 @@ changeTypeIconBtn: { width: 53, height: 51, marginHorizontal: 5, borderRadius: 1
 changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'center' , alignSelf: 'center' },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
-loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
+loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '90%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
 loadingText: { color: '#f3efbd', marginTop: 12, fontWeight: '700', fontSize: 15 },
 });
