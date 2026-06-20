@@ -318,7 +318,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
             <Image
               source={{ uri: section.mediaUri || section.mediaUrl }}
-              style={[styles.inlineImage, isFullscreen ? { flex: 1, height: "100%" } : { height: 266 }]}
+              style={[styles.inlineImage, isFullscreen ? { flex: 1 } : { height: 266 }]}
               resizeMode="contain"
             />
           </View>
