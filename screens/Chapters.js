@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet, Alert, ImageBackground, KeyboardAvoidingView, Platform, StatusBar, FlatList, Dimensions, BackHandler, ActivityIndicator } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
-import * as Sharing from 'expo-sharing';
 import { zip, unzip } from 'react-native-zip-archive';
+import * as ImagePicker from 'expo-image-picker';
 import SectionPlayer from './SectionPlayer';
+import * as Sharing from 'expo-sharing';
+import PdfMove from './PdfMove';
 
 const { height, width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.76;
@@ -19,6 +20,7 @@ const SECTION_TYPES = {
   IMAGE: "image",
   AUDIO: "audio",
 };
+
 
 export default function Chapters() {
   const [mode, setMode] = useState("main");
@@ -719,9 +721,6 @@ export default function Chapters() {
       }
     }
 
-    const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
-    await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
-
     try {
       const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
@@ -821,6 +820,7 @@ export default function Chapters() {
       if (mode === "add") {
         if(prevMode === "list") setMode("list");
         else setMode("main");
+        resetForm();
         return true;
       }
 
@@ -892,7 +892,7 @@ export default function Chapters() {
           videoUrl: currentChapter.sections[activeSectionId].mediaUrl,
           vid: currentChapter.sections[activeSectionId].mediaUri,
         }}
-        isActive={activeSectionId === currentChapter.sections[activeSectionId].id}
+        isActive={true}
         onClosePdf={() => setOpenpdfViewer(false)} 
       />
     )
@@ -1439,6 +1439,6 @@ changeTypeIconBtn: { width: 53, height: 51, marginHorizontal: 5, borderRadius: 1
 changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'center' , alignSelf: 'center' },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
-loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '76%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
+loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '83%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
 loadingText: { color: '#f3efbd', marginTop: 12, fontWeight: '700', fontSize: 15 },
 });
