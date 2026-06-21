@@ -11,6 +11,9 @@ const ICON_SIZE = Math.round(20 * SCALE);
 const BUTTON_SIZE = Math.round(48 * SCALE);
 const TEXT_PRIMARY = Math.round(15 * SCALE);
 
+let globalLastActionTime = 0;
+const THROTTLE_DELAY = 570;
+
 
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
@@ -70,21 +73,56 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
 
   const zoomStep = 0.25;
-  const handleZoomIn = () => setZoomScale(s => Math.min(s + zoomStep, 4));
-  const handleZoomOut = () => setZoomScale(s => Math.max(s - zoomStep, 0.5));
+  
+  const handleZoomIn = () => {
+    const now = Date.now();
+    if ( now - globalLastActionTime < THROTTLE_DELAY) {
+      return;
+    }
+
+    globalLastActionTime = now;
+
+    setZoomScale(s => Math.min(s + zoomStep, 4));
+  }
+
+
+  const handleZoomOut = () => {
+    const now = Date.now();
+    if ( now - globalLastActionTime < THROTTLE_DELAY) {
+      return;
+    }
+
+    globalLastActionTime = now;
+
+    setZoomScale(s => Math.max(s - zoomStep, 0.5));
+  }
 
 
   const goToNextPage = () => {
+    const now = Date.now();
+    if ( now - globalLastActionTime < 190) {
+      return;
+    }
+
+    globalLastActionTime = now;
+
     if (totalPages && currentPage < totalPages) setCurrentPage(p => p + 1);
   };
 
 
   const goToPrevPage = () => {
+    const now = Date.now();
+    if ( now - globalLastActionTime < 190) {
+      return;
+    }
+
+    globalLastActionTime = now;
+
     if (currentPage > 1) setCurrentPage(p => p - 1);
   };
 
 
-
+  
   useEffect(() => {
     if (wasActive.current && !isActive) {
       onClosePdf?.();
