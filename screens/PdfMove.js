@@ -122,7 +122,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   };
 
 
-  
+
   useEffect(() => {
     if (wasActive.current && !isActive) {
       onClosePdf?.();
@@ -207,6 +207,8 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
           <Pdf
             key ={key}
             source={pdfSource}
+            fitPolicy={2}
+            maxPageResolution={2000000}
             trustAllCerts={false}
             horizontal={true}
             enableScale={true}
