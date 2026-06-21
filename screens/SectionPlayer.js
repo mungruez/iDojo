@@ -368,7 +368,7 @@ export default function SectionPlayer({ section, index, isActive, onActivate, on
 
 const styles = StyleSheet.create({
   activeCard: { backgroundColor: 'rgba(0,0,0,0.95)', marginHorizontal: 7, marginVertical: 7, borderRadius: 16, borderWidth: 2, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 10 },
-  activeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12, backgroundColor: 'rgba(255,255,255,0.1)', z-index: 7, opacity: 1},
+  activeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12, backgroundColor: 'rgba(255,255,255,0.1)', zIndex: 7, opacity: 1},
   activeSectionLabel: { color: '#8d7f30', fontWeight: 'bold', fontSize: 11 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center', marginLeft: 8, borderColor: '#d4af37', borderWidth: 1.5  },
   iconText: { color: 'rgb(228, 19, 19)', fontSize: 18,  textAlignVertical: 'center', textAlign: "center", alignSelf: 'center', includeFontPadding: false },
