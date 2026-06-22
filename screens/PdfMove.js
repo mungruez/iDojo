@@ -12,7 +12,7 @@ const BUTTON_SIZE = Math.round(48 * SCALE);
 const TEXT_PRIMARY = Math.round(15 * SCALE);
 
 let globalLastActionTime = 0;
-const THROTTLE_DELAY = 570;
+const THROTTLE_DELAY = 760;
 
 
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
@@ -100,7 +100,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const goToNextPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 190) {
+    if ( now - globalLastActionTime < 380) {
       return;
     }
 
@@ -112,7 +112,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const goToPrevPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 190) {
+    if ( now - globalLastActionTime < 380) {
       return;
     }
 
