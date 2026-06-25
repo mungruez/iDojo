@@ -25,7 +25,7 @@ export default function MyDojoStyles({route}) {
     const [selectedSingles, setSelectedSingles] = useState([]);
 
     const [ftype, setType] = useState('select move type');
-    const [fstyle, setFStyle] = useState('Enter Move Title');
+    const [fstyle, setFStyle] = useState('Enter List Title');
 
     const [addmode, setAddMode] = useState(false);
     const [move, setMove] = useState(null);
@@ -143,7 +143,7 @@ export default function MyDojoStyles({route}) {
       let stylesSeen = [];
       for (let mNum = 0; mNum < movesList.length; mNum++) {
         const move = movesList[mNum];
-        const currentStyle = move.style || "Enter Move Title";
+        const currentStyle = move.style || "Enter List Title";
         let mIndex = stylesSeen.indexOf(currentStyle);
 
         if (mIndex < 0) {
@@ -292,7 +292,7 @@ export default function MyDojoStyles({route}) {
               
               if (isDeletingAll || updatedList.filter(m => m.type === ftype && (fstyle === "allstyles" || m.style === fstyle)).length < 1) {
                 setListMode(false);
-                setFStyle('Enter Move Title');
+                setFStyle('Enter List Title');
                 setType('select Move type');
               } else {
                 setHMoves(getMoves(fstyle, ftype, updatedList));
@@ -782,7 +782,7 @@ export default function MyDojoStyles({route}) {
           id: moveId,
           title: title.trim(),
           type: typeAM,
-          style: fstyleAM.trim() || "Enter Move Title",
+          style: fstyleAM.trim() || "Enter List Title",
           steps: typeAM === "steps" ? finalSteps : [],
           vid: typeAM === "video" || typeAM === "pdf" ? finalVid : null,
           videoUrl: typeAM === "video" || typeAM === "pdf" ? videoUrl : '',
