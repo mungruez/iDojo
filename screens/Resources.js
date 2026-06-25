@@ -6,16 +6,13 @@ import { useAudioPlayer } from 'expo-audio';
 
 const ksoundFile = require('../assets/woosh.mp3');
 
-
 export default function Resources() {
   const navigation = useNavigation();
 
-
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
-      kplayer.loop = false; 
-    });
+    kplayer.loop = false; 
+  });
   
-
   const navKSound = () => {
     try {
       if(kplayer) {
@@ -26,7 +23,6 @@ export default function Resources() {
     }
     navigation.navigate("LoginScreen");
   };
-
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
@@ -45,7 +41,6 @@ export default function Resources() {
 </Text>
 <Text style={ styles.title }>Years of research into accumulating the best video, audio and graphics for Self Defense Moves has made iDojo a masterpice. All future upgrades will be free as the main goal is to teach Self Defense to those who would use it only when required. Use the volume buttom(top right) to control sounds, videos can be played in slow motion, wifi is only needed for the Featured List. DojoSoft`s continues to innovate by placing an invisible button in this iDojo App that will launch a secret password Manager App. DojoSoft promises to be the best Self Defense mobile App by releasing meaningful upgrades in the future. We plan to realse:-  In-app video recording and move analysis to allow users to record themselves performing techniques and use a video analysis service to provide feedback on their form, timing, and execution to offer personalized coaching tips based on the user's performance. Other future upgrades include:-  A community forum, Challenges and an AI Coach for traing and gear.
 </Text>
-
 <Text style={ styles.movesList }>Moves List:</Text>
 <Text style={ styles.title }> A list of over eighty videos of Moves with audio and text instructions. Each video was carefully edited to contain a description with an AI Morpheus voice and can be slowed in order to, view the Move in slow motion.</Text>
 
@@ -77,7 +72,6 @@ export default function Resources() {
     </ImageBackground>
   )
 }
-
 
 const styles = StyleSheet.create({
   imgBackground: {
@@ -129,9 +123,7 @@ const styles = StyleSheet.create({
     zIndex:99,
     elevation:99,
   },
-  buttonArea: {
-    flex: 1,
-  },
+  buttonArea: { flex: 1 },
   addMove: {
     textDecorationLine: 'underline',
     textDecorationColor: '#f74646',
