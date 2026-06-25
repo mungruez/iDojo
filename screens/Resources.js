@@ -49,10 +49,10 @@ export default function Resources() {
 </Text>
 
 <Text style={ styles.addMove }>Add Move:</Text>
-<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense Moves into the iDojo App. You can also share the Move image or images, a single video or a single pdf when viewing a move. Moves can only be shared and imported with the iDojo App, only single videos, images and PDFs can be shared externally and instuctions are provided. Awesome for sharing individual Self Defence stories, albums, events and more. </Text>
+<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense Moves into the iDojo App. You can also share the Move image or images, a single video or a single pdf when viewing a move. Moves can only be shared and imported with the iDojo App, only single videos, images and PDFs can be shared externally and instuctions are provided. Only iDojo zip files containing Moves can be imported. Awesome for sharing individual Self Defence stories, albums, events and more. </Text>
 
 <Text style={ styles.chapters }>Chapters:</Text>
-<Text style={ styles.title }>Add, Share, Edit, View, Delete and Import your own Chapters to the iDojo App. A Chapter is a collection of videos, audios, images and PDFs in any number and in any order. You can also share an individual Chapter image, a single video or a single pdf when viewing a chapter. Chapters can be shared and imported with the iDojo App and our free wheeShare App. Only single videos, images and PDFs can be shared externally and instuctions are provided. Chapters are awesome for sharing lessons, courses, albums, events and more.
+<Text style={ styles.title }>Add, Share, Edit, View, Delete and Import your own Chapters to the iDojo App. A Chapter is a collection of videos, audios, images and PDFs in any number and in any order. You can also share an individual Chapter image, a single video or a single pdf when viewing a chapter. Chapters can be shared and imported with the iDojo App and our free wheeShare App. Only single videos, images and PDFs can be shared externally and instuctions are provided. Only iDojo zip files containing Chapters can be imported. Chapters are awesome for sharing lessons, courses, albums, events and more.
 </Text>
 
 <Text style={ styles.fightersList }>Fighters List:</Text>
