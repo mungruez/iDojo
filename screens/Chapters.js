@@ -54,7 +54,7 @@ export default function Chapters() {
   const showInstructions = () => {
     Alert.alert(
       "My Dojo Moves List",
-      "Intructions: Save, Edit, View, Share, Delete and Import Chapters using iDojo. You may add any number of Chapters your phone memory allows. Click the binoculars icon to search Chapters by the search term entered. After a search another search can be done by using backspace to remove the search term instead of the silver reload icon.\n(1) Use the gold, plus(+) icon in the top menu bar to Add Chapters. Every Chapter must contain at least one Section. You can add a Video, Audio, PDF or Image to a Section. A title and media is required for all Sections of a Chapter. The default allcategories, will be used when a Chapter Category is not entered.\n(2) Click on one of the gold and white buttons on the Chapters Screen to see all Chapters with the same Category. The first Category button in the list is All Categories in gold. Media in Setions can contain online links or a file uploaded from the phone, not both.\n(3) On the list screen press and hold a move card to see the batch bar appear, after select all Chapters to share or delete and click on the share or delete button in the batch bar to share or delete Chapters. Use the Edit button at the bottom of each Chapter card in the list to edit a Chapter, and to view any Chapter just click on its Chapter card. When viewing a video Section of a Chapter, click the red arrow to the right to the title to share the individual video. When viewing a Chapters press the square to see fullscreen mode appear, then click the red, green or blue share arrow to share a Section. Chapters can be shared and imported with the iDojo App and the wheeShare App, only single videos, images and PDFs can be shared externally.\n(4) Scroll horizontally and vertically on the All categories list screen to view all your Chapters. On the Add Chapters screen fill out the form and click the save button to save Chapters . When adding Sections on the Add Chapter screen click one of the 4 buttons above the gold save button, to add a Scetion. The -section icon is provided for removing Sections. Thank you for using our App.",
+      "Intructions: Save, Edit, View, Share, Delete and Import Chapters using iDojo. You may add any number of Chapters your phone memory allows. Click the binoculars icon to search Chapters by the search term entered. After a search another search can be done by using backspace to remove the search term instead of the silver reload icon.\n(1) Use the gold, plus(+) icon in the top menu bar to Add Chapters. Every Chapter must contain at least one Section. You can add a Video, Audio, PDF or Image to a Section. A category, title is required for all Chapters and media is required for all Sections of a Chapter. Media in each Setion can contain online links or a file uploaded from the phone, not both.\n(2) Click on one of the white and gold buttons on the Chapters Screen to see the List Screen with all Chapters in the same Category.\n(3) On the list screen press and hold a move card to see the batch bar appear, after select all Chapters to share or delete and click on the share or delete button in the batch bar to share or delete Chapters. Use the Edit button at the bottom of each Chapter card in the list to edit a Chapter, and to view any Chapter just click on its Chapter card. When viewing a video Section of a Chapter, click the red arrow to the right to the title to share the individual video. When viewing a Chapters press the square to see fullscreen mode appear, then click the red, green or blue share arrow to share a Section. Chapters can be shared and imported with the iDojo App and the wheeShare App, only single videos, images and PDFs can be shared externally.\n(4) The first Category button has All Categories written in gold. Scroll horizontally and vertically on the All categories List Screen to view all Chapters. On the Add Chapters screen fill out the form and click the save button to save Chapters. When adding Sections on the Add Chapter screen click one of the four buttons above the gold save button, to add a Scetion. The -section icon is provided for removing Sections and next to it is the Change To icons that can be used to change a section type to pdf,image,video or audio. Thank you for using our App.",
       [ { text: "OK",
         onPress: () => setMode("main"),
           style: "cancel" 
@@ -115,7 +115,7 @@ export default function Chapters() {
     let categoriesSeen = [];
     for (let mNum = 0; mNum < chaptersList.length; mNum++) {
       const chapter = chaptersList[mNum];
-      const currentCategory = chapter.category || "Enter Chapter Category";
+      const currentCategory = chapter.category || "Enter Category";
       let mIndex = categoriesSeen.indexOf(currentCategory);
   
       if (mIndex < 0) {
@@ -658,6 +658,7 @@ export default function Chapters() {
   };
 
 
+  
 
   const pickMedia = async (sectionId, type) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -702,6 +703,11 @@ export default function Chapters() {
   const saveChapter = async () => {
     if (!chapterTitle.trim()) {
       Alert.alert('Required', 'Please enter a Chapter Title');
+      return;
+    }
+
+    if (!chapterCategory.trim()) {
+      Alert.alert('Required', 'Please enter a Chapter Category');
       return;
     }
 
@@ -754,7 +760,7 @@ export default function Chapters() {
       const chapterData = {
         id: chaptId,
         title: chapterTitle.trim(),
-        category: chapterCategory.trim(),
+        category: chapterCategory.trim() || "Enter Category",
         description: chapterDesc,
         sections: processedSections,
         updatedAt: new Date().toISOString(),
@@ -767,6 +773,7 @@ export default function Chapters() {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
     }
   };
+
 
 
 
@@ -840,6 +847,8 @@ export default function Chapters() {
 
   
 
+
+
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
       onLongPress={() => toggleSelect(item.id)}
@@ -875,11 +884,15 @@ export default function Chapters() {
   };
 
 
+
+
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <ActivityIndicator size="large" color="#caaf38" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />
     </View>
   );
+
+
 
 
   if ( openpdfViewer && mode === 'view' && currentChapter?.sections?.[openpdfViewer] && currentChapter.sections[openpdfViewer].type === "pdf" ) {
@@ -897,6 +910,8 @@ export default function Chapters() {
       />
     )
   }
+
+
 
 
   if (mode === 'view' && currentChapter) {
@@ -957,6 +972,8 @@ export default function Chapters() {
   }
 
   
+
+
   if (mode === 'list') {
     return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' imageStyle={{ opacity: 0.9 }} source={require('../assets/chapterslistbg.png')}>
@@ -1049,6 +1066,8 @@ export default function Chapters() {
     );
   }
  
+
+
   
   if (mode === 'add') {
    return (
