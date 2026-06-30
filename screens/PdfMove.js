@@ -11,9 +11,6 @@ const ICON_SIZE = Math.round(20 * SCALE);
 const BUTTON_SIZE = Math.round(48 * SCALE);
 const TEXT_PRIMARY = Math.round(15 * SCALE);
 
-let globalLastActionTime = 0;
-const THROTTLE_DELAY = 1292;
-
 
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
@@ -42,16 +39,18 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [zoomScale, setZoomScale] = useState(1);
-  
+
+  const [globalLastActionTime, setGlobalLastActionTime] = useState(0);
+
   const wasActive = useRef(false);
   
   const COOLDOWN_MS = 1900;
+  
   
   const pdfSource = {
     uri: pdf.vid && pdf.vid.length > 0 ? pdf.vid : (pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : ''),
     cache: true,
   };
-
 
   
   const canClick = () => {
@@ -71,15 +70,16 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   };
 
 
+
   const zoomStep = 0.25;
   
   const handleZoomIn = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < THROTTLE_DELAY) {
+    if ( now - globalLastActionTime < 1900) {
       return;
     }
 
-    globalLastActionTime = now;
+    setGlobalLastActionTime(now);
 
     setZoomScale(s => Math.min(s + zoomStep, 4));
   }
@@ -87,11 +87,11 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const handleZoomOut = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < THROTTLE_DELAY) {
+    if ( now - globalLastActionTime < 1900) {
       return;
     }
 
-    globalLastActionTime = now;
+    setGlobalLastActionTime(now);
 
     setZoomScale(s => Math.max(s - zoomStep, 0.5));
   }
@@ -99,11 +99,11 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const goToNextPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1292) {
+    if ( now - globalLastActionTime < 1900) {
       return;
     }
 
-    globalLastActionTime = now;
+    setGlobalLastActionTime(now);
 
     if (totalPages && currentPage < totalPages) setCurrentPage(p => p + 1);
   };
@@ -111,11 +111,11 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const goToPrevPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1292) {
+    if ( now - globalLastActionTime < 1900) {
       return;
     }
 
-    globalLastActionTime = now;
+    setGlobalLastActionTime(now);
 
     if (currentPage > 1) setCurrentPage(p => p - 1);
   };
