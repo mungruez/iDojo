@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, TouchableWithoutFeedback , ScrollView, StatusBar } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, TouchableWithoutFeedback , ScrollView, StatusBar, TouchableOpacity, Alert, Linking } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
@@ -9,20 +9,37 @@ const ksoundFile = require('../assets/woosh.mp3');
 export default function Resources() {
   const navigation = useNavigation();
 
+
   const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
     kplayer.loop = false; 
   });
+
+
+  const handlePress = async () => {
+    try {
+      const supported = await Linking.canOpenURL("https://mungruez.github.io/myPortfolioWebsite/idojoprivacy.html");
+      if (supported) {
+        await Linking.openURL("https://mungruez.github.io/myPortfolioWebsite/idojoprivacy.html");
+      } else {
+        Alert.alert('Error', 'Unable to open browser. Please check your web browser configuration.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An unexpected error occurred while trying to launch the policy page.');
+    }
+  };
   
+
   const navKSound = () => {
     try {
       if(kplayer) {
         kplayer.play();
       }
     } catch (error) {
-        alert("Error playing sound effect");
+        Alert.alert("Sound Error","Error playing sound effect");
     }
     navigation.navigate("LoginScreen");
   };
+
 
   return (
     <ImageBackground style={ styles.imgBackground } resizeMode='stretch' source={require('../assets/greentextbackground.png')}>
@@ -34,7 +51,7 @@ export default function Resources() {
       </TouchableWithoutFeedback > 
 
       <ScrollView style={{ flexDirection:"column", marginTop:5, marginBottom: 1, paddingBottom: 5 }}>
-        <View style={{marginTop:2, borderColor:'silver', borderWidth:1, borderRadius:7, marginBotton:19}}>
+        <View style={{marginTop: 2, borderColor: 'silver', borderWidth: 1, borderRadius: 7, marginBottom: 19}}>
 <Text style={ styles.title }> Thank you for downloading the iDojo mobile App by DojoSoft, we hope you have learned about Self Defense, your support will be put to constructive use as we continue to build a community. Special thanks to all involved, a lot of time and effort was put into making iDojo. Thank you to the sponsors, people and organizations who made this original App possible. We mention them here with their corporate or organizational affiliation at the time from which this App was created.
   Thanks to: The World Boxing Federation, MMA and UFC for giving us the opportunity to analyse the best fighters of all time and their fighting styles. Most of all be careful when trying out these moves and have fun. 
   Disclaimer: This App does not collect any data from any device and is excellent with battery consumption.    
@@ -65,7 +82,11 @@ export default function Resources() {
 
 <Text style={ styles.freeyourmind }>Free Your Mind:</Text>
 <Text style={ styles.title }>Audio for a healthy mind tthat will motivate Self Defense learning and intense training. Each Audio is carefully handcrafted to be interlectually, heart touching to enable you to free your mind. When playing audio, click the purple bar in the slider for seeking.
-          </Text>
+</Text>
+
+<TouchableOpacity onPress={handlePress} style={{ paddingVertical: 12, alignItems: 'center', justifyContent: 'center' }} accessibilityRole="link">
+  <Text style={{ color: '#007AFF', fontSize: 15, textDecorationLine: 'underline', fontStyle: "italic", fontWeight: '500' }}>View Privacy Policy</Text>
+</TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -73,14 +94,9 @@ export default function Resources() {
   )
 }
 
+
 const styles = StyleSheet.create({
-  imgBackground: {
-    marginBottom:"5%",
-    width: '100%',
-    maxHeight: '95%',
-    flex: 1,
-    opacity: 1, 
-  },
+  imgBackground: { marginBottom:"5%",width: '100%', maxHeight: '95%', flex: 1, opacity: 1 },
   title: {
     fontSize: 15,
     fontWeight:'medium',
@@ -93,23 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 5,
   },
-  text: {
-    fontSize: 19,
-    fontWeight:'400',
-    color:'white',
-    backgroundColor:'#2f4f4f',
-    margin:5,
-    borderColor:'silver',
-    borderWidth:1.5,
-    borderRadius:5
-  },
-  icon: {
-    height: 76,
-    elevation: 3,
-    marginTop:38,
-    textAlign: "center",
-    zIndex:3 
-  },
+  icon: { height: 76, elevation: 3, marginTop:38, textAlign: "center", zIndex:3 },
   invisiblebtn: {
     background: "transparent",
     backgroundColor: "transparent",
