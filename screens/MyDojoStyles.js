@@ -502,7 +502,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const viewPdf = async (move) => {
       if ( isOffline && !move.vid ) {
         Alert.alert("No Internet", "You need an internet connection to view PDF Moves.");
@@ -578,7 +577,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const getYouTubeId = (url) => {
       try {
         if (!url || typeof url !== 'string') return "";
@@ -645,7 +643,6 @@ export default function MyDojoStyles({route}) {
         trimmed.includes('.pdf')
       );
     };
-
 
 
     const pickMedia = async (index = null) => {
@@ -738,6 +735,7 @@ export default function MyDojoStyles({route}) {
       }
   
       try {
+        if (!loading) setLoading(true);
         const moveId = move?.id || Date.now().toString();
         const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
   
@@ -795,6 +793,8 @@ export default function MyDojoStyles({route}) {
   
       } catch (err) {
         Alert.alert("Save Error", err.message || "An unknown error occurred.");
+      } finally {
+        if(loading) setLoading(false);
       }
     };
 

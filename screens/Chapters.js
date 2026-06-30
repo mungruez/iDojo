@@ -213,7 +213,7 @@ export default function Chapters() {
     try {
       if (isLoadingRef.current) return;
       isLoadingRef.current = true;
-      setLoading(true);
+      if (!loading) setLoading(true);
 
       const incomingChapters = Array.isArray(newData) ? newData : [newData];
       const updatedList = [...chapters];
@@ -728,6 +728,7 @@ export default function Chapters() {
     }
 
     try {
+      if (!loading) setLoading(true);
       const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
       await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
@@ -747,12 +748,10 @@ export default function Chapters() {
       const processedSections = await Promise.all(
         sections.map(async (section) => {
           const newSection = { ...section };
-          
           if (section.mediaUri) {
             const ext = section.type === 'pdf' ? '.pdf' : section.type === 'audio' ? '.m4a' : section.type === 'image' ? '.jpg' : '.mp4';
             newSection.mediaUri = await ensurePermanent(section.mediaUri, `section_${section.id}_${Date.now()}${ext}`);
           }
-          
           return newSection;
         })
       );
@@ -771,9 +770,10 @@ export default function Chapters() {
 
     } catch (err) {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
+    } finally {
+      if(loading) setLoading(false);
     }
   };
-
 
 
 
@@ -888,7 +888,7 @@ export default function Chapters() {
 
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
-      <ActivityIndicator size="large" color="#caaf38" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />
+      <ActivityIndicator size="large" color="#caaf38" style={{marginTop: 38, flex: 1, transform: [{scale: 2.5}]}} />
     </View>
   );
 
@@ -1458,6 +1458,6 @@ changeTypeIconBtn: { width: 53, height: 51, marginHorizontal: 5, borderRadius: 1
 changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'center' , alignSelf: 'center' },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
-loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '91%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
+loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '93%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
 loadingText: { color: '#f3efbd', marginTop: 12, fontWeight: '700', fontSize: 15 },
 });

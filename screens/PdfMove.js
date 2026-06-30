@@ -12,7 +12,7 @@ const BUTTON_SIZE = Math.round(48 * SCALE);
 const TEXT_PRIMARY = Math.round(15 * SCALE);
 
 let globalLastActionTime = 0;
-const THROTTLE_DELAY = 760;
+const THROTTLE_DELAY = 1292;
 
 
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
@@ -46,14 +46,13 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   const wasActive = useRef(false);
   
   const COOLDOWN_MS = 1900;
-
   
   const pdfSource = {
     uri: pdf.vid && pdf.vid.length > 0 ? pdf.vid : (pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : ''),
     cache: true,
   };
 
-  
+
   
   const canClick = () => {
     const now = Date.now();
@@ -100,7 +99,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const goToNextPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 380) {
+    if ( now - globalLastActionTime < 1292) {
       return;
     }
 
@@ -112,7 +111,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const goToPrevPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 380) {
+    if ( now - globalLastActionTime < 1292) {
       return;
     }
 
@@ -277,8 +276,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 10,
     padding: 19,
-  }
-  ,
+  },
   controlsTop: { position: 'absolute', top: 7, left: 7, right: 7, height: BUTTON_SIZE, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'rgba(7, 3, 38, 0.7)', borderRadius: 10, zIndex: 20, elevation: 10 },
   controlBtn: { width: BUTTON_SIZE, height: BUTTON_SIZE, borderRadius: BUTTON_SIZE / 2, backgroundColor: 'rgba(19, 12, 76, 0.8)', alignItems: 'center', justifyContent: 'center' },
   controlText: { color: 'white', fontWeight: '600', fontSize: ICON_SIZE },
