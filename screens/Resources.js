@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontStyle: "italic",
     fontWeight:'600',
-    marginLeft: 7,
+    marginLeft: 10,
   },
   movesList: {
     textDecorationLine: 'underline',
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontStyle: "italic",
     fontWeight:'600',
-    marginLeft: 7,
+    marginLeft: 10,
   },
   fightersList: {
     textDecorationLine: 'underline',
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     color:'yellow',
     fontSize: 19,
     fontWeight:'600',
-    marginLeft: 7,
+    marginLeft: 10,
   },
   chapters: {
     textDecorationLine: 'underline',
@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     color: '#948b0b',
     fontSize: 19,
-    fontWeight:'600',
-    marginLeft: 7,
+    fontWeight:'700',
+    marginLeft: 10,
   },
   manuals: {
     textDecorationLine: 'underline',
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     color:'green',
     fontSize: 19,
     fontWeight:'600',
-    marginLeft: 7,
+    marginLeft: 10,
   },
   featured: {
     textDecorationLine: 'underline',
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     color:'silver',
     fontWeight:'600',
-    marginLeft: 7,
+    marginLeft: 10,
   },
   freeyourmind: {
     textDecorationLine: 'underline',
@@ -185,6 +185,6 @@ const styles = StyleSheet.create({
     fontSize: 19,
     color:'purple',
     fontWeight:'600',
-    marginLeft: 7,
+    marginLeft: 10,
   },
 })
