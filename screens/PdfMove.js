@@ -43,7 +43,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   const [globalLastActionTime, setGlobalLastActionTime] = useState(0);
 
   const wasActive = useRef(false);
-  
+  const pdfRef = useRef(null);
   const COOLDOWN_MS = 1900;
   
   
@@ -69,57 +69,58 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     setKey(prev => prev + 1);
   };
 
-
-
   const zoomStep = 0.25;
   
   const handleZoomIn = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1900) {
+    if ( now - globalLastActionTime < 1292) {
       return;
     }
 
     setGlobalLastActionTime(now);
-
     setZoomScale(s => Math.min(s + zoomStep, 4));
   }
 
-
   const handleZoomOut = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1900) {
+    if ( now - globalLastActionTime < 1292) {
       return;
     }
 
     setGlobalLastActionTime(now);
-
     setZoomScale(s => Math.max(s - zoomStep, 0.5));
   }
 
-
   const goToNextPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1900) {
+    if ( now - globalLastActionTime < 1292) {
       return;
     }
 
     setGlobalLastActionTime(now);
 
-    if (totalPages && currentPage < totalPages) setCurrentPage(p => p + 1);
+    if (pdfRef.current && totalPages && currentPage < totalPages) {
+      const next = currentPage + 1;
+      setCurrentPage(next);
+      pdfRef.current.setPage(next);
+    }
   };
 
 
   const goToPrevPage = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1900) {
+    if ( now - globalLastActionTime < 1292) {
       return;
     }
 
     setGlobalLastActionTime(now);
 
-    if (currentPage > 1) setCurrentPage(p => p - 1);
+    if (pdfRef.current && currentPage > 1) {
+      const prev = currentPage - 1;
+      setCurrentPage(prev);
+      pdfRef.current.setPage(prev);
+    }
   };
-
 
 
   useEffect(() => {
@@ -130,7 +131,6 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   }, [isActive, onClosePdf]);
   
 
-  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#323232' }}>
       <StatusBar barStyle="dark-content"/>
@@ -204,17 +204,18 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
         <View style={styles.viewerBody}>
           <Pdf
+            ref={pdfRef}
             key ={key}
             source={pdfSource}
             fitPolicy={2}
-            maxPageResolution={2000000}
+            maxPageResolution={1200000}
             trustAllCerts={false}
             horizontal={true}
             enableScale={true}
             style={styles.pdfStyle}
             scale={zoomScale}
             page={currentPage}
-            enablePaging={false}  
+            enablePaging={true}  
             singlePage={false}
             onLoadComplete={(numberOfPages) => {
               setTotalPages(numberOfPages);
@@ -262,13 +263,17 @@ const styles = StyleSheet.create({
   descScroll: { maxHeight: height * 0.07 },
   descText: { color: 'honeydew', fontSize: 12, lineHeight: 15, marginVertical: 1 },
   pdfContainer: { flex: 1, margin: 2, backgroundColor: 'white', borderRadius: 12, overflow: 'hidden', borderWidth: 2, borderColor: '#3b82f6' },
-  loadingText: { color: '#60a5fa', fontSize: 16, fontWeight: 'bold' },
+  loadingText: { marginTop: 12, color: '#60a5fa', fontSize: 16, fontWeight: 'bold' },
   headerText: { fontSize: 11, fontWeight: '600', color: '#0b1c2e' },
   viewerBody: { flex: 1, position: 'relative', paddingTop: BUTTON_SIZE + 12 },
   pdfStyle: { flex: 1, width: '100%', backgroundColor: '#c4e3fc' },
-  loadingText: { marginTop: 12, fontSize: 14, color: '#555555' },
   errorText: { fontSize: 16, fontWeight: 'bold', color: '#f73a3a', textAlign: 'center' },
   errorSubText: { fontSize: 12, color: '#c4e3fc', marginTop: 6, textAlign: 'center' },
+  controlsTop: { position: 'absolute', top: 7, left: 7, right: 7, height: BUTTON_SIZE, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'rgba(7, 3, 38, 0.7)', borderRadius: 10, zIndex: 20, elevation: 10 },
+  controlBtn: { width: BUTTON_SIZE, height: BUTTON_SIZE, borderRadius: BUTTON_SIZE / 2, backgroundColor: 'rgba(19, 12, 76, 0.8)', alignItems: 'center', justifyContent: 'center' },
+  controlText: { color: 'white', fontWeight: '600', fontSize: ICON_SIZE },
+  pageIndicator: { paddingHorizontal: 12 },
+  pageIndicatorText: { color: 'white', fontSize: TEXT_PRIMARY, fontWeight: '600' },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#1e293b',
@@ -277,9 +282,4 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 19,
   },
-  controlsTop: { position: 'absolute', top: 7, left: 7, right: 7, height: BUTTON_SIZE, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'rgba(7, 3, 38, 0.7)', borderRadius: 10, zIndex: 20, elevation: 10 },
-  controlBtn: { width: BUTTON_SIZE, height: BUTTON_SIZE, borderRadius: BUTTON_SIZE / 2, backgroundColor: 'rgba(19, 12, 76, 0.8)', alignItems: 'center', justifyContent: 'center' },
-  controlText: { color: 'white', fontWeight: '600', fontSize: ICON_SIZE },
-  pageIndicator: { paddingHorizontal: 12 },
-  pageIndicatorText: { color: 'white', fontSize: TEXT_PRIMARY, fontWeight: '600' },
 });
