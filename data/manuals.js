@@ -295,7 +295,7 @@ export const manuals = [
           {
             title:"Crossed Arm Hold And Chin Blow",
             img: require('../assets/manuals/armholdchinblow1.png'),
-            desc: "The attacker attempts to strike you with his left hand. Step to your right and clasp his wrist with your left hand, thumbs down and pulling him towards you slightly. Step forward with your right foot simultaneously wrapping your right arm around his left arm. Rotate his arm upwards and backwards as you clasp your own wrist with the thumb down. Now you can force your hard into his face and step behind him with a kickback.",
+            desc: "The attacker attempts to strike you with his left hand. Step to your right and clasp his wrist with your left hand, thumbs down and pulling him towards you slightly. Step forward with your right foot simultaneously wrapping your right arm around his left arm. Rotate his arm upwards and backwards as you clasp your own wrist with the thumb down. Now you can force your hand into his face and step behind him with a kickback.",
           }
         ]
       },
@@ -1000,7 +1000,7 @@ export const manuals = [
           {
             title:"Disarming Trick 1",
             img: require('../assets/manuals/foxholetrick1.png'),
-            desc: "Coming out of a foxhole, clasp the attacker's leading foot, using hand on the same side. Thrust hard with your forearm against the inside of his knee joint, pushing out and back. climb across the attacker using your knee in his groin and choke. This can be performed with either hand.",
+            desc: "Coming out of a foxhole, clasp the attacker's leading foot, using hand on the same side. Thrust hard with your forearm against the inside of his knee joint, pushing out and back. Climb across the attacker using your knee in his groin and choke. This can be performed with either hand.",
           }
         ]
       }
