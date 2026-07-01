@@ -262,7 +262,7 @@ export const manuals = [
           {
             title:"Front Trip And Arm Break - Action 1",
             img: require('../assets/manuals/punchdefensetrip2.png'),
-            desc: "While your attacker is falling over your left leg, continue holding his right hand. When he is flat on the ground, force your knee against his right shoulder with your left legthen pull his extended arm towards you which may cause dislocation. Now, for additional punishment grab his chin with you left hand and pull up violently. use caution in pactice.",
+            desc: "While your attacker is falling over your left leg, continue holding his right hand. When he is flat on the ground, force your knee against his right shoulder with your left legthen pull his extended arm towards you which may cause dislocation. Now, for additional punishment grab his chin with you left hand and pull up violently. Use caution in pactice.",
           }
         ]
       },
@@ -273,7 +273,7 @@ export const manuals = [
           {
             title:"Shoulder Pressure Arm Break",
             img: require('../assets/manuals/counterarmbreak1.png'),
-            desc: "If you can trap your attackers right hand under your left armpit, then capture it and break it bt twisting your left arm around the outside of his, while your right arm rests on his shoulder. Grasp your own right arm with your left hand and pull up with your left hand and lean back slightly. This will cause considerable pain or break his arm. this hold can be applied with either hand.",
+            desc: "If you can trap your attackers right hand under your left armpit, then capture it and break it bt twisting your left arm around the outside of his, while your right arm rests on his shoulder. Grasp your own right arm with your left hand and pull up with your left hand and lean back slightly. This will cause considerable pain or break his arm. This hold can be applied with either hand.",
           }
         ]
       },
@@ -284,7 +284,7 @@ export const manuals = [
           {
             title:"Punch Defense Action Against Arm And Shoulder",
             img: require('../assets/manuals/punchdefenseshoulder1.png'),
-            desc: "Your attacker is in front of you and attempts to strike a low blow with his right hand. So then, block his right arm with your left hand slightly bent and at the same time grasp his sleeve at the muscle with your right hand. Now, force his arm back with your left hand, rotating at the same time so that it is in the crotch of your arm and your left hand is now on his right muscle. Then force his bent arm up and across his back and lean towards him forcing him to bend forward with upwards pressure of your left arm. To secure him grasp his collar witth your right hand.",
+            desc: "Your attacker is in front of you and attempts to strike a low blow with his right hand. So then, block his right arm with your left hand slightly bent and at the same time grasp his sleeve at the muscle with your right hand. Now, force his arm back with your left hand, rotating at the same time so that it is in the crotch of your arm and your left hand is now on his right muscle. Then force his bent arm up and across his back and lean towards him forcing him to bend forward with upwards pressure of your left arm. To secure him grasp his collar with your right hand.",
           }
         ]
       },
@@ -343,7 +343,7 @@ export const manuals = [
           {
             title:"Circle Throw - Finish",
             img: require('../assets/manuals/circlethrow1.png'),
-            desc: "The picture shows how to break a fall when thrown by the 'Circle Throw' . The fist comes down first, then you roll on your arm, rolling across your shoulder and slapping the ground hard just before your back lands.",
+            desc: "The picture shows how to break a fall when thrown by the 'Circle Throw'. The fist comes down first, then you roll on your arm, rolling across your shoulder and slapping the ground hard just before your back lands.",
           }
         ]
       },
@@ -354,7 +354,7 @@ export const manuals = [
           {
             title:"Over Shoulder Throw",
             img: require('../assets/manuals/chokedefenseshoulderthrow1.png'),
-            desc: "If the attacker attempts to choke you from behind with his right arm around your neck, step forward slightly with your right foot and at the same time grasp his arm at the elbow with your left hand. Then reach up with your right hand grasping his clothes at his right shoulder. Stoop forward suddenly then by forcing your hips violently into his stomach, pull him over your shoulder.",
+            desc: "If the attacker attempts to choke you from behind with his right arm around your neck, step forward slightly with your right foot and at the same time grasp his arm at the elbow with your left hand. Then reach up with your right hand grasping his clothes at his right shoulder. Step forward suddenly then by forcing your hips violently into his stomach, pull him over your shoulder.",
           }
         ]
       },
@@ -484,7 +484,7 @@ export const manuals = [
           {
             title:"Single Arm Choke Break - Start",
             img: require('../assets/manuals/singlearmchokebreak2.png'),
-            desc: "Next, pull his arm under your left arm pit. His hand must be rotated so his palm is up. lean back and down hard against his extended arm to cause it to break. ",
+            desc: "Next, pull his arm under your left arm pit. His hand must be rotated so his palm is up. Lean back and down hard against his extended arm to cause it to break. ",
           }
         ]
       },
@@ -511,7 +511,7 @@ export const manuals = [
           {
             title:"Front Choke Break With Knee Pressure - Start",
             img: require('../assets/manuals/chokebreakknee1.png'),
-            desc: "The attacker attempts to choke you with both hands standing in front of you. To break the choke move your foot slightly towards the rear, then cros your left hand over his right and grab his left wrist with your thumb down.",
+            desc: "The attacker attempts to choke you with both hands standing in front of you. To break the choke move your foot slightly towards the rear, then cross your left hand over his right and grab his left wrist with your thumb down.",
           },
           {
             title:"Front Choke Break With Knee Pressure - Action 2",
@@ -521,7 +521,7 @@ export const manuals = [
           {
             title:"Front Choke Break With Knee Pressure - Finish",
             img: require('../assets/manuals/chokebreakknee3.png'),
-            desc: "Force the attacker downward until he is on his knee while rotating his arm so that his palm is facing upward and his thumb towards you. Pull up with your lleft hand and push down with your right. Then for a quick break force your knee hard against his elbow.",
+            desc: "Force the attacker downward until he is on his knee while rotating his arm so that his palm is facing upward and his thumb towards you. Pull up with your left hand and push down with your right. Then for a quick break force your knee hard against his elbow.",
           }
         ]
       },
@@ -543,7 +543,7 @@ export const manuals = [
           {
             title:"Choke break With Jab Into Throat",
             img: require('../assets/manuals/chokebreakthroatjab1.png'),
-            desc: "The attacker attempts to choke you with both hands from the front. jab hard with either hand, fingers stiffened into your attacker's throat.",
+            desc: "The attacker attempts to choke you with both hands from the front. Jab hard with either hand, fingers stiffened into your attacker's throat.",
           }
         ]
       },
@@ -570,7 +570,7 @@ export const manuals = [
           {
             title:"Double Pressure Back Strangle - Finish",
             img: require('../assets/manuals/backstrangle2.png'),
-            desc: "Force your attacker down into a sitting positionso that his back rests on your right knee. Pull back hard on your right arm and push forward with your head and right shoulder causing immediate strangulation.",
+            desc: "Force your attacker down into a sitting position so that his back rests on your right knee. Pull back hard on your right arm and push forward with your head and right shoulder causing immediate strangulation.",
           }
         ]
       },
@@ -581,7 +581,7 @@ export const manuals = [
           {
             title:"Strangle With Knee",
             img: require('../assets/manuals/stranglewithknee1.png'),
-            desc: "Get behind your attacker and clasp your right forearm against his windpipe pulling his head back slightly. Your left arm is extended over his left shoulder so grasp your left muscle with your right hand and push against the back of his head with the palm of your left hand. insert your right knee into his back and bring him back slowly to strangle him.",
+            desc: "Get behind your attacker and clasp your right forearm against his windpipe pulling his head back slightly. Your left arm is extended over his left shoulder so grasp your left muscle with your right hand and push against the back of his head with the palm of your left hand. Insert your right knee into his back and bring him back slowly to strangle him.",
           }
         ]
       },
@@ -592,7 +592,7 @@ export const manuals = [
           {
             title:"Wrap Around Choke",
             img: require('../assets/manuals/wraparoundchoke1.png'),
-            desc: "With the attacker directly in front of you reach out with your right hand and grasp his collar, behind the left ear and thumb down. Grab his right arm at the back of the muscleand pull him violently towards you and at the same time step directly behind him. Keep the grasp on his collar tight and your right forearm stiff against his windpipe. then bend him back and with your left hand grasp his left hand at the wrist so that his palm is facing out. Force his arm against your chest by pulling it backwards and pull hard with your right arm against his windpipe causing strangulation.",
+            desc: "With the attacker directly in front of you reach out with your right hand and grasp his collar, behind the left ear and thumb down. Grab his right arm at the back of the muscleand pull him violently towards you and at the same time step directly behind him. Keep the grasp on his collar tight and your right forearm stiff against his windpipe. Then bend him back and with your left hand grasp his left hand at the wrist so that his palm is facing out. Force his arm against your chest by pulling it backwards and pull hard with your right arm against his windpipe causing strangulation.",
           }
         ]
       },
@@ -641,7 +641,7 @@ export const manuals = [
           {
             title:"Choking Attacker If You Miss A Circle Throw",
             img: require('../assets/manuals/circlethrowmiss1.png'),
-            desc: "When attempting the cross arm choke or circle throw and you miss the throw, let him fall between your legsand immediately apply a scissors hold and continue choking. Howvwer this choke is countered by brabing the groin or a rotating elbow to your thighs.",
+            desc: "When attempting the cross arm choke or circle throw and you miss the throw, let him fall between your legs and immediately apply a scissors hold and continue choking. However this choke is countered by grasping the groin or a rotating elbow to your thighs.",
           }
         ]
       },
@@ -652,7 +652,7 @@ export const manuals = [
           {
             title:"Spine Break Pressure Hold",
             img: require('../assets/manuals/spinebreakhold1.png'),
-            desc: "To capture the attacker step in close facing him directly. Throw your right arm around his neck, step to the left with your right foot so that his body is directly behind yours. Slide him onto your back with a hip movement to your right, lowering your body at the same time. Wrap your left arm around his left leg. he is then directly across your back. grasp the inside of your thighs with both hands, thumbs up. Hold on to your thighs and bring your legs together to apply pressure. This will crush the attacker.",
+            desc: "To capture the attacker step in close facing him directly. Throw your right arm around his neck, step to the left with your right foot so that his body is directly behind yours. Slide him onto your back with a hip movement to your right, lowering your body at the same time. Wrap your left arm around his left leg. He is then directly across your back. grasp the inside of your thighs with both hands, thumbs up. Hold on to your thighs and bring your legs together to apply pressure. This will crush the attacker.",
           }
         ]
       },
@@ -728,7 +728,7 @@ export const manuals = [
           {
             title:"Stick Defense - Start",
             img: require('../assets/manuals/collarchoke1.png'),
-            desc: "When an attacker attempts to close in on you hold him back with your left hand and reach back with your right hand and grasp your stick as shown in the imaage.",
+            desc: "When an attacker attempts to close in on you hold him back with your left hand and reach back with your right hand and grasp your stick as shown in the image.",
           },
           {
             title:"Stick Defense - Finish",
@@ -798,7 +798,7 @@ export const manuals = [
           {
             title:"Stick Or Club Defense Action Against Sharp Weapon - Action 2",
             img: require('../assets/manuals/sharpweapondefensestick2.png'),
-            desc: "Step towards your attacker as you cross your right hand over your left holing your stick or club in your right hand. receive the knife jab between your crossed hands. Force the stick over his forearm towards your crossed left hand and grab the stick.",
+            desc: "Step towards your attacker as you cross your right hand over your left holing your stick or club in your right hand. Receive the knife jab between your crossed hands. Force the stick over his forearm towards your crossed left hand and grab the stick.",
           },
           {
             title:"Stick Or Club Defense Action Against Sharp Weapon - Finish",
@@ -841,7 +841,7 @@ export const manuals = [
           {
             title:"Disarming Trick 2",
             img: require('../assets/manuals/disarmingtricktwo1.png'),
-            desc: "The attacker attempts to capture you by holding a weapon to your stomach:      Clasp his right hand at the wrist with your left hand and with your thumb facing down. At the same time step back with your right foot at 180 degrees. Hold his arm palm up towards your body and pull slightly while rotating and twisting it.",
+            desc: "The attacker attempts to capture you by holding a weapon to your stomach:  Clasp his right hand at the wrist with your left hand and with your thumb facing down. At the same time step back with your right foot at 180 degrees. Hold his arm palm up towards your body and pull slightly while rotating and twisting it.",
           },
           {
             title:"Disarming Trick 2",
@@ -883,7 +883,7 @@ export const manuals = [
           {
             title:"Another Illustration Of Defense Against Machete, Club or Knife - Start",
             img: require('../assets/manuals/machetedisarm1.png'),
-            desc: "Your attacker attempts to strike you across your head and shoulders with a weapon in his right hand:\n  Cross your hands above your head, with right hand in front of the left. Get close enough to receive the blow at his forearm, in the 'V' formed by your hands. Then grasp his wrist with your right rotating his arm towards you  so that his hand will face up. At the same time slide your right foot back about 50 degrees and apply pressure downward on his elbow with your left forearm. To put the attacker out of action force him slowly to the ground while holding him firmly. Step over his right arm with your left foot and sit on his shoulder then break his arm by pulling up hard.Then grasp his wrist with your right rotating his arm towards you  so that his hand will face up.",
+            desc: "Your attacker attempts to strike you across your head and shoulders with a weapon in his right hand:\n  Cross your hands above your head, with right hand in front of the left. Get close enough to receive the blow at his forearm, in the 'V' formed by your hands. Then grasp his wrist with your right rotating his arm towards you  so that his hand will face up. At the same time slide your right foot back about 50 degrees and apply pressure downward on his elbow with your left forearm. To put the attacker out of action force him slowly to the ground while holding him firmly. Step over his right arm with your left foot and sit on his shoulder then break his arm by pulling up hard. Then grasp his wrist with your right while rotating his arm towards you, so that his hand will face up.",
           },
           {
             title:"Another Illustration Of Defense Against Machete, Club or Knife - Finish",
@@ -899,7 +899,7 @@ export const manuals = [
           {
             title:"Crossed Arm Block Against Downward Slash With arm Break - Start",
             img: require('../assets/manuals/downwardslasharmblock1.png'),
-            desc: "Your attacker attempts to strike you with aknife in adownward motion. Cross your hands above your head with your right hand on top of the left.  Get close enough to receive the blow at his forearm, in the 'V' formed by your hands.",
+            desc: "Your attacker attempts to strike you with a knife in a downward motion. Cross your hands above your head with your right hand on top of the left.  Get close enough to receive the blow at his forearm, in the 'V' formed by your hands.",
           },
           {
             title:"Crossed Arm Block Against Downward Slash With arm Break - Finish",
@@ -915,7 +915,7 @@ export const manuals = [
           {
             title:"Weapon Disarm With Arm Break And Shoulder Throw - Action 1",
             img: require('../assets/manuals/weapondisarm1.png'),
-            desc: "Your attacker attempts to use a weapon from his hip with his right hand. Step in with your left foot and grasp his wrist with your left hand and with your thumb on the inside. top of the left.",
+            desc: "Your attacker attempts to use a weapon from his hip with his right hand. Step in with your left foot and grasp his wrist with your left hand and with your thumb on the inside, top of the left.",
           },
           {
             title:"Weapon Disarm With Arm Break And Shoulder Throw - Action 2",
@@ -936,7 +936,7 @@ export const manuals = [
           {
             title:"Disarming Trick 1",
             img: require('../assets/manuals/bayonetdisarm1.png'),
-            desc: "The attacker is armed with a bayonet and he is aiming it for your body:  Grais right wrist with your left hand. Step forward with your right foot while sliding your right arm between his arm and side. Cock your arm to form an 'L' clenching fist tightly. Strike the back of his elbow sharply with the center of your forearm. This will cause considerable pain forcing him to drop his weapon. If he attempts to throw his free hand around your neck then go into the 'Over The Shoulder Throw' .",
+            desc: "The attacker is armed with a bayonet and he is aiming it for your body:  Grab his right wrist with your left hand. Step forward with your right foot while sliding your right arm between his arm and side. Cock your arm to form an 'L' clenching fist tightly. Strike the back of his elbow sharply with the center of your forearm. This will cause considerable pain forcing him to drop his weapon. If he attempts to throw his free hand around your neck then go into the 'Over The Shoulder Throw' .",
           }
         ]
       },
@@ -952,7 +952,7 @@ export const manuals = [
           {
             title:"Rifle Or Bayonet Disarm - Action 2",
             img: require('../assets/manuals/rifledisarm2.png'),
-            desc: "Step or pivot towards your leeft and grasp the rifle at the back of the bayonet with your left hand pulling up while pulling down with your right hand grasped to the back of the balance of the rifle.",
+            desc: "Step or pivot towards your left and grasp the rifle at the back of the bayonet with your left hand pulling up while pulling down with your right hand grasped to the back of the balance of the rifle.",
           },
           {
             title:"Rifle Or Bayonet Disarm - Action 3",
