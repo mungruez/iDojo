@@ -4,13 +4,11 @@ import { useState, useEffect, useRef} from 'react';
 import Pdf from 'react-native-pdf';
 
 const { height } = Dimensions.get('window');
-
 const { width } = Dimensions.get('window');
 const SCALE = Math.min(width / 375, 1.25);
 const ICON_SIZE = Math.round(20 * SCALE);
 const BUTTON_SIZE = Math.round(48 * SCALE);
 const TEXT_PRIMARY = Math.round(15 * SCALE);
-
 
 export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
@@ -39,20 +37,20 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [zoomScale, setZoomScale] = useState(1);
-
   const [globalLastActionTime, setGlobalLastActionTime] = useState(0);
 
   const wasActive = useRef(false);
   const pdfRef = useRef(null);
+  const displyRef = useRef(1);
+  const isTransitioningRef = useRef(false);
   const COOLDOWN_MS = 1900;
-  
-  
+  const zoomStep = 0.25;
+    
   const pdfSource = {
     uri: pdf.vid && pdf.vid.length > 0 ? pdf.vid : (pdf.videoUrl && pdf.videoUrl.length > 7 ? pdf.videoUrl : ''),
     cache: true,
   };
 
-  
   const canClick = () => {
     const now = Date.now();
     if (now - lastClickTime < COOLDOWN_MS) {
@@ -62,63 +60,64 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     return true;
   };
 
-
+  
   const handleRetry = () => {
     if (!canClick()) return;
     setIsLoading(true);
     setKey(prev => prev + 1);
   };
-
-  const zoomStep = 0.25;
   
+
   const handleZoomIn = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1292) {
-      return;
-    }
-
+    if ( now - globalLastActionTime < 1292 || isTransitioningRef.current) return;
     setGlobalLastActionTime(now);
     setZoomScale(s => Math.min(s + zoomStep, 4));
   }
 
+
   const handleZoomOut = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1292) {
-      return;
-    }
-
+    if ( now - globalLastActionTime < 1292 || isTransitioningRef.current) return;
     setGlobalLastActionTime(now);
     setZoomScale(s => Math.max(s - zoomStep, 0.5));
   }
 
+
   const goToNextPage = () => {
+    if (isTransitioningRef.current || isLoading || !pdfRef.current) return;
+
     const now = Date.now();
     if ( now - globalLastActionTime < 1292) {
       return;
     }
 
-    setGlobalLastActionTime(now);
-
-    if (pdfRef.current && totalPages && currentPage < totalPages) {
-      const next = currentPage + 1;
-      setCurrentPage(next);
-      pdfRef.current.setPage(next);
+    if (totalPages && displyRef.current < totalPages) {
+      isTransitioningRef.current = true;
+      setGlobalLastActionTime(now);
+      
+      displyRef.current += 1;
+      setCurrentPage(displyRef.current); 
+      pdfRef.current.setPage(displyRef.current);
     }
-  };
+  }
 
 
   const goToPrevPage = () => {
+    if (isTransitioningRef.current || isLoading || !pdfRef.current) return;
+    
     const now = Date.now();
     if ( now - globalLastActionTime < 1292) {
       return;
     }
 
-    setGlobalLastActionTime(now);
-
-    if (pdfRef.current && currentPage > 1) {
-      const prev = currentPage - 1;
-      setCurrentPage(prev);
-      pdfRef.current.setPage(prev);
+    if (displyRef.current > 1) {
+      isTransitioningRef.current = true;
+      setGlobalLastActionTime(now);
+      
+      displyRef.current -= 1;
+      setCurrentPage(displyRef.current);
+      pdfRef.current.setPage(displyRef.current);
     }
   };
 
@@ -172,7 +171,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
       <View style={styles.pdfContainer}>
         { !errorMessage && !isLoading && (
-          <View style={styles.controlsTop} pointerEvents={isLoading ? 'none' : 'auto'}>
+          <View style={[styles.controlsTop, isTransitioningRef.current && { opacity: 0.4 }]} pointerEvents={isLoading ? 'none' : 'auto'}>
             <TouchableOpacity onPress={goToPrevPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
               <Text style={styles.controlText}>◀</Text>
             </TouchableOpacity>
@@ -214,7 +213,6 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
             enableScale={true}
             style={styles.pdfStyle}
             scale={zoomScale}
-            page={currentPage}
             enablePaging={true}  
             singlePage={false}
             onLoadComplete={(numberOfPages) => {
@@ -222,11 +220,14 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
               setIsLoading(false);
             }}
             onPageChanged={(page) => {
+              displyRef.current = page;
               setCurrentPage(page);
+              isTransitioningRef.current = false;
             }}
             onError={(error) => {
               setErrorMessage(error.toString());
               setIsLoading(false);
+              isTransitioningRef.current = false;
             }}
           />
 
@@ -241,7 +242,6 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     </SafeAreaView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0e27' },
