@@ -133,7 +133,7 @@ export default function MyDojoStyles({route}) {
           setSMoves([]);
         }
       } catch (e) {
-        Alert.alert("Parse Error", "An error occurred while parsing Move styles: " + e.message);
+        Alert.alert("Parse Error", e.message || "An error occurred while parsing Move styles: ");
       }
     };
     
@@ -217,7 +217,7 @@ export default function MyDojoStyles({route}) {
           setType('select move type');    
         }
       } catch (e) {
-        Alert.alert("Load Failed", e.message);
+        Alert.alert("Load Failed", e.message || "Failed to load Move list.");
       } finally {
         isLoadingRef.current = false;
         setLoading(false);
@@ -255,7 +255,7 @@ export default function MyDojoStyles({route}) {
         setMoves(updatedList);
         await saveToStorage(updatedList); 
       } catch (e) {
-        Alert.alert("Save Failed", e.message);
+        Alert.alert("Save Failed", e.message || "Failed to save Move data.");
       } finally {
         isLoadingRef.current = false;
         setLoading(false);
@@ -689,7 +689,6 @@ export default function MyDojoStyles({route}) {
     };
   
   
-
   
     const save = async () => {
       let validatedSteps = []; 
@@ -809,6 +808,7 @@ export default function MyDojoStyles({route}) {
         }
 
         if (addmode) {
+          if (isLoadingRef.current) return true;
           setAddMode(false);
           return true;
         }
@@ -818,7 +818,10 @@ export default function MyDojoStyles({route}) {
           setListMode(false);
           setSelectedIds([]);
           return true;
+        } else if (isLoadingRef.current) {
+          return true;
         }
+
         return false;
       });
 
@@ -930,11 +933,9 @@ export default function MyDojoStyles({route}) {
       return null;
     };
 
-
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
-
 
     if (viewmode === 1 || viewmode === 2) {
       return <VideoPlayer video={move} isActive={true} />;
@@ -1366,7 +1367,6 @@ export default function MyDojoStyles({route}) {
      </ImageBackground>
     );
 }
-
 
 const styles = StyleSheet.create({
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },

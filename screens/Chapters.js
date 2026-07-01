@@ -825,6 +825,7 @@ export default function Chapters() {
       }
 
       if (mode === "add") {
+        if (isLoadingRef.current) return true;
         if(prevMode === "list") setMode("list");
         else setMode("main");
         resetForm();
@@ -836,6 +837,8 @@ export default function Chapters() {
         setChapterCategory("");
         setPrevCategory("");
         setSelectedIds([]);
+        return true;
+      } else if (isLoadingRef.current) {
         return true;
       }
 
@@ -913,7 +916,6 @@ export default function Chapters() {
 
 
 
-
   if (mode === 'view' && currentChapter) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#323232', width: '100%', height:'100%', marginTop: 0 }}>
@@ -970,8 +972,7 @@ export default function Chapters() {
       </SafeAreaView>
     );
   }
-
-  
+ 
 
 
   if (mode === 'list') {
@@ -1066,7 +1067,6 @@ export default function Chapters() {
     );
   }
  
-
 
   
   if (mode === 'add') {
