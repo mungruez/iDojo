@@ -171,7 +171,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
       <View style={styles.pdfContainer}>
         { !errorMessage && !isLoading && (
-          <View style={[styles.controlsTop, isTransitioningRef.current && { opacity: 0.4 }]} pointerEvents={isLoading ? 'none' : 'auto'}>
+          <View style={styles.controlsTop} pointerEvents={isLoading ? 'none' : 'auto'}>
             <TouchableOpacity onPress={goToPrevPage} style={styles.controlBtn} hitSlop={{top:10,left:10,right:10,bottom:10}}>
               <Text style={styles.controlText}>◀</Text>
             </TouchableOpacity>
