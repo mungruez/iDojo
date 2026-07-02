@@ -37,7 +37,7 @@ export default function MyDojoStyles({route}) {
     const [videoUrl, setVideoUrl] = useState(move?.videoUrl || "");
     const [steps, setSteps] = useState(move?.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
     const [searchQuery, setSearchQuery] = useState('');
-
+    const [isPicking, setIsPicking] = useState(false);
     const [viewmode, setViewMode] = useState(0);
 
     const isOffline = useNetInfo().isConnected === false;
@@ -643,8 +643,9 @@ export default function MyDojoStyles({route}) {
         trimmed.includes('.pdf')
       );
     };
+  
 
-
+    
     const pickMedia = async (index = null) => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
@@ -654,41 +655,62 @@ export default function MyDojoStyles({route}) {
       
       const isVideo = (typeAM === "video" && index === null);
       const mediaType = isVideo ? 'videos' : 'images';
+      
       try {
-  
-        if(typeAM === "pdf") {
+        setIsPicking(true);
+        let pickedUri = "";
+
+        if (typeAM === "pdf") {
           const result = await DocumentPicker.getDocumentAsync({
             type: 'application/pdf',
           });
-          if (!result.canceled && result.assets && result.assets.length > 0) setVid(result.assets[0].uri);
-  
+
+          if (!result.canceled && result.assets && result.assets.length > 0) {
+            pickedUri = result.assets[0].uri;
+          }
+
         } else {
           const res = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: [mediaType],
             allowsEditing: false,
             quality: 1.0,
           });
-  
+
           if (!res.canceled && res.assets && res.assets.length > 0) {
-            const pickedUri = res.assets[0].uri; 
-            if (isVideo) {
-              setVid(pickedUri);
-              if(videoUrl && videoUrl.trim().length > 1) {
-                setVideoUrl("");
-              }
-            } else {
-              const s = [...steps];
-              s[index].img = pickedUri;
-              setSteps(s);
-            }
+            pickedUri = res.assets[0].uri; 
           }
         }
+        
+        if (pickedUri === "") {
+          return; 
+        }
+
+        const fileInfo = await FileSystem.getInfoAsync(pickedUri);
+        if (!fileInfo.exists || fileInfo.size === 0) {
+          throw new Error("File is empty or missing from temporary storage.");
+        }
+
+        if (typeAM === "pdf") {
+          setVid(pickedUri);
+        } else if (isVideo) {
+          setVid(pickedUri);
+          if (videoUrl && videoUrl.trim().length > 1) {
+            setVideoUrl("");
+          }
+        } else {
+          const s = [...steps];
+          s[index].img = pickedUri;
+          setSteps(s);
+        }
+
       } catch (err) {
-        Alert.alert("Picker Error", "Could not open gallery.");
+        Alert.alert("Picker Error", "Could not copy large file from gallery to temporary storage. Please try again.");
+      } finally {
+        setIsPicking(false);
       }
     };
   
-  
+
   
     const save = async () => {
       let validatedSteps = []; 
@@ -735,6 +757,7 @@ export default function MyDojoStyles({route}) {
   
       try {
         if (!loading) setLoading(true);
+        let copyfailed = false;
         const moveId = move?.id || Date.now().toString();
         const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
   
@@ -753,8 +776,8 @@ export default function MyDojoStyles({route}) {
             await FileSystem.copyAsync({ from: uri, to: destUri });
             return destUri;
           } catch (e) {
-            Alert.alert("Copy Failed", `File: ${fileName}\nError: ${e.message}`);
-            return uri;
+            Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+            return "COPYFAILED";
           }
         };
   
@@ -763,6 +786,7 @@ export default function MyDojoStyles({route}) {
         if ((typeAM === "video" || typeAM === "pdf") && vid) {
           const ext = typeAM === 'pdf' ? '.pdf' : '.mp4';
             finalVid = await ensurePermanent(vid, `file_${Date.now()}${ext}`);
+            if ( finalVid === "COPYFAILED") copyfailed = true;
         }
         
         if (typeAM === 'steps') {
@@ -775,6 +799,8 @@ export default function MyDojoStyles({route}) {
           })));
         }
       
+        if (copyfailed) return;
+
         const finalData = {
           id: moveId,
           title: title.trim(),

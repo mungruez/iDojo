@@ -729,6 +729,7 @@ export default function Chapters() {
 
     try {
       if (!loading) setLoading(true);
+      let copyfailed = false;
       const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
       await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
@@ -740,8 +741,8 @@ export default function Chapters() {
           await FileSystem.copyAsync({ from: uri, to: destUri });
           return destUri;
         } catch (e) {
-          Alert.alert("Copy Failed", `File: ${fileName}\nError: ${e.message}`);
-          return uri;
+          Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+          return "COPYFAILED";
         }
       };
 
@@ -751,11 +752,14 @@ export default function Chapters() {
           if (section.mediaUri) {
             const ext = section.type === 'pdf' ? '.pdf' : section.type === 'audio' ? '.m4a' : section.type === 'image' ? '.jpg' : '.mp4';
             newSection.mediaUri = await ensurePermanent(section.mediaUri, `section_${section.id}_${Date.now()}${ext}`);
+            if ( newSection.mediaUri === "COPYFAILED") copyfailed = true;
           }
           return newSection;
         })
       );
     
+      if(copyfailed) return;
+
       const chapterData = {
         id: chaptId,
         title: chapterTitle.trim(),
