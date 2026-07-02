@@ -592,7 +592,7 @@ export const manuals = [
           {
             title:"Wrap Around Choke",
             img: require('../assets/manuals/wraparoundchoke1.png'),
-            desc: "With the attacker directly in front of you reach out with your right hand and grasp his collar, behind the left ear and thumb down. Grab his right arm at the back of the muscleand pull him violently towards you and at the same time step directly behind him. Keep the grasp on his collar tight and your right forearm stiff against his windpipe. Then bend him back and with your left hand grasp his left hand at the wrist so that his palm is facing out. Force his arm against your chest by pulling it backwards and pull hard with your right arm against his windpipe causing strangulation.",
+            desc: "With the attacker directly in front of you reach out with your right hand and grasp his collar, behind the left ear and thumb down. Grab his right arm at the back of the muscle and pull him violently towards you and at the same time step directly behind him. Keep the grasp on his collar tight and your right forearm stiff against his windpipe. Then bend him back and with your left hand grasp his left hand at the wrist so that his palm is facing out. Force his arm against your chest by pulling it backwards and pull hard with your right arm against his windpipe causing strangulation.",
           }
         ]
       },
@@ -695,7 +695,7 @@ export const manuals = [
           {
             title:"Choking With Collar And Thumb Pressure",
             img: require('../assets/manuals/thumbchoke1.png'),
-            desc: "Graps your attacker's collar behind his ears with both hands, forcing your thumb behind his windpipe. Pull him forward and raise your knee into his groin or go into the circle throw. {'\n'} Alternate Action:  Force him backwards by stepping to his right side. Insert your right leg behind his right leg, forcing him to the ground. Then continue to strangle him.",
+            desc: "Graps your attacker's collar behind his ears with both hands, forcing your thumb behind his windpipe. Pull him forward and raise your knee into his groin or go into the circle throw. \n Alternate Action:  Force him backwards by stepping to his right side. Insert your right leg behind his right leg, forcing him to the ground. Then continue to strangle him.",
           }
         ]
       },
@@ -973,7 +973,7 @@ export const manuals = [
           {
             title:"Rifle Or Bayonet Disarming - Action 1",
             img: require('../assets/manuals/rifledisarming1.png'),
-            desc: "At close quarters the attacker attempts to drive his rifle into your face or torso. cross your arms and twist to your left. ",
+            desc: "At close quarters the attacker attempts to drive his rifle into your face or torso. Cross your arms and twist to your left. ",
           },
           {
             title:"Rifle Or Bayonet Disarming - Action 2",
