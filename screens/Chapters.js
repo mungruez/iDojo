@@ -870,7 +870,6 @@ export default function Chapters() {
   
 
 
-
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
       onLongPress={() => toggleSelect(item.id)}
@@ -907,13 +906,14 @@ export default function Chapters() {
 
 
 
-
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
-      <ActivityIndicator size="large" color="#caaf38" style={{marginTop: 38, flex: 1, transform: [{scale: 2.5}]}} />
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#caaf38" style={{ transform: [{ scale: 2.5 }], marginBottom: 25 }} />
+        <Text style={styles.loadingText}>Please Wait...</Text>
+      </View>
     </View>
   );
-
 
 
 
@@ -992,7 +992,6 @@ export default function Chapters() {
     );
   }
  
-
 
   if (mode === 'list') {
     return (
@@ -1159,28 +1158,29 @@ export default function Chapters() {
                   style={styles.stepImgContainer}
                   onPress={() => pickMedia(section.id, section.type)}
                 >
-                  { isPicking ? <ActivityIndicator size="small" color="#967713" style={{marginTop: 57, marginLeft: 38, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> : section.mediaUri ? (
-                    <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
-                      {section.type === SECTION_TYPES.IMAGE ? (
-                          <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
-                        ) : section.type === SECTION_TYPES.VIDEO && section.mediaUri ? (
-                          <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
-                        ) : (
-                        <View style={styles.stepImg}>
-                          <Text style={[{fontSize: 45, marginLeft: 13, marginTop: 15}, section.type === SECTION_TYPES.PDF && {fontSize: 57, marginLeft: 12, marginTop: 7}]}>
-                            {section.type === SECTION_TYPES.VIDEO ? '🎬' : 
-                             section.type === SECTION_TYPES.AUDIO ? '🎵' : '📄'}
-                          </Text>
-                          <Text style={{ fontSize: 11, marginLeft: 25 }} numberOfLines={1} ellipsizeMode="clip">
-                            {section.mediaUri.split('.').pop()}
-                          </Text>
+                  { isPicking ? ( <ActivityIndicator size="small" color="#967713" style={{marginTop: 57, marginLeft: 38, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> )
+                    : section.mediaUri ? (
+                      <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
+                        { section.type === SECTION_TYPES.IMAGE ? (
+                            <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
+                          ) : section.type === SECTION_TYPES.VIDEO && section.mediaUri ? (
+                            <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
+                          ) : (
+                          <View style={styles.stepImg}>
+                            <Text style={[{fontSize: 45, marginLeft: 13, marginTop: 15}, section.type === SECTION_TYPES.PDF && {fontSize: 57, marginLeft: 12, marginTop: 7}]}>
+                              {section.type === SECTION_TYPES.VIDEO ? '🎬' : 
+                              section.type === SECTION_TYPES.AUDIO ? '🎵' : '📄'}
+                            </Text>
+                            <Text style={{ fontSize: 11, marginLeft: 25 }} numberOfLines={1} ellipsizeMode="clip">
+                              {section.mediaUri.split('.').pop()}
+                            </Text>
+                          </View>
+                        ) }
+                        
+                        <View style={[{height: "15%", width: "100%", alignItems: "center", justifyContent: "cennter", backgroundColor: 'rgba(38, 152, 95, 0.57)', borderRadius: 7 }, section.type === "video" && {backgroundColor: 'rgba(243, 72, 95, 0.57)' }, section.type === "pdf" && {backgroundColor: 'rgba(72, 103, 243, 0.57)'}, section.type === "audio" && {backgroundColor: 'rgba(223, 72, 243, 0.57)'} ]}>
+                          <Text style={{ width: "100%", textAlign: "center", alignSelf: "center", fontSize: 10, color: "#f3efbd", fontWeight: "bold" }}>CHANGE</Text>
                         </View>
-                      )}
-                      
-                      <View style={[{height: "15%", width: "100%", alignItems: "center", justifyContent: "cennter", backgroundColor: 'rgba(38, 152, 95, 0.57)', borderRadius: 7 }, section.type === "video" && {backgroundColor: 'rgba(243, 72, 95, 0.57)' }, section.type === "pdf" && {backgroundColor: 'rgba(72, 103, 243, 0.57)'}, section.type === "audio" && {backgroundColor: 'rgba(223, 72, 243, 0.57)'} ]}>
-                        <Text style={{ width: "100%", textAlign: "center", alignSelf: "center", fontSize: 10, color: "#f3efbd", fontWeight: "bold" }}>CHANGE</Text>
                       </View>
-                    </View>
                   ) : !section.mediaUrl && (
                     <View style={styles.videoIcon}>
                       <ImageBackground 
@@ -1188,7 +1188,7 @@ export default function Chapters() {
                         resizeMode='contain'
                         source={section.type === SECTION_TYPES.VIDEO ? require('../assets/uploadvideobg.png') : section.type === SECTION_TYPES.PDF ? require('../assets/uploadpdfbg.png') : section.type === SECTION_TYPES.AUDIO ? require('../assets/uploadaudiobg.png') : require('../assets/uploadimagebg.png')} />
                     </View>
-                  )}
+                  ) }
                 </TouchableOpacity>
 
                 { section.mediaUri && (
@@ -1478,5 +1478,5 @@ changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'ce
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '93%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
-loadingText: { color: '#f3efbd', marginTop: 12, fontWeight: '700', fontSize: 15 },
+loadingText: { color: '#f3efbd', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' },
 });
