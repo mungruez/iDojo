@@ -974,7 +974,7 @@ export default function MyDojoStyles({route}) {
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
 
 
-    if (viewmode === 1 || viewmode === 2) {
+    if ( viewmode === 1 || viewmode === 2 ) {
       return <VideoPlayer video={move} isActive={true} />;
     }
 
@@ -1085,11 +1085,11 @@ export default function MyDojoStyles({route}) {
                 <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
                 <Text style={styles.toggleModeText}>Or Link</Text>
               </TouchableOpacity>
-            )}
+            ) }
 
-            {!vid && !videoUrl && (
+            { !vid && !videoUrl && (
               <Text style={styles.orText}>— OR —</Text>
-            )}
+            ) }
                 
             { !vid && ( <Text style={styles.label}>Video URL of Move</Text> ) }
             { !vid && ( <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> ) }
@@ -1099,7 +1099,7 @@ export default function MyDojoStyles({route}) {
                 <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
                 <Text style={styles.toggleModeText}> Or Upload</Text>
               </TouchableOpacity>
-            )}
+            ) }
 
             <Text style={styles.label}>Move Description</Text>
             <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
