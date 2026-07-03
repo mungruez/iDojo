@@ -909,7 +909,7 @@ export default function Chapters() {
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#caaf38" style={{ transform: [{ scale: 2.5 }], marginBottom: 25 }} />
+        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.5 }], marginBottom: 25 }} />
         <Text style={styles.loadingText}>Please Wait...</Text>
       </View>
     </View>
@@ -1158,7 +1158,7 @@ export default function Chapters() {
                   style={styles.stepImgContainer}
                   onPress={() => pickMedia(section.id, section.type)}
                 >
-                  { isPicking ? ( <ActivityIndicator size="small" color="#967713" style={{marginTop: 57, marginLeft: 38, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> )
+                  { isPicking ? ( <ActivityIndicator size="small" color="#a88510" style={{marginTop: 57, marginLeft: 38, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> )
                     : section.mediaUri ? (
                       <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
                         { section.type === SECTION_TYPES.IMAGE ? (
