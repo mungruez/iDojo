@@ -1159,7 +1159,7 @@ export default function Chapters() {
                   style={styles.stepImgContainer}
                   onPress={() => pickMedia(section.id, section.type)}
                 >
-                  {section.mediaUri ? (
+                  {  isPicking ? <ActivityIndicator size="small" color="#f30707" style={{marginTop: 57, marginLeft: 38, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> : section.mediaUri ? (
                     <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
                       {section.type === SECTION_TYPES.IMAGE ? (
                           <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />

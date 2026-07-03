@@ -1071,7 +1071,7 @@ export default function MyDojoStyles({route}) {
    
          { typeAM === "video" ? (
            <View>
-            { vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+            { isPicking ? <ActivityIndicator size="small" color="#f30707" style={{marginTop: 5, marginLeft: 38, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
               <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
               </TouchableOpacity> )
               : !videoUrl && ( 
@@ -1106,7 +1106,7 @@ export default function MyDojoStyles({route}) {
            </View>
            ) : typeAM === "pdf" ? (
              <View>
-               { vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+               { isPicking ? <ActivityIndicator size="small" color="#0b07f3" style={{marginTop: 5, marginLeft: 38, flex: 1, transform: [{scale: 1.5}]}} /> : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
                  </TouchableOpacity> )
                : !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
