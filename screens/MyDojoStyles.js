@@ -594,6 +594,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     const checkVideo = (mv) => {
       try {
         if(mv.videoUrl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
@@ -619,10 +620,12 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     const viewManual = (mv) => {
       setMove(mv);
       setViewMode(3);
     };
+
 
 
     const checkFStyle = (text) => {
@@ -634,6 +637,7 @@ export default function MyDojoStyles({route}) {
       setFStyleAM(text);
     };
     
+
 
     const isValidPdfUrl = (url) => {
       if (!url || typeof url !== 'string') return false;
@@ -824,6 +828,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     useEffect(() => {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
         if (viewmode > 0) {
@@ -855,10 +860,12 @@ export default function MyDojoStyles({route}) {
     }, [viewmode, addmode, listmode]);
 
 
+
     const toggleSelectSingle = (index) => {
       setSelectedSingles(prev => prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]);
     };
   
+
 
     const handleShareSingles = async (selectedids) => {
       if (!selectedids?.length) return;
@@ -895,6 +902,7 @@ export default function MyDojoStyles({route}) {
         }
     };
       
+
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
@@ -959,9 +967,12 @@ export default function MyDojoStyles({route}) {
       return null;
     };
 
+
+
     if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
     if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+
 
     if (viewmode === 1 || viewmode === 2) {
       return <VideoPlayer video={move} isActive={true} />;
@@ -1393,6 +1404,7 @@ export default function MyDojoStyles({route}) {
      </ImageBackground>
     );
 }
+
 
 const styles = StyleSheet.create({
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },

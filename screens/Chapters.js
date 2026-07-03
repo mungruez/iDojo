@@ -46,6 +46,7 @@ export default function Chapters() {
   const [activeSectionId, setActiveSectionId] = useState(null);
   const [vcDropdownVisible, setVcDropdownVisible] = useState(true);
   const [openpdfViewer, setOpenpdfViewer] = useState(null);
+  const [isPicking, setIsPicking] = useState(false);
 
   const isOffline = useNetInfo().isConnected === false;
   const isLoadingRef = useRef(false);
@@ -656,9 +657,8 @@ export default function Chapters() {
     setVcDropdownVisible(false);  
     setMode("view");
   };
-
-
   
+
 
   const pickMedia = async (sectionId, type) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -668,17 +668,20 @@ export default function Chapters() {
     }
 
     try {
+      setIsPicking(true);
+      let pickedUri = "";
+
       if (type === SECTION_TYPES.PDF) {
         const result = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' });
         if (!result.canceled && result.assets?.length > 0) {
-          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
+          pickedUri = result.assets[0].uri;
         }
       } else if (type === SECTION_TYPES.AUDIO) {
         const result = await DocumentPicker.getDocumentAsync({ 
-          type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/wav'] 
+          type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/wav']
         });
         if (!result.canceled && result.assets?.length > 0) {
-          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
+          pickedUri = result.assets[0].uri;
         }
       } else {
         const mediaType = type === SECTION_TYPES.VIDEO ? 'videos' : 'images';
@@ -688,15 +691,27 @@ export default function Chapters() {
           quality: 1,
         });
         if (!result.canceled && result.assets?.length > 0) {
-          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
+          pickedUri = result.assets[0].uri;
         }
       }
+
+      if (pickedUri === "") {
+        return;
+      }
+
+      const fileInfo = await FileSystem.getInfoAsync(pickedUri);
+      if (!fileInfo.exists || fileInfo.size === 0) {
+        throw new Error("File is empty or failed to copy to temporary cache storage.");
+      }
+
+      updateSection(sectionId, 'mediaUri', pickedUri);
+
     } catch (err) {
-      Alert.alert('Error', 'Could not open media');
+      Alert.alert('Error', 'Could not process media file. Please try selecting a smaller file or try again.');
+    } finally {
+      setIsPicking(false);
     }
   };
-
-
 
 
 
