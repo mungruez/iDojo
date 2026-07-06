@@ -707,7 +707,7 @@ export default function Chapters() {
       updateSection(sectionId, 'mediaUri', pickedUri);
 
     } catch (err) {
-      Alert.alert('Error', 'Could not process media file. Please try selecting a smaller file or try again.');
+      Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
     } finally {
       setIsPicking(false);
     }
@@ -773,7 +773,10 @@ export default function Chapters() {
         })
       );
     
-      if(copyfailed) return;
+      if(copyfailed) {
+        if(loading) setLoading(false);
+        return;
+      }  
 
       const chapterData = {
         id: chaptId,
@@ -1085,7 +1088,6 @@ export default function Chapters() {
     );
   }
  
-
   
   if (mode === 'add') {
    return (
@@ -1158,7 +1160,7 @@ export default function Chapters() {
                   style={styles.stepImgContainer}
                   onPress={() => pickMedia(section.id, section.type)}
                 >
-                  { isPicking ? ( <ActivityIndicator size="small" color="#a88510" style={{marginTop: 57, marginLeft: 38, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> )
+                  { isPicking ? ( <ActivityIndicator size="small" color="#a88510" style={{marginTop: 57, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> )
                     : section.mediaUri ? (
                       <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
                         { section.type === SECTION_TYPES.IMAGE ? (
@@ -1298,7 +1300,6 @@ export default function Chapters() {
    );
   }
 
-
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
@@ -1374,7 +1375,6 @@ export default function Chapters() {
      </ImageBackground>
   );
 }
-
 
 const styles = StyleSheet.create({
 container: { flex: 1, backgroundColor: '#c2cdd4' },

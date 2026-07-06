@@ -88,7 +88,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     if (isTransitioningRef.current || isLoading || !pdfRef.current) return;
 
     const now = Date.now();
-    if ( now - globalLastActionTime < 1292) {
+    if ( now - globalLastActionTime < 1900) {
       return;
     }
 
@@ -107,7 +107,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     if (isTransitioningRef.current || isLoading || !pdfRef.current) return;
     
     const now = Date.now();
-    if ( now - globalLastActionTime < 1292) {
+    if ( now - globalLastActionTime < 1900) {
       return;
     }
 
