@@ -983,9 +983,24 @@ export default function MyDojoStyles({route}) {
     };
 
 
-    if (loading && ftype === 'video') return <ActivityIndicator size="large" color="#f30707" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
-    if (loading && ftype === 'steps') return <ActivityIndicator size="large" color="#0b6112" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
-    if (loading && ftype === 'pdf') return <ActivityIndicator size="large" color="#0b1461" style={{marginTop:38, flex:1, transform: [{scale: 2.0}]}} />;
+    if (loading && ftype === 'video') return (
+      <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#f30707" style={{ transform: [{ scale: 1.7 }] }} />
+        <Text style={{ marginTop: 12, color: '#420105', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
+      </View>
+    );
+    if (loading && ftype === 'steps') return (
+      <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#0b6112" style={{ transform: [{ scale: 1.7 }] }} />
+        <Text style={{ marginTop: 12, color: '#01421e', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
+      </View>
+    );
+    if (loading && ftype === 'pdf') return (
+      <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#0d1879" style={{ transform: [{ scale: 1.7 }] }} />
+        <Text style={{ marginTop: 12, color: '#0b0142', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
+      </View>
+    );
 
 
     if ( viewmode === 1 || viewmode === 2 ) {
