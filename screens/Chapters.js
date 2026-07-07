@@ -1178,7 +1178,7 @@ export default function Chapters() {
               multiline={true}
             />
 
-            {sections.map((section, index) => (
+            { sections.map((section, index) => (
               <View key={section.id} style={styles.sectionCard}>
                 <View style={styles.sectionHeaderAM}>
                   <Text style={styles.sectionHeaderTextAM}>Section {index + 1}</Text>
