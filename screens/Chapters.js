@@ -716,6 +716,10 @@ export default function Chapters() {
 
 
   const saveChapter = async () => {
+    if(isPicking) { 
+        return;
+    }
+
     if (!chapterTitle.trim()) {
       Alert.alert('Required', 'Please enter a Chapter Title');
       return;
@@ -1172,7 +1176,7 @@ export default function Chapters() {
                   { isPicking ? (
                       <View style={{ marginTop: 57, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                         <ActivityIndicator size="small" color="#a88510" style={{ transform: [{ scale: 1.5 }] }} />
-                        <Text style={{ marginTop: 8, color: '#a88510', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
+                        <Text style={{ marginTop: 8, color: '#f3efbd', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
                       </View>
                     ) : section.mediaUri ? (
                       <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 

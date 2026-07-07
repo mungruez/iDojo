@@ -717,7 +717,10 @@ export default function MyDojoStyles({route}) {
   
     const save = async () => {
       let validatedSteps = []; 
-  
+      if(isPicking) { 
+        return;
+      }
+
       if (!title.trim()) {
         Alert.alert("Required", "Please enter a Move Title.");
         return;
@@ -1083,9 +1086,9 @@ export default function MyDojoStyles({route}) {
          { typeAM === "video" ? (
            <View>
             { isPicking ? (
-              <View style={{ marginTop: 19, marginBottom: 19, marginLeft: 38, alignItems: 'center', flex: 1 }}>
+              <View style={{ marginTop: 19, marginBottom: 19, marginLeft: 12, alignItems: 'flex-start', justifyContent: 'center' }}>
                 <ActivityIndicator size="small" color="#f30707" style={{ transform: [{ scale: 1.5 }] }} />
-                <Text style={{ marginTop: 8, fontSize: 12, color: '#f30707' }}>Loading</Text>
+                <Text style={{ marginTop: 8,  color: '#420105',fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Loading</Text>
               </View>
             ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
               <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
@@ -1123,9 +1126,9 @@ export default function MyDojoStyles({route}) {
            ) : typeAM === "pdf" ? (
              <View>
                { isPicking ? (
-                 <View style={{ marginTop: 5, marginBottom: 19, marginLeft: 38, alignItems: 'center', flex: 1 }}>
+                 <View style={{ marginTop: 5, marginBottom: 19, marginLeft: 12, alignItems: 'flex-start', justifyContent: 'center' }}>
                    <ActivityIndicator size="small" color="#0b07f3" style={{ transform: [{ scale: 1.5 }] }} />
-                   <Text style={{ marginTop: 8, color: '#0b07f3', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
+                   <Text style={{ marginTop: 8, color: '#141238', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
                  </View>
                ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
