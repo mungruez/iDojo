@@ -752,13 +752,22 @@ export default function Chapters() {
       const ensurePermanent = async (uri, fileName) => {
         if (!uri || uri.startsWith(permanentDirUri)) return uri;
         const destUri = `${permanentDirUri}${fileName}`;
-        try {
-          await FileSystem.copyAsync({ from: uri, to: destUri });
-          return destUri;
-        } catch (e) {
-          Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
-          return "COPYFAILED";
+        let lastError;
+
+        for (let attempt = 1; attempt <= 3; attempt += 1) {
+          try {
+            await FileSystem.copyAsync({ from: uri, to: destUri });
+            return destUri;
+          } catch (e) {
+            lastError = e;
+            if (attempt < 3) {
+              await new Promise((resolve) => setTimeout(resolve, 570 * attempt));
+              continue;
+            }
+          }
         }
+        Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+        return "COPYFAILED";
       };
 
       const processedSections = await Promise.all(
@@ -774,7 +783,7 @@ export default function Chapters() {
       );
     
       if(copyfailed) {
-        if(loading) setLoading(false);
+        setLoading(false);
         return;
       }  
 
@@ -793,7 +802,7 @@ export default function Chapters() {
     } catch (err) {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
     } finally {
-      if(loading) setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -1160,8 +1169,12 @@ export default function Chapters() {
                   style={styles.stepImgContainer}
                   onPress={() => pickMedia(section.id, section.type)}
                 >
-                  { isPicking ? ( <ActivityIndicator size="small" color="#a88510" style={{marginTop: 57, flex: 1, alignSelf: "center", transform: [{scale: 1.5}]}} /> )
-                    : section.mediaUri ? (
+                  { isPicking ? (
+                      <View style={{ marginTop: 57, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                        <ActivityIndicator size="small" color="#a88510" style={{ transform: [{ scale: 1.5 }] }} />
+                        <Text style={{ marginTop: 8, color: '#a88510', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
+                      </View>
+                    ) : section.mediaUri ? (
                       <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
                         { section.type === SECTION_TYPES.IMAGE ? (
                             <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />

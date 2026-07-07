@@ -775,13 +775,24 @@ export default function MyDojoStyles({route}) {
         const ensurePermanent = async (uri, fileName) => {
           if (!uri || !uri.startsWith('file://') || uri.includes('/moves/')) return uri;
           const destUri = `${permanentDirUri}${fileName}`;
-          try {
-            await FileSystem.copyAsync({ from: uri, to: destUri });
-            return destUri;
-          } catch (e) {
-            Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
-            return "COPYFAILED";
+          let lastError;
+
+          for (let attempt = 1; attempt <= 3; attempt += 1) {
+            try {
+              await FileSystem.copyAsync({ from: uri, to: destUri });
+              return destUri;
+            } catch (e) {
+              lastError = e;
+              if (attempt < 3) {
+                await new Promise((resolve) => setTimeout(resolve, 570 * attempt));
+                continue;
+              }
+            }
           }
+
+          console.warn('Copy media failed after retries:', lastError);
+          Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+          return "COPYFAILED";
         };
   
         let finalVid = vid; 
@@ -1071,7 +1082,12 @@ export default function MyDojoStyles({route}) {
    
          { typeAM === "video" ? (
            <View>
-            { isPicking ? <ActivityIndicator size="small" color="#f30707" style={{marginTop: 19, marginLeft: 38, marginBottom: 19, flex: 1, transform: [{scale: 1.5}]}} /> : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+            { isPicking ? (
+              <View style={{ marginTop: 19, marginBottom: 19, marginLeft: 38, alignItems: 'center', flex: 1 }}>
+                <ActivityIndicator size="small" color="#f30707" style={{ transform: [{ scale: 1.5 }] }} />
+                <Text style={{ marginTop: 8, fontSize: 12, color: '#f30707' }}>Loading</Text>
+              </View>
+            ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
               <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
               </TouchableOpacity> )
               : !videoUrl && ( 
@@ -1106,7 +1122,12 @@ export default function MyDojoStyles({route}) {
            </View>
            ) : typeAM === "pdf" ? (
              <View>
-               { isPicking ? <ActivityIndicator size="small" color="#0b07f3" style={{marginTop: 5, marginLeft: 38, marginBottom: 19, flex: 1, transform: [{scale: 1.5}]}} /> : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+               { isPicking ? (
+                 <View style={{ marginTop: 5, marginBottom: 19, marginLeft: 38, alignItems: 'center', flex: 1 }}>
+                   <ActivityIndicator size="small" color="#0b07f3" style={{ transform: [{ scale: 1.5 }] }} />
+                   <Text style={{ marginTop: 8, color: '#0b07f3', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
+                 </View>
+               ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
                  </TouchableOpacity> )
                : !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
