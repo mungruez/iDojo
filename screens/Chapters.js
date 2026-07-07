@@ -660,6 +660,40 @@ export default function Chapters() {
   
 
 
+  const copyPickedMediaToCache = async (sourceUri, fileName, retries = 3) => {
+    const cacheDir = `${FileSystem.cacheDirectory}chapter-media/`;
+    await FileSystem.makeDirectoryAsync(cacheDir, { intermediates: true });
+    const destinationUri = `${cacheDir}${fileName}`;
+
+    let lastError = null;
+
+    for (let attempt = 1; attempt <= retries; attempt += 1) {
+      try {
+        const sourceInfo = await FileSystem.getInfoAsync(sourceUri);
+        if (!sourceInfo.exists) {
+          throw new Error('Selected file is not available yet.');
+        }
+
+        await FileSystem.copyAsync({ from: sourceUri, to: destinationUri });
+        const destinationInfo = await FileSystem.getInfoAsync(destinationUri);
+
+        if (destinationInfo.exists && destinationInfo.size > 0) {
+          return destinationUri;
+        }
+
+        lastError = new Error('Copied file is empty.');
+      } catch (error) {
+        lastError = error;
+        if (attempt < retries) {
+          await new Promise((resolve) => setTimeout(resolve, 600 * attempt));
+        }
+      }
+    }
+
+    throw lastError || new Error('Unable to copy selected media.');
+  };
+
+
   const pickMedia = async (sectionId, type) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -699,12 +733,9 @@ export default function Chapters() {
         return;
       }
 
-      const fileInfo = await FileSystem.getInfoAsync(pickedUri);
-      if (!fileInfo.exists || fileInfo.size === 0) {
-        throw new Error("File is empty or failed to copy to temporary cache storage.");
-      }
-
-      updateSection(sectionId, 'mediaUri', pickedUri);
+      const mediaFileName = `${sectionId}_${Date.now()}${type === SECTION_TYPES.PDF ? '.pdf' : type === SECTION_TYPES.AUDIO ? '.m4a' : type === SECTION_TYPES.VIDEO ? '.mp4' : '.jpg'}`;
+      const cachedUri = await copyPickedMediaToCache(pickedUri, mediaFileName);
+      updateSection(sectionId, 'mediaUri', cachedUri);
 
     } catch (err) {
       Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
@@ -925,7 +956,7 @@ export default function Chapters() {
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.5 }], marginBottom: 25 }} />
+        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.0 }], marginBottom: 25 }} />
         <Text style={styles.loadingText}>Please Wait...</Text>
       </View>
     </View>

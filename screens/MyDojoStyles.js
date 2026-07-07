@@ -649,6 +649,40 @@ export default function MyDojoStyles({route}) {
   
 
     
+    const copyPickedMediaToCache = async (sourceUri, fileName, retries = 3) => {
+      const cacheDir = `${FileSystem.cacheDirectory}move-media/`;
+      await FileSystem.makeDirectoryAsync(cacheDir, { intermediates: true });
+      const destinationUri = `${cacheDir}${fileName}`;
+
+      let lastError = null;
+
+      for (let attempt = 1; attempt <= retries; attempt += 1) {
+        try {
+          const sourceInfo = await FileSystem.getInfoAsync(sourceUri);
+          if (!sourceInfo.exists) {
+            throw new Error('Selected file is not available yet.');
+          }
+
+          await FileSystem.copyAsync({ from: sourceUri, to: destinationUri });
+          const destinationInfo = await FileSystem.getInfoAsync(destinationUri);
+
+          if (destinationInfo.exists && destinationInfo.size > 0) {
+            return destinationUri;
+          }
+
+          lastError = new Error('Copied file is empty.');
+        } catch (error) {
+          lastError = error;
+          if (attempt < retries) {
+            await new Promise((resolve) => setTimeout(resolve, 600 * attempt));
+          }
+        }
+      }
+
+      throw lastError || new Error('Unable to copy selected media.');
+    };
+
+
     const pickMedia = async (index = null) => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
@@ -688,21 +722,19 @@ export default function MyDojoStyles({route}) {
           return; 
         }
 
-        const fileInfo = await FileSystem.getInfoAsync(pickedUri);
-        if (!fileInfo.exists || fileInfo.size === 0) {
-          throw new Error("File is empty or missing from temporary storage.");
-        }
+        const mediaFileName = `${Date.now()}${typeAM === "pdf" ? '.pdf' : isVideo ? '.mp4' : '.jpg'}`;
+        const cachedUri = await copyPickedMediaToCache(pickedUri, mediaFileName);
 
         if (typeAM === "pdf") {
-          setVid(pickedUri);
+          setVid(cachedUri);
         } else if (isVideo) {
-          setVid(pickedUri);
+          setVid(cachedUri);
           if (videoUrl && videoUrl.trim().length > 1) {
             setVideoUrl("");
           }
         } else {
           const s = [...steps];
-          s[index].img = pickedUri;
+          s[index].img = cachedUri;
           setSteps(s);
         }
 
@@ -762,7 +794,7 @@ export default function MyDojoStyles({route}) {
       }
   
       try {
-        if (!loading) setLoading(true);
+        setLoading(true);
         let copyfailed = false;
         const moveId = move?.id || Date.now().toString();
         const permanentDirUri = `${FileSystem.documentDirectory}moves/${moveId}/`;
@@ -792,8 +824,6 @@ export default function MyDojoStyles({route}) {
               }
             }
           }
-
-          console.warn('Copy media failed after retries:', lastError);
           Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
           return "COPYFAILED";
         };
@@ -817,7 +847,7 @@ export default function MyDojoStyles({route}) {
         }
       
         if (copyfailed) {
-          if(loading) setLoading(false);
+          setLoading(false);
           return;
         }
 
@@ -839,7 +869,7 @@ export default function MyDojoStyles({route}) {
       } catch (err) {
         Alert.alert("Save Error", err.message || "An unknown error occurred.");
       } finally {
-        if(loading) setLoading(false);
+        setLoading(false);
       }
     };
 
