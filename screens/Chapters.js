@@ -955,8 +955,9 @@ export default function Chapters() {
 
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.0 }], marginBottom: 25 }} />
+      <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -57, marginBottom: 12 }}>
+        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -24, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
+        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.0 }], marginBottom: 12 }} />
         <Text style={styles.loadingText}>Please Wait...</Text>
       </View>
     </View>
