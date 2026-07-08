@@ -102,9 +102,11 @@ export default function Chapters() {
         } 
       });
   
-      if(cCategories.length > 1) {
+      if (cCategories.length > 1) {
         setSchapters(cCategories);
-      } 
+      } else {
+        setSchapters([]);
+      }
     } catch (e) {
       Alert.alert("Parse Error", "An error occurred while grouping chapter category: " + e.message);
     }
@@ -163,6 +165,7 @@ export default function Chapters() {
         );
 
         if (loadedChapters.length === 0) {
+          setSchapters([]);
           setMode("main");
           setHchapters([]);
         } else {
@@ -170,9 +173,9 @@ export default function Chapters() {
           parseCategories(loadedChapters, null);
 
           const filtered = getChapters(chapterCategory, loadedChapters);
-          if (filtered.length === 0 && mode === "list") {
+          if (filtered.length === 0) {
             setHchapters([]);
-            setMode("main");
+            if(mode === "list") setMode("main");
           } else {
             setHchapters(filtered);
           }
@@ -271,12 +274,9 @@ export default function Chapters() {
               setCurrentChapter(null);
 
               if (isDeletingAll || updatedList.filter(m => (chapterCategory === "allcategories" || m.category === chapterCategory)).length < 1) {
-                setMode('main');
                 setChapterCategory('Enter Category');
-                if( isDeletingAll && prevCategory && prevCategory === "allcategories" ) {
-                  setSchapters([]);
-                }
                 setPrevCategory("");
+                setMode('main');
               } else {
                 setHchapters(getChapters(chapterCategory, updatedList));
               }
@@ -757,7 +757,7 @@ export default function Chapters() {
       updateSection(sectionId, 'mediaUri', pickedUri);
 
     } catch (err) {
-      Alert.alert("Pick Failed", "Could not add this file. Please try again or choose a smaller file.");
+      Alert.alert("Pick Failed", "Please try again or choose a smaller file. Your device may be running out of space.");
     } finally {
       setIsPicking(false);
     }
@@ -810,7 +810,7 @@ export default function Chapters() {
           await FileSystem.copyAsync({ from: uri, to: destUri });
           return destUri;
         } catch (e) {
-          Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+          Alert.alert("Copy Media Failed", "Please try again. The file is large. Your device may be running out of space.");
           return "COPYFAILED";
         }
       };
