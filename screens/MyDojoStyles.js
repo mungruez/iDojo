@@ -918,8 +918,7 @@ export default function MyDojoStyles({route}) {
         setLoading(false);
       }
     };
-
-
+    
 
     useEffect(() => {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -951,7 +950,6 @@ export default function MyDojoStyles({route}) {
 
       return () => backHandler.remove();
     }, [viewmode, addmode, listmode]);
-
 
 
     const toggleSelectSingle = (index) => {
@@ -1072,6 +1070,7 @@ export default function MyDojoStyles({route}) {
         <Text style={{ marginTop: 12, color: '#01421e', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
       </View>
     );
+
     if (loading && ftype === 'pdf') return (
       <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color="#0d1879" style={{ transform: [{ scale: 1.7 }] }} />
@@ -1305,8 +1304,7 @@ export default function MyDojoStyles({route}) {
          </TouchableOpacity>
        </ScrollView>
       </KeyboardAvoidingView>
-      </ImageBackground>
-    );   
+      </ImageBackground> );   
 
 
     if (listmode) return (

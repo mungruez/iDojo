@@ -1374,6 +1374,7 @@ export default function Chapters() {
    );
   }
 
+  
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
@@ -1449,6 +1450,7 @@ export default function Chapters() {
      </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
 container: { flex: 1, backgroundColor: '#c2cdd4' },
