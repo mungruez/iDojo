@@ -646,17 +646,37 @@ export default function MyDojoStyles({route}) {
         trimmed.includes('.pdf')
       );
     };
+
+
+    const getMediaFileExtension = (uri, type) => {
+      if (typeof uri === 'string') {
+        const nameFromUri = uri.split('/').pop()?.split('?')[0] || '';
+        const extFromName = nameFromUri.includes('.')
+          ? `.${nameFromUri.split('.').pop().toLowerCase()}`
+          : '';
+
+        const supportedExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.mp4', '.mov', '.avi', '.m4a', '.mp3', '.wav', '.pdf', '.aac', '.ogg'];
+        if (supportedExts.includes(extFromName)) {
+          return extFromName;
+        }
+      }
+
+      if (type === "pdf") return '.pdf';
+      if (type === "audio") return '.wav';
+      if (type === "steps") return '.jpg';
+      return '.mp4';
+    };
   
 
     
-    const copyPickedMediaToCache = async (sourceUri, fileName, retries = 3) => {
+    const copyPickedMediaToCache = async (sourceUri, fileName, retries = 2) => {
       const cacheDir = `${FileSystem.cacheDirectory}move-media/`;
       await FileSystem.makeDirectoryAsync(cacheDir, { intermediates: true });
       const destinationUri = `${cacheDir}${fileName}`;
 
       let lastError = null;
 
-      for (let attempt = 1; attempt <= retries; attempt += 1) {
+      for (let attempt = 1; attempt < retries; attempt += 1) {
         try {
           const sourceInfo = await FileSystem.getInfoAsync(sourceUri);
           if (!sourceInfo.exists) {
@@ -674,12 +694,29 @@ export default function MyDojoStyles({route}) {
         } catch (error) {
           lastError = error;
           if (attempt < retries) {
-            await new Promise((resolve) => setTimeout(resolve, 600 * attempt));
+            await new Promise((resolve) => setTimeout(resolve, 760 * attempt));
           }
         }
       }
 
       throw lastError || new Error('Unable to copy selected media.');
+    };
+
+
+    const isValidMediaUri = async (uri) => {
+      if (!uri || typeof uri !== 'string') return false;
+      if (!uri.startsWith('file://') && !uri.startsWith('http')) return false;
+    
+      if (uri.startsWith('file://')) {
+        try {
+          const info = await FileSystem.getInfoAsync(uri);
+          return info.exists && info.size > 0;
+        } catch {
+          return false;
+        }
+      }
+    
+      return true;
     };
 
 
@@ -718,11 +755,20 @@ export default function MyDojoStyles({route}) {
           }
         }
         
+        if (!pickedUri || !(await isValidMediaUri(pickedUri))) {
+          Alert.alert(
+            "Selected Media Failed",
+            "This file could not be used. Please try again or choose a different file."
+          );
+          return;
+        }
+
         if (pickedUri === "") {
           return; 
         }
 
-        const mediaFileName = `${Date.now()}${typeAM === "pdf" ? '.pdf' : isVideo ? '.mp4' : '.jpg'}`;
+        const ext = getMediaFileExtension(pickedUri, typeAM);
+        const mediaFileName = `${Date.now()}${ext}`;
         const cachedUri = await copyPickedMediaToCache(pickedUri, mediaFileName);
 
         if (typeAM === "pdf") {
@@ -812,13 +858,13 @@ export default function MyDojoStyles({route}) {
           const destUri = `${permanentDirUri}${fileName}`;
           let lastError;
 
-          for (let attempt = 1; attempt <= 3; attempt += 1) {
+          for (let attempt = 1; attempt < 2; attempt += 1) {
             try {
               await FileSystem.copyAsync({ from: uri, to: destUri });
               return destUri;
             } catch (e) {
               lastError = e;
-              if (attempt < 3) {
+              if (attempt < 2) {
                 await new Promise((resolve) => setTimeout(resolve, 570 * attempt));
                 continue;
               }
@@ -831,9 +877,9 @@ export default function MyDojoStyles({route}) {
         let finalVid = vid; 
         let finalSteps = [...steps];
         if ((typeAM === "video" || typeAM === "pdf") && vid) {
-          const ext = typeAM === 'pdf' ? '.pdf' : '.mp4';
-            finalVid = await ensurePermanent(vid, `file_${Date.now()}${ext}`);
-            if ( finalVid === "COPYFAILED") copyfailed = true;
+          const ext = getMediaFileExtension(vid, typeAM);
+          finalVid = await ensurePermanent(vid, `idojo_file_${Date.now()}${ext}`);
+          if ( finalVid === "COPYFAILED") copyfailed = true;
         }
         
         if (typeAM === 'steps') {
@@ -841,7 +887,7 @@ export default function MyDojoStyles({route}) {
             ...s,
             title: s.title.trim() || `Step ${i + 1}`,
             img: s.img && s.img.startsWith('file://') && !s.img.includes('/moves/') 
-              ? await ensurePermanent(s.img, `step_${i}_${Date.now()}.jpg`)
+              ? await ensurePermanent(s.img, `step_${i}_${Date.now()}${getMediaFileExtension(s.img, 'image')}`)
               : s.img
           })));
         }
@@ -885,6 +931,7 @@ export default function MyDojoStyles({route}) {
         }
 
         if (addmode) {
+          if(isPicking) return true;
           if (isLoadingRef.current) return true;
           setAddMode(false);
           return true;
@@ -947,7 +994,6 @@ export default function MyDojoStyles({route}) {
         }
     };
       
-
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
@@ -1019,6 +1065,7 @@ export default function MyDojoStyles({route}) {
         <Text style={{ marginTop: 12, color: '#420105', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
       </View>
     );
+
     if (loading && ftype === 'steps') return (
       <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color="#0b6112" style={{ transform: [{ scale: 1.7 }] }} />
@@ -1115,7 +1162,7 @@ export default function MyDojoStyles({route}) {
        <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
          <ImageBackground style={ styles.iconAM } resizeMode='contain' imageStyle={{ opacity: 1 }} source={typeAM ==='video' && !move ? require('../assets/addmovetitle.png') : typeAM ==='video' && move ? require('../assets/editmovetitle.png') : typeAM ==='steps' && !move ? require('../assets/addmanualtitle.png') : typeAM ==='steps' && move ? require('../assets/editmanualtitle.png') : typeAM ==="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
        </View>
-       <TouchableOpacity onPress={() => setAddMode(false)} style={styles.discardBtn}>
+       <TouchableOpacity onPress={() => { if (isPicking) return; setAddMode(false) }} style={styles.discardBtn}>
          <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
          <Text style={styles.discardText}>CANCEL</Text>
        </TouchableOpacity>
@@ -1259,7 +1306,7 @@ export default function MyDojoStyles({route}) {
        </ScrollView>
       </KeyboardAvoidingView>
       </ImageBackground>
-     );   
+    );   
 
 
     if (listmode) return (

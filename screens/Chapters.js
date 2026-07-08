@@ -612,11 +612,6 @@ export default function Chapters() {
     setCurrentChapter(null);
     setChapterId(Date.now().toString());
     setChapterTitle('');
-    if(prevCategory && prevCategory === "allcategories") {
-      setChapterCategory("allcategories");
-    } else {
-      setChapterCategory(chapterCategory || "allcategories");
-    }
     setChapterDesc('');
     setSections([]);
   };
@@ -659,38 +654,56 @@ export default function Chapters() {
   };
   
 
+  const isRenderableMediaUri = (uri) => {
+    if (!uri || typeof uri !== 'string') return false;
+    return uri.startsWith('http://') || uri.startsWith('https://') || uri.startsWith('file://') || uri.startsWith('content://');
+  };
 
-  const copyPickedMediaToCache = async (sourceUri, fileName, retries = 3) => {
-    const cacheDir = `${FileSystem.cacheDirectory}chapter-media/`;
-    await FileSystem.makeDirectoryAsync(cacheDir, { intermediates: true });
-    const destinationUri = `${cacheDir}${fileName}`;
+  const getMediaFileExtension = (uri, type) => {
+    if (typeof uri === 'string') {
+      const nameFromUri = uri.split('/').pop()?.split('?')[0] || '';
+      const extFromName = nameFromUri.includes('.')
+        ? `.${nameFromUri.split('.').pop().toLowerCase()}`
+        : '';
 
-    let lastError = null;
-
-    for (let attempt = 1; attempt <= retries; attempt += 1) {
-      try {
-        const sourceInfo = await FileSystem.getInfoAsync(sourceUri);
-        if (!sourceInfo.exists) {
-          throw new Error('Selected file is not available yet.');
-        }
-
-        await FileSystem.copyAsync({ from: sourceUri, to: destinationUri });
-        const destinationInfo = await FileSystem.getInfoAsync(destinationUri);
-
-        if (destinationInfo.exists && destinationInfo.size > 0) {
-          return destinationUri;
-        }
-
-        lastError = new Error('Copied file is empty.');
-      } catch (error) {
-        lastError = error;
-        if (attempt < retries) {
-          await new Promise((resolve) => setTimeout(resolve, 600 * attempt));
-        }
+      const supportedExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.mp4', '.mov', '.avi', '.m4a', '.mp3', '.wav', '.pdf', '.aac', '.ogg'];
+      if (supportedExts.includes(extFromName)) {
+        return extFromName;
       }
     }
 
-    throw lastError || new Error('Unable to copy selected media.');
+    if (type === SECTION_TYPES.PDF) return '.pdf';
+    if (type === SECTION_TYPES.AUDIO) return '.wav';
+    if (type === SECTION_TYPES.IMAGE) return '.jpg';
+    return '.mp4';
+  };
+
+
+  const isValidMediaUri = async (uri, minimumSize = 0) => {
+    if (!uri || typeof uri !== 'string') return false;
+    if (uri.startsWith('http://') || uri.startsWith('https://')) return true;
+    if (uri.startsWith('content://')) {
+      try {
+        const info = await FileSystem.getInfoAsync(uri);
+        return info.exists && (typeof info.size !== 'number' || info.size > minimumSize);
+      } catch {
+        return true;
+      }
+    }
+    if (!uri.startsWith('file://')) return false;
+
+    try {
+      const info = await FileSystem.getInfoAsync(uri);
+      return info.exists && (typeof info.size !== 'number' || info.size > minimumSize);
+    } catch {
+      return false;
+    }
+  };
+
+
+  const getSectionPreviewSource = (section) => {
+    if (!section?.mediaUri || !isRenderableMediaUri(section.mediaUri)) return null;
+    return { uri: section.mediaUri };
   };
 
 
@@ -712,7 +725,7 @@ export default function Chapters() {
         }
       } else if (type === SECTION_TYPES.AUDIO) {
         const result = await DocumentPicker.getDocumentAsync({ 
-          type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/wav']
+          type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/wave']
         });
         if (!result.canceled && result.assets?.length > 0) {
           pickedUri = result.assets[0].uri;
@@ -728,17 +741,23 @@ export default function Chapters() {
           pickedUri = result.assets[0].uri;
         }
       }
+      
+      if (!pickedUri || !(await isValidMediaUri(pickedUri, 0))) {
+        Alert.alert(
+          "Pick Failed",
+          "This file could not be used. Please try again or choose a different file."
+        );
+        return;
+      }
 
       if (pickedUri === "") {
         return;
       }
 
-      const mediaFileName = `${sectionId}_${Date.now()}${type === SECTION_TYPES.PDF ? '.pdf' : type === SECTION_TYPES.AUDIO ? '.m4a' : type === SECTION_TYPES.VIDEO ? '.mp4' : '.jpg'}`;
-      const cachedUri = await copyPickedMediaToCache(pickedUri, mediaFileName);
-      updateSection(sectionId, 'mediaUri', cachedUri);
+      updateSection(sectionId, 'mediaUri', pickedUri);
 
     } catch (err) {
-      Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+      Alert.alert("Pick Failed", "Could not add this file. Please try again or choose a smaller file.");
     } finally {
       setIsPicking(false);
     }
@@ -748,7 +767,7 @@ export default function Chapters() {
 
   const saveChapter = async () => {
     if(isPicking) { 
-        return;
+      return;
     }
 
     if (!chapterTitle.trim()) {
@@ -778,7 +797,7 @@ export default function Chapters() {
     }
 
     try {
-      if (!loading) setLoading(true);
+      setLoading(true);
       let copyfailed = false;
       const chaptId = chapterId || currentChapter?.id || Date.now().toString();
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
@@ -787,29 +806,20 @@ export default function Chapters() {
       const ensurePermanent = async (uri, fileName) => {
         if (!uri || uri.startsWith(permanentDirUri)) return uri;
         const destUri = `${permanentDirUri}${fileName}`;
-        let lastError;
-
-        for (let attempt = 1; attempt <= 3; attempt += 1) {
-          try {
-            await FileSystem.copyAsync({ from: uri, to: destUri });
-            return destUri;
-          } catch (e) {
-            lastError = e;
-            if (attempt < 3) {
-              await new Promise((resolve) => setTimeout(resolve, 570 * attempt));
-              continue;
-            }
-          }
+        try {
+          await FileSystem.copyAsync({ from: uri, to: destUri });
+          return destUri;
+        } catch (e) {
+          Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+          return "COPYFAILED";
         }
-        Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
-        return "COPYFAILED";
       };
 
       const processedSections = await Promise.all(
         sections.map(async (section) => {
           const newSection = { ...section };
           if (section.mediaUri) {
-            const ext = section.type === 'pdf' ? '.pdf' : section.type === 'audio' ? '.m4a' : section.type === 'image' ? '.jpg' : '.mp4';
+            const ext = getMediaFileExtension(section.mediaUri, section.type);
             newSection.mediaUri = await ensurePermanent(section.mediaUri, `section_${section.id}_${Date.now()}${ext}`);
             if ( newSection.mediaUri === "COPYFAILED") copyfailed = true;
           }
@@ -832,6 +842,7 @@ export default function Chapters() {
       };
 
       await handleSaveChapter(chapterData);
+      setChapterCategory(prevCategory || '');
       setMode(prevMode);
 
     } catch (err) {
@@ -848,12 +859,12 @@ export default function Chapters() {
 
     for (const section of chapter.sections) {
       if (section.type === 'image' && (section.mediaUri || section.mediaUrl)) {
-        if(section.mediaUri) return { uri: section.mediaUri };
-        if(!isOffline && section.mediaUrl) return { uri: section.mediaUrl };
+        if(section.mediaUri && isRenderableMediaUri(section.mediaUri)) return { uri: section.mediaUri };
+        if(!isOffline && section.mediaUrl && isRenderableMediaUri(section.mediaUrl)) return { uri: section.mediaUrl };
       }
 
       if (section.type === 'video') {
-        if (section.mediaUri) return { uri: section.mediaUri };
+        if (section.mediaUri && isRenderableMediaUri(section.mediaUri)) return { uri: section.mediaUri };
 
         if (section.mediaUrl?.includes('youtube.com') || section.mediaUrl?.includes('youtu.be')) {
           const id = section.mediaUrl.match(/(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/)?.[1];
@@ -891,9 +902,10 @@ export default function Chapters() {
       }
 
       if (mode === "add") {
+        if(isPicking) return true;
         if (isLoadingRef.current) return true;
-        if(prevMode === "list") setMode("list");
-        else setMode("main");
+        setChapterCategory(prevCategory || '');
+        setMode(prevMode === "list" ? "list" : "main");
         resetForm();
         return true;
       }
@@ -956,8 +968,8 @@ export default function Chapters() {
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -57, marginBottom: 12 }}>
-        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -24, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
-        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.0 }], marginBottom: 12 }} />
+        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -43, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
+        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.0 }], marginBottom: 17 }} />
         <Text style={styles.loadingText}>Please Wait...</Text>
       </View>
     </View>
@@ -1145,7 +1157,16 @@ export default function Chapters() {
             <ImageBackground style={ styles.iconAM } resizeMode='contain' imageStyle={{ opacity: 1 }} source={currentChapter ? require('../assets/editchaptertitle.png') : require('../assets/addchaptertitle.png') } /> 
           </View>
 
-          <TouchableOpacity onPress={() => { resetForm(); setMode(prevMode); }} style={styles.discardBtn}>
+          <TouchableOpacity onPress={() => {
+              if (isPicking) return;
+              try {
+                setChapterCategory(prevCategory || '');
+                setMode(prevMode === "list" ? "list" : "main");
+                resetForm();
+              } catch (err) {
+                Alert.alert('Cancel Error', err?.message || String(err));
+              }
+            }} style={styles.discardBtn}>
             <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
             <Text style={styles.discardText}>CANCEL</Text>
           </TouchableOpacity>
@@ -1179,7 +1200,10 @@ export default function Chapters() {
               multiline={true}
             />
 
-            { sections.map((section, index) => (
+            { sections.map((section, index) => {
+              const previewSource = getSectionPreviewSource(section);
+
+              return (
               <View key={section.id} style={styles.sectionCard}>
                 <View style={styles.sectionHeaderAM}>
                   <Text style={styles.sectionHeaderTextAM}>Section {index + 1}</Text>
@@ -1206,16 +1230,16 @@ export default function Chapters() {
                   onPress={() => pickMedia(section.id, section.type)}
                 >
                   { isPicking ? (
-                      <View style={{ marginTop: 57, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                      <View style={{ height: 95, width: 114, marginTop: 57, alignItems: 'center', justifyContent: 'center'}}>
                         <ActivityIndicator size="small" color="#a88510" style={{ transform: [{ scale: 1.5 }] }} />
                         <Text style={{ marginTop: 8, color: '#f3efbd', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
                       </View>
                     ) : section.mediaUri ? (
                       <View style={section.type === "video" ? styles.videoIconUploaded : section.type === "pdf" ? styles.pdfIconUploaded : section.type === "audio" ? styles.audioIconUploaded : styles.imageIconUploaded } > 
-                        { section.type === SECTION_TYPES.IMAGE ? (
-                            <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
-                          ) : section.type === SECTION_TYPES.VIDEO && section.mediaUri ? (
-                            <Image source={{ uri: section.mediaUri }} style={styles.stepImg} />
+                        { section.type === SECTION_TYPES.IMAGE && previewSource ? (
+                            <Image source={previewSource} style={styles.stepImg} />
+                          ) : section.type === SECTION_TYPES.VIDEO && previewSource ? (
+                            <Image source={previewSource} style={styles.stepImg} />
                           ) : (
                           <View style={styles.stepImg}>
                             <Text style={[{fontSize: 45, marginLeft: 13, marginTop: 15}, section.type === SECTION_TYPES.PDF && {fontSize: 57, marginLeft: 12, marginTop: 7}]}>
@@ -1315,7 +1339,8 @@ export default function Chapters() {
                   </TouchableOpacity>
                 </View>
               </View>
-            ))}
+              );
+            })}
 
             <View style={styles.addSectionContainer}>
               <View style={styles.addSectionButtons}>
@@ -1375,7 +1400,7 @@ export default function Chapters() {
           </View>
 
           <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom: 1, minHeight: 73, width:"100%"}}>
-            <TouchableOpacity onPress={() => { setCurrentChapter(null); setChapterTitle(""); setChapterCategory(""); setChapterDesc(""); setSelectedIds([]); setSections([]); setPrevMode("main"); setMode("add"); } } style={styles.plusIcon}>
+            <TouchableOpacity onPress={() => { setCurrentChapter(null); setChapterTitle(""); setPrevCategory(""); setChapterCategory(""); setChapterDesc(""); setSelectedIds([]); setSections([]); setPrevMode("main"); setMode("add"); } } style={styles.plusIcon}>
               <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/addchaptericon.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={handleImportChapters} style={styles.importIcon}>
@@ -1527,5 +1552,5 @@ changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'ce
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
 loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '93%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
-loadingText: { color: '#f3efbd', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' },
+loadingText: { color: '#f3efbd', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase', marginTop: 7 },
 });
