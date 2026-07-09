@@ -323,7 +323,7 @@ export default function MyDojoStyles({route}) {
           : hmoves.filter(m => selectedids.includes(m.id));
 
         const shareDirUri = `${FileSystem.cacheDirectory}share_batch/`;
-        const zipPathUri = `${FileSystem.cacheDirectory}iDojo_Export.zip`;
+        const zipPathUri = `${FileSystem.cacheDirectory}iDojo_Moves_Export.zip`;
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.makeDirectoryAsync(shareDirUri, { intermediates: true });
 
@@ -620,7 +620,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const viewManual = (mv) => {
       setMove(mv);
       setViewMode(3);
@@ -636,7 +635,6 @@ export default function MyDojoStyles({route}) {
       setFStyleAM(text);
     };
     
-
 
     const isValidPdfUrl = (url) => {
       if (!url || typeof url !== 'string') return false;
@@ -668,7 +666,6 @@ export default function MyDojoStyles({route}) {
     };
   
 
-    
     const copyPickedMediaToCache = async (sourceUri, fileName, retries = 2) => {
       const cacheDir = `${FileSystem.cacheDirectory}move-media/`;
       await FileSystem.makeDirectoryAsync(cacheDir, { intermediates: true });
@@ -758,7 +755,7 @@ export default function MyDojoStyles({route}) {
         if (!pickedUri || !(await isValidMediaUri(pickedUri))) {
           Alert.alert(
             "Selected Media Failed",
-            "This file could not be used. Please try again or choose a different file."
+            "This file could not be used. Please try again or choose a different file. Your device may be running out of space."
           );
           return;
         }
@@ -785,7 +782,7 @@ export default function MyDojoStyles({route}) {
         }
 
       } catch (err) {
-        Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+        Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may be running out of space.");
       } finally {
         setIsPicking(false);
       }
@@ -870,7 +867,7 @@ export default function MyDojoStyles({route}) {
               }
             }
           }
-          Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may run out of space.");
+          Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may be running out of space. You may need to free some memory.");
           return "COPYFAILED";
         };
   
@@ -887,7 +884,7 @@ export default function MyDojoStyles({route}) {
             ...s,
             title: s.title.trim() || `Step ${i + 1}`,
             img: s.img && s.img.startsWith('file://') && !s.img.includes('/moves/') 
-              ? await ensurePermanent(s.img, `step_${i}_${Date.now()}${getMediaFileExtension(s.img, 'image')}`)
+              ? await ensurePermanent(s.img, `idojo_step_${i}_${Date.now()}${getMediaFileExtension(s.img, 'image')}`)
               : s.img
           })));
         }
@@ -1058,22 +1055,25 @@ export default function MyDojoStyles({route}) {
 
 
     if (loading && ftype === 'video') return (
-      <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#f30707" style={{ transform: [{ scale: 1.7 }] }} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fcf1ec', width: "100%", height: "93%" }}>
+        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -12, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
+        <ActivityIndicator size="large" color="#f30707" style={{ marginTop: 12, transform: [{ scale: 1.7 }] }} />
         <Text style={{ marginTop: 12, color: '#420105', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
       </View>
     );
 
     if (loading && ftype === 'steps') return (
-      <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#0b6112" style={{ transform: [{ scale: 1.7 }] }} />
-        <Text style={{ marginTop: 12, color: '#01421e', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#d9eec4', width: "100%", height: "93%" }}>
+        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -12, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
+        <ActivityIndicator size="large" color="#0e6415" style={{ marginTop: 12, transform: [{ scale: 1.7 }] }} />
+        <Text style={{ marginTop: 12, color: '#044421', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
       </View>
     );
 
     if (loading && ftype === 'pdf') return (
-      <View style={{ flex: 1, marginTop: 38, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#0d1879" style={{ transform: [{ scale: 1.7 }] }} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#c4d9ee', width: "100%", height: "93%" }}>
+        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -12, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
+        <ActivityIndicator size="large" color="#0d1879" style={{ marginTop: 12, transform: [{ scale: 1.7 }] }} />
         <Text style={{ marginTop: 12, color: '#0b0142', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
       </View>
     );
@@ -1085,7 +1085,7 @@ export default function MyDojoStyles({route}) {
 
 
     if(viewmode == 3) return (
-      <View style={{flex: 1, paddingTop: 40, backgroundColor:"#228b22", opacity: 1}}> 
+      <View style={{flex: 1, paddingTop: 40, backgroundColor:"#0ba156", opacity: 1}}> 
        <StatusBar barStyle="light-content"/>
        <SafeAreaView style={{ backgroundColor:'black', flex: 1}}>
         <Text style={{ backgroundColor: '#2f4f4f', color: "crimson", textAlign: "center", fontSize: 21, marginBottom: 19, marginTop: 38 }}>

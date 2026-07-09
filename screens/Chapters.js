@@ -55,7 +55,7 @@ export default function Chapters() {
   const showInstructions = () => {
     Alert.alert(
       "My Dojo Moves List",
-      "Intructions: Save, Edit, View, Share, Delete and Import Chapters using iDojo. You may add any number of Chapters your phone memory allows. Click the binoculars icon to search Chapters by the search term entered. After a search another search can be done by using backspace to remove the search term instead of the silver reload icon.\n(1) Use the gold, plus(+) icon in the top menu bar to Add Chapters. Every Chapter must contain at least one Section. You can add a Video, Audio, PDF or Image to a Section. A category, title is required for all Chapters and media is required for all Sections of a Chapter. Media in each Setion can contain online links or a file uploaded from the phone, not both.\n(2) Click on one of the white and gold buttons on the Chapters Screen to see the List Screen with all Chapters in the same Category.\n(3) On the list screen press and hold a move card to see the batch bar appear, after select all Chapters to share or delete and click on the share or delete button in the batch bar to share or delete Chapters. Use the Edit button at the bottom of each Chapter card in the list to edit a Chapter, and to view any Chapter just click on its Chapter card. When viewing a video Section of a Chapter, click the red arrow to the right to the title to share the individual video. When viewing a Chapters press the square to see fullscreen mode appear, then click the red, green or blue share arrow to share a Section. Chapters can be shared and imported with the iDojo App and the wheeShare App, only single videos, images and PDFs can be shared externally.\n(4) The first Category button has All Categories written in gold. Scroll horizontally and vertically on the All categories List Screen to view all Chapters. On the Add Chapters screen fill out the form and click the save button to save Chapters. When adding Sections on the Add Chapter screen click one of the four buttons above the gold save button, to add a Scetion. The -section icon is provided for removing Sections and next to it is the Change To icons that can be used to change a section type to pdf,image,video or audio. Thank you for using our App.",
+      "Intructions: Save, Edit, View, Share, Delete and Import Chapters using iDojo. You may add any number of Chapters your phone memory allows. Click the binoculars icon to search Chapters by the search term entered. After a search another search can be done by using backspace to remove the search term instead of the silver reload icon.\n(1) Use the gold, plus(+) icon in the top menu bar to Add Chapters. Every Chapter must contain at least one Section. You can add a Video, Audio, PDF or Image to a Section. A category, title is required for all Chapters and media is required for all Sections of a Chapter. Media in each Section can contain online links or a file uploaded from the phone, not both.\n(2) Click on one of the white and gold buttons on the Chapters Screen to see the List Screen with all Chapters in the same Category.\n(3) On the list screen press and hold a move card to see the batch bar appear, after select all Chapters to share or delete and click on the share or delete button in the batch bar to share or delete Chapters. Use the Edit button at the bottom of each Chapter card in the list to edit a Chapter, and to view any Chapter just click on its Chapter card. When viewing a video Section of a Chapter, click the red arrow to the right to the title to share the individual video. When viewing a Chapters press the square to see full-screen mode appear, then click the red, green or blue share arrow to share a Section. Chapters can be shared and imported with the iDojo App and the WheeShare App, only single videos, images and PDFs can be shared externally.\n(4) The first Category button has All Categories written in gold. Scroll horizontally and vertically on the All categories List Screen to view all Chapters. On the Add Chapters screen fill out the form and click the save button to save Chapters. When adding Sections on the Add Chapter screen click one of the four buttons above the gold save button, to add a Section. The -section icon is provided for removing Sections and next to it is the Change To icons that can be used to change a section type to pdf,image,video or audio. Thank you for using our App.",
       [ { text: "OK",
         onPress: () => setMode("main"),
           style: "cancel" 
@@ -619,6 +619,7 @@ export default function Chapters() {
 
 
   const addSection = (type) => {
+    if (isPicking) return;
     const newSection = {
       id: Date.now().toString(),
       type: type,
@@ -632,11 +633,13 @@ export default function Chapters() {
 
 
   const removeSection = (id) => {
+    if (isPicking) return;
     setSections(sections.filter(s => s.id !== id));
   };
 
 
   const updateSection = (id, field, value) => {
+    if (isPicking) return;
     setSections(sections.map(s => s.id === id ? { ...s, [field]: value } : s));
   };
 
@@ -968,8 +971,8 @@ export default function Chapters() {
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -57, marginBottom: 12 }}>
-        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -43, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
-        <ActivityIndicator size="large" color="#b69014" style={{ transform: [{ scale: 2.0 }], marginBottom: 17 }} />
+        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -45, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
+        <ActivityIndicator size="large" color="#b49019" style={{ transform: [{ scale: 1.9 }], marginBottom: 17 }} />
         <Text style={styles.loadingText}>Please Wait...</Text>
       </View>
     </View>
@@ -1227,10 +1230,10 @@ export default function Chapters() {
 
                 <TouchableOpacity 
                   style={styles.stepImgContainer}
-                  onPress={() => pickMedia(section.id, section.type)}
+                  onPress={() => { if (isPicking) return; pickMedia(section.id, section.type) }}
                 >
                   { isPicking ? (
-                      <View style={{ height: 95, width: 114, marginTop: 57, alignItems: 'center', justifyContent: 'center'}}>
+                      <View style={{ height: 114, width: 190, marginTop: 57, alignItems: 'center', justifyContent: 'center'}}>
                         <ActivityIndicator size="small" color="#a88510" style={{ transform: [{ scale: 1.5 }] }} />
                         <Text style={{ marginTop: 8, color: '#f3efbd', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
                       </View>
@@ -1266,18 +1269,18 @@ export default function Chapters() {
                   ) }
                 </TouchableOpacity>
 
-                { section.mediaUri && (
+                { section.mediaUri && !isPicking && (
                   <TouchableOpacity style={styles.toggleModeBtn} onPress={() => { updateSection(section.id, 'mediaUri', null); }}>
                     <Text style={{fontSize: 23, marginTop: -7}}>🔗</Text>
                     <Text style={styles.toggleModeText}>Or Link</Text>
                   </TouchableOpacity>
                 ) }
 
-                { !section.mediaUri && !section.mediaUrl && (
+                { !section.mediaUri && !section.mediaUrl && !isPicking && (
                   <Text style={styles.orText}>— OR —</Text>
                 ) }
                 
-                { !section.mediaUri && (
+                { !section.mediaUri && !isPicking &&(
                   <>
                     <Text style={styles.label}>{`Section ${section.type} URL`}</Text>
                     <TextInput
@@ -1291,7 +1294,7 @@ export default function Chapters() {
                   </>
                 ) }
 
-                { section.mediaUrl && (
+                { section.mediaUrl && !isPicking && (
                   <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { updateSection(section.id, 'mediaUrl', ''); }}>
                     <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
                     <Text style={styles.toggleModeText}> Or Upload</Text>
@@ -1322,7 +1325,7 @@ export default function Chapters() {
                         <TouchableOpacity
                           key={type}
                           style={styles.changeTypeIconBtn}
-                          onPress={() => updateSection(section.id, 'type', type)}
+                          onPress={() => updateSection(section.id, 'type', type) }
                         >
                           <Text style={styles.changeTypeIcon}>
                             {type === SECTION_TYPES.VIDEO ? '📹' :
@@ -1334,7 +1337,7 @@ export default function Chapters() {
                     </View>
                   </View>
 
-                  <TouchableOpacity onPress={() => removeSection(section.id)} style={styles.removeStepIcon}>
+                  <TouchableOpacity onPress={() => removeSection(section.id) } style={styles.removeStepIcon}>
                     <ImageBackground style={{ height: 76, width: "90%" }} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/removesectionicon.png')}/>
                   </TouchableOpacity>
                 </View>
