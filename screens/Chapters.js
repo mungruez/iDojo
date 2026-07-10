@@ -63,6 +63,22 @@ export default function Chapters() {
       { cancelable: false } 
     );
   };
+  
+
+  const clearAppCache = async () => {
+    try {
+      const cacheDir = FileSystem.cacheDirectory;
+      if (cacheDir) {
+        const cachedItems = await FileSystem.readDirectoryAsync(cacheDir);
+        for (const item of cachedItems) {
+          const itemPath = `${cacheDir}${item}`;
+          await FileSystem.deleteAsync(itemPath, { idempotent: true });
+        }
+      }
+    } catch (error) {
+
+    }
+  };
 
 
   const parseCategories = (list, query) => {
@@ -763,7 +779,6 @@ export default function Chapters() {
     }
 
     try {
-      setIsPicking(true);
       let pickedUri = "";
 
       if (type === SECTION_TYPES.PDF) {
@@ -897,21 +912,24 @@ export default function Chapters() {
         updatedAt: new Date().toISOString(),
       };
 
-      try {
-        const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
-        for (const file of existingFiles) {
-          if (!activeSavedFilenames.includes(file)) {
-            const fullPathToDelete = `${permanentDirUri}${file}`;
-            await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
-          }
-        }
-      } catch (cleanupErr) {
-
-      }
-
       await handleSaveChapter(chapterData);
       setChapterCategory(prevCategory || '');
       setMode(prevMode);
+      setTimeout(async () => {
+        try {
+          const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
+          for (const file of existingFiles) {
+            if (!activeSavedFilenames.includes(file)) {
+              const fullPathToDelete = `${permanentDirUri}${file}`;
+              await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+              console.log(`Safely deleted large old video: ${file}`);
+            }
+          }
+        } catch (cleanupErr) {
+
+        }
+      }, 300);
+
     } catch (err) {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
     } finally {
@@ -943,14 +961,13 @@ export default function Chapters() {
     return require('../assets/chapterplaceholder.png');
   };
 
-
   
   useFocusEffect(
     useCallback(() => {
+      clearAppCache();
       loadChapters();
     }, [])
   );
-
 
 
   useEffect(() => {
@@ -1285,7 +1302,7 @@ export default function Chapters() {
 
                 <TouchableOpacity 
                   style={styles.stepImgContainer}
-                  onPress={() => { if (isPicking) return; pickMedia(section.id, section.type) }}
+                  onPress={() => { if (isPicking) return; setIsPicking(true); pickMedia(section.id, section.type) }}
                 >
                   { isPicking ? (
                       <View style={{ height: 114, width: 190, marginTop: 57, alignItems: 'center', justifyContent: 'center'}}>

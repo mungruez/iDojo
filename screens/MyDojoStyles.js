@@ -59,6 +59,23 @@ export default function MyDojoStyles({route}) {
         );
     };
 
+
+    const clearAppCache = async () => {
+      try {
+        const cacheDir = FileSystem.cacheDirectory;
+        if (cacheDir) {
+          const cachedItems = await FileSystem.readDirectoryAsync(cacheDir);
+          for (const item of cachedItems) {
+            const itemPath = `${cacheDir}${item}`;
+            await FileSystem.deleteAsync(itemPath, { idempotent: true });
+          }
+        }
+      } catch (error) {
+      
+      }
+    };
+
+
     const parseStyles = (list, query) => {
       if (!Array.isArray(list)) {
         Alert.alert("Data Error", "Data is not an array, skipping loading.");
@@ -573,7 +590,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
-    useFocusEffect(useCallback(() => { loadMoves(); }, []));
+    useFocusEffect(useCallback(() => { clearAppCache(); loadMoves(); }, []));
 
 
     const toggleSelect = (id) => {
@@ -770,7 +787,6 @@ export default function MyDojoStyles({route}) {
       const mediaType = isVideo ? 'videos' : 'images';
       
       try {
-        setIsPicking(true);
         let pickedUri = "";
 
         if (typeAM === "pdf") {
@@ -943,18 +959,6 @@ export default function MyDojoStyles({route}) {
           return;
         }
 
-        try {
-          const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
-          for (const file of existingFiles) {
-            if (!activeSavedFilenames.includes(file)) {
-              const fullPathToDelete = `${permanentDirUri}${file}`;
-              await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
-            }
-          }
-        } catch (cleanupErr) {
-
-        }
-
         const finalData = {
           id: moveId,
           title: title.trim(),
@@ -966,9 +970,22 @@ export default function MyDojoStyles({route}) {
           thumb: typeAM === "video" || typeAM === "pdf" ? (finalVid || videoUrl) : (finalSteps[0]?.img || null),
           desc: desc 
         };
-  
+
         handleSave(finalData);
         setAddMode(false);
+        setTimeout(async () => {
+          try {
+            const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
+            for (const file of existingFiles) {
+              if (!activeSavedFilenames.includes(file)) {
+                const fullPathToDelete = `${permanentDirUri}${file}`;
+                await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+              }
+            }
+          } catch (cleanupErr) {
+
+          }
+        }, 380);
   
       } catch (err) {
         Alert.alert("Save Error", err.message || "An unknown error occurred.");
@@ -1241,30 +1258,30 @@ export default function MyDojoStyles({route}) {
                 <ActivityIndicator size="small" color="#f30707" style={{ transform: [{ scale: 1.5 }] }} />
                 <Text style={{ marginTop: 8,  color: '#420105',fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Loading</Text>
               </View>
-            ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+            ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
               <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
               </TouchableOpacity> )
               : !videoUrl && ( 
-              <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+              <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia();}} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
                 <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> 
               </TouchableOpacity> )
             }
 
-            { vid && (
+            { vid && !isPicking && (
               <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 5, alignSelf: "flex-start", marginLeft: 12}]} onPress={() => { setVid(''); }}>
                 <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
                 <Text style={styles.toggleModeText}>Or Link</Text>
               </TouchableOpacity>
             ) }
 
-            { !vid && !videoUrl && (
+            { !vid && !videoUrl && !isPicking &&(
               <Text style={styles.orText}>— OR —</Text>
             ) }
                 
-            { !vid && ( <Text style={styles.label}>Video URL of Move</Text> ) }
-            { !vid && ( <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> ) }
+            { !vid && !isPicking && ( <Text style={styles.label}>Video URL of Move</Text> ) }
+            { !vid && !isPicking && ( <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> ) }
 
-            { videoUrl && (
+            { videoUrl && !isPicking && (
               <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
                 <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
                 <Text style={styles.toggleModeText}> Or Upload</Text>
@@ -1281,29 +1298,29 @@ export default function MyDojoStyles({route}) {
                    <ActivityIndicator size="small" color="#0b07f3" style={{ transform: [{ scale: 1.5 }] }} />
                    <Text style={{ marginTop: 8, color: '#141238', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
                  </View>
-               ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+               ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
                  </TouchableOpacity> )
-               : !videoUrl && ( <TouchableOpacity onPress={() => pickMedia()} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+               : !videoUrl && ( <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> 
                 </TouchableOpacity> )
               }
 
-              { vid && (
+              { vid &&  !isPicking && (
                 <TouchableOpacity style={[styles.toggleModePdfBtn, {marginTop: 5, alignSelf: "flex-start", marginLeft: 12}]} onPress={() => { setVid(''); }}>
                   <Text style={{fontSize: 22, marginTop: -7}}>🔗</Text>
                   <Text style={styles.toggleModeText}>Or Link</Text>
                 </TouchableOpacity>
               ) }
 
-              { !vid && !videoUrl && (
+              { !vid && !videoUrl &&  !isPicking && (
                 <Text style={styles.orText}>— OR —</Text>
               ) } 
 
-              { !vid && ( <Text style={styles.label}>PDF URL of Move</Text> ) }
-              { !vid && ( <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> ) }
+              { !vid &&  !isPicking && ( <Text style={styles.label}>PDF URL of Move</Text> ) }
+              { !vid &&  !isPicking && ( <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> ) }
 
-              { videoUrl && (
+              { videoUrl &&  !isPicking && (
                 <TouchableOpacity style={[styles.toggleModePdfBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
                   <Text style={{fontSize: 22, marginTop: -2}}>📁</Text>
                   <Text style={styles.toggleModeText}> Or Upload</Text>
@@ -1320,7 +1337,7 @@ export default function MyDojoStyles({route}) {
                  <Text style={styles.label}>Step Title</Text>
                  <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
                  <Text style={styles.label}>Step Image</Text>
-                 <TouchableOpacity onPress={() => pickMedia(i)} style={styles.stepImgContainer}>
+                 <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(i);}} style={styles.stepImgContainer}>
                    {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
                  </TouchableOpacity>
    
