@@ -150,9 +150,17 @@ export default function Chapters() {
       setLoading(true);
 
       const fileUri = `${FileSystem.documentDirectory}chapters.json`;
+      const trackingUri = `${FileSystem.documentDirectory}.user_initialized`;
       const info = await FileSystem.getInfoAsync(fileUri);
-      
-      if (info.exists) {
+      const trackingInfo = await FileSystem.getInfoAsync(trackingUri);
+    
+      if (!info.exists && !trackingInfo.exists) {
+        await FileSystem.writeAsStringAsync(fileUri, JSON.stringify([]));
+        await FileSystem.writeAsStringAsync(trackingUri, "true");
+      }
+
+      const currentInfo = await FileSystem.getInfoAsync(fileUri);
+      if (currentInfo.exists) {
         const content = await FileSystem.readAsStringAsync(fileUri);
         let loadedChapters = JSON.parse(content);
         loadedChapters = loadedChapters.filter(m => 
@@ -165,6 +173,7 @@ export default function Chapters() {
         );
 
         if (loadedChapters.length === 0) {
+          setChapters([]);
           setSchapters([]);
           setMode("main");
           setHchapters([]);
@@ -179,9 +188,30 @@ export default function Chapters() {
           } else {
             setHchapters(filtered);
           }
-        }
 
-      } else {
+          setTimeout(async () => {
+            try {
+              const baseChaptersDir = `${FileSystem.documentDirectory}chapters/`;
+              const dirInfo = await FileSystem.getInfoAsync(baseChaptersDir);
+                
+              if (dirInfo.exists) {
+                const localFolders = await FileSystem.readDirectoryAsync(baseChaptersDir);
+                const validIds = loadedChapters.map(c => String(c.id).trim());
+
+                for (const folderId of localFolders) {
+                  if (!validIds.includes(String(folderId).trim())) {
+                    const pathToDelete = `${baseChaptersDir}${folderId}/`;
+                    await FileSystem.deleteAsync(pathToDelete, { idempotent: true });
+                  }
+                }
+              }
+
+            } catch (gcError) {
+
+            }
+          }, 1500);
+        } 
+      } else {     
         setChapters([]);
         setSchapters([]);
         setHchapters([]);
@@ -202,6 +232,8 @@ export default function Chapters() {
   const saveChaptersToStorage = async (chaptersData) => {
     try {
       const fileUri = `${FileSystem.documentDirectory}chapters.json`;
+      const trackingUri = `${FileSystem.documentDirectory}.user_initialized`;
+      await FileSystem.writeAsStringAsync(trackingUri, "true");
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(chaptersData));
       setChapters(chaptersData);
       parseCategories(chaptersData, null);
@@ -256,18 +288,29 @@ export default function Chapters() {
         {text: 'Delete', style: 'destructive',
           onPress: async () => {
             try {
-              const chaptersToDelete = chapters.filter(m => cleanIdsToDelete.includes(String(m.id)));
+              setLoading(true);
+              const chaptersToDelete = chapters.filter(m => cleanIdsToDelete.includes(String(m.id).trim()));
+              let errfound = false;
               for (const chapter of chaptersToDelete) {
                 const folderUri = `${FileSystem.documentDirectory}chapters/${chapter.id}/`;
                 try {
                   await FileSystem.deleteAsync(folderUri, { idempotent: true });
                 } catch (err) {
-                    Alert.alert("Delete Error", e.message || "Could not delete file from storage.");
+                  if(!errfound) {
+                    errfound = true;
+                    Alert.alert("Delete Error", err.message || "Could not delete file from storage.");
+                  }
                 }
               }
-              const updatedList = chapters.filter(m => !cleanIdsToDelete.includes(String(m.id)));
+              const updatedList = chapters.filter(m => !cleanIdsToDelete.includes(String(m.id).trim()));
               const fileUri = `${FileSystem.documentDirectory}chapters.json`;
               await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(updatedList));
+              
+              if (updatedList.length === 0) {
+                const trackingUri = `${FileSystem.documentDirectory}.user_initialized`;
+                await FileSystem.writeAsStringAsync(trackingUri, "true");
+              }
+
               setChapters(updatedList);
               parseCategories(updatedList, null);
               setSelectedIds([]);
@@ -283,6 +326,8 @@ export default function Chapters() {
 
             } catch (e) {
               Alert.alert("Delete Error", e.message || "Could not delete files from storage.");
+            } finally {
+              setLoading(false);
             }
           }
         }
@@ -806,11 +851,19 @@ export default function Chapters() {
       const permanentDirUri = `${FileSystem.documentDirectory}chapters/${chaptId}/`;
       await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
 
+      const activeSavedFilenames = [];
       const ensurePermanent = async (uri, fileName) => {
-        if (!uri || uri.startsWith(permanentDirUri)) return uri;
+        if (!uri) return uri;
+         if (uri.startsWith(permanentDirUri)) {
+          const existingName = uri.split('/').pop();
+          activeSavedFilenames.push(existingName);
+          return uri;
+        }
+
         const destUri = `${permanentDirUri}${fileName}`;
         try {
           await FileSystem.copyAsync({ from: uri, to: destUri });
+          activeSavedFilenames.push(fileName);
           return destUri;
         } catch (e) {
           Alert.alert("Copy Media Failed", "Please try again. The file is large. Your device may be running out of space.");
@@ -823,7 +876,7 @@ export default function Chapters() {
           const newSection = { ...section };
           if (section.mediaUri) {
             const ext = getMediaFileExtension(section.mediaUri, section.type);
-            newSection.mediaUri = await ensurePermanent(section.mediaUri, `section_${section.id}_${Date.now()}${ext}`);
+            newSection.mediaUri = await ensurePermanent(section.mediaUri, `idojo_section_${section.id}_${Date.now()}${ext}`);
             if ( newSection.mediaUri === "COPYFAILED") copyfailed = true;
           }
           return newSection;
@@ -844,10 +897,21 @@ export default function Chapters() {
         updatedAt: new Date().toISOString(),
       };
 
+      try {
+        const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
+        for (const file of existingFiles) {
+          if (!activeSavedFilenames.includes(file)) {
+            const fullPathToDelete = `${permanentDirUri}${file}`;
+            await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+          }
+        }
+      } catch (cleanupErr) {
+
+      }
+
       await handleSaveChapter(chapterData);
       setChapterCategory(prevCategory || '');
       setMode(prevMode);
-
     } catch (err) {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
     } finally {
@@ -970,9 +1034,9 @@ export default function Chapters() {
 
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
-      <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: -57, marginBottom: 12 }}>
-        <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -45, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
-        <ActivityIndicator size="large" color="#b49019" style={{ transform: [{ scale: 1.9 }], marginBottom: 17 }} />
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Image style={{ height: 57, width: 76, elevation: 4, marginBottom: 19, opacity: 1 } } resizeMode='contain' source={require('../assets/icon.png')} />
+        <ActivityIndicator size="large" color="#b49019" style={{ transform: [{ scale: 1.9 }], marginBottom: 17,  }} />
         <Text style={styles.loadingText}>Please Wait...</Text>
       </View>
     </View>
@@ -1556,6 +1620,6 @@ changeTypeIconBtn: { width: 53, height: 51, marginHorizontal: 5, borderRadius: 1
 changeTypeIcon: { color: '#f3efbd', fontSize: 34, lineHeight: 38, textAlign: 'center' , alignSelf: 'center' },
 toggleModeBtn: { alignSelf: 'center', marginTop: 45, marginBottom: 19, padding: 5, backgroundColor: 'rgba(212, 175, 55, 0.12)', borderRadius: 6, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.5)', flexDirection: "row" },
 toggleModeText: { color: '#f3efbd', fontSize: 14, fontWeight: '600', marginLeft: 4 },
-loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '93%', backgroundColor: 'rgba(0,0,0,0.75)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
+loadingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '93%', backgroundColor: 'rgba(19, 19, 19, 0.76)', alignItems: 'center', justifyContent: 'center', zIndex: 19, elevation: 50 },
 loadingText: { color: '#f3efbd', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase', marginTop: 7 },
 });
