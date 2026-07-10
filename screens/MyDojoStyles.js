@@ -177,8 +177,15 @@ export default function MyDojoStyles({route}) {
         
         const fileUri = `${FileSystem.documentDirectory}moves.json`;
         const info = await FileSystem.getInfoAsync(fileUri);
-        
-        if (info.exists) {
+        const trackingUri = `${FileSystem.documentDirectory}.moves_user_initialized`;
+        const trackingInfo = await FileSystem.getInfoAsync(trackingUri);
+        if (!info.exists && !trackingInfo.exists) {
+          await FileSystem.writeAsStringAsync(fileUri, JSON.stringify([]));
+          await FileSystem.writeAsStringAsync(trackingUri, "true");
+        }
+
+        const currentInfo = await FileSystem.getInfoAsync(fileUri);
+        if (currentInfo.exists) {
           const content = await FileSystem.readAsStringAsync(fileUri);
           let movesList = JSON.parse(content);
           movesList = movesList.filter(m => 
@@ -208,6 +215,27 @@ export default function MyDojoStyles({route}) {
             } else {
               setHMoves(filtered);
             }
+
+            setTimeout(async () => {
+              try {
+                const baseMovesDir = `${FileSystem.documentDirectory}moves/`;
+                const dirInfo = await FileSystem.getInfoAsync(baseMovesDir);
+                  
+                if (dirInfo.exists) {
+                  const localFolders = await FileSystem.readDirectoryAsync(baseMovesDir);
+                  const validIds = movesList.map(m => String(m.id).trim());
+
+                  for (const folderId of localFolders) {
+                    if (!validIds.includes(String(folderId).trim())) {
+                      const pathToDelete = `${baseMovesDir}${folderId}/`;
+                      await FileSystem.deleteAsync(pathToDelete, { idempotent: true });
+                    }
+                  }
+                }
+              } catch (gcError) {
+                
+              }
+            }, 1500);
           }
         } else {
           setMoves([]);
@@ -228,6 +256,8 @@ export default function MyDojoStyles({route}) {
     const saveToStorage = async (list) => {
       try {
         const fileUri = `${FileSystem.documentDirectory}moves.json`;
+        const trackingUri = `${FileSystem.documentDirectory}.moves_user_initialized`;
+        await FileSystem.writeAsStringAsync(trackingUri, "true");
         await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(list));
         parseStyles(list, null);
         setHMoves(getMoves(fstyle, ftype, list)); 
@@ -279,13 +309,25 @@ export default function MyDojoStyles({route}) {
            onPress: async () => {
             try {
               const movesToDelete = moves.filter(m => cleanIdsToDelete.includes(String(m.id)));
-              for (const move of movesToDelete) {
-                const folderUri = `${FileSystem.documentDirectory}moves/${move.id}/`;
-                await FileSystem.deleteAsync(folderUri, { idempotent: true });
+              let errfound = false;
+              for (const moveItem of movesToDelete) {
+                const folderUri = `${FileSystem.documentDirectory}moves/${moveItem.id}/`;
+                try {
+                  await FileSystem.deleteAsync(folderUri, { idempotent: true });
+                } catch (err) {
+                  if (!errfound) {
+                    errfound = true;
+                    Alert.alert("Delete Error", err.message || "Could not delete file from storage.");
+                  }
+                }
               }
               const updatedList = moves.filter(m => !cleanIdsToDelete.includes(String(m.id)));
               const fileUri = `${FileSystem.documentDirectory}moves.json`;
               await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(updatedList));
+              if (updatedList.length === 0) {
+                  const trackingUri = `${FileSystem.documentDirectory}.moves_user_initialized`;
+                  await FileSystem.writeAsStringAsync(trackingUri, "true");
+                }
               setMoves(updatedList);
               parseStyles(updatedList, null);
               setSelectedIds([]);
@@ -849,15 +891,22 @@ export default function MyDojoStyles({route}) {
           await FileSystem.deleteAsync(permanentDirUri, { idempotent: true });
         }
   
+        const activeSavedFilenames = [];
         await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
         const ensurePermanent = async (uri, fileName) => {
-          if (!uri || !uri.startsWith('file://') || uri.includes('/moves/')) return uri;
+          if (!uri || !uri.startsWith('file://')) return uri;
+          if (uri.startsWith(permanentDirUri)) {
+            const existingName = uri.split('/').pop();
+            activeSavedFilenames.push(existingName);
+            return uri;
+          }
           const destUri = `${permanentDirUri}${fileName}`;
           let lastError;
 
           for (let attempt = 1; attempt < 2; attempt += 1) {
             try {
               await FileSystem.copyAsync({ from: uri, to: destUri });
+              activeSavedFilenames.push(fileName);
               return destUri;
             } catch (e) {
               lastError = e;
@@ -892,6 +941,18 @@ export default function MyDojoStyles({route}) {
         if (copyfailed) {
           setLoading(false);
           return;
+        }
+
+        try {
+          const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
+          for (const file of existingFiles) {
+            if (!activeSavedFilenames.includes(file)) {
+              const fullPathToDelete = `${permanentDirUri}${file}`;
+              await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+            }
+          }
+        } catch (cleanupErr) {
+
         }
 
         const finalData = {
