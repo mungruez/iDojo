@@ -233,7 +233,7 @@ export default function MyDojoStyles({route}) {
                   }
                 }
               } catch (gcError) {
-                
+
               }
             }, 1500);
           }
@@ -1210,7 +1210,6 @@ export default function MyDojoStyles({route}) {
       <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
     )
 
-
     if (addmode) return (
       <ImageBackground style={ styles.imgBackgroundAM } imageStyle={{ opacity: 0.7 }} resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
        <StatusBar barStyle="light-content" />
@@ -1367,7 +1366,6 @@ export default function MyDojoStyles({route}) {
       </KeyboardAvoidingView>
       </ImageBackground> );   
 
-
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
@@ -1458,7 +1456,6 @@ export default function MyDojoStyles({route}) {
              </View> ) }
         </SafeAreaView>
       </ImageBackground> );
-
 
     return (
       <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
@@ -1579,7 +1576,6 @@ export default function MyDojoStyles({route}) {
      </ImageBackground>
     );
 }
-
 
 const styles = StyleSheet.create({
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },

@@ -993,8 +993,6 @@ export default function Chapters() {
     return () => backHandler.remove();
   }, [mode]);
 
-  
-
 
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
@@ -1020,7 +1018,6 @@ export default function Chapters() {
         </View>
     </TouchableOpacity>
   );
-
      
   const MyHeader = () => {
     if (schapters.length === 0) return null;
@@ -1029,7 +1026,6 @@ export default function Chapters() {
     if (firstId === "c-all") return <Image source={require('../assets/chaptersdivider.png')} style={styles.goldDivider} resizeMode='contain'/>;
     return null;
   };
-
 
 
   if (loading) return ( 
@@ -1041,7 +1037,6 @@ export default function Chapters() {
       </View>
     </View>
   );
-
 
 
   if ( openpdfViewer && mode === 'view' && currentChapter?.sections?.[openpdfViewer] && currentChapter.sections[openpdfViewer].type === "pdf" ) {
@@ -1059,8 +1054,6 @@ export default function Chapters() {
       />
     )
   }
-
-
 
   if (mode === 'view' && currentChapter) {
     return (
@@ -1119,7 +1112,6 @@ export default function Chapters() {
     );
   }
  
-
   if (mode === 'list') {
     return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' imageStyle={{ opacity: 0.9 }} source={require('../assets/chapterslistbg.png')}>
@@ -1212,7 +1204,6 @@ export default function Chapters() {
     );
   }
  
-  
   if (mode === 'add') {
    return (
     <ImageBackground source={require('../assets/chaptersbg.png')} style={styles.imgBackground} imageStyle={{ opacity: 1.0 }} resizeMode='cover' >
@@ -1441,7 +1432,6 @@ export default function Chapters() {
    );
   }
 
-  
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
