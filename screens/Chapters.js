@@ -604,7 +604,7 @@ export default function Chapters() {
               section.mediaUrl = '';
             }
           } catch (copyErr) {
-            console.log('Import copy failed:', copyErr.message || copyErr);
+            Alert.alert('Import Copy Failed:', copyErr.message || copyErr);
           }
         }
       };
@@ -922,13 +922,12 @@ export default function Chapters() {
             if (!activeSavedFilenames.includes(file)) {
               const fullPathToDelete = `${permanentDirUri}${file}`;
               await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
-              console.log(`Safely deleted large old video: ${file}`);
             }
           }
         } catch (cleanupErr) {
 
         }
-      }, 300);
+      }, 570);
 
     } catch (err) {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
@@ -1129,6 +1128,7 @@ export default function Chapters() {
     );
   }
  
+ 
   if (mode === 'list') {
     return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' imageStyle={{ opacity: 0.9 }} source={require('../assets/chapterslistbg.png')}>
@@ -1221,6 +1221,7 @@ export default function Chapters() {
     );
   }
  
+
   if (mode === 'add') {
    return (
     <ImageBackground source={require('../assets/chaptersbg.png')} style={styles.imgBackground} imageStyle={{ opacity: 1.0 }} resizeMode='cover' >
@@ -1448,6 +1449,7 @@ export default function Chapters() {
     </ImageBackground>
    );
   }
+
 
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>

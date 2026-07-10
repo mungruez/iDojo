@@ -327,6 +327,7 @@ export default function MyDojoStyles({route}) {
             try {
               const movesToDelete = moves.filter(m => cleanIdsToDelete.includes(String(m.id)));
               let errfound = false;
+
               for (const moveItem of movesToDelete) {
                 const folderUri = `${FileSystem.documentDirectory}moves/${moveItem.id}/`;
                 try {
@@ -338,13 +339,16 @@ export default function MyDojoStyles({route}) {
                   }
                 }
               }
+
               const updatedList = moves.filter(m => !cleanIdsToDelete.includes(String(m.id)));
               const fileUri = `${FileSystem.documentDirectory}moves.json`;
               await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(updatedList));
+              
               if (updatedList.length === 0) {
-                  const trackingUri = `${FileSystem.documentDirectory}.moves_user_initialized`;
-                  await FileSystem.writeAsStringAsync(trackingUri, "true");
-                }
+                const trackingUri = `${FileSystem.documentDirectory}.moves_user_initialized`;
+                await FileSystem.writeAsStringAsync(trackingUri, "true");
+              }
+
               setMoves(updatedList);
               parseStyles(updatedList, null);
               setSelectedIds([]);
@@ -985,7 +989,7 @@ export default function MyDojoStyles({route}) {
           } catch (cleanupErr) {
 
           }
-        }, 380);
+        }, 570);
   
       } catch (err) {
         Alert.alert("Save Error", err.message || "An unknown error occurred.");
@@ -1161,7 +1165,6 @@ export default function MyDojoStyles({route}) {
       return <VideoPlayer video={move} isActive={true} />;
     }
 
-
     if(viewmode == 3) return (
       <View style={{flex: 1, paddingTop: 40, backgroundColor:"#0ba156", opacity: 1}}> 
        <StatusBar barStyle="light-content"/>
@@ -1221,7 +1224,6 @@ export default function MyDojoStyles({route}) {
        </SafeAreaView>
       </View>
     );
-
 
     if( viewmode === 4 ) return (
       <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
