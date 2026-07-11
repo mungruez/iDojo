@@ -473,7 +473,6 @@ export default function Chapters() {
 
 
 
-
   const handleImportChapters = async () => {
     let extractDir = null;
     let tempZipPath = null;
@@ -669,7 +668,7 @@ export default function Chapters() {
     }
   };
 
-
+  
   const resetForm = () => {
     setCurrentChapter(null);
     setChapterId(Date.now().toString());
@@ -677,7 +676,6 @@ export default function Chapters() {
     setChapterDesc('');
     setSections([]);
   };
-
 
 
   const addSection = (type) => {
@@ -714,7 +712,6 @@ export default function Chapters() {
    const toggleSelect = (id) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
-
 
 
   const viewChapter = (chapter) => {
@@ -927,7 +924,11 @@ export default function Chapters() {
         for (const file of existingFiles) {
           if (!activeSavedFilenames.includes(file)) {
             const fullPathToDelete = `${permanentDirUri}${file}`;
-            await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+            try {
+              await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+            } catch (deleteErr) {
+
+            }
           }
         }
       } catch (cleanupErr) {
