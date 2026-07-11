@@ -1175,12 +1175,12 @@ export default function MyDojoStyles({route}) {
     
         <View style={{backgroundColor: "black", paddingBottom: 19, flex: 1}}>
           <FlatList
-            data={move.steps}
+            data={move?.steps || []}
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 57 }}
             keyExtractor={ (item, index) => index.toString() }
             showsVerticalScrollIndicator={false}
-            initialNumToRender={12}
+            initialNumToRender={Array.isArray(move?.steps) ? move.steps.length : 1}
             renderItem={ ({ item: step, index }) => (
               <View style={{backgroundColor: "black", marginBottom: 19}}>
                 <View style={{backgroundColor: bgColor[Math.floor(Math.random()*bgColor.length)], marginBottom: 3, fontSize: 19, borderColor:"silver", borderWidth: 1, borderRadius: 5,}}>
@@ -1411,11 +1411,11 @@ export default function MyDojoStyles({route}) {
            
           <View style = {styles.flatlistContainer}> 
            <FlatList
-            data = {hmoves}
+            data = {hmoves || []}
             extraData = {[selectedIds, moves]}
             keyExtractor = {(item, index) => item.id || index.toString()}
             style = {{ flex: 1 }}
-            contentContainerStyle = {{ paddingBottom: 38, flexGrow: 1, minHeight: 200 * Math.max(hmoves.length, 1) }}
+            contentContainerStyle = {{ paddingBottom: 38, flexGrow: 1, minHeight: 200 * Math.max((hmoves || []).length, 1) }}
             ListEmptyComponent = {() => {
               return (
                 <View style={{padding: 19, alignItems: 'center'}}>
@@ -1437,7 +1437,7 @@ export default function MyDojoStyles({route}) {
                   <Text style={ftype === "steps" ? styles.sectionHeader : ftype === "pdf" ? styles.sectionHeaderPdf : styles.sectionHeaderVideo}>{item.style}</Text>
                     <FlatList
                       horizontal
-                      data={item.data}
+                      data={item?.data || []}
                       extraData={[selectedIds, moves]}
                       getItemLayout={(data, index) => {
                         const itemWidth = Dimensions.get('window').width * 0.7;
@@ -1448,7 +1448,7 @@ export default function MyDojoStyles({route}) {
                         };
                       }}
                       windowSize = {38}
-                      initialNumToRender = {item.data.length}
+                      initialNumToRender={Array.isArray(item?.data) ? item.data.length : 1}
                       showsHorizontalScrollIndicator = {false}
                       keyExtractor = {(item, index) => item?.id?.toString() || `index-${index}` }
                       contentContainerStyle = {{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}

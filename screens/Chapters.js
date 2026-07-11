@@ -1154,7 +1154,7 @@ export default function Chapters() {
                
             <View style = {styles.flatlistContainer}> 
              <FlatList
-              data = {hchapters}
+              data = {hchapters || []}
               extraData = {[selectedIds, chapters]}
               keyExtractor = {(item, index) => item.id || index.toString()}
               style = {{ flex: 1 }}
@@ -1180,7 +1180,7 @@ export default function Chapters() {
                     <Text style={ styles.sectionHeader }>{item.category}</Text>
                       <FlatList
                         horizontal
-                        data={item.data}
+                        data={item?.data || []}
                         extraData={[selectedIds, chapters]}
                         getItemLayout={(data, index) => {
                           const itemWidth = Dimensions.get('window').width * 0.7;
@@ -1191,7 +1191,7 @@ export default function Chapters() {
                           };
                         }}
                         windowSize = {38}
-                        initialNumToRender = {item.data.length}
+                        initialNumToRender={Array.isArray(item?.data) ? item.data.length : 1}
                         showsHorizontalScrollIndicator = {false}
                         keyExtractor = {(item, index) => item?.id?.toString() || `index-${index}` }
                         contentContainerStyle = {{ paddingRight: 38, paddingLeft: 12, minWidth: (Dimensions.get('window').width * (item.data?.length || 1)) * 0.7, flexGrow: 1 }}
