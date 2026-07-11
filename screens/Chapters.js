@@ -153,7 +153,7 @@ export default function Chapters() {
   
 
   const getChapters = (cat, chaptersList) => {
-    if( !cat || !chaptersList) return [];
+    if( !cat || cat.trim() === "" || !chaptersList) return [];
     let sChapters = chaptersList.filter(m => (cat === "allcategories" || m.category === cat));
     if(cat === "allcategories") return parseHChapters(sChapters);
     return sChapters;
@@ -648,8 +648,10 @@ export default function Chapters() {
 
       if(mvcat === "allcategories") {
         setChapterCategory("");
+        setPrevCategory("allcategories");
       } else {
         setChapterCategory(mvcat);
+        setPrevCategory(mvcat);
       }
 
       setSections([]);
@@ -670,21 +672,18 @@ export default function Chapters() {
 
   
   const resetForm = () => {
-    if (isPicking) return;
-    if (isPickingRef.current) return;
+    if (isPicking || isPickingRef.current) return;
+    setSections([]);
+    setChapterDesc('');
+    setChapterTitle('');
     setCurrentChapter(null);
     setChapterId(Date.now().toString());
     if(prevCategory === "allcategories") setChapterCategory("allcategories");
-    setChapterTitle('');
-    setChapterDesc('');
-    setSections([]);
   };
 
 
   const addSection = (type) => {
-    if (isPicking) return;
-    if (isPickingRef.current) return;
-
+    if (isPicking ||isPickingRef.current) return;
     const newSection = {
       id: Date.now().toString(),
       type: type,
@@ -693,21 +692,18 @@ export default function Chapters() {
       mediaUri: null,
       mediaUrl: '',
     };
-
     setSections([...sections, newSection]);
   };
 
 
   const removeSection = (id) => {
-    if (isPicking) return;
-    if (isPickingRef.current) return;
+    if (isPicking || isPickingRef.current) return;
     setSections(sections.filter(s => s.id !== id));
   };
 
 
   const updateSection = (id, field, value) => {
-    if (isPicking) return;
-    if (isPickingRef.current) return;
+    if (isPicking || isPickingRef.current) return;
     setSections(sections.map(s => s.id === id ? { ...s, [field]: value } : s));
   };
 
@@ -1003,19 +999,16 @@ export default function Chapters() {
         if(isPicking) return true;
         if (isPickingRef.current) return true;
         if (isLoadingRef.current) return true;
-        if(prevCategory==="allcategories") {
-          setChapterCategory('allcategories');
-        }
         setMode(prevMode === "list" ? "list" : "main");
         resetForm();
         return true;
       }
 
       if (mode === "list") {
-        setMode("main");
         setChapterCategory("");
         setPrevCategory("");
         setSelectedIds([]);
+        setMode("main");
         return true;
       } else if (isLoadingRef.current) {
         return true;
@@ -1260,7 +1253,7 @@ export default function Chapters() {
           </View>
 
           <TouchableOpacity onPress={() => {
-              if (isPicking) return;
+              if (isPicking || isPickingRef.current) return;
               try {
                 resetForm();
                 setMode(prevMode === "list" ? "list" : "main");

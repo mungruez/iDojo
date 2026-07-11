@@ -180,8 +180,8 @@ export default function MyDojoStyles({route}) {
 
 
     const getMoves = (mstyle, mtype, movesList) => {
+      if( !mstyle || mstyle.trim() === "" || !mtype || mtype.trim() === "" || !movesList) return [];
       if( mtype !== "video" && mtype !== "steps" && mtype !== "pdf" ) return [];
-      if( !movesList ) return [];
       let sMoves = movesList.filter(m => m.type === mtype && (mstyle === "allstyles" || m.style === mstyle));
       if(mstyle === "allstyles") return parseHMoves(sMoves);
       return sMoves;
