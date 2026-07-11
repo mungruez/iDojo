@@ -349,8 +349,7 @@ export default function Chapters() {
         }
       ]
     );
-  };
-  
+  };  
 
 
 
@@ -739,7 +738,6 @@ export default function Chapters() {
     return '.mp4';
   };
 
-  
 
   const isValidMediaUri = async (uri, minimumSize = 0) => {
     if (!uri || typeof uri !== 'string') return false;
@@ -761,7 +759,6 @@ export default function Chapters() {
       return false;
     }
   };
-
 
 
   const getSectionPreviewSource = (section) => {
@@ -945,10 +942,8 @@ export default function Chapters() {
   };
 
 
-
   const getChapterThumbnail = (chapter) => {
     if (!chapter || !chapter.sections ) return require('../assets/chapterplaceholder.png');
-
     for (const section of chapter.sections) {
       if (section.type === 'image' && (section.mediaUri || section.mediaUrl)) {
         if(section.mediaUri && isRenderableMediaUri(section.mediaUri)) return { uri: section.mediaUri };
@@ -1045,7 +1040,6 @@ export default function Chapters() {
   );
      
 
-
   const MyHeader = () => {
     if (schapters.length === 0) return null;
     if (!schapters[0]) return null;
@@ -1053,7 +1047,6 @@ export default function Chapters() {
     if (firstId === "c-all") return <Image source={require('../assets/chaptersdivider.png')} style={styles.goldDivider} resizeMode='contain'/>;
     return null;
   };
-
 
 
   if (loading) return ( 
@@ -1065,7 +1058,6 @@ export default function Chapters() {
       </View>
     </View>
   );
-
 
 
   if ( openpdfViewer && mode === 'view' && currentChapter?.sections?.[openpdfViewer] && currentChapter.sections[openpdfViewer].type === "pdf" ) {
@@ -1083,7 +1075,6 @@ export default function Chapters() {
       />
     )
   }
-
 
 
   if (mode === 'view' && currentChapter) {
@@ -1142,7 +1133,6 @@ export default function Chapters() {
       </SafeAreaView>
     );
   }
- 
  
 
   if (mode === 'list') {
@@ -1237,7 +1227,6 @@ export default function Chapters() {
     );
   }
  
-
   if (mode === 'add') {
    return (
     <ImageBackground source={require('../assets/chaptersbg.png')} style={styles.imgBackground} imageStyle={{ opacity: 1.0 }} resizeMode='cover' >
@@ -1463,7 +1452,6 @@ export default function Chapters() {
    );
   }
 
-
   return (
     <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/chaptersbg.png')}>
       <StatusBar barStyle="dark-content"/>
@@ -1539,7 +1527,6 @@ export default function Chapters() {
      </ImageBackground>
   );
 }
-
 
 const styles = StyleSheet.create({
 container: { flex: 1, backgroundColor: '#c2cdd4' },
