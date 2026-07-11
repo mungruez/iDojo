@@ -198,7 +198,7 @@ export default function Chapters() {
           setChapters(loadedChapters || []);
           parseCategories(loadedChapters, null);
 
-          const filtered = getChapters(chapterCategory, loadedChapters);
+          const filtered = getChapters(prevCategory, loadedChapters);
           if (filtered.length === 0) {
             setHchapters([]);
             if(mode === "list") setMode("main");
@@ -232,8 +232,8 @@ export default function Chapters() {
         setChapters([]);
         setSchapters([]);
         setHchapters([]);
-        setMode("main");
         setChapterCategory("");
+        setMode("main");
       }
     } catch (e) {
       Alert.alert("Load Failed", e.message);
@@ -253,8 +253,7 @@ export default function Chapters() {
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(chaptersData));
       setChapters(chaptersData);
       parseCategories(chaptersData, null);
-      if(prevCategory === "allcategories") setHchapters(getChapters("allcategories", chaptersData));
-      else setHchapters(getChapters(chapterCategory, chaptersData));
+      setHchapters(getChapters(prevCategory, chaptersData));
     } catch (e) {
       Alert.alert("Save Error", e.message || "Could not save move list to disk.");
       throw e;
@@ -338,7 +337,7 @@ export default function Chapters() {
                 setPrevCategory("");
                 setMode('main');
               } else {
-                setHchapters(getChapters(chapterCategory, updatedList));
+                setHchapters(getChapters(prevCategory, updatedList));
               }
 
             } catch (e) {
@@ -615,12 +614,7 @@ export default function Chapters() {
       
       const updatedList = [...chapters, ...finalChapters];
       await handleSaveChapter(updatedList);
-      setChapters(updatedList);
-      parseCategories(updatedList, null);
-      setHchapters(getChapters(chapterCategory, updatedList));  
-      
       Alert.alert('Success', `${finalChapters.length} chapter(s) imported!`);
-      
     } catch (e) {
       Alert.alert('Import Failed', e.message || 'Failed to import chapters');
       if (extractDir) {
@@ -745,6 +739,7 @@ export default function Chapters() {
     return '.mp4';
   };
 
+  
 
   const isValidMediaUri = async (uri, minimumSize = 0) => {
     if (!uri || typeof uri !== 'string') return false;
@@ -768,10 +763,12 @@ export default function Chapters() {
   };
 
 
+
   const getSectionPreviewSource = (section) => {
     if (!section?.mediaUri || !isRenderableMediaUri(section.mediaUri)) return null;
     return { uri: section.mediaUri };
   };
+
 
 
   const pickMedia = async (sectionId, type) => {
@@ -1521,7 +1518,7 @@ export default function Chapters() {
               { item && item.category && 
                 ( <TouchableOpacity
                   style={{width: "67%", flex: 1, height: 67, alignItems: "center", justifyContent: "center", opacity: 1, alignSelf:"center" }}
-                  onPress={() => { setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setPrevCategory(item.category); setMode("list"); setPrevMode("main"); }}>
+                  onPress={() => { setPrevCategory(item.category); setHchapters(getChapters(item.category, chapters)); setChapterCategory(item.category); setPrevMode("main"); setMode("list"); }}>
                   {item.id === 'c-all' ? 
                     ( <ImageBackground style={{ width: "100%", height: "100%", alignSelf: "center", justifyContent: "center", alignItems: "center" }} resizeMode='contain' source={require('../assets/allcategoriesbtn.png')} />
                     ) : (
