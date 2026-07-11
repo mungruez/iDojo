@@ -50,6 +50,7 @@ export default function Chapters() {
 
   const isOffline = useNetInfo().isConnected === false;
   const isLoadingRef = useRef(false);
+  const isPickingRef = React.useRef(false);
 
 
   const showInstructions = () => {
@@ -353,6 +354,7 @@ export default function Chapters() {
   
 
 
+
   const shareChapters = async (chapterIds) => {
     if (isOffline) {
       Alert.alert("No Internet", "You need an internet connection to share chapters.");
@@ -468,7 +470,6 @@ export default function Chapters() {
       }
     }
   };
-
 
 
 
@@ -681,6 +682,8 @@ export default function Chapters() {
 
   const addSection = (type) => {
     if (isPicking) return;
+    if (isPickingRef.current) return;
+
     const newSection = {
       id: Date.now().toString(),
       type: type,
@@ -689,18 +692,21 @@ export default function Chapters() {
       mediaUri: null,
       mediaUrl: '',
     };
+
     setSections([...sections, newSection]);
   };
 
 
   const removeSection = (id) => {
     if (isPicking) return;
+    if (isPickingRef.current) return;
     setSections(sections.filter(s => s.id !== id));
   };
 
 
   const updateSection = (id, field, value) => {
     if (isPicking) return;
+    if (isPickingRef.current) return;
     setSections(sections.map(s => s.id === id ? { ...s, [field]: value } : s));
   };
 
@@ -722,6 +728,7 @@ export default function Chapters() {
     if (!uri || typeof uri !== 'string') return false;
     return uri.startsWith('http://') || uri.startsWith('https://') || uri.startsWith('file://') || uri.startsWith('content://');
   };
+
 
   const getMediaFileExtension = (uri, type) => {
     if (typeof uri === 'string') {
@@ -780,7 +787,9 @@ export default function Chapters() {
 
     try {
       let pickedUri = "";
-
+      isPickingRef.current = true;
+      setIsPicking(true);
+      
       if (type === SECTION_TYPES.PDF) {
         const result = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' });
         if (!result.canceled && result.assets?.length > 0) {
@@ -822,6 +831,7 @@ export default function Chapters() {
     } catch (err) {
       Alert.alert("Pick Failed", "Please try again or choose a smaller file. Your device may be running out of space.");
     } finally {
+      isPickingRef.current = false;
       setIsPicking(false);
     }
   };
@@ -829,7 +839,7 @@ export default function Chapters() {
 
 
   const saveChapter = async () => {
-    if(isPicking) { 
+    if(isPickingRef.current) { 
       return;
     }
 
@@ -986,6 +996,7 @@ export default function Chapters() {
 
       if (mode === "add") {
         if(isPicking) return true;
+        if (isPickingRef.current) return true;
         if (isLoadingRef.current) return true;
         setChapterCategory(prevCategory || '');
         setMode(prevMode === "list" ? "list" : "main");
@@ -1008,6 +1019,7 @@ export default function Chapters() {
 
     return () => backHandler.remove();
   }, [mode]);
+
 
 
   const ChapterCard = ({ item }) => (
@@ -1035,6 +1047,8 @@ export default function Chapters() {
     </TouchableOpacity>
   );
      
+
+
   const MyHeader = () => {
     if (schapters.length === 0) return null;
     if (!schapters[0]) return null;
@@ -1042,6 +1056,7 @@ export default function Chapters() {
     if (firstId === "c-all") return <Image source={require('../assets/chaptersdivider.png')} style={styles.goldDivider} resizeMode='contain'/>;
     return null;
   };
+
 
 
   if (loading) return ( 
@@ -1053,6 +1068,7 @@ export default function Chapters() {
       </View>
     </View>
   );
+
 
 
   if ( openpdfViewer && mode === 'view' && currentChapter?.sections?.[openpdfViewer] && currentChapter.sections[openpdfViewer].type === "pdf" ) {
@@ -1070,6 +1086,8 @@ export default function Chapters() {
       />
     )
   }
+
+
 
   if (mode === 'view' && currentChapter) {
     return (
@@ -1129,6 +1147,7 @@ export default function Chapters() {
   }
  
  
+
   if (mode === 'list') {
     return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' imageStyle={{ opacity: 0.9 }} source={require('../assets/chapterslistbg.png')}>
@@ -1398,7 +1417,7 @@ export default function Chapters() {
                         <TouchableOpacity
                           key={type}
                           style={styles.changeTypeIconBtn}
-                          onPress={() => updateSection(section.id, 'type', type) }
+                          onPress={() => { updateSection(section.id, 'mediaUri', null); updateSection(section.id, 'mediaUrl', ""); updateSection(section.id, 'type', type); }}
                         >
                           <Text style={styles.changeTypeIcon}>
                             {type === SECTION_TYPES.VIDEO ? '📹' :

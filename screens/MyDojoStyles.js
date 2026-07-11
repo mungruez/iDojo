@@ -42,6 +42,7 @@ export default function MyDojoStyles({route}) {
 
     const isOffline = useNetInfo().isConnected === false;
     const isLoadingRef = React.useRef(false);
+    const isPickingRef = React.useRef(false);
 
     const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
@@ -155,6 +156,7 @@ export default function MyDojoStyles({route}) {
     };
     
 
+
     const parseHMoves = (movesList) => {
       let hMoves = [];
       let stylesSeen = [];
@@ -177,6 +179,7 @@ export default function MyDojoStyles({route}) {
     };
 
 
+
     const getMoves = (mstyle, mtype, movesList) => {
       if( mtype !== "video" && mtype !== "steps" && mtype !== "pdf" ) return [];
       if( !movesList ) return [];
@@ -184,6 +187,7 @@ export default function MyDojoStyles({route}) {
       if(mstyle === "allstyles") return parseHMoves(sMoves);
       return sMoves;
     }
+
 
 
     const loadMoves = async () => {
@@ -268,6 +272,7 @@ export default function MyDojoStyles({route}) {
         setLoading(false);
       }
     };
+
 
 
     const saveToStorage = async (list) => {
@@ -657,7 +662,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const checkVideo = (mv) => {
       try {
         if(mv.videoUrl && (mv.videoUrl.includes("youtube.com") || mv.videoUrl.includes("youtu.be"))) {
@@ -792,6 +796,8 @@ export default function MyDojoStyles({route}) {
       
       try {
         let pickedUri = "";
+        isPickingRef.current = true;
+        setIsPicking(true);
 
         if (typeAM === "pdf") {
           const result = await DocumentPicker.getDocumentAsync({
@@ -846,6 +852,7 @@ export default function MyDojoStyles({route}) {
       } catch (err) {
         Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may be running out of space.");
       } finally {
+        isPickingRef.current = false;
         setIsPicking(false);
       }
     };
@@ -1010,6 +1017,7 @@ export default function MyDojoStyles({route}) {
 
         if (addmode) {
           if(isPicking) return true;
+          if(isPickingRef.current) return true;
           if (isLoadingRef.current) return true;
           setAddMode(false);
           return true;
@@ -1144,6 +1152,7 @@ export default function MyDojoStyles({route}) {
       </View>
     );
 
+
     if (loading && ftype === 'steps') return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#d9eec4', width: "100%", height: "93%" }}>
         <ImageBackground style={{ height: 57, width: 76, elevation: 4, marginTop: -12, opacity: 1 } } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/icon.png')} />
@@ -1151,6 +1160,7 @@ export default function MyDojoStyles({route}) {
         <Text style={{ marginTop: 12, color: '#044421', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Please Wait</Text>
       </View>
     );
+
 
     if (loading && ftype === 'pdf') return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#c4d9ee', width: "100%", height: "93%" }}>
@@ -1160,10 +1170,11 @@ export default function MyDojoStyles({route}) {
       </View>
     );
 
-
+    
     if ( viewmode === 1 || viewmode === 2 ) {
       return <VideoPlayer video={move} isActive={true} />;
     }
+
 
     if(viewmode == 3) return (
       <View style={{flex: 1, paddingTop: 40, backgroundColor:"#0ba156", opacity: 1}}> 
@@ -1225,9 +1236,13 @@ export default function MyDojoStyles({route}) {
       </View>
     );
 
+
+
     if( viewmode === 4 ) return (
       <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
     )
+
+
 
     if (addmode) return (
       <ImageBackground style={ styles.imgBackgroundAM } imageStyle={{ opacity: 0.7 }} resizeMode='cover' source={require('../assets/addmovebg.jpg')}>
@@ -1385,6 +1400,8 @@ export default function MyDojoStyles({route}) {
       </KeyboardAvoidingView>
       </ImageBackground> );   
 
+
+
     if (listmode) return (
       <ImageBackground style={{flex: 1, width: '100%', height: '100%', opacity: 1}} resizeMode='cover' source={require('../assets/mydojobg.jpg')}>
         <StatusBar barStyle="light-content"/>
@@ -1475,6 +1492,7 @@ export default function MyDojoStyles({route}) {
              </View> ) }
         </SafeAreaView>
       </ImageBackground> );
+
 
     return (
       <ImageBackground style={styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/mydojostylesbg.jpg')}>
@@ -1595,6 +1613,7 @@ export default function MyDojoStyles({route}) {
      </ImageBackground>
     );
 }
+
 
 const styles = StyleSheet.create({
 flatlistContainer: { minWidth: "100%", flex: 1, paddingBottom: 5 },
