@@ -153,7 +153,7 @@ export default function Chapters() {
   
 
   const getChapters = (cat, chaptersList) => {
-    if( !cat || !chaptersList ) return [];
+    if( !cat || !chaptersList) return [];
     let sChapters = chaptersList.filter(m => (cat === "allcategories" || m.category === cat));
     if(cat === "allcategories") return parseHChapters(sChapters);
     return sChapters;
@@ -244,7 +244,6 @@ export default function Chapters() {
     }
   };
 
-
   
   const saveChaptersToStorage = async (chaptersData) => {
     try {
@@ -254,7 +253,8 @@ export default function Chapters() {
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(chaptersData));
       setChapters(chaptersData);
       parseCategories(chaptersData, null);
-      setHchapters(getChapters(chapterCategory, chaptersData)); 
+      if(prevCategory === "allcategories") setHchapters(getChapters("allcategories", chaptersData));
+      else setHchapters(getChapters(chapterCategory, chaptersData));
     } catch (e) {
       Alert.alert("Save Error", e.message || "Could not save move list to disk.");
       throw e;
@@ -670,8 +670,11 @@ export default function Chapters() {
 
   
   const resetForm = () => {
+    if (isPicking) return;
+    if (isPickingRef.current) return;
     setCurrentChapter(null);
     setChapterId(Date.now().toString());
+    if(prevCategory === "allcategories") setChapterCategory("allcategories");
     setChapterTitle('');
     setChapterDesc('');
     setSections([]);
@@ -935,8 +938,10 @@ export default function Chapters() {
 
       }      
 
+      if(prevCategory==="allcategories") {
+        setChapterCategory('allcategories');
+      }
       await handleSaveChapter(chapterData);
-      setChapterCategory(prevCategory || '');
       setMode(prevMode);
 
     } catch (err) {
@@ -998,7 +1003,9 @@ export default function Chapters() {
         if(isPicking) return true;
         if (isPickingRef.current) return true;
         if (isLoadingRef.current) return true;
-        setChapterCategory(prevCategory || '');
+        if(prevCategory==="allcategories") {
+          setChapterCategory('allcategories');
+        }
         setMode(prevMode === "list" ? "list" : "main");
         resetForm();
         return true;
@@ -1255,9 +1262,8 @@ export default function Chapters() {
           <TouchableOpacity onPress={() => {
               if (isPicking) return;
               try {
-                setChapterCategory(prevCategory || '');
-                setMode(prevMode === "list" ? "list" : "main");
                 resetForm();
+                setMode(prevMode === "list" ? "list" : "main");
               } catch (err) {
                 Alert.alert('Cancel Error', err?.message || String(err));
               }
@@ -1322,7 +1328,7 @@ export default function Chapters() {
 
                 <TouchableOpacity 
                   style={styles.stepImgContainer}
-                  onPress={() => { if (isPicking) return; setIsPicking(true); pickMedia(section.id, section.type) }}
+                  onPress={() => { if (isPicking) return; pickMedia(section.id, section.type) }}
                 >
                   { isPicking ? (
                       <View style={{ height: 114, width: 190, marginTop: 57, alignItems: 'center', justifyContent: 'center'}}>
@@ -1420,9 +1426,7 @@ export default function Chapters() {
                           onPress={() => { updateSection(section.id, 'mediaUri', null); updateSection(section.id, 'mediaUrl', ""); updateSection(section.id, 'type', type); }}
                         >
                           <Text style={styles.changeTypeIcon}>
-                            {type === SECTION_TYPES.VIDEO ? '📹' :
-                             type === SECTION_TYPES.PDF ? '📄' :
-                             type === SECTION_TYPES.AUDIO ? '🎵' : '🖼️'}
+                            {type === SECTION_TYPES.VIDEO ? '📹' : type === SECTION_TYPES.PDF ? '📄' : type === SECTION_TYPES.AUDIO ? '🎵' : '🖼️'}
                           </Text>
                         </TouchableOpacity>
                       ) ) }

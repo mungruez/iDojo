@@ -179,7 +179,6 @@ export default function MyDojoStyles({route}) {
     };
 
 
-
     const getMoves = (mstyle, mtype, movesList) => {
       if( mtype !== "video" && mtype !== "steps" && mtype !== "pdf" ) return [];
       if( !movesList ) return [];
@@ -866,6 +865,9 @@ export default function MyDojoStyles({route}) {
       if(isPicking) { 
         return;
       }
+      if(isPickingRef.current) { 
+        return;
+      }
 
       if (!title.trim()) {
         Alert.alert("Required", "Please enter a Move Title.");
@@ -1237,11 +1239,9 @@ export default function MyDojoStyles({route}) {
     );
 
 
-
     if( viewmode === 4 ) return (
       <PdfMove pdf={move} onClosePdf={() => setViewMode(0)} isActive={true} />
     )
-
 
 
     if (addmode) return (
@@ -1255,8 +1255,8 @@ export default function MyDojoStyles({route}) {
        <View style={{ marginBottom: 12, paddingLeft: 5, paddingRight:5, marginTop: 25, opacity : 1}}>
          <ImageBackground style={ styles.iconAM } resizeMode='contain' imageStyle={{ opacity: 1 }} source={typeAM ==='video' && !move ? require('../assets/addmovetitle.png') : typeAM ==='video' && move ? require('../assets/editmovetitle.png') : typeAM ==='steps' && !move ? require('../assets/addmanualtitle.png') : typeAM ==='steps' && move ? require('../assets/editmanualtitle.png') : typeAM ==="pdf" && move ? require('../assets/editpdfmovetitle.png') : require('../assets/addpdfmovetitle.png') } /> 
        </View>
-       <TouchableOpacity onPress={() => { if (isPicking) return; setAddMode(false) }} style={styles.discardBtn}>
-         <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
+       <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setAddMode(false) }} style={styles.discardBtn}>
+         <ImageBackground style={{ alignSelf: 'center', height: 67, width: "100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
          <Text style={styles.discardText}>CANCEL</Text>
        </TouchableOpacity>
    
@@ -1265,7 +1265,7 @@ export default function MyDojoStyles({route}) {
          <Text style={styles.label}>Move Title</Text>
          <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
          
-         <Text style={styles.label}>Moves List Title/Styles</Text>
+         <Text style={styles.label}>Moves List Title</Text>
          <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Moves List Title" value={fstyleAM} onChangeText={checkFStyle} />
    
          { typeAM === "video" ? (
@@ -1273,13 +1273,13 @@ export default function MyDojoStyles({route}) {
             { isPicking ? (
               <View style={{ marginTop: 19, marginBottom: 19, marginLeft: 12, alignItems: 'flex-start', justifyContent: 'center' }}>
                 <ActivityIndicator size="small" color="#f30707" style={{ transform: [{ scale: 1.5 }] }} />
-                <Text style={{ marginTop: 8,  color: '#420105',fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Loading</Text>
+                <Text style={{ marginTop: 8, color: '#420105', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textTransform: 'uppercase' }}>Loading</Text>
               </View>
-            ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+            ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => {if (isPicking) return; pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
               <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
               </TouchableOpacity> )
               : !videoUrl && ( 
-              <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia();}} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
+              <TouchableOpacity onPress={() => {if (isPicking) return; pickMedia();}} style={vid || videoUrl ? styles.videoIconUploaded : styles.videoIcon}> 
                 <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadvideobg.png')} /> 
               </TouchableOpacity> )
             }
@@ -1315,10 +1315,10 @@ export default function MyDojoStyles({route}) {
                    <ActivityIndicator size="small" color="#0b07f3" style={{ transform: [{ scale: 1.5 }] }} />
                    <Text style={{ marginTop: 8, color: '#141238', fontWeight: '700', fontSize: 11, letterSpacing: 0.8, textAlign: 'center', textTransform: 'uppercase' }}>Loading</Text>
                  </View>
-               ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+               ) : vid && !videoUrl && vid.length > 7 ? ( <TouchableOpacity onPress={() => {if (isPicking) return; pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf:'center', height: 57, width: 57 }} resizeMode='contain' source={require('../assets/fileuploadedicon.png')}/> 
                  </TouchableOpacity> )
-               : !videoUrl && ( <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
+               : !videoUrl && ( <TouchableOpacity onPress={() => {if (isPicking) return; pickMedia(); }} style={vid || videoUrl ? styles.videoIconUploaded : styles.pdfIcon}> 
                    <ImageBackground style={{ alignSelf: 'center', height: 67, width: 76, }} resizeMode='contain' source={require('../assets/uploadpdfbg.png')} /> 
                 </TouchableOpacity> )
               }
@@ -1354,7 +1354,7 @@ export default function MyDojoStyles({route}) {
                  <Text style={styles.label}>Step Title</Text>
                  <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
                  <Text style={styles.label}>Step Image</Text>
-                 <TouchableOpacity onPress={() => {setIsPicking(true); pickMedia(i);}} style={styles.stepImgContainer}>
+                 <TouchableOpacity onPress={() => {if (isPicking) return; pickMedia(i);}} style={styles.stepImgContainer}>
                    {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
                  </TouchableOpacity>
    
