@@ -591,8 +591,10 @@ export default function MyDojoStyles({route}) {
           videoUrl: move.videoUrl || "",
           type: 'pdf'
         };
+
         setViewMode(4);  
         setMove(pdfData);
+        
       } catch (err) {
         Alert.alert("Unable To Open PDF", "Failed to open PDF: " + err.message);
       }
@@ -981,23 +983,21 @@ export default function MyDojoStyles({route}) {
           thumb: typeAM === "video" || typeAM === "pdf" ? (finalVid || videoUrl) : (finalSteps[0]?.img || null),
           desc: desc 
         };
+        
+        try {
+          const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
+          for (const file of existingFiles) {
+            if (!activeSavedFilenames.includes(file)) {
+              const fullPathToDelete = `${permanentDirUri}${file}`;
+              await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+            }
+          }
+        } catch (cleanupErr) {
+
+        }
 
         handleSave(finalData);
         setAddMode(false);
-        setTimeout(async () => {
-          try {
-            const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
-            for (const file of existingFiles) {
-              if (!activeSavedFilenames.includes(file)) {
-                const fullPathToDelete = `${permanentDirUri}${file}`;
-                await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
-              }
-            }
-          } catch (cleanupErr) {
-
-          }
-        }, 570);
-  
       } catch (err) {
         Alert.alert("Save Error", err.message || "An unknown error occurred.");
       } finally {

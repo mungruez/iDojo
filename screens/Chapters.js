@@ -226,7 +226,7 @@ export default function Chapters() {
             } catch (gcError) {
 
             }
-          }, 1500);
+          }, 1615);
         } 
       } else {     
         setChapters([]);
@@ -922,22 +922,21 @@ export default function Chapters() {
         updatedAt: new Date().toISOString(),
       };
 
+      try {
+        const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
+        for (const file of existingFiles) {
+          if (!activeSavedFilenames.includes(file)) {
+            const fullPathToDelete = `${permanentDirUri}${file}`;
+            await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+          }
+        }
+      } catch (cleanupErr) {
+
+      }      
+
       await handleSaveChapter(chapterData);
       setChapterCategory(prevCategory || '');
       setMode(prevMode);
-      setTimeout(async () => {
-        try {
-          const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
-          for (const file of existingFiles) {
-            if (!activeSavedFilenames.includes(file)) {
-              const fullPathToDelete = `${permanentDirUri}${file}`;
-              await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
-            }
-          }
-        } catch (cleanupErr) {
-
-        }
-      }, 570);
 
     } catch (err) {
       Alert.alert("Save Error", err.message || "Failed to save Chapter");
