@@ -532,7 +532,7 @@ export default function MyDojoStyles({route}) {
             restored.steps = move.steps.map((step, stepIdx) => ({
               ...step, 
               img: fixPath(step?.img),
-              id: step.id || `step_${index}_${stepIdx}`
+              id: step.id || `idojo_step_${index}_${stepIdx}`
             }));
             restored.thumb = restored.steps?.[0]?.img || null;
           }
@@ -633,7 +633,7 @@ export default function MyDojoStyles({route}) {
           setVid(mv.vid);
           setVideoUrl(mv.videoUrl || "");
         } else {
-          setSteps(mv.steps || [{ id: Date.now().toString(), title:"", img: null, desc: "" }]);
+          setSteps(mv.steps || [{ id: Date.now().toString(), title: "", img: null, desc: "" }]);
         }
         setAddMode(true);
       }
@@ -944,7 +944,7 @@ export default function MyDojoStyles({route}) {
         let finalSteps = [...steps];
         if ((typeAM === "video" || typeAM === "pdf") && vid) {
           const ext = getMediaFileExtension(vid, typeAM);
-          finalVid = await ensurePermanent(vid, `idojo_file_${Date.now()}${ext}`);
+          finalVid = await ensurePermanent(vid, `idojo_file${ext}`);
           if ( finalVid === "COPYFAILED") copyfailed = true;
         }
         
@@ -953,7 +953,7 @@ export default function MyDojoStyles({route}) {
             ...s,
             title: s.title.trim() || `Step ${i + 1}`,
             img: s.img && s.img.startsWith('file://') && !s.img.includes('/moves/') 
-              ? await ensurePermanent(s.img, `idojo_step_${i}_${Date.now()}${getMediaFileExtension(s.img, 'image')}`)
+              ? await ensurePermanent(s.img, `idojo_step_${s.id}${getMediaFileExtension(s.img, 'image')}`)
               : s.img
           })));
         }

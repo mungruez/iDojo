@@ -595,7 +595,7 @@ export default function Chapters() {
             : section.type === 'image' ? '.jpg'
             : '.mp4';
 
-          const destUri = `${permanentDirUri}section_${section.id}_${Date.now()}${sourceExt}`;
+          const destUri = `${permanentDirUri}idojo_section_${section.id}${sourceExt}`;
 
           try {
             await FileSystem.copyAsync({ from: localSource, to: destUri });
@@ -891,7 +891,7 @@ export default function Chapters() {
           const newSection = { ...section };
           if (section.mediaUri) {
             const ext = getMediaFileExtension(section.mediaUri, section.type);
-            newSection.mediaUri = await ensurePermanent(section.mediaUri, `idojo_section_${section.id}_${Date.now()}${ext}`);
+            newSection.mediaUri = await ensurePermanent(section.mediaUri, `idojo_section_${section.id}${ext}`);
             if ( newSection.mediaUri === "COPYFAILED") copyfailed = true;
           }
           return newSection;
@@ -1047,7 +1047,7 @@ export default function Chapters() {
   if (loading) return ( 
     <View style={styles.loadingOverlay}>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Image style={{ height: 57, width: 76, elevation: 4, marginBottom: 19, opacity: 1 } } resizeMode='contain' source={require('../assets/icon.png')} />
+        <Image style={{ height: 57, width: 76, elevation: 4, marginBottom: 24, opacity: 1 } } resizeMode='contain' source={require('../assets/icon.png')} />
         <ActivityIndicator size="large" color="#b49019" style={{ transform: [{ scale: 1.9 }], marginBottom: 17,  }} />
         <Text style={styles.loadingText}>Please Wait...</Text>
       </View>
