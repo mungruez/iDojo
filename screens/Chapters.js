@@ -640,11 +640,11 @@ export default function Chapters() {
       setChapterId(Date.now().toString());
 
       if(mvcat === "allcategories") {
-        setChapterCategory("");
         setPrevCategory("allcategories");
+        setChapterCategory("");
       } else {
-        setChapterCategory(mvcat);
         setPrevCategory(mvcat);
+        setChapterCategory(mvcat);
       }
 
       setSections([]);
