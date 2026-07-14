@@ -1606,7 +1606,7 @@ export default function MyDojoStyles({route}) {
            )}
          />) : (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.infoText}>Click one of the 3 + icons to add moves or use the import icon to import moves. You can share moves after adding or importing.</Text>
+            <Text style={styles.infoText}>Click one of the 3 + icons to add moves or use the red folder, import icon to import moves. You can share moves after adding or importing.</Text>
           </View>
         )}
       </SafeAreaView>

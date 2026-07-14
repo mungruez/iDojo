@@ -1520,7 +1520,7 @@ export default function Chapters() {
            ) }
           /> ) : (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.infoText}>Click on the gold + Chapter icon to add Chapters or use the import icon to import Chapters. You can share Chapters after adding or importing.</Text>
+            <Text style={styles.infoText}>Click on the gold + Chapter icon to add Chapters or use the red folder, import icon to import Chapters. You can share Chapters after adding or importing.</Text>
           </View>
         ) }
       </SafeAreaView>
