@@ -7,8 +7,7 @@ const images = require.context('../assets/fighters', true, /\.png$/);
 const imageSources = images.keys().map((key) => images(key));
 
 
-export default function Fighter({ route, navigation }) {
-  const { fighter,offset } = route.params;
+export default function Fighter({ fighter, offset }) {
   const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
 

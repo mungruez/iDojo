@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet, Alert, ImageBackground, KeyboardAvoidingView, Platform, StatusBar, FlatList, Dimensions, BackHandler, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { fighters as initialStaticFighters } from '../data/fighters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
+import { useNavigation } from '@react-navigation/native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
 import { useAudioPlayer } from 'expo-audio';
-import * as Sharing from 'expo-sharing';
-import {fighters} from '../data/fighters';
-import { useNavigation } from '@react-navigation/native';
 import { useAudioPlayer } from 'expo-audio';
-import { fighters as initialStaticFighters } from '../data/fighters';
+import * as Sharing from 'expo-sharing';
+import Fighter from './Fighter';
 
 const { height, width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.76;
@@ -40,8 +40,6 @@ export default function FightersList() {
   const [fighterDescList, setFighterDescList] = useState([""]); 
   const [fighterMoves, setFighterMoves] = useState([]);
   const [activeAvatarUri, setActiveAvatarUri] = useState(null);
-
-  const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
   const navigation = useNavigation();
   
@@ -463,10 +461,9 @@ export default function FightersList() {
 
 
 
-
   useFocusEffect(
     useCallback(() => {
-      if(mode !== "add") loadFighters();
+      if(mode === "list") loadFighters();
     }, [mode])
   );
 
@@ -476,6 +473,14 @@ export default function FightersList() {
       if (mode === 'add') {
         if (isPickingRef.current || isPicking) return true;
         if (isLoadingRef.current) return true;
+        setMode('list');
+        return true;
+      }
+
+      if (mode === 'view') {
+        if (isPickingRef.current || isPicking) return true;
+        if (isLoadingRef.current) return true;
+        setCurrentFighter(null);
         setMode('list');
         return true;
       }
@@ -616,6 +621,11 @@ export default function FightersList() {
   );
 
 
+  if ( mode === "view" ) {
+    return <Fighter fighter={currentFighter} offset={0} />;
+  }
+
+
   if (mode === 'add') {
     return (
       <ImageBackground source={require('../assets/fightersbackground.jpeg')} style={styles.imgBackground} resizeMode='cover' >
@@ -724,32 +734,44 @@ export default function FightersList() {
         { loading ? (
           <View style={styles.loadingOverlay}>
             <ActivityIndicator size="large" color="#caaf38" />
-            <Text style={styles.loadingText}>Synchronizing Combat Roster...</Text>
+            <Text style={styles.loadingText}>Synchronizing Fighters Roster...</Text>
           </View> )
         : ( <FlatList
           data={hFighters || []}
-          extraData={allFighters}
+          extraData={selectedIds, allFighters}
           numColumns={2}
           contentContainerStyle={{ paddingBottom: 57 }}
           keyExtractor={(item, index) => item.name || index.toString()}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2, marginLeft: 7, marginRight: 7, width: "50%", borderWidth: 0 }}>
-              <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
+              { selectedIds.includes(item.id) && selectedIds.length === 1 ? ( <View> <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
                 onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
                 style={[styles.mainCardView, selectedIds.includes(item.id) && styles.selectedCard]} >
                     <View style={styles.subCardView}>
                       <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
-                        <View style={{marginLeft: 12, marginBottom: 7}}>
-                          <Text style={{ fontSize: 14, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>
+                    </View>
+              </Pressable>
+              <View style={styles.chapterCardFooter}>
+                <TouchableOpacity style={styles.editBtnCard} onPress={() => populateForEdit(item, item.style)}>
+                  <Text style={styles.editBtnText}>EDIT</Text>
+                </TouchableOpacity>
+              </View> </View> ) : ( <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
+                onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
+                style={[styles.mainCardView, selectedIds.includes(item.id) && styles.selectedCard]} >
+                    <View style={styles.subCardView}>
+                      <Image source={ item.isStaticBundle ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
+                      <View style={{marginLeft: 12, marginBottom: 7}}>
+                        <Text style={{ fontSize: 14, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>
                             
-                          <View
-                              style={styles.styleTextView}>
-                                <Text style={{ color: '#9a9aa1', fontSize: 12 }}>{item.style}</Text>
-                          </View>
+                        <View style={styles.styleTextView}>
+                          <Text style={{ color: '#9a9aa1', fontSize: 12 }}>{item.style}</Text>
                         </View>
                       </View>
-                </Pressable>
+                    </View>
+              </Pressable>
+                
+              ) }
             </View>)}
           /> ) }
 
