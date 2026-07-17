@@ -93,11 +93,9 @@ export default function FightersList() {
         isStaticBundle: true
       }));
 
-      // Directly consolidate into one flat single roster list
       const masterList = [...mappedStaticBundle, ...customFighters];
       setAllFighters(masterList);
       
-      // Initialize your flat horizontal array directly with the filtered master list
       const query = searchQuery?.trim()?.toLowerCase();
       if (query) {
         const filtered = masterList.filter(f => 
@@ -111,7 +109,6 @@ export default function FightersList() {
         setHFighters(masterList);
       }
 
-      // Background cleanup loop for orphaned directories
       setTimeout(async () => {
         try {
           const baseDir = `${FileSystem.documentDirectory}fighters/`;
@@ -158,7 +155,6 @@ export default function FightersList() {
     const cleanIdsToDelete = actualIds.map(id => String(id).trim());
     if (cleanIdsToDelete.length === 0) return;
 
-    // Filter to isolate static items which cannot be removed from local database
     const staticSelections = cleanIdsToDelete.filter(id => id.startsWith('static_fighter_'));
     if (staticSelections.length > 0) {
       Alert.alert("Permission Blocked", "Built-in legendary fighter files cannot be removed from your catalog roster.");
@@ -272,7 +268,6 @@ export default function FightersList() {
         for (let mIdx = 0; mIdx < fCopy.moves.length; mIdx++) {
           const move = fCopy.moves[mIdx];
           if (move.img && typeof move.img === 'string' && move.img.startsWith('file://')) {
-            // FIXED: Standardised backticks to prevent compilation crashes
             const moveFileName = `move_${mIdx}_${move.img.split('/').pop()}`;
             await FileSystem.copyAsync({ from: move.img, to: `${targetDir}${moveFileName}` });
             move.img = moveFileName;
@@ -436,14 +431,10 @@ export default function FightersList() {
       const customFightersOnly = allFighters.filter(f => !f.isStaticBundle);
       const staticFightersOnly = allFighters.filter(f => f.isStaticBundle);
       const updatedCustomList = [...customFightersOnly, ...finalFighters];
-      
       const fileUri = `${FileSystem.documentDirectory}fighters_custom.json`;
       const trackingUri = `${FileSystem.documentDirectory}.fighters_user_initialized`;
-      
-      // Enforce file persistence consistency markers straight onto disk storage
       await FileSystem.writeAsStringAsync(trackingUri, "true");
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(updatedCustomList));
-
       const nextCombinedMaster = [...staticFightersOnly, ...updatedCustomList];
       setAllFighters(nextCombinedMaster);
       setHFighters(nextCombinedMaster);
@@ -464,6 +455,7 @@ export default function FightersList() {
       if(mode === "list") loadFighters();
     }, [mode])
   );
+
 
 
   useEffect(() => {
@@ -501,6 +493,7 @@ export default function FightersList() {
       const incomingFighters = Array.isArray(newFighterPayload) ? newFighterPayload : [newFighterPayload];
       const currentCustomFighters = allFighters.filter(f => !f.isStaticBundle);
       const staticBundleItems = allFighters.filter(f => f.isStaticBundle);
+      
       incomingFighters.forEach(itemData => {
         const index = currentCustomFighters.findIndex(f => String(f.id).trim() === String(itemData.id).trim());
         if (index > -1) {
@@ -538,17 +531,10 @@ export default function FightersList() {
   const addDescLine = () => setFighterDescList([...fighterDescList, ""]);
   const removeDescLine = (idx) => setFighterDescList(fighterDescList.filter((_, i) => i !== idx));
   const updateDescLine = (idx, val) => setFighterDescList(fighterDescList.map((d, i) => i === idx ? val : d));
-
-  const addMoveItem = () => {
-    setFighterMoves([...fighterMoves, { id: Date.now().toString() + Math.random().toString(36).substring(2, 5), title: "", img: null, desc: "" }]);
-  };
+  const addMoveItem = () => { setFighterMoves([...fighterMoves, { id: Date.now().toString() + Math.random().toString(36).substring(2, 5), title: "", img: null, desc: "" }]); };
   const removeMoveItem = (id) => setFighterMoves(fighterMoves.filter(m => m.id !== id));
   const updateMoveItem = (id, field, val) => setFighterMoves(fighterMoves.map(m => m.id === id ? { ...m, [field]: val } : m));
-
-  const toggleSelect = (id) => {
-    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
-  };
-
+  const toggleSelect = (id) => { setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]); };
   
 
   const pickFighterMedia = async (target, moveId = null) => {
@@ -557,6 +543,7 @@ export default function FightersList() {
       Alert.alert("Permission Denied", "Gallery access is required!");
       return;
     }
+
     try {
       isPickingRef.current = true;
       setIsPicking(true);
@@ -582,6 +569,7 @@ export default function FightersList() {
     }
   };
 
+
   
   const renderMoveFormItem = (move) => (
     <View key={move.id} style={styles.sectionContainerBlock}>
@@ -601,7 +589,6 @@ export default function FightersList() {
         </TouchableOpacity>
         { move.img && <Text style={styles.fileLoadedIndicator}>✅ Image Uploaded</Text> }
       </View>
-      
 
       <Text style={styles.label}>Move Breakdowns / Technical Details</Text>
       <TextInput
@@ -621,9 +608,11 @@ export default function FightersList() {
   );
 
 
+
   if ( mode === "view" ) {
     return <Fighter fighter={currentFighter} offset={0} />;
   }
+
 
 
   if (mode === 'add') {
