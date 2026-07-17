@@ -57,10 +57,8 @@ export default function FightersList() {
       }
     } catch (error) {}
 
-    setFighterStyle(item.style);
     setCurrentFighter(item);
     setMode("view");
-    //navigation.navigate('FighterScreen', {fighter: item, offset: 0});
   };
 
 
@@ -596,17 +594,19 @@ export default function FightersList() {
         onChangeText={(text) => updateMoveItem(move.id, 'title', text)}
       />
 
+      <Text style={styles.label}>Signature Move Image</Text>
       <View style={styles.mediaPickerRow}>
-        <TouchableOpacity style={styles.uploadBtn} onPress={() => pickFighterMedia('move', move.id)}>
-          <Text style={styles.uploadBtnText}>{move.img ? "🔄 CHANGE MOVE IMAGE" : "🖼️ CHOOSE MOVE IMAGE"}</Text>
+        <TouchableOpacity onPress={() => pickFighterMedia('move', move.id)} style={styles.stepImgContainer}>
+          {move.img ? <Image source={{ uri: move.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
         </TouchableOpacity>
-        {move.img && <Text style={styles.fileLoadedIndicator}>✅ Asset Loaded</Text>}
+        { move.img && <Text style={styles.fileLoadedIndicator}>✅ Image Uploaded</Text> }
       </View>
+      
 
-      <Text style={styles.label}>Move Breakdowns / Technical Rules</Text>
+      <Text style={styles.label}>Move Breakdowns / Technical Details</Text>
       <TextInput
         style={[styles.input, styles.descInput]}
-        placeholder="Explain technical approach or stance secrets..."
+        placeholder="Explain technical details or stance secrets..."
         placeholderTextColor="#726b6b"
         value={move.desc}
         onChangeText={(text) => updateMoveItem(move.id, 'desc', text)}
@@ -614,8 +614,8 @@ export default function FightersList() {
         numberOfLines={3}
       />
 
-      <TouchableOpacity onPress={() => removeMoveItem(move.id)} style={styles.removeStepIconRow}>
-        <Text style={styles.removeStepIconText}>- REMOVE SIGNATURE MOVE</Text>
+      <TouchableOpacity onPress={() => removeMoveItem(move.id)} style={styles.removeSignatureMoveBtn}>
+        <ImageBackground style={{ height: 67, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
       </TouchableOpacity>
     </View>
   );
@@ -649,14 +649,14 @@ export default function FightersList() {
 
               <Text style={styles.label}>Fighter Avatar Profile Image</Text>
               <View style={styles.mediaPickerRow}>
-                <TouchableOpacity style={styles.uploadBtn} onPress={() => pickFighterMedia('avatar')}>
-                  <Text style={styles.uploadBtnText}>{activeAvatarUri ? "🔄 CHANGE PROFILE PHOTO" : "🖼️ CHOOSE PROFILE PHOTO"}</Text>
+                <TouchableOpacity onPress={() => pickFighterMedia('avatar')} style={styles.stepImgContainer}>
+                  {activeAvatarUri ? <Image source={{ uri: move.avatar }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
                 </TouchableOpacity>
                 {activeAvatarUri && <Text style={styles.fileLoadedIndicator}>✅ Profile Photo Loaded</Text>}
               </View>
 
               <Text style={styles.label}>Legendary Quotes & Wisdom lines</Text>
-              {fighterDescList.map((descLine, dIdx) => (
+              { fighterDescList.map((descLine, dIdx) => (
                 <View key={dIdx} style={styles.dynamicLineRow}>
                   <TextInput
                     style={[styles.input, { flex: 1, marginBottom: 0 }]}
@@ -679,19 +679,17 @@ export default function FightersList() {
               <Text style={styles.label}>Strategic Conclusions / Stance secrets</Text>
               <TextInput style={styles.input} placeholder="e.g. Leaning back into ropes avoids heavy blows..." placeholderTextColor="#726b6b" value={fighterConc} onChangeText={setFighterConc} />
 
-              {/* SIGNATURE MOVES MASTER LOOP MATRIX BUILDER */}
-              <Text style={styles.formStreamSectionDivider}>⚡ SIGNATURE MOVES BUILDER</Text>
+              <Text style={styles.formStreamSectionDivider}>⚡ SIGNATURE MOVES</Text>
+
               {fighterMoves.map((move) => renderMoveFormItem(move))}
 
-              <TouchableOpacity onPress={addMoveItem} style={styles.addMoreRowBtn}>
-                <Text style={styles.addMoreRowText}>+ ADD FRESH SIGNATURE MOVE</Text>
+              <TouchableOpacity onPress={addMoveItem} style={styles.addSignatureMoveBtn}>
+                <ImageBackground style={{ height: 57, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.saveBtnFullBlock} onPress={saveFighterProfile}>
-                <ImageBackground style={{ height: 50, width: "100%", justifyContent: 'center', alignItems: 'center' }} resizeMode='cover' source={require('../assets/savechapterbtn.png')}>
-                  <Text style={styles.saveBtnTextInternal}>COMMIT ROSTER CHANGES</Text>
-                </ImageBackground>
-              </TouchableOpacity>
+              <TouchableOpacity style={styles.saveBtn} onPress={saveFighterProfile}>
+                <ImageBackground style={{ height: 76, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
+              </TouchableOpacity> 
             </ScrollView>
           </SafeAreaView>
         </KeyboardAvoidingView>
@@ -748,30 +746,29 @@ export default function FightersList() {
               { selectedIds.includes(item.id) && selectedIds.length === 1 ? ( <View> <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
                 onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
                 style={[styles.mainCardView, selectedIds.includes(item.id) && styles.selectedCard]} >
-                    <View style={styles.subCardView}>
-                      <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
-                    </View>
-              </Pressable>
-              <View style={styles.chapterCardFooter}>
-                <TouchableOpacity style={styles.editBtnCard} onPress={() => populateForEdit(item, item.style)}>
-                  <Text style={styles.editBtnText}>EDIT</Text>
-                </TouchableOpacity>
-              </View> </View> ) : ( <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
-                onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
-                style={[styles.mainCardView, selectedIds.includes(item.id) && styles.selectedCard]} >
+                  <View style={styles.subCardView}>
+                    <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
+                  </View>
+                </Pressable>
+                <View style={styles.chapterCardFooter}>
+                  <TouchableOpacity style={styles.editBtnCard} onPress={() => populateForEdit(item, item.style)}>
+                    <Text style={styles.editBtnText}>EDIT</Text>
+                  </TouchableOpacity>
+                </View> 
+                </View> ) : ( <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
+                  onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
+                  style={[styles.mainCardView, selectedIds.includes(item.id) && styles.selectedCard]} >
                     <View style={styles.subCardView}>
                       <Image source={ item.isStaticBundle ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                       <View style={{marginLeft: 12, marginBottom: 7}}>
-                        <Text style={{ fontSize: 14, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>
-                            
+                        <Text style={{ fontSize: 14, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>  
                         <View style={styles.styleTextView}>
                           <Text style={{ color: '#9a9aa1', fontSize: 12 }}>{item.style}</Text>
                         </View>
                       </View>
                     </View>
-              </Pressable>
-                
-              ) }
+                </Pressable> ) 
+              }
             </View>)}
           /> ) }
 
@@ -802,7 +799,7 @@ const styles = StyleSheet.create({
   dashboardIconsControlsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 1, minHeight: 50, width: '100%', gap: 15 },
   imgBackground: { minWidth: '100%', minHeight: '100%', height: Dimensions.get('window').height, flex: 1 },
   icon: { height: 57, opacity: 1, marginTop: 38, textAlign: "center"},
-  mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#228b22", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
+  mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#caaf38", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
   subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", color: 'crimson', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
   plusIcon: { width: 45, height: 45 },
   iconAM: { height: 60, width: width * 0.8 },
@@ -830,9 +827,20 @@ const styles = StyleSheet.create({
   descInput: { height: 70, textAlignVertical: 'top', paddingVertical: 8 },
   dynamicLineRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
   selectedCard: { borderColor: '#dc2626', backgroundColor: '#fef2f2', borderWidth: 2 },
-  chapterCardTitle: { fontSize: 15, fontWeight: 'bold', color: '#1e293b', marginBottom: 4, textAlign: 'center' },
-  styleTextView: { marginTop: 3, borderWidth: .5, borderRadius: 12, borderColor:'#228b22', flexDirection:'row', backgroundColor:'#323232', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 4, paddingVertical: 2},
-  chapterCardCount: { fontSize: 12, color: '#64748b', marginBottom: 10, textAlign: 'center' },
+  styleTextView: { marginTop: 3, borderWidth: .5, borderRadius: 12, borderColor:'#caaf38', flexDirection:'row', backgroundColor:'#323232', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 4, paddingVertical: 2},
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 999 },
-  loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 }
+  loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
+  saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
+  addSignatureMoveBtn: { width: 190, height: 57, borderRadius: 15, marginTop: 7, alignSelf:'center' },
+  removeSignatureMoveBtn: { width: 228, height: 67, borderRadius: 15, marginTop: 7, alignSelf:'center' },
+  formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#caaf38', paddingBottom: 4 },
+  sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
+  mediaPickerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6, gap: 10 },
+  fileLoadedIndicator: { color: '#4ade80', fontSize: 11, fontWeight: '600' },
+  addMoreRowBtn: { paddingVertical: 8, paddingHorizontal: 12, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 8, marginVertical: 6, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)', alignItems: 'center' },
+  addMoreRowText: { color: '#caaf38', fontWeight: 'bold', fontSize: 11 },
+  miniLineRemoveBtn: { width: 36, height: 40, backgroundColor: 'rgba(220,38,38,0.1)', borderWidth: 1, borderColor: '#dc2626', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
+  miniLineRemoveText: { color: '#dc2626', fontWeight: 'bold' },
+  stepImg: { width: '100%', height: '100%' },
+  stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 });
