@@ -597,7 +597,7 @@ export default function FightersList() {
       <Text style={styles.label}>Signature Move Image</Text>
       <View style={styles.mediaPickerRow}>
         <TouchableOpacity onPress={() => pickFighterMedia('move', move.id)} style={styles.stepImgContainer}>
-          {move.img ? <Image source={{ uri: move.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
+          {move.img ? <Image source={{ uri: move.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
         </TouchableOpacity>
         { move.img && <Text style={styles.fileLoadedIndicator}>✅ Image Uploaded</Text> }
       </View>
@@ -635,9 +635,10 @@ export default function FightersList() {
             <View style={styles.formHeaderTitleRow}>
               <ImageBackground style={styles.iconAM} resizeMode='contain' source={currentFighter ? require('../assets/editchaptericon.png') : require('../assets/addchaptericon.png')} /> 
             </View>
-            
+
             <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setCurrentFighter(null); setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null); setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]); setMode('list'); }} style={styles.discardBtn}>
-              <Text style={styles.discardText}>❌ DISCARD CHANGES</Text>
+              <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
+              <Text style={styles.discardText}>❌ CANCEL</Text>
             </TouchableOpacity>
 
             <ScrollView style={styles.formScroller} contentContainerStyle={{ paddingBottom: 120 }}>
@@ -650,7 +651,7 @@ export default function FightersList() {
               <Text style={styles.label}>Fighter Avatar Profile Image</Text>
               <View style={styles.mediaPickerRow}>
                 <TouchableOpacity onPress={() => pickFighterMedia('avatar')} style={styles.stepImgContainer}>
-                  {activeAvatarUri ? <Image source={{ uri: move.avatar }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
+                  {activeAvatarUri ? <Image source={{ uri: move.avatar }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
                 </TouchableOpacity>
                 {activeAvatarUri && <Text style={styles.fileLoadedIndicator}>✅ Profile Photo Loaded</Text>}
               </View>
