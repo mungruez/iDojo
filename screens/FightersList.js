@@ -766,10 +766,10 @@ export default function FightersList() {
             </TouchableOpacity> 
             <TouchableOpacity onPress={handleImportFighters} style={styles.importIcon}>
               <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>
-              <TouchableOpacity onPress={showInstructions} style={styles.infoIcon}>
-                <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/mydojostylesinfoicon.png')}/>         
-              </TouchableOpacity>       
-            </TouchableOpacity>
+            </TouchableOpacity> 
+            <TouchableOpacity onPress={showInstructions} style={styles.infoIcon}>
+              <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/mydojostylesinfoicon.png')}/>         
+            </TouchableOpacity> 
           </View>
         </View>  
         
@@ -838,22 +838,22 @@ export default function FightersList() {
 }
 
 
-const styles = StyleSheet.create({
-  dashboardIconsControlsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 1, minHeight: 50, width: '100%', gap: 15 },
+const styles = StyleSheet.create({ 
+  dashboardIconsControlsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 1, minHeight: 73, width: '100%', gap: 15 },
   imgBackground: { minWidth: '100%', minHeight: '100%', height: Dimensions.get('window').height, flex: 1 },
   icon: { height: 57, opacity: 1, marginTop: 38, textAlign: "center"},
   mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#caaf38", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
   subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", color: 'crimson', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
   plusIcon: { width: 45, height: 45 },
   iconAM: { height: 60, width: width * 0.8 },
-  header: { paddingHorizontal: 16, marginBottom: 10, width: '100%' },
+  header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5 },
   searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4, gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: '100%', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
   searchInput: { height: 38, width: '70%', backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 8, paddingHorizontal: 8, color: 'white', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11 },
   searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
   clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
-  plusIconAM: { width: 40, height: 40, marginRight: 10 },
   infoIcon: { height: 47, width: 47, marginLeft: 21, marginBottom: 5, opacity: 1 },
-  importIcon: { width: 45, height: 45 },
+  plusIcon: { height: 57, width: 76, backgroundColor: 'rgba(0,0,0,0.57)', borderRadius: 12, marginLeft: 15, marginRight: 7, opacity: 1},
+  importIcon: {height: 76, width: 67, borderRadius: 9, marginLeft: 12 },
   chapterCardFooter: { flexDirection: 'row', justifyContent: 'center', width: '100%' },
   editBtnCard: { backgroundColor: '#947e1f', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 6, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
   editBtnText: { color: '#ffffff', fontSize: 12, fontWeight: '600', letterSpacing: 1},
