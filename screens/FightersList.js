@@ -57,6 +57,18 @@ export default function FightersList() {
     setMode("view");
   };
 
+  const showInstructions = () => {
+    Alert.alert(
+      "Fighters List",
+      "Intructions: Save, Edit, View, Share, Delete and Import Chapters using iDojo. You may add any number of Fighters your phone memory allows. Click the binoculars icon to search Fighters by the search term entered. After a search another search can be done by using backspace to remove the search term instead of the silver reload icon.\n(1) Use the gold, plus(+) icon in the top menu bar to Add Fighters. Every Fighter must contain at least one Signature Move. You can add an Image to every Signature Move. A Fighter avatar, style and name is required for all Fighters and media is required for all Signature Moves. Media in each Signature Move can only contain images uploaded from the phone.\n(2) Click on one of the cards on the Fighters List Screen to open and view the Fighter Screen.\n(3) On the list screen press and hold a Fighter card to see the batch bar appear, after select all Fighters to share or delete and click on the share or delete button in the batch bar to share or delete Fighters. Use the Edit button at the bottom of a Fighters card to edit a Fighter, it only appears after pressing and holding the card. Fighters can only be shared and imported with the iDojo App.\n(4) Scroll vertically on the List Screen to view all Fighter Cards each showing a thumnail of the avatar image. On the Add Fighters screen fill out the form and click the save button to save Fighters. When adding Signature Moves on the Add Fighter screen click the add signature move button to add a Signature Move and the Add Quote button to add fighter Quotes. The -Signature Move button is provided for removing Signature Moves. Thank you and please enjoy using iDojo.",
+      [ { text: "OK",
+        onPress: () => setMode("main"),
+          style: "cancel" 
+      }],
+      { cancelable: false } 
+    );
+  };
+
   const parseStyles = (list, query) => {
     if (!Array.isArray(list)) {
       Alert.alert("Data Error", "Data is not an array, skipping loading.");
@@ -641,7 +653,7 @@ export default function FightersList() {
       />
 
       <TouchableOpacity onPress={() => removeMoveItem(move.id)} style={styles.removeSignatureMoveBtn}>
-        <ImageBackground style={{ height: 45, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
+        <ImageBackground style={{ height: 45, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
       </TouchableOpacity>
     </View>
   );
@@ -695,14 +707,14 @@ export default function FightersList() {
                     onChangeText={(text) => updateDescLine(dIdx, text)}
                   />
                   {fighterDescList.length > 1 && (
-                    <TouchableOpacity onPress={() => removeDescLine(dIdx)} style={styles.miniLineRemoveBtn}>
-                      <Text style={styles.miniLineRemoveText}>✕</Text>
+                    <TouchableOpacity onPress={() => removeDescLine(dIdx)} style={styles.addQuoteBtn}>
+                      <ImageBackground style={{ height: 31, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius: 15 }} resizeMode='cover' source={require('../assets/removequotebtn.png')} />
                     </TouchableOpacity>
                   )}
                 </View>
               ))}
               <TouchableOpacity onPress={addMoveItem} style={styles.addQuoteBtn}>
-                <ImageBackground style={{ height: 31, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addquotebtn.png')} />
+                <ImageBackground style={{ height: 31, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius: 15 }} resizeMode='cover' source={require('../assets/addquotebtn.png')} />
               </TouchableOpacity>
 
               <Text style={styles.label}>Strategic Conclusions / Stance secrets</Text>
@@ -713,11 +725,11 @@ export default function FightersList() {
               {fighterMoves.map((move) => renderMoveFormItem(move))}
 
               <TouchableOpacity onPress={addMoveItem} style={styles.addSignatureMoveBtn}>
-                <ImageBackground style={{ height: 40, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
+                <ImageBackground style={{ height: 40, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.saveBtn} onPress={handleSaveFighterData}>
-                <ImageBackground style={{ height: 76, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
+                <ImageBackground style={{ height: 76, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius: 12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
               </TouchableOpacity> 
             </ScrollView>
           </SafeAreaView>
@@ -753,7 +765,10 @@ export default function FightersList() {
               <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/addchaptericon.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={handleImportFighters} style={styles.importIcon}>
-              <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
+              <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>
+              <TouchableOpacity onPress={showInstructions} style={styles.infoIcon}>
+                <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/mydojostylesinfoicon.png')}/>         
+              </TouchableOpacity>       
             </TouchableOpacity>
           </View>
         </View>  
@@ -837,6 +852,7 @@ const styles = StyleSheet.create({
   searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
   clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
   plusIconAM: { width: 40, height: 40, marginRight: 10 },
+  infoIcon: { height: 47, width: 47, marginLeft: 21, marginBottom: 5, opacity: 1 },
   importIcon: { width: 45, height: 45 },
   chapterCardFooter: { flexDirection: 'row', justifyContent: 'center', width: '100%' },
   editBtnCard: { backgroundColor: '#947e1f', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 6, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
@@ -859,15 +875,15 @@ const styles = StyleSheet.create({
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 999 },
   loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
   saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
-  addSignatureMoveBtn: { width: 171, height: 43, borderRadius: 15, marginTop: 7, alignSelf:'center' },
-  addQuoteBtn: { width: 109, height: 31, borderRadius: 9, marginTop: 5, alignSelf:'center'},
-  removeSignatureMoveBtn: { width: 177, height: 47, borderRadius: 15, marginTop: 7, alignSelf:'center' },
+  addSignatureMoveBtn: { width: 171, height: 43, borderRadius: 19, marginTop: 7, alignSelf:'center' },
+  addQuoteBtn: { width: 109, height: 31, borderRadius: 19, marginTop: 5, alignSelf:'center'},
+  removeSignatureMoveBtn: { width: 177, height: 47, borderRadius: 19, marginTop: 7, alignSelf:'center' },
   formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
   mediaPickerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6, gap: 10 },
   fileLoadedIndicator: { color: '#4ade80', fontSize: 11, fontWeight: '600' },
-  miniLineRemoveBtn: { width: 36, height: 40, backgroundColor: 'rgba(220,38,38,0.1)', borderWidth: 1, borderColor: '#dc2626', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
-  miniLineRemoveText: { color: '#dc2626', fontWeight: 'bold' },
+  miniLineRemoveBtn: { width: 133, height: 40, backgroundColor: 'rgba(220,38,38,0.1)', borderWidth: 1, borderColor: '#dc2626', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
+  miniLineRemoveText: { color: '#dc2626', fontWeight: 'bold', fontSize: 13 },
   stepImg: { width: '100%', height: '100%' },
   stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 });

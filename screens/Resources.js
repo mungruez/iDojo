@@ -73,7 +73,7 @@ export default function Resources() {
 </Text>
 
 <Text style={ styles.fightersList }>Fighters List:</Text>
-<Text style={ styles.title }> A first time ever, list of the best fighters of all time. Each fighter was hand-picked and carefully researched by DojoSoft before being added to the list. DojoSoft only considers real life, fighting styles that are practiced for effective Self Defense. 
+<Text style={ styles.title }> A first time ever, list of the best fighters of all time. Each fighter was hand-picked and carefully researched by DojoSoft before being added to the list. DojoSoft only considers real life, fighting styles that are practiced for effective Self Defense. Add, Share, Edit, View, Delete and Import your own Fighters to the iDojo App. Fighters can only be shared and imported with the iDojo App,
 </Text>
 
 <Text style={ styles.featured }>Featured:</Text>
