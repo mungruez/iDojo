@@ -661,7 +661,7 @@ export default function FightersList() {
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
           <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.formHeaderTitleRow}>
-              <ImageBackground style={styles.iconAM} resizeMode='contain' source={currentFighter ? require('../assets/editchaptericon.png') : require('../assets/addchaptericon.png')} /> 
+              <ImageBackground style={styles.iconAM} resizeMode='contain' source={currentFighter ? require('../assets/editfightertitle.png') : require('../assets/addfightertitle.png')} /> 
             </View>
 
             <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setCurrentFighter(null); setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null); setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]); setMode('list'); }} style={styles.discardBtn}>
@@ -701,8 +701,8 @@ export default function FightersList() {
                   )}
                 </View>
               ))}
-              <TouchableOpacity onPress={addDescLine} style={styles.addMoreRowBtn}>
-                <Text style={styles.addMoreRowText}>+ ADD QUOTE LINE</Text>
+              <TouchableOpacity onPress={addMoveItem} style={styles.addQuoteBtn}>
+                <ImageBackground style={{ height: 31, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addquotebtn.png')} />
               </TouchableOpacity>
 
               <Text style={styles.label}>Strategic Conclusions / Stance secrets</Text>
@@ -860,13 +860,12 @@ const styles = StyleSheet.create({
   loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
   saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
   addSignatureMoveBtn: { width: 190, height: 57, borderRadius: 15, marginTop: 7, alignSelf:'center' },
+  addQuoteBtn: { width: 109, height: 31, borderRadius: 9, marginTop: 5, alignSelf:'center'},
   removeSignatureMoveBtn: { width: 228, height: 67, borderRadius: 15, marginTop: 7, alignSelf:'center' },
   formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
   mediaPickerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6, gap: 10 },
   fileLoadedIndicator: { color: '#4ade80', fontSize: 11, fontWeight: '600' },
-  addMoreRowBtn: { paddingVertical: 8, paddingHorizontal: 12, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 8, marginVertical: 6, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)', alignItems: 'center' },
-  addMoreRowText: { color: '#caaf38', fontWeight: 'bold', fontSize: 11 },
   miniLineRemoveBtn: { width: 36, height: 40, backgroundColor: 'rgba(220,38,38,0.1)', borderWidth: 1, borderColor: '#dc2626', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
   miniLineRemoveText: { color: '#dc2626', fontWeight: 'bold' },
   stepImg: { width: '100%', height: '100%' },
