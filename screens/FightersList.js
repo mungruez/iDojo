@@ -641,7 +641,7 @@ export default function FightersList() {
       />
 
       <TouchableOpacity onPress={() => removeMoveItem(move.id)} style={styles.removeSignatureMoveBtn}>
-        <ImageBackground style={{ height: 67, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
+        <ImageBackground style={{ height: 45, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
       </TouchableOpacity>
     </View>
   );
@@ -713,7 +713,7 @@ export default function FightersList() {
               {fighterMoves.map((move) => renderMoveFormItem(move))}
 
               <TouchableOpacity onPress={addMoveItem} style={styles.addSignatureMoveBtn}>
-                <ImageBackground style={{ height: 57, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
+                <ImageBackground style={{ height: 40, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.saveBtn} onPress={handleSaveFighterData}>
@@ -859,9 +859,9 @@ const styles = StyleSheet.create({
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 999 },
   loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
   saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
-  addSignatureMoveBtn: { width: 190, height: 57, borderRadius: 15, marginTop: 7, alignSelf:'center' },
+  addSignatureMoveBtn: { width: 171, height: 43, borderRadius: 15, marginTop: 7, alignSelf:'center' },
   addQuoteBtn: { width: 109, height: 31, borderRadius: 9, marginTop: 5, alignSelf:'center'},
-  removeSignatureMoveBtn: { width: 228, height: 67, borderRadius: 15, marginTop: 7, alignSelf:'center' },
+  removeSignatureMoveBtn: { width: 177, height: 47, borderRadius: 15, marginTop: 7, alignSelf:'center' },
   formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
   mediaPickerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6, gap: 10 },
