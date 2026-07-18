@@ -1,22 +1,19 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet, Alert, ImageBackground, KeyboardAvoidingView, Platform, StatusBar, FlatList, Dimensions, BackHandler, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet, Alert, ImageBackground, Pressable,KeyboardAvoidingView, Platform, StatusBar, FlatList, Dimensions, BackHandler, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { fighters as initialStaticFighters } from '../data/fighters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
-import { useNavigation } from '@react-navigation/native';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system/legacy';
+import * as FileSystem from 'expo-file-system'; // Removed /legacy unless absolutely necessary
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
 import { useAudioPlayer } from 'expo-audio';
-import { useAudioPlayer } from 'expo-audio';
 import * as Sharing from 'expo-sharing';
+import { fighters as initialStaticFighters } from '../data/fighters';
 import Fighter from './Fighter';
 
 const { height, width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.76;
-  
 const ksoundFile = require('../assets/woosh.mp3');
 
 export default function FightersList() {
@@ -42,25 +39,52 @@ export default function FightersList() {
   const [activeAvatarUri, setActiveAvatarUri] = useState(null);
 
   const navigation = useNavigation();
-  
 
-  const kplayer = useAudioPlayer(ksoundFile, (kplayer) => {
-    kplayer.loop = false; 
+  const kplayer = useAudioPlayer(ksoundFile, (player) => {
+    player.loop = false; 
   });
-
 
   const navKSound = (item) => {
     try {
-      if(kplayer) {
+      if (kplayer) {
         kplayer.seekTo(0);
         kplayer.play();
       }
     } catch (error) {}
 
     setCurrentFighter(item);
+    setSelectedIds([]);
     setMode("view");
   };
 
+  const parseStyles = (list, query) => {
+    if (!Array.isArray(list)) {
+      Alert.alert("Data Error", "Data is not an array, skipping loading.");
+      return;
+    }
+
+    try {
+      const validList = list.filter(f => f && f.id && f.name && f.style);
+      const q = query?.trim()?.toLowerCase();
+      
+      if (!q) {
+        setHFighters(validList);
+        return;
+      }
+
+      const filteredList = validList.filter(f => {
+        const mainMatch = f.name?.toLowerCase().includes(q) || f.desc?.toLowerCase().includes(q) || f.style?.toLowerCase().includes(q);
+        const nestedMatch = f.moves?.some(mv => 
+          mv.title?.toLowerCase().includes(q) || mv.desc?.toLowerCase().includes(q)
+        );
+        return mainMatch || nestedMatch;
+      });
+
+      setHFighters(filteredList);
+    } catch (e) {
+      Alert.alert("Filtering Error", e.message || "An error occurred filtering Fighters.");
+    }
+  };
 
   const loadFighters = async () => {
     try {
@@ -131,8 +155,7 @@ export default function FightersList() {
       isLoadingRef.current = false;
       setLoading(false);
     }
-  };
-
+  };  
 
   const populateForEdit = (fighter, activeStyle) => {
     if (!fighter) {
@@ -203,13 +226,8 @@ export default function FightersList() {
               setHFighters(nextCombinedMaster);
               setSelectedIds([]);
               setCurrentFighter(null);
-
-              const remainingItems = nextCombinedMaster.filter(f => 
-                fighterStyle === "allstyles" || f.style === fighterStyle
-              );
-
-              if (isDeletingAll || remainingItems.length < 1) {
-                setMode('main');
+              if (isDeletingAll || nextCombinedMaster.length < 1) {
+                setMode('list'); 
               }
             } catch (e) {
               Alert.alert("Delete Error", e.message || "Failed to purge database selections.");
@@ -222,8 +240,8 @@ export default function FightersList() {
     );
   };
 
-  
-  
+
+
   const shareFighters = async (fighterIds) => {
     if (isOffline) {
       Alert.alert("No Internet", "An active internet profile connection is required to share fighters.");
@@ -282,11 +300,7 @@ export default function FightersList() {
 
       const manifest = { app: 'iDojo_Fighters', version: 1, count: itemsToShare.length, exportDate: new Date().toISOString() };
       await FileSystem.writeAsStringAsync(`${shareDir}manifest.json`, JSON.stringify(manifest));
-
-      const nakedSource = Platform.OS === 'android' ? shareDir.replace('file://', '').replace(/\/$/, '') : shareDir;
-      const nakedTarget = Platform.OS === 'android' ? zipPath.replace('file://', '') : zipPath;
-
-      await zip(nakedSource, nakedTarget);
+      await zip(shareDir, zipPath);
       await Sharing.shareAsync(zipPath, { dialogTitle: `Share ${itemsToShare.length} Fighter(s)`, mimeType: 'application/zip' });
       shareSuccess = true;
     } catch (e) {
@@ -300,7 +314,7 @@ export default function FightersList() {
   };
 
 
-  
+
   const handleImportFighters = async () => {
     let extractDir = null;
     let tempZipPath = null;
@@ -327,18 +341,14 @@ export default function FightersList() {
       
       await FileSystem.copyAsync({ from: asset.uri, to: tempZipPath });
       await FileSystem.makeDirectoryAsync(extractDir, { intermediates: true });
-      
-      const nakedZip = Platform.OS === 'android' ? tempZipPath.replace('file://', '') : tempZipPath;
-      const nakedDest = Platform.OS === 'android' ? extractDir.replace('file://', '').replace(/\/$/, '') : extractDir;
-      
-      await unzip(nakedZip, nakedDest);
+      await unzip(tempZipPath, extractDir);
       
       let manifest = { count: 1 };
       try {
         const manifestContent = await FileSystem.readAsStringAsync(`${extractDir}manifest.json`);
         manifest = JSON.parse(manifestContent);
       } catch (e) {
-        Alert.alert("Error Importing", "Error in manifest file")
+        Alert.alert("Import Notice", "Parsing generic structural mapping parameters.");
       }
       
       const rawFighters = [];
@@ -399,8 +409,10 @@ export default function FightersList() {
 
         const migrateFile = async (sourcePath, destName) => {
           if (!sourcePath || typeof sourcePath !== 'string' || sourcePath.startsWith('http') || sourcePath.startsWith('asset://')) return sourcePath;
-          const sourceExt = sourcePath.includes('.') ? `.${sourcePath.split('.').pop().toLowerCase()}` : '.png';
+          const baseFileName = sourcePath.split('/').pop() || '';
+          const sourceExt = baseFileName.includes('.') ? `.${baseFileName.split('.').pop().toLowerCase()}` : '.png';
           const destUri = `${permanentDirUri}${destName}${sourceExt}`;
+          
           try {
             await FileSystem.copyAsync({ from: sourcePath, to: destUri });
             return destUri;
@@ -443,6 +455,7 @@ export default function FightersList() {
       Alert.alert('Import Failed', e.message || 'Failed to extract custom archive package.');
     } finally {
       setLoading(false);
+      setSelectedIds([]);
       if (extractDir) try { await FileSystem.deleteAsync(extractDir, { idempotent: true }); } catch (err) {}
       if (tempZipPath) try { await FileSystem.deleteAsync(tempZipPath, { idempotent: true }); } catch (err) {}
     }
@@ -452,35 +465,36 @@ export default function FightersList() {
 
   useFocusEffect(
     useCallback(() => {
-      if(mode === "list") loadFighters();
+      if (mode === "list") loadFighters();
     }, [mode])
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      const handleHardwareBackPress = () => {
+        if (isPickingRef.current || isPicking || isLoadingRef.current) {
+          return true; 
+        }
 
+        if (mode === 'add' || mode === 'view') {
+          setCurrentFighter(null);
+          setSelectedIds([]);
+          setMode('list');
+          return true; 
+        }
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (mode === 'add') {
-        if (isPickingRef.current || isPicking) return true;
-        if (isLoadingRef.current) return true;
-        setMode('list');
-        return true;
-      }
+        if (selectedIds.length > 0) {
+          setSelectedIds([]);
+          return true;
+        }
 
-      if (mode === 'view') {
-        if (isPickingRef.current || isPicking) return true;
-        if (isLoadingRef.current) return true;
-        setCurrentFighter(null);
-        setMode('list');
-        return true;
-      }
-    
-      setSelectedIds([]);
-      setMode('list');
-      return false;
-    });
-    return () => backHandler.remove();
-  }, [mode, isPicking, loading]);
+        return false; 
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', handleHardwareBackPress);
+      return () => BackHandler.removeEventListener('hardwareBackPress', handleHardwareBackPress);
+    }, [mode, selectedIds, isPicking])
+  );
 
 
 
@@ -490,7 +504,29 @@ export default function FightersList() {
       isLoadingRef.current = true;
       if (!loading) setLoading(true);
 
-      const incomingFighters = Array.isArray(newFighterPayload) ? newFighterPayload : [newFighterPayload];
+      let incomingFighters = [];
+      if (newFighterPayload && typeof newFighterPayload === 'object' && !newFighterPayload.nativeEvent) {
+        incomingFighters = Array.isArray(newFighterPayload) ? newFighterPayload : [newFighterPayload];
+      } else {
+        if (!fighterName?.trim() || !fighterStyle?.trim()) {
+          Alert.alert("Validation Error", "Please provide a valid name and fighting style.");
+          isLoadingRef.current = false;
+          setLoading(false);
+          return;
+        }
+
+        incomingFighters = [{
+          id: fighterId || Date.now().toString(),
+          name: fighterName.trim(),
+          style: fighterStyle.trim(),
+          conc: fighterConc?.trim() || "",
+          desc: fighterDescList.filter(line => line?.trim() !== ""),
+          moves: fighterMoves || [],
+          avatar: activeAvatarUri,
+          isStaticBundle: false
+        }];
+      }
+
       const currentCustomFighters = allFighters.filter(f => !f.isStaticBundle);
       const staticBundleItems = allFighters.filter(f => f.isStaticBundle);
       
@@ -506,13 +542,16 @@ export default function FightersList() {
       const nextCombinedMaster = [...staticBundleItems, ...currentCustomFighters];
       const fileUri = `${FileSystem.documentDirectory}fighters_custom.json`;
       const trackingUri = `${FileSystem.documentDirectory}.fighters_user_initialized`;
+      
       await FileSystem.writeAsStringAsync(trackingUri, "true");
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(currentCustomFighters));
+      
       setAllFighters(nextCombinedMaster);
       setHFighters(nextCombinedMaster);
+      setSelectedIds([]);
       setMode('list');
     } catch (e) {
-      Alert.alert('Save Failed', e.message);
+      Alert.alert('Save Failed', e.message || 'Unable to finalize file records updates.');
     } finally {
       isLoadingRef.current = false;
       setLoading(false);
@@ -523,8 +562,7 @@ export default function FightersList() {
   const getMediaFileExtension = (uri) => {
     if (!uri || typeof uri !== 'string') return '.png';
     const extMatch = uri.match(/\.[0-9a-z]+$/i);
-    if (extMatch) return extMatch[0].toLowerCase();
-    return '.png';
+    return extMatch ? extMatch[0].toLowerCase() : '.png';
   };
 
 
@@ -536,6 +574,7 @@ export default function FightersList() {
   const updateMoveItem = (id, field, val) => setFighterMoves(fighterMoves.map(m => m.id === id ? { ...m, [field]: val } : m));
   const toggleSelect = (id) => { setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]); };
   
+  const selectedFighterMatch = allFighters.find(f => String(f.id) === String(selectedIds[0]));
 
   const pickFighterMedia = async (target, moveId = null) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -609,7 +648,7 @@ export default function FightersList() {
 
 
 
-  if ( mode === "view" ) {
+  if (mode === "view") {
     return <Fighter fighter={currentFighter} offset={0} />;
   }
 
@@ -640,17 +679,17 @@ export default function FightersList() {
               <Text style={styles.label}>Fighter Avatar Profile Image</Text>
               <View style={styles.mediaPickerRow}>
                 <TouchableOpacity onPress={() => pickFighterMedia('avatar')} style={styles.stepImgContainer}>
-                  {activeAvatarUri ? <Image source={{ uri: move.avatar }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
+                  {activeAvatarUri ? <Image source={{ uri: activeAvatarUri }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
                 </TouchableOpacity>
                 {activeAvatarUri && <Text style={styles.fileLoadedIndicator}>✅ Profile Photo Loaded</Text>}
               </View>
 
-              <Text style={styles.label}>Legendary Quotes & Wisdom lines</Text>
+              <Text style={styles.label}>Legendary Quotes & Wisdom Lines</Text>
               { fighterDescList.map((descLine, dIdx) => (
                 <View key={dIdx} style={styles.dynamicLineRow}>
                   <TextInput
                     style={[styles.input, { flex: 1, marginBottom: 0 }]}
-                    placeholder={`Quote / Descriptor Line #${dIdx + 1}`}
+                    placeholder={`Quote description line #${dIdx + 1}`}
                     placeholderTextColor="#726b6b"
                     value={descLine}
                     onChangeText={(text) => updateDescLine(dIdx, text)}
@@ -663,7 +702,7 @@ export default function FightersList() {
                 </View>
               ))}
               <TouchableOpacity onPress={addDescLine} style={styles.addMoreRowBtn}>
-                <Text style={styles.addMoreRowText}>+ ADD MORE QUOTE LINES</Text>
+                <Text style={styles.addMoreRowText}>+ ADD QUOTE LINE</Text>
               </TouchableOpacity>
 
               <Text style={styles.label}>Strategic Conclusions / Stance secrets</Text>
@@ -677,7 +716,7 @@ export default function FightersList() {
                 <ImageBackground style={{ height: 57, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius:15 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.saveBtn} onPress={saveFighterProfile}>
+              <TouchableOpacity style={styles.saveBtn} onPress={handleSaveFighterData}>
                 <ImageBackground style={{ height: 76, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius:12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
               </TouchableOpacity> 
             </ScrollView>
@@ -704,7 +743,7 @@ export default function FightersList() {
             <TouchableOpacity onPress={() => parseStyles(allFighters, searchQuery)} style={styles.searchBtn}>
               <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/binocularsicon.png')}/>         
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { setSearchQuery(''); parseStyles(allFighters, null); }} style={styles.clearBtn}>
+            <TouchableOpacity onPress={() => { setSearchQuery(''); setHFighters(allFighters); }} style={styles.clearBtn}>
               <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/reloadicon.png')}/>         
             </TouchableOpacity>
           </View>
@@ -726,10 +765,10 @@ export default function FightersList() {
           </View> )
         : ( <FlatList
           data={hFighters || []}
-          extraData={selectedIds, allFighters}
+          extraData={{ selectedIds, allFighters }}
           numColumns={2}
           contentContainerStyle={{ paddingBottom: 57 }}
-          keyExtractor={(item, index) => item.name || index.toString()}
+          keyExtractor={(item, index) => item.id ? String(item.id) : index.toString()}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2, marginLeft: 7, marginRight: 7, width: "50%", borderWidth: 0 }}>
@@ -749,7 +788,7 @@ export default function FightersList() {
                   onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
                   style={[styles.mainCardView, selectedIds.includes(item.id) && styles.selectedCard]} >
                     <View style={styles.subCardView}>
-                      <Image source={ item.isStaticBundle ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
+                      <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                       <View style={{marginLeft: 12, marginBottom: 7}}>
                         <Text style={{ fontSize: 14, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>  
                         <View style={styles.styleTextView}>
@@ -764,13 +803,12 @@ export default function FightersList() {
 
           { selectedIds.length > 0 && (
             <View style={styles.batchBar}>
-              <Text style={styles.batchText}>{`${selectedIds.length} Selected`}</Text>
+              { selectedIds.length == 1 ? ( <TouchableOpacity style={styles.editBtnCard} onPress={() => populateForEdit(selectedFighterMatch, selectedFighterMatch?.style)}>
+                <Text style={styles.editBtnText}>EDIT</Text>
+              </TouchableOpacity> ) : ( <Text style={styles.batchText}>{`${selectedIds.length} Selected`}</Text> ) }
               <TouchableOpacity onPress={() => shareFighters(selectedIds)} style={styles.shareIcon}>
                 <ImageBackground style={{height: "100%", width: "100%"}} resizeMode='contain' source={require('../assets/sharechaptericon.png')}/>         
               </TouchableOpacity>
-              { selectedIds.length == 1 && ( <TouchableOpacity onPress={() => populateForEdit(item, item.style)} style={styles.editBtnCard}>
-                <ImageBackground style={{height: "100%", width: "100%"}} resizeMode='contain' source={require('../assets/sharechaptericon.png')}/>         
-              </TouchableOpacity> ) }
               <TouchableOpacity onPress={() => deleteFighters(selectedIds)} style={styles.myDojoDiscardIcon}>
                 <ImageBackground style={{height: "100%", width: "100%"}} resizeMode='contain' source={require('../assets/discardicon.png')}/> 
               </TouchableOpacity>
@@ -801,8 +839,8 @@ const styles = StyleSheet.create({
   plusIconAM: { width: 40, height: 40, marginRight: 10 },
   importIcon: { width: 45, height: 45 },
   chapterCardFooter: { flexDirection: 'row', justifyContent: 'center', width: '100%' },
-  editBtnCard: { backgroundColor: '#caaf38', paddingHorizontal: 16, paddingVertical: 6, borderRadius: 6 },
-  editBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 11 },
+  editBtnCard: { backgroundColor: '#947e1f', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 6, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
+  editBtnText: { color: '#ffffff', fontSize: 12, fontWeight: '600', letterSpacing: 1},
   batchBar: { position: 'absolute', bottom: 20, left: '5%', right: '5%', height: 55, backgroundColor: '#1e293b', borderRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, borderWidth: 1.5, borderColor: '#caaf38', elevation: 10 },
   batchText: { color: '#caaf38', fontWeight: 'bold', fontSize: 13 },
   shareIcon: { width: 35, height: 35 },
