@@ -259,8 +259,10 @@ export default function FightersList() {
       Alert.alert("No Internet", "An active internet profile connection is required to share fighters.");
       return;
     }
+
     if (!fighterIds?.length) return;
     const cleanSharableIds = fighterIds.filter(id => !id.startsWith('static_fighter_'));
+    
     if (cleanSharableIds.length === 0) {
       Alert.alert("Action Blocked", "Built-in core fighters cannot be compressed into external sharing packages.");
       return;
@@ -481,6 +483,8 @@ export default function FightersList() {
     }, [mode])
   );
 
+
+
   useFocusEffect(
     useCallback(() => {
       const handleHardwareBackPress = () => {
@@ -588,6 +592,7 @@ export default function FightersList() {
   
   const selectedFighterMatch = allFighters.find(f => String(f.id) === String(selectedIds[0]));
 
+  
   const pickFighterMedia = async (target, moveId = null) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -737,7 +742,6 @@ export default function FightersList() {
       </ImageBackground>
     );
   }
-
 
 
   return (
