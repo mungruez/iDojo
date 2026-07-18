@@ -861,7 +861,7 @@ const styles = StyleSheet.create({
   saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
   addSignatureMoveBtn: { width: 190, height: 57, borderRadius: 15, marginTop: 7, alignSelf:'center' },
   removeSignatureMoveBtn: { width: 228, height: 67, borderRadius: 15, marginTop: 7, alignSelf:'center' },
-  formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#caaf38', paddingBottom: 4 },
+  formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
   mediaPickerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6, gap: 10 },
   fileLoadedIndicator: { color: '#4ade80', fontSize: 11, fontWeight: '600' },
