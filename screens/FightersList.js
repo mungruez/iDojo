@@ -44,6 +44,7 @@ export default function FightersList() {
     player.loop = false; 
   });
 
+
   const navKSound = (item) => {
     try {
       if (kplayer) {
@@ -57,6 +58,7 @@ export default function FightersList() {
     setMode("view");
   };
 
+
   const showInstructions = () => {
     Alert.alert(
       "Fighters List",
@@ -68,6 +70,7 @@ export default function FightersList() {
       { cancelable: false } 
     );
   };
+
 
   const parseStyles = (list, query) => {
     if (!Array.isArray(list)) {
@@ -98,6 +101,7 @@ export default function FightersList() {
     }
   };
 
+
   const loadFighters = async () => {
     try {
       if (isLoadingRef.current) return; 
@@ -106,10 +110,8 @@ export default function FightersList() {
 
       const fileUri = `${FileSystem.documentDirectory}fighters_custom.json`;
       const trackingUri = `${FileSystem.documentDirectory}.fighters_user_initialized`;
-      
       const info = await FileSystem.getInfoAsync(fileUri);
       const trackingInfo = await FileSystem.getInfoAsync(trackingUri);
-    
       if (!info.exists && !trackingInfo.exists) {
         await FileSystem.writeAsStringAsync(fileUri, JSON.stringify([]));
         await FileSystem.writeAsStringAsync(trackingUri, "true");
@@ -311,7 +313,6 @@ export default function FightersList() {
       });
 
       await Promise.all(exportPromises);
-
       const manifest = { app: 'iDojo_Fighters', version: 1, count: itemsToShare.length, exportDate: new Date().toISOString() };
       await FileSystem.writeAsStringAsync(`${shareDir}manifest.json`, JSON.stringify(manifest));
       await zip(shareDir, zipPath);
@@ -605,6 +606,7 @@ export default function FightersList() {
       setIsPicking(true);
       const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], allowsEditing: false, quality: 1.0 });
       if (res.canceled || !res.assets?.[0]?.uri) return;
+
       const pickedUri = res.assets[0].uri;
       const ext = getMediaFileExtension(pickedUri);
       const cacheDir = `${FileSystem.cacheDirectory}fighter-cache/`;
@@ -643,7 +645,7 @@ export default function FightersList() {
         <TouchableOpacity onPress={() => pickFighterMedia('move', move.id)} style={styles.stepImgContainer}>
           {move.img ? <Image source={{ uri: move.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
         </TouchableOpacity>
-        { move.img && <Text style={styles.fileLoadedIndicator}>✅ Image Uploaded</Text> }
+        { move.img && <Text style={styles.fileLoadedIndicator}>✅Uploaded click to change</Text> }
       </View>
 
       <Text style={styles.label}>Move Breakdowns / Technical Details</Text>
@@ -673,17 +675,17 @@ export default function FightersList() {
 
   if (mode === 'add') {
     return (
-      <ImageBackground source={require('../assets/fightersbackground.jpeg')} style={styles.imgBackground} resizeMode='cover' >
+      <ImageBackground source={require('../assets/addfighterbg.png')} style={styles.imgBackground} resizeMode='cover' >
         <StatusBar barStyle="light-content" />
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-          <SafeAreaView style={{ flex: 1 }}>
+          <SafeAreaView style={{ flex: 1,  backgroundColor: 'rgba(0,0,0,0.19)' }}>
             <View style={styles.formHeaderTitleRow}>
               <ImageBackground style={styles.iconAM} resizeMode='contain' source={currentFighter ? require('../assets/editfightertitle.png') : require('../assets/addfightertitle.png')} /> 
             </View>
 
             <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setCurrentFighter(null); setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null); setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]); setMode('list'); }} style={styles.discardBtn}>
               <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
-              <Text style={styles.discardText}>❌ CANCEL</Text>
+              <Text style={styles.discardText}>❌CANCEL</Text>
             </TouchableOpacity>
 
             <ScrollView style={styles.formScroller} contentContainerStyle={{ paddingBottom: 120 }}>
@@ -693,12 +695,12 @@ export default function FightersList() {
               <Text style={styles.label}>Fighting Style / Martial Art Class</Text>
               <TextInput style={styles.input} placeholder="e.g. Sambo" placeholderTextColor="#726b6b" value={fighterStyle} onChangeText={setFighterStyle} />
 
-              <Text style={styles.label}>Fighter Avatar Profile Image</Text>
+              <Text style={styles.label}>Fighter Avatar/Profile Image</Text>
               <View style={styles.mediaPickerRow}>
                 <TouchableOpacity onPress={() => pickFighterMedia('avatar')} style={styles.stepImgContainer}>
                   {activeAvatarUri ? <Image source={{ uri: activeAvatarUri }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
                 </TouchableOpacity>
-                {activeAvatarUri && <Text style={styles.fileLoadedIndicator}>✅ Profile Photo Loaded</Text>}
+                {activeAvatarUri && <Text style={styles.fileLoadedIndicator}>✅Profile Photo Loaded</Text>}
               </View>
 
               <Text style={styles.label}>Legendary Quotes & Wisdom Lines</Text>
@@ -869,12 +871,12 @@ const styles = StyleSheet.create({
   formHeaderTitleRow: { width: '100%', alignItems: 'center', marginVertical: 10 },
   discardBtn: { alignSelf: 'center', backgroundColor: 'rgba(220, 38, 38, 0.15)', borderWidth: 1, borderColor: '#dc2626', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, marginBottom: 12 },
   discardText: { color: '#ef4444', fontWeight: 'bold', fontSize: 11 },
-  formScroller: { flex: 1, paddingHorizontal: 16 },
-  label: { color: '#caaf38', fontSize: 12, fontWeight: 'bold', marginTop: 10, marginBottom: 4, textTransform: 'uppercase' },
-  input: { height: 40, backgroundColor: '#fff', borderRadius: 8, paddingHorizontal: 12, color: '#000', borderWidth: 1, borderColor: '#cbd5e1', marginBottom: 6 },
+  formScroller: { flex: 1, paddingHorizontal: 16, opacity: 1 },
+  label: { color: '#e2c74c', fontSize: 12, fontWeight: 'bold', marginTop: 10, marginBottom: 4, textTransform: 'uppercase' },
+  input: { height: 40, backgroundColor: '#fff', borderRadius: 8, paddingHorizontal: 12, color: '#000', borderWidth: 1, borderColor: '#ffefa9', marginBottom: 6 },
   descInput: { height: 70, textAlignVertical: 'top', paddingVertical: 8 },
   dynamicLineRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
-  selectedCard: { borderColor: '#dc2626', backgroundColor: '#fef2f2', borderWidth: 2 },
+  selectedCard: { borderColor: '#e7cb4f', backgroundColor: 'rgba(247, 216, 114, 0.76)', borderWidth: 2 },
   styleTextView: { marginTop: 3, borderWidth: .5, borderRadius: 12, borderColor:'#caaf38', flexDirection:'row', backgroundColor:'#323232', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 4, paddingVertical: 2},
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 999 },
   loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
@@ -885,9 +887,7 @@ const styles = StyleSheet.create({
   formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
   mediaPickerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6, gap: 10 },
-  fileLoadedIndicator: { color: '#4ade80', fontSize: 11, fontWeight: '600' },
-  miniLineRemoveBtn: { width: 133, height: 40, backgroundColor: 'rgba(220,38,38,0.1)', borderWidth: 1, borderColor: '#dc2626', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
-  miniLineRemoveText: { color: '#dc2626', fontWeight: 'bold', fontSize: 13 },
+  fileLoadedIndicator: { color: '#4ade80', fontSize: 10, fontWeight: '600' },
   stepImg: { width: '100%', height: '100%' },
   stepImgContainer: { width: 77, height: 77, justifyContent: 'center', alignItems: 'center', borderRadius: 12, borderWidth: 0, opacity: 1},
 });
