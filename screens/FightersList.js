@@ -841,7 +841,7 @@ export default function FightersList() {
                 <ImageBackground style={{ height: 40, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.saveBtn} onPress={handleSaveFighterData}>
+              <TouchableOpacity style={styles.saveBtn} onPress={saveFighterProfile}>
                 <ImageBackground style={{ height: 76, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius: 12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
               </TouchableOpacity> 
             </ScrollView>
@@ -874,7 +874,7 @@ export default function FightersList() {
 
           <View style={styles.dashboardIconsControlsRow}>
             <TouchableOpacity onPress={() => populateForEdit(null, "allstyles")} style={styles.plusIcon}>
-              <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/addchaptericon.png')}/>         
+              <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/addfightericon.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={handleImportFighters} style={styles.importIcon}>
               <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>
