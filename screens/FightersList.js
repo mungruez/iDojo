@@ -781,7 +781,7 @@ export default function FightersList() {
 
 
 
-  if (mode === 'add') {
+  if (mode === "add") {
     return (
       <ImageBackground source={require('../assets/addfighterbg.png')} style={styles.imgBackground} resizeMode='cover' >
         <StatusBar barStyle="light-content" />
