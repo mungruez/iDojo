@@ -643,7 +643,7 @@ export default function FightersList() {
       <Text style={styles.label}>Signature Move Image</Text>
       <View style={styles.mediaPickerRow}>
         <TouchableOpacity onPress={() => pickFighterMedia('move', move.id)} style={styles.stepImgContainer}>
-          {move.img ? <Image source={{ uri: move.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
+          {move.img ? <Image source={{ uri: move.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebtn.png')} />}
         </TouchableOpacity>
         { move.img && <Text style={styles.fileLoadedIndicator}>✅Uploaded click to change</Text> }
       </View>
@@ -698,7 +698,7 @@ export default function FightersList() {
               <Text style={styles.label}>Fighter Avatar/Profile Image</Text>
               <View style={styles.mediaPickerRow}>
                 <TouchableOpacity onPress={() => pickFighterMedia('avatar')} style={styles.stepImgContainer}>
-                  {activeAvatarUri ? <Image source={{ uri: activeAvatarUri }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebg.png')} />}
+                  {activeAvatarUri ? <Image source={{ uri: activeAvatarUri }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebtn.png')} />}
                 </TouchableOpacity>
                 {activeAvatarUri && <Text style={styles.fileLoadedIndicator}>✅Profile Photo Loaded</Text>}
               </View>
