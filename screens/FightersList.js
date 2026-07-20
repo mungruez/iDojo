@@ -62,9 +62,9 @@ export default function FightersList() {
   const showInstructions = () => {
     Alert.alert(
       "Fighters List",
-      "Intructions: Save, Edit, View, Share, Delete and Import Chapters using iDojo. You may add any number of Fighters your phone memory allows. Click the binoculars icon to search Fighters by the search term entered. After a search another search can be done by using backspace to remove the search term instead of the silver reload icon.\n(1) Use the gold, plus(+) icon in the top menu bar to Add Fighters. Every Fighter must contain at least one Signature Move. You can add an Image to every Signature Move. A Fighter avatar, style and name is required for all Fighters and media is required for all Signature Moves. Media in each Signature Move can only contain images uploaded from the phone.\n(2) Click on one of the cards on the Fighters List Screen to open and view the Fighter Screen.\n(3) On the list screen press and hold a Fighter card to see the batch bar appear, after select all Fighters to share or delete and click on the share or delete button in the batch bar to share or delete Fighters. Use the Edit button at the bottom of a Fighters card to edit a Fighter, it only appears after pressing and holding the card. Fighters can only be shared and imported with the iDojo App.\n(4) Scroll vertically on the List Screen to view all Fighter Cards each showing a thumnail of the avatar image. On the Add Fighters screen fill out the form and click the save button to save Fighters. When adding Signature Moves on the Add Fighter screen click the add signature move button to add a Signature Move and the Add Quote button to add fighter Quotes. The -Signature Move button is provided for removing Signature Moves. Thank you and please enjoy using iDojo.",
+      "Intructions: Save, Edit, View, Share, Delete and Import Fighters using iDojo. You may add any number of Fighters your phone memory allows. Click the binoculars icon to search Fighters by the search term entered. After a search another search can be done by using backspace to remove the search term instead of the silver reload icon.\n(1) Use the gold, plus(+) icon in the top menu bar to Add Fighters. Every Fighter must contain at least one Signature Move. You can add an Image to every Signature Move. A Fighter avatar, style and name is required for all Fighters and media is required for all Signature Moves, the conclusion is optional. Media in each Signature Move can only contain images uploaded from the phone.\n(2) Click on one of the cards on the Fighters List Screen to open and view the Fighter Screen.\n(3) On the list screen press and hold a Fighter card to see the batch bar appear, after select all Fighters to share or delete and click on the share or delete button in the batch bar to share or delete Fighters. Use the Edit button at the bottom of a Fighters card to edit a Fighter, it only appears after pressing and holding the card. Fighters can only be shared and imported with the iDojo App.\n(4) Scroll vertically on the List Screen to view all Fighter Cards each showing a thumnail of the avatar image. On the Add Fighters screen fill out the form and click the save button to save Fighters. When adding Signature Moves on the Add Fighter screen click the add signature move button to add a Signature Move and the Add Quote button to add Fighter Quotes. The -Signature Move button is provided for removing Signature Moves. Thank you and please enjoy using iDojo.",
       [ { text: "OK",
-        onPress: () => setMode("main"),
+        onPress: () => setMode("list"),
           style: "cancel" 
       }],
       { cancelable: false } 
@@ -824,9 +824,7 @@ export default function FightersList() {
 
           { selectedIds.length > 0 && (
             <View style={styles.batchBar}>
-              { selectedIds.length == 1 ? ( <TouchableOpacity style={styles.editBtnCard} onPress={() => populateForEdit(selectedFighterMatch, selectedFighterMatch?.style)}>
-                <Text style={styles.editBtnText}>EDIT</Text>
-              </TouchableOpacity> ) : ( <Text style={styles.batchText}>{`${selectedIds.length} Selected`}</Text> ) }
+              <Text style={styles.batchText}>{`${selectedIds.length} Selected`}</Text>
               <TouchableOpacity onPress={() => shareFighters(selectedIds)} style={styles.shareIcon}>
                 <ImageBackground style={{height: "100%", width: "100%"}} resizeMode='contain' source={require('../assets/sharechaptericon.png')}/>         
               </TouchableOpacity>
@@ -851,7 +849,7 @@ const styles = StyleSheet.create({
   mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#caaf38", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
   subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", color: 'crimson', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
   plusIcon: { width: 45, height: 45 },
-  iconAM: { height: 60, width: width * 0.8 },
+  iconAM: { height: 60, opacity: 1, marginTop: 3, textAlign: "center" },
   header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5 },
   searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4, gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: '100%', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
   searchInput: { height: 38, width: '70%', backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 8, paddingHorizontal: 8, color: 'white', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11 },
