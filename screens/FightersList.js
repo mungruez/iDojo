@@ -519,10 +519,8 @@ export default function FightersList() {
     try {
       const fileUri = `${FileSystem.documentDirectory}fighters_custom.json`;
       const trackingUri = `${FileSystem.documentDirectory}.fighters_user_initialized`;
-      
       await FileSystem.writeAsStringAsync(trackingUri, "true");
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(customOnlyList));
-      
       setAllFighters(combinedMasterList);
       setHFighters(combinedMasterList); 
     } catch (e) {
@@ -532,11 +530,11 @@ export default function FightersList() {
   };
 
 
-  const handleSaveFighterData = async (newFighterPayload, activeStyle) => {
+    const handleSaveFighterData = async (newFighterPayload) => {
     try {
       if (isLoadingRef.current) return;
       isLoadingRef.current = true;
-      if (!loading) setLoading(true);
+      
       const incomingFighters = Array.isArray(newFighterPayload) ? newFighterPayload : [newFighterPayload];
       const currentCustomFighters = allFighters.filter(f => !f.isStaticBundle);
       const staticBundleItems = allFighters.filter(f => f.isStaticBundle);
@@ -551,18 +549,22 @@ export default function FightersList() {
       });
 
       const nextCombinedMaster = [...staticBundleItems, ...currentCustomFighters];
-      await saveFightersToStorage(currentCustomFighters, nextCombinedMaster, activeStyle);
+      const fileUri = `${FileSystem.documentDirectory}fighters_custom.json`;
+      const trackingUri = `${FileSystem.documentDirectory}.fighters_user_initialized`;
+      await FileSystem.writeAsStringAsync(trackingUri, "true");
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(currentCustomFighters));
+      setAllFighters(nextCombinedMaster);
+      setHFighters(nextCombinedMaster);
+      setSearchQuery('');
       setMode('list');
     } catch (e) {
       Alert.alert('Save Failed', e.message);
     } finally {
       isLoadingRef.current = false;
-      setLoading(false);
     }
   };
 
 
-  
   const saveFighterProfile = async () => {
     if (isPickingRef.current || isPicking) return;
 
@@ -667,19 +669,16 @@ export default function FightersList() {
             await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
           }
         }
-      } catch (cleanupErr) {
-      }
+      } catch (cleanupErr) {}
 
-      const destinationStyle = prevStyle || 'allstyles';
-      setFighterStyle(destinationStyle);
-
-      await handleSaveFighterData(finalFighterData, destinationStyle);
+      await handleSaveFighterData(finalFighterData);
     } catch (err) {
       Alert.alert("Save Error", err.message || "An error occurred while compiling fighter data profiles.");
-    } finally {
+    } {
       setLoading(false);
     }
   };
+
 
 
   const getMediaFileExtension = (uri) => {
