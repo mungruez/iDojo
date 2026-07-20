@@ -174,12 +174,12 @@ export default function FightersList() {
   const populateForEdit = (fighter, activeStyle) => {
     if (!fighter) {
       setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null);
-      setFighterStyle(""); setFighterId(Date.now().toString()); setFighterDescList([""]); setFighterMoves([]);
+      setFighterStyle(""); setFighterId(Date.now().toString()); setFighterDescList(["  "]); setFighterMoves([]);
     } else {
       setCurrentFighter(fighter); setFighterId(fighter.id); setFighterName(fighter.name);
       setFighterStyle(fighter.style); setFighterConc(fighter.conc || "");
       setActiveAvatarUri(typeof fighter.avatar === 'string' ? fighter.avatar : null);
-      setFighterDescList(Array.isArray(fighter.desc) ? [...fighter.desc] : [""]);
+      setFighterDescList(Array.isArray(fighter.desc) ? [...fighter.desc] : ["  "]);
       setFighterMoves(Array.isArray(fighter.moves) ? [...fighter.moves] : []);
     }
     setMode("add");
@@ -657,7 +657,7 @@ export default function FightersList() {
         avatar: finalAvatar || require('../assets/avatars/muhammadali.png'),
         desc: validatedDesc,
         style: fighterStyle.trim(),
-        conc: fighterConc.trim(),
+        conc: fighterConc?.trim() || "",
         moves: processedMoves
       };
 
@@ -734,14 +734,17 @@ export default function FightersList() {
 
 
   
-  const renderMoveFormItem = (move) => (
+  const renderMoveFormItem = (move) => {
+    if (!move) return null;
+
+    return (
     <View key={move.id} style={styles.sectionContainerBlock}>
       <Text style={styles.label}>Signature Move Title</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter Move Name..."
         placeholderTextColor="#726b6b"
-        value={move.title}
+        value={move.title || ""}
         onChangeText={(text) => updateMoveItem(move.id, 'title', text)}
       />
 
@@ -758,7 +761,7 @@ export default function FightersList() {
         style={[styles.input, styles.descInput]}
         placeholder="Explain technical details/secrets..."
         placeholderTextColor="#726b6b"
-        value={move.desc}
+        value={move.desc || ""}
         onChangeText={(text) => updateMoveItem(move.id, 'desc', text)}
         multiline
         numberOfLines={3}
@@ -767,8 +770,8 @@ export default function FightersList() {
       <TouchableOpacity onPress={() => removeMoveItem(move.id)} style={styles.removeSignatureMoveBtn}>
         <ImageBackground style={{ height: 45, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
       </TouchableOpacity>
-    </View>
-  );
+    </View> )
+  };
 
 
 
@@ -834,7 +837,7 @@ export default function FightersList() {
 
               <Text style={styles.formStreamSectionDivider}>⚡ SIGNATURE MOVES</Text>
 
-              {fighterMoves.map((move) => renderMoveFormItem(move))}
+              { Array.isArray(fighterMoves) && fighterMoves.map((move) => renderMoveFormItem(move))}
 
               <TouchableOpacity onPress={addMoveItem} style={styles.addSignatureMoveBtn}>
                 <ImageBackground style={{ height: 40, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
