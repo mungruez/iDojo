@@ -739,28 +739,6 @@ export default function Chapters() {
   };
 
 
-  const isValidMediaUri = async (uri, minimumSize = 0) => {
-    if (!uri || typeof uri !== 'string') return false;
-    if (uri.startsWith('http://') || uri.startsWith('https://')) return true;
-    if (uri.startsWith('content://')) {
-      try {
-        const info = await FileSystem.getInfoAsync(uri);
-        return info.exists && (typeof info.size !== 'number' || info.size > minimumSize);
-      } catch {
-        return true;
-      }
-    }
-    if (!uri.startsWith('file://')) return false;
-
-    try {
-      const info = await FileSystem.getInfoAsync(uri);
-      return info.exists && (typeof info.size !== 'number' || info.size > minimumSize);
-    } catch {
-      return false;
-    }
-  };
-
-
   const getSectionPreviewSource = (section) => {
     if (!section?.mediaUri || !isRenderableMediaUri(section.mediaUri)) return null;
     return { uri: section.mediaUri };
@@ -783,14 +761,14 @@ export default function Chapters() {
       if (type === SECTION_TYPES.PDF) {
         const result = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' });
         if (!result.canceled && result.assets?.length > 0) {
-          pickedUri = result.assets[0].uri;
+          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
         }
       } else if (type === SECTION_TYPES.AUDIO) {
         const result = await DocumentPicker.getDocumentAsync({ 
-          type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/wave']
+          type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/wav'] 
         });
         if (!result.canceled && result.assets?.length > 0) {
-          pickedUri = result.assets[0].uri;
+          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
         }
       } else {
         const mediaType = type === SECTION_TYPES.VIDEO ? 'videos' : 'images';
@@ -800,26 +778,11 @@ export default function Chapters() {
           quality: 1,
         });
         if (!result.canceled && result.assets?.length > 0) {
-          pickedUri = result.assets[0].uri;
+          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
         }
       }
-      
-      if (!pickedUri || !(await isValidMediaUri(pickedUri, 0))) {
-        Alert.alert(
-          "Pick Failed",
-          "This file could not be used. Please try again or choose a different file."
-        );
-        return;
-      }
-
-      if (pickedUri === "") {
-        return;
-      }
-
-      updateSection(sectionId, 'mediaUri', pickedUri);
-
     } catch (err) {
-      Alert.alert("Pick Failed", "Please try again or choose a smaller file. Your device may be running out of space.");
+      Alert.alert('Error', 'Could not open media');
     } finally {
       isPickingRef.current = false;
       setIsPicking(false);

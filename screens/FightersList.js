@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNetInfo } from "@react-native-community/netinfo";
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system'; // Removed /legacy unless absolutely necessary
+import * as FileSystem from 'expo-file-system/legacy';
 import { zip, unzip } from 'react-native-zip-archive';
 import * as ImagePicker from 'expo-image-picker';
 import { useAudioPlayer } from 'expo-audio';
@@ -515,38 +515,32 @@ export default function FightersList() {
 
 
 
-  const handleSaveFighterData = async (newFighterPayload) => {
+  const saveFightersToStorage = async (customOnlyList, combinedMasterList, activeStyle) => {
+    try {
+      const fileUri = `${FileSystem.documentDirectory}fighters_custom.json`;
+      const trackingUri = `${FileSystem.documentDirectory}.fighters_user_initialized`;
+      
+      await FileSystem.writeAsStringAsync(trackingUri, "true");
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(customOnlyList));
+      
+      setAllFighters(combinedMasterList);
+      setHFighters(combinedMasterList); 
+    } catch (e) {
+      Alert.alert("Save Error", e.message || "Could not save fighter updates to disk.");
+      throw e;
+    }
+  };
+
+
+  const handleSaveFighterData = async (newFighterPayload, activeStyle) => {
     try {
       if (isLoadingRef.current) return;
       isLoadingRef.current = true;
       if (!loading) setLoading(true);
-
-      let incomingFighters = [];
-      if (newFighterPayload && typeof newFighterPayload === 'object' && !newFighterPayload.nativeEvent) {
-        incomingFighters = Array.isArray(newFighterPayload) ? newFighterPayload : [newFighterPayload];
-      } else {
-        if (!fighterName?.trim() || !fighterStyle?.trim()) {
-          Alert.alert("Validation Error", "Please provide a valid name and fighting style.");
-          isLoadingRef.current = false;
-          setLoading(false);
-          return;
-        }
-
-        incomingFighters = [{
-          id: fighterId || Date.now().toString(),
-          name: fighterName.trim(),
-          style: fighterStyle.trim(),
-          conc: fighterConc?.trim() || "",
-          desc: fighterDescList.filter(line => line?.trim() !== ""),
-          moves: fighterMoves || [],
-          avatar: activeAvatarUri,
-          isStaticBundle: false
-        }];
-      }
-
+      const incomingFighters = Array.isArray(newFighterPayload) ? newFighterPayload : [newFighterPayload];
       const currentCustomFighters = allFighters.filter(f => !f.isStaticBundle);
       const staticBundleItems = allFighters.filter(f => f.isStaticBundle);
-      
+
       incomingFighters.forEach(itemData => {
         const index = currentCustomFighters.findIndex(f => String(f.id).trim() === String(itemData.id).trim());
         if (index > -1) {
@@ -557,20 +551,132 @@ export default function FightersList() {
       });
 
       const nextCombinedMaster = [...staticBundleItems, ...currentCustomFighters];
-      const fileUri = `${FileSystem.documentDirectory}fighters_custom.json`;
-      const trackingUri = `${FileSystem.documentDirectory}.fighters_user_initialized`;
-      
-      await FileSystem.writeAsStringAsync(trackingUri, "true");
-      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(currentCustomFighters));
-      
-      setAllFighters(nextCombinedMaster);
-      setHFighters(nextCombinedMaster);
-      setSelectedIds([]);
+      await saveFightersToStorage(currentCustomFighters, nextCombinedMaster, activeStyle);
       setMode('list');
     } catch (e) {
-      Alert.alert('Save Failed', e.message || 'Unable to finalize file records updates.');
+      Alert.alert('Save Failed', e.message);
     } finally {
       isLoadingRef.current = false;
+      setLoading(false);
+    }
+  };
+
+
+  
+  const saveFighterProfile = async () => {
+    if (isPickingRef.current || isPicking) return;
+
+    if (!fighterName.trim()) {
+      Alert.alert('Required', 'Please enter a Fighter Name');
+      return;
+    }
+
+    if (!fighterStyle.trim()) {
+      Alert.alert('Required', 'Please enter a Fighting Style');
+      return;
+    }
+
+    const validatedDesc = fighterDescList
+      .map(d => d.trim())
+      .filter(d => d.length > 0);
+
+    if (validatedDesc.length === 0) {
+      Alert.alert('Required', 'Please provide at least one description item text block.');
+      return;
+    }
+
+    for (const move of fighterMoves) {
+      if (!move.title.trim()) {
+        Alert.alert('Required', 'Every custom signature move needs a Title.');
+        return;
+      }
+      if (!move.img && !move.desc?.trim()) {
+        Alert.alert('Required', `Signature move "${move.title}" requires either an image or a text description.`);
+        return;
+      }
+    }
+
+    try {
+      setLoading(true);
+      let copyfailed = false;
+      const activeSavedFilenames = [];
+      const fId = fighterId || currentFighter?.id || Date.now().toString();
+      const permanentDirUri = `${FileSystem.documentDirectory}fighters/${fId}/`;
+      await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+      
+      const ensurePermanent = async (uri, fileName) => {
+        if (!uri) return uri;
+        
+        if (typeof uri === 'string' && uri.startsWith(permanentDirUri)) {
+          const existingName = uri.split('/').pop();
+          if (existingName) activeSavedFilenames.push(existingName);
+          return uri;
+        }
+
+        const destUri = `${permanentDirUri}${fileName}`;
+        try {
+          await FileSystem.copyAsync({ from: uri, to: destUri });
+          activeSavedFilenames.push(fileName);
+          return destUri;
+        } catch (e) {
+          Alert.alert("Copy Media Failed", "Please try again. Device storage space may be full.");
+          return "COPYFAILED";
+        }
+      };
+
+      let finalAvatar = activeAvatarUri;
+      if (activeAvatarUri && activeAvatarUri.startsWith('file://')) {
+        const ext = getMediaFileExtension(activeAvatarUri);
+        finalAvatar = await ensurePermanent(activeAvatarUri, `idojo_avatar${ext}`);
+        if (finalAvatar === "COPYFAILED") copyfailed = true;
+      }
+
+      const processedMoves = await Promise.all(
+        fighterMoves.map(async (moveItem) => {
+          const moveCopy = { ...moveItem, title: moveItem.title.trim(), desc: moveItem.desc.trim() };
+          if (moveItem.img && typeof moveItem.img === 'string' && moveItem.img.startsWith('file://')) {
+            const ext = getMediaFileExtension(moveItem.img);
+            const safeFilename = `idojo_fighter_move_${String(moveItem.id).trim()}${ext}`;
+            moveCopy.img = await ensurePermanent(moveItem.img, safeFilename);
+            if (moveCopy.img === "COPYFAILED") copyfailed = true;
+          }
+          return moveCopy;
+        })
+      );
+
+      if (copyfailed) {
+        setLoading(false);
+        return;
+      }
+
+      const finalFighterData = {
+        id: fId,
+        name: fighterName.trim(),
+        avatar: finalAvatar || require('../assets/avatars/muhammadali.png'),
+        desc: validatedDesc,
+        style: fighterStyle.trim(),
+        conc: fighterConc.trim(),
+        moves: processedMoves
+      };
+
+      try {
+        const existingFiles = await FileSystem.readDirectoryAsync(permanentDirUri);
+        for (const file of existingFiles) {
+          if (!activeSavedFilenames.includes(file)) {
+            const fullPathToDelete = `${permanentDirUri}${file}`;
+            await FileSystem.deleteAsync(fullPathToDelete, { idempotent: true });
+          }
+        }
+      } catch (cleanupErr) {
+      }
+
+      const destinationStyle = prevStyle || 'allstyles';
+      setFighterStyle(destinationStyle);
+
+      await handleSaveFighterData(finalFighterData, destinationStyle);
+    } catch (err) {
+      Alert.alert("Save Error", err.message || "An error occurred while compiling fighter data profiles.");
+    } finally {
       setLoading(false);
     }
   };
@@ -651,7 +757,7 @@ export default function FightersList() {
       <Text style={styles.label}>Move Breakdowns / Technical Details</Text>
       <TextInput
         style={[styles.input, styles.descInput]}
-        placeholder="Explain technical details or stance secrets..."
+        placeholder="Explain technical details/secrets..."
         placeholderTextColor="#726b6b"
         value={move.desc}
         onChangeText={(text) => updateMoveItem(move.id, 'desc', text)}
@@ -724,7 +830,7 @@ export default function FightersList() {
                 <ImageBackground style={{ height: 31, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius: 15 }} resizeMode='cover' source={require('../assets/addquotebtn.png')} />
               </TouchableOpacity>
 
-              <Text style={styles.label}>Strategic Conclusions / Stance secrets</Text>
+              <Text style={styles.label}>Strategic Conclusions / Secrets</Text>
               <TextInput style={styles.input} placeholder="e.g. Leaning back into ropes avoids heavy blows..." placeholderTextColor="#726b6b" value={fighterConc} onChangeText={setFighterConc} />
 
               <Text style={styles.formStreamSectionDivider}>⚡ SIGNATURE MOVES</Text>
