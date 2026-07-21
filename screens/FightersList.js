@@ -792,16 +792,16 @@ export default function FightersList() {
             </View>
 
             <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setCurrentFighter(null); setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null); setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]); setMode('list'); }} style={styles.discardBtn} >
-              <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
+              <ImageBackground style={{ alignSelf: 'center', height: 67, width: "100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
               <Text style={styles.discardText}>❌CANCEL</Text>
             </TouchableOpacity>
 
             <ScrollView style={styles.formScroller} contentContainerStyle={{ paddingBottom: 120 }}>
               <Text style={styles.label}>Fighter Name</Text>
-              <TextInput style={styles.input} placeholder="e.g. Fedor Emelianenko" placeholderTextColor="#726b6b" value={fighterName} onChangeText={setFighterName} />
+              <TextInput style={styles.input} placeholder="e.g. Fedor Emelianenko" placeholderTextColor="#72726b" value={fighterName} onChangeText={setFighterName} />
 
               <Text style={styles.label}>Fighting Style / Martial Art Class</Text>
-              <TextInput style={styles.input} placeholder="e.g. Sambo" placeholderTextColor="#726b6b" value={fighterStyle} onChangeText={setFighterStyle} />
+              <TextInput style={styles.input} placeholder="e.g. Sambo" placeholderTextColor="#72726b" value={fighterStyle} onChangeText={setFighterStyle} />
 
               <Text style={styles.label}>Fighter Avatar/Profile Image</Text>
               <View style={styles.mediaPickerRow}>
@@ -817,7 +817,7 @@ export default function FightersList() {
                   <TextInput
                     style={[styles.input, { flex: 1, marginBottom: 0 }]}
                     placeholder={`Quote description line #${dIdx + 1}`}
-                    placeholderTextColor="#726b6b"
+                    placeholderTextColor="#72726b"
                     value={descLine}
                     onChangeText={(text) => updateDescLine(dIdx, text)}
                   />
