@@ -171,6 +171,7 @@ export default function FightersList() {
     }
   };  
 
+
   const populateForEdit = (fighter, activeStyle) => {
     if (!fighter) {
       setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null);
@@ -184,7 +185,6 @@ export default function FightersList() {
     }
     setMode("add");
   };
-
 
 
   const deleteFighters = async (idsFromArg = []) => {
@@ -477,13 +477,11 @@ export default function FightersList() {
   };
 
 
-
   useFocusEffect(
     useCallback(() => {
       if (mode === "list") loadFighters();
     }, [mode])
   );
-
 
 
   useFocusEffect(
@@ -680,7 +678,6 @@ export default function FightersList() {
   };
 
 
-
   const getMediaFileExtension = (uri) => {
     if (!uri || typeof uri !== 'string') return '.png';
     const extMatch = uri.match(/\.[0-9a-z]+$/i);
@@ -697,7 +694,7 @@ export default function FightersList() {
   const toggleSelect = (id) => { setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]); };
   
   const selectedFighterMatch = allFighters.find(f => String(f.id) === String(selectedIds[0]));
-
+  
   
   const pickFighterMedia = async (target, moveId = null) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -731,7 +728,6 @@ export default function FightersList() {
       setIsPicking(false);
     }
   };
-
 
   
   const renderMoveFormItem = (move) => {
@@ -774,11 +770,7 @@ export default function FightersList() {
   };
 
 
-
-  if (mode === "view") {
-    return <Fighter fighter={currentFighter} offset={0} />;
-  }
-
+  if (mode === "view") { return <Fighter fighter={currentFighter} offset={0} />; }
 
 
   if (mode === "add") {
@@ -851,7 +843,6 @@ export default function FightersList() {
       </ImageBackground>
     );
   }
-
 
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
@@ -947,7 +938,6 @@ export default function FightersList() {
     </ImageBackground>
   )
 }
-
 
 const styles = StyleSheet.create({ 
   dashboardIconsControlsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 1, minHeight: 73, width: '100%', gap: 15 },
