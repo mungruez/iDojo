@@ -174,12 +174,12 @@ export default function FightersList() {
   const populateForEdit = (fighter, activeStyle) => {
     if (!fighter) {
       setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null);
-      setFighterStyle(""); setFighterId(Date.now().toString()); setFighterDescList(["  "]); setFighterMoves([]);
+      setFighterStyle(""); setFighterId(Date.now().toString()); setFighterDescList([""]); setFighterMoves([]);
     } else {
       setCurrentFighter(fighter); setFighterId(fighter.id); setFighterName(fighter.name);
       setFighterStyle(fighter.style); setFighterConc(fighter.conc || "");
       setActiveAvatarUri(typeof fighter.avatar === 'string' ? fighter.avatar : null);
-      setFighterDescList(Array.isArray(fighter.desc) ? [...fighter.desc] : ["  "]);
+      setFighterDescList(Array.isArray(fighter.desc) ? [...fighter.desc] : [""]);
       setFighterMoves(Array.isArray(fighter.moves) ? [...fighter.moves] : []);
     }
     setMode("add");
@@ -489,7 +489,7 @@ export default function FightersList() {
   useFocusEffect(
     useCallback(() => {
       const handleHardwareBackPress = () => {
-        if (isPickingRef.current || isPicking || isLoadingRef.current) {
+        if (isPickingRef.current || isPicking || isLoadingRef.current || loading) {
           return true; 
         }
 
@@ -674,7 +674,7 @@ export default function FightersList() {
       await handleSaveFighterData(finalFighterData);
     } catch (err) {
       Alert.alert("Save Error", err.message || "An error occurred while compiling fighter data profiles.");
-    } {
+    } finally {
       setLoading(false);
     }
   };
@@ -786,12 +786,12 @@ export default function FightersList() {
       <ImageBackground source={require('../assets/addfighterbg.png')} style={styles.imgBackground} resizeMode='cover' >
         <StatusBar barStyle="light-content" />
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-          <SafeAreaView style={{ flex: 1,  backgroundColor: 'rgba(0,0,0,0.19)' }}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.19)' }}>
             <View style={styles.formHeaderTitleRow}>
               <ImageBackground style={styles.iconAM} resizeMode='contain' source={currentFighter ? require('../assets/editfightertitle.png') : require('../assets/addfightertitle.png')} /> 
             </View>
 
-            <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setCurrentFighter(null); setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null); setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]); setMode('list'); }} style={styles.discardBtn}>
+            <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setCurrentFighter(null); setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null); setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]); setMode('list'); }} style={styles.discardBtn} >
               <ImageBackground style={{ alignSelf:'center', height:67, width:"100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
               <Text style={styles.discardText}>❌CANCEL</Text>
             </TouchableOpacity>
@@ -836,7 +836,6 @@ export default function FightersList() {
               <TextInput style={styles.input} placeholder="e.g. Leaning back into ropes avoids heavy blows..." placeholderTextColor="#726b6b" value={fighterConc} onChangeText={setFighterConc} />
 
               <Text style={styles.formStreamSectionDivider}>⚡ SIGNATURE MOVES</Text>
-
               { Array.isArray(fighterMoves) && fighterMoves.map((move) => renderMoveFormItem(move))}
 
               <TouchableOpacity onPress={addMoveItem} style={styles.addSignatureMoveBtn}>
@@ -905,7 +904,7 @@ export default function FightersList() {
                 onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
                 style={[styles.mainCardView, selectedIds.includes(item.id) && styles.selectedCard]} >
                   <View style={styles.subCardView}>
-                    <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
+                    <Image source={typeof item.avatar === 'number' ? item.avatar : item.avatar ? { uri: item.avatar } : require('../assets/chapterplaceholder.png')} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                   </View>
                 </Pressable>
                 <View style={styles.chapterCardFooter}>
