@@ -745,7 +745,6 @@ export default function Chapters() {
   };
 
 
-
   const pickMedia = async (sectionId, type) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
