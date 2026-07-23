@@ -928,8 +928,8 @@ export default function Chapters() {
   
   useFocusEffect(
     useCallback(() => {
-      clearAppCache();
-      loadChapters();
+      if ( mode !== "view" ) clearAppCache();
+      if ( mode !== "add" && mode !== "view" ) loadChapters();
     }, [])
   );
 

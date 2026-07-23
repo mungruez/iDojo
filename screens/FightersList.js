@@ -172,8 +172,8 @@ export default function FightersList() {
   };  
 
 
-  const populateForEdit = (fighter, activeStyle) => {
-    if (!fighter) {
+  const populateForEdit = ( fighter ) => {
+    if ( !fighter ) {
       setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null);
       setFighterStyle(""); setFighterId(Date.now().toString()); setFighterDescList([""]); setFighterMoves([]);
     } else {
@@ -652,7 +652,7 @@ export default function FightersList() {
       const finalFighterData = {
         id: fId,
         name: fighterName.trim(),
-        avatar: finalAvatar || require('../assets/avatars/muhammadali.png'),
+        avatar: finalAvatar || require('../assets/chapterplaceholder.png'),
         desc: validatedDesc,
         style: fighterStyle.trim(),
         conc: fighterConc?.trim() || "",
@@ -731,7 +731,7 @@ export default function FightersList() {
 
   
   const renderMoveFormItem = (move) => {
-    if (!move) return null;
+    if ( !move ) return null;
 
     return (
     <View key={move.id} style={styles.sectionContainerBlock}>
@@ -804,7 +804,7 @@ export default function FightersList() {
               </View>
 
               <Text style={styles.label}>Legendary Quotes & Wisdom Lines</Text>
-              { fighterDescList.map((descLine, dIdx) => (
+              { Array.isArray(fighterDescList) && fighterDescList.map((descLine, dIdx) => (
                 <View key={dIdx} style={styles.dynamicLineRow}>
                   <TextInput
                     style={[styles.input, { flex: 1, marginBottom: 0 }]}
@@ -820,7 +820,7 @@ export default function FightersList() {
                   )}
                 </View>
               ))}
-              <TouchableOpacity onPress={addMoveItem} style={styles.addQuoteBtn}>
+              <TouchableOpacity onPress={addDescLine} style={styles.addQuoteBtn}>
                 <ImageBackground style={{ height: 31, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius: 15 }} resizeMode='cover' source={require('../assets/addquotebtn.png')} />
               </TouchableOpacity>
 
@@ -865,7 +865,7 @@ export default function FightersList() {
           </View>
 
           <View style={styles.dashboardIconsControlsRow}>
-            <TouchableOpacity onPress={() => populateForEdit(null, "allstyles")} style={styles.plusIcon}>
+            <TouchableOpacity onPress={() => populateForEdit(null)} style={styles.plusIcon}>
               <ImageBackground style={{ height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/addfightericon.png')}/>         
             </TouchableOpacity> 
             <TouchableOpacity onPress={handleImportFighters} style={styles.importIcon}>
@@ -899,7 +899,7 @@ export default function FightersList() {
                   </View>
                 </Pressable>
                 <View style={styles.chapterCardFooter}>
-                  <TouchableOpacity style={styles.editBtnCard} onPress={() => populateForEdit(item, item.style)}>
+                  <TouchableOpacity style={styles.editBtnCard} onPress={() => populateForEdit(item)}>
                     <Text style={styles.editBtnText}>EDIT</Text>
                   </TouchableOpacity>
                 </View> 
