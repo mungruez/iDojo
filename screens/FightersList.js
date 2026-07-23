@@ -792,10 +792,10 @@ export default function FightersList() {
               <Text style={styles.label}>Fighter Name</Text>
               <TextInput style={styles.input} placeholder="e.g. Fedor Emelianenko" placeholderTextColor="#72726b" value={fighterName} onChangeText={setFighterName} />
 
-              <Text style={styles.label}>Fighting Style / Martial Art Class</Text>
+              <Text style={styles.label}>Fighting Style</Text>
               <TextInput style={styles.input} placeholder="e.g. Sambo" placeholderTextColor="#72726b" value={fighterStyle} onChangeText={setFighterStyle} />
 
-              <Text style={styles.label}>Fighter Avatar/Profile Image</Text>
+              <Text style={styles.label}>Avatar/Profile Image</Text>
               <View style={styles.mediaPickerRow}>
                 <TouchableOpacity onPress={() => pickFighterMedia('avatar')} style={styles.stepImgContainer}>
                   {activeAvatarUri ? <Image source={{ uri: activeAvatarUri }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadfighterimagebtn.png')} />}
@@ -956,7 +956,7 @@ const styles = StyleSheet.create({
   plusIcon: { height: 57, width: 76, backgroundColor: 'rgba(0,0,0,0.57)', borderRadius: 12, marginLeft: 15, marginRight: 7, opacity: 1},
   importIcon: {height: 76, width: 67, borderRadius: 9, marginLeft: 12 },
   chapterCardFooter: { flexDirection: 'row', justifyContent: 'center', width: '100%' },
-  editBtnCard: { backgroundColor: '#947e1f', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 6, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
+  editBtnCard: { backgroundColor: '#7e6b15', paddingVertical: 7, paddingHorizontal: 14, borderRadius: 5, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
   editBtnText: { color: '#ffffff', fontSize: 12, fontWeight: '600', letterSpacing: 1},
   batchBar: { position: 'absolute', bottom: 20, left: '5%', right: '5%', height: 55, backgroundColor: '#1e293b', borderRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, borderWidth: 1.5, borderColor: '#caaf38', elevation: 10 },
   batchText: { color: '#caaf38', fontWeight: 'bold', fontSize: 13 },
