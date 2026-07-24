@@ -820,7 +820,7 @@ export default function Chapters() {
       if (!pickedUri) return;
 
       let finalUri = pickedUri;
-      const ext = type === SECTION_TYPES.PDF ? '.pdf' : type === SECTION_TYPES.AUDIO ? '.mp3' : '.jpg';
+      const ext = getMediaFileExtension(pickedUri, type);
       const mediaFileName = `${Date.now()}${ext}`;
       finalUri = await copyPickedMediaToCache(pickedUri, mediaFileName);
       
@@ -844,6 +844,7 @@ export default function Chapters() {
   };
 
 
+  
 
 
   const saveChapter = async () => {
