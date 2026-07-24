@@ -476,40 +476,38 @@ export default function FightersList() {
     }
   };
 
+  
 
   useFocusEffect(
     useCallback(() => {
-      if (mode === "list") loadFighters();
+      if (mode !== "add") loadFighters();
     }, [mode])
   );
 
 
-  useFocusEffect(
-    useCallback(() => {
-      const handleHardwareBackPress = () => {
-        if (isPickingRef.current || isPicking || isLoadingRef.current || loading) {
-          return true; 
-        }
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (isPickingRef.current || isPicking || isLoadingRef.current || loading) {
+        return true; 
+      }
 
-        if (mode === 'add' || mode === 'view') {
-          setCurrentFighter(null);
-          setSelectedIds([]);
-          setMode('list');
-          return true; 
-        }
+      if (mode === 'add' || mode === 'view') {
+        setCurrentFighter(null);
+        setSelectedIds([]);
+        setMode('list');
+        return true; 
+      }
 
-        if (selectedIds.length > 0) {
-          setSelectedIds([]);
-          return true;
-        }
+      if (selectedIds.length > 0) {
+        setSelectedIds([]);
+        return true;
+      }
 
-        return false; 
-      };
+      return false;
+    });
 
-      BackHandler.addEventListener('hardwareBackPress', handleHardwareBackPress);
-      return () => BackHandler.removeEventListener('hardwareBackPress', handleHardwareBackPress);
-    }, [mode, selectedIds, isPicking])
-  );
+    return () => backHandler.remove();
+  }, [mode]);
 
 
 
@@ -844,6 +842,7 @@ export default function FightersList() {
     );
   }
 
+
   return (
     <ImageBackground style={ styles.imgBackground } imageStyle={{ opacity: 1 }} resizeMode='cover' source={require('../assets/fightersbackground.jpeg')}>
       <StatusBar barStyle="light-content"/>
@@ -938,6 +937,7 @@ export default function FightersList() {
     </ImageBackground>
   )
 }
+
 
 const styles = StyleSheet.create({ 
   dashboardIconsControlsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 1, minHeight: 73, width: '100%', gap: 15 },

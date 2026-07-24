@@ -719,6 +719,40 @@ export default function Chapters() {
   };
 
 
+  const copyPickedMediaToCache = async (sourceUri, fileName, retries = 2) => {
+    const cacheDir = `${FileSystem.cacheDirectory}chapter-media/`;
+    await FileSystem.makeDirectoryAsync(cacheDir, { intermediates: true });
+        const destinationUri = `${cacheDir}${fileName}`;
+  
+        let lastError = null;
+  
+        for (let attempt = 1; attempt < retries; attempt += 1) {
+          try {
+            const sourceInfo = await FileSystem.getInfoAsync(sourceUri);
+            if (!sourceInfo.exists) {
+              throw new Error('Selected file is not available yet.');
+            }
+  
+            await FileSystem.copyAsync({ from: sourceUri, to: destinationUri });
+            const destinationInfo = await FileSystem.getInfoAsync(destinationUri);
+  
+            if (destinationInfo.exists && destinationInfo.size > 0) {
+              return destinationUri;
+            }
+  
+            lastError = new Error('Copied file is empty.');
+          } catch (error) {
+            lastError = error;
+            if (attempt < retries) {
+              await new Promise((resolve) => setTimeout(resolve, 760 * attempt));
+            }
+          }
+        }
+  
+        throw lastError || new Error('Unable to copy selected media.');
+  };
+
+
   const getMediaFileExtension = (uri, type) => {
     if (typeof uri === 'string') {
       const nameFromUri = uri.split('/').pop()?.split('?')[0] || '';
@@ -746,10 +780,12 @@ export default function Chapters() {
 
 
   const pickMedia = async (sectionId, type) => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permission Denied", "Gallery access is needed to add Chapters!");
-      return;
+    if (type === SECTION_TYPES.VIDEO || type === SECTION_TYPES.IMAGES) {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Denied", "Gallery access is needed!");
+        return;
+      }
     }
 
     try {
@@ -759,27 +795,46 @@ export default function Chapters() {
       
       if (type === SECTION_TYPES.PDF) {
         const result = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' });
-        if (!result.canceled && result.assets?.length > 0) {
-          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+          pickedUri = result.assets[0].uri;
         }
       } else if (type === SECTION_TYPES.AUDIO) {
         const result = await DocumentPicker.getDocumentAsync({ 
           type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/wav'] 
         });
-        if (!result.canceled && result.assets?.length > 0) {
-          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+          pickedUri = result.assets[0].uri; 
         }
       } else {
         const mediaType = type === SECTION_TYPES.VIDEO ? 'videos' : 'images';
         const result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: [mediaType],
           allowsEditing: false,
-          quality: 1,
+          quality: 1.0,
         });
-        if (!result.canceled && result.assets?.length > 0) {
-          updateSection(sectionId, 'mediaUri', result.assets[0].uri);
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+          pickedUri = result.assets[0].uri; 
         }
       }
+
+      if (!pickedUri) return;
+
+      let finalUri = pickedUri;
+      const ext = type === SECTION_TYPES.PDF ? '.pdf' : type === SECTION_TYPES.AUDIO ? '.mp3' : '.jpg';
+      const mediaFileName = `${Date.now()}${ext}`;
+      finalUri = await copyPickedMediaToCache(pickedUri, mediaFileName);
+      
+      const updatedSections = [...sections];
+      const targetIndex = updatedSections.findIndex(s => s.id === sectionId);
+      
+      if (targetIndex !== -1) {
+        updatedSections[targetIndex] = { 
+          ...updatedSections[targetIndex], 
+          mediaUri: finalUri 
+        };
+        setSections(updatedSections);
+      }
+
     } catch (err) {
       Alert.alert('Error', 'Could not open media');
     } finally {
@@ -787,6 +842,7 @@ export default function Chapters() {
       setIsPicking(false);
     }
   };
+
 
 
 
