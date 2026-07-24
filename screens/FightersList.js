@@ -72,6 +72,22 @@ export default function FightersList() {
   };
 
 
+  const clearAppCache = async () => {
+    try {
+      const cacheDir = FileSystem.cacheDirectory;
+        if (cacheDir) {
+        const cachedItems = await FileSystem.readDirectoryAsync(cacheDir);
+        for (const item of cachedItems) {
+          const itemPath = `${cacheDir}${item}`;
+          await FileSystem.deleteAsync(itemPath, { idempotent: true });
+        }
+      }
+    } catch (error) {
+      
+    }
+  };
+
+
   const parseStyles = (list, query) => {
     if (!Array.isArray(list)) {
       Alert.alert("Data Error", "Data is not an array, skipping loading.");
@@ -175,7 +191,8 @@ export default function FightersList() {
   const populateForEdit = ( fighter ) => {
     if ( !fighter ) {
       setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null);
-      setFighterStyle(""); setFighterId(Date.now().toString()); setFighterDescList([""]); setFighterMoves([]);
+      setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]);
+      setFighterId(Date.now().toString());
     } else {
       setCurrentFighter(fighter); setFighterId(fighter.id); setFighterName(fighter.name);
       setFighterStyle(fighter.style); setFighterConc(fighter.conc || "");
@@ -241,7 +258,9 @@ export default function FightersList() {
               setSelectedIds([]);
               setCurrentFighter(null);
               if (isDeletingAll || nextCombinedMaster.length < 1) {
-                setMode('list'); 
+                if( mode !== "list" ) {
+                  setMode('list');
+                } 
               }
             } catch (e) {
               Alert.alert("Delete Error", e.message || "Failed to purge database selections.");
@@ -475,11 +494,11 @@ export default function FightersList() {
       if (tempZipPath) try { await FileSystem.deleteAsync(tempZipPath, { idempotent: true }); } catch (err) {}
     }
   };
-
   
 
   useFocusEffect(
     useCallback(() => {
+      if (mode !== "add") clearAppCache();
       if (mode !== "add") loadFighters();
     }, [mode])
   );
@@ -526,7 +545,7 @@ export default function FightersList() {
   };
 
 
-    const handleSaveFighterData = async (newFighterPayload) => {
+  const handleSaveFighterData = async (newFighterPayload) => {
     try {
       if (isLoadingRef.current) return;
       isLoadingRef.current = true;
