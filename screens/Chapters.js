@@ -1573,7 +1573,7 @@ batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection
 batchText: { color: '#b39020', fontWeight: 'bold'},
 shareIcon: { height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
-header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5, },
+header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5, borderRadius: 9},
 myDojoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'rgba(0,0,0,0.76)', opacity: 1 },
 title: { fontSize: 17, fontWeight: 'bold', color: '#a08016', height: 38, width: '100%', textAlign: 'center', marginBottom: 2 },
 infoText: { fontSize: 14, fontWeight: 'bold', color: '#c29d26', minHeight: 76, width: '94%', textAlign: 'center', marginTop: -95, paddingHorizontal: 19, backgroundColor: 'rgba(0,0,0,0.5)' },
