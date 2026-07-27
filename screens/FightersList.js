@@ -14,6 +14,7 @@ import Fighter from './Fighter';
 
 const { height, width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.76;
+
 const ksoundFile = require('../assets/woosh.mp3');
 
 export default function FightersList() {
@@ -89,27 +90,24 @@ export default function FightersList() {
 
 
   const parseStyles = (list, query) => {
-    if (!Array.isArray(list)) {
+    if (!Array.isArray(allFighters)) {
       Alert.alert("Data Error", "Data is not an array, skipping loading.");
       return;
     }
 
     try {
-      const validList = list.filter(f => f && f.id && f.name && f.style);
-      const q = query?.trim()?.toLowerCase();
+      const validList = allFighters.filter(f => f && f.id && f.name && f.style);
+      const q = searchQuery?.trim()?.toLowerCase();
       
       if (!q) {
         setHFighters(validList);
         return;
       }
 
-      const filteredList = validList.filter(f => {
-        const mainMatch = f.name?.toLowerCase().includes(q) || f.desc?.toLowerCase().includes(q) || f.style?.toLowerCase().includes(q);
-        const nestedMatch = f.moves?.some(mv => 
-          mv.title?.toLowerCase().includes(q) || mv.desc?.toLowerCase().includes(q)
-        );
-        return mainMatch || nestedMatch;
-      });
+      const filteredList = validList.filter(f => 
+        f.name?.toLowerCase().includes(q) || f.style?.toLowerCase().includes(q) || f.desc?.some(d => d?.toLowerCase().includes(q)) ||
+        f.moves?.some(m => m.title?.toLowerCase().includes(q) || m.desc?.toLowerCase().includes(q))
+      );
 
       setHFighters(filteredList);
     } catch (e) {
@@ -496,6 +494,7 @@ export default function FightersList() {
   };
   
 
+
   useFocusEffect(
     useCallback(() => {
       if (mode !== "add") clearAppCache();
@@ -781,10 +780,11 @@ export default function FightersList() {
       />
 
       <TouchableOpacity onPress={() => removeMoveItem(move.id)} style={styles.removeSignatureMoveBtn}>
-        <ImageBackground style={{ height: 45, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
+        <ImageBackground style={{ height: 47, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='contain' source={require('../assets/removesignaturemovebtn.png')} />
       </TouchableOpacity>
     </View> )
   };
+
 
 
   if (mode === "view") { return <Fighter fighter={currentFighter} offset={0} />; }
@@ -795,17 +795,17 @@ export default function FightersList() {
       <ImageBackground source={require('../assets/addfighterbg.png')} style={styles.imgBackground} resizeMode='cover' >
         <StatusBar barStyle="light-content" />
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-          <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.19)' }}>
-            <View style={styles.formHeaderTitleRow}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.19)', borderRadius: 9 }}>
+            <View>
               <ImageBackground style={styles.iconAM} resizeMode='contain' source={currentFighter ? require('../assets/editfightertitle.png') : require('../assets/addfightertitle.png')} /> 
             </View>
 
             <TouchableOpacity onPress={() => { if (isPicking || isPickingRef.current) return; setCurrentFighter(null); setSelectedIds([]); setFighterName(""); setFighterConc(""); setActiveAvatarUri(null); setFighterStyle(""); setFighterDescList([""]); setFighterMoves([]); setMode('list'); }} style={styles.discardBtn} >
-              <ImageBackground style={{ alignSelf: 'center', height: 67, width: "100%", opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
+              <ImageBackground style={{ alignSelf: "flex-start", marginLeft: 3, height: 67, width: 67, opacity: 1}} imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/discardicon.png')}/>
               <Text style={styles.discardText}>❌CANCEL</Text>
             </TouchableOpacity>
 
-            <ScrollView style={styles.formScroller} contentContainerStyle={{ paddingBottom: 120 }}>
+            <ScrollView style={styles.formScroller} contentContainerStyle={{ paddingBottom: 157 ,backgroundColor: 'rgba(0, 0, 0, 0.43)', borderRadius: 9  }}>
               <Text style={styles.label}>Fighter Name</Text>
               <TextInput style={styles.input} placeholder="e.g. Fedor Emelianenko" placeholderTextColor="#72726b" value={fighterName} onChangeText={setFighterName} />
 
@@ -824,7 +824,7 @@ export default function FightersList() {
               { Array.isArray(fighterDescList) && fighterDescList.map((descLine, dIdx) => (
                 <View key={dIdx} style={styles.dynamicLineRow}>
                   <TextInput
-                    style={[styles.input, { flex: 1, marginBottom: 0 }]}
+                    style={styles.input}
                     placeholder={`Quote description line #${dIdx + 1}`}
                     placeholderTextColor="#72726b"
                     value={descLine}
@@ -848,11 +848,11 @@ export default function FightersList() {
               { Array.isArray(fighterMoves) && fighterMoves.map((move) => renderMoveFormItem(move))}
 
               <TouchableOpacity onPress={addMoveItem} style={styles.addSignatureMoveBtn}>
-                <ImageBackground style={{ height: 40, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='cover' source={require('../assets/addsignaturemovebtn.png')} />
+                <ImageBackground style={{ height: 43, width: "100%", opacity: 1, borderRadius: 19 }} imageStyle={{ opacity: 1, borderRadius: 19 }} resizeMode='contain' source={require('../assets/addsignaturemovebtn.png')} />
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.saveBtn} onPress={saveFighterProfile}>
-                <ImageBackground style={{ height: 76, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius: 12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
+                <ImageBackground style={{ height: 95, width: "100%", opacity: 1, borderRadius: 12 }} imageStyle={{ opacity: 1, borderRadius: 12 }} resizeMode='cover' source={require('../assets/savechapterbtn.png')} />
               </TouchableOpacity> 
             </ScrollView>
           </SafeAreaView>
@@ -867,7 +867,7 @@ export default function FightersList() {
       <StatusBar barStyle="light-content"/>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7}}>
 
-        <View style={{marginBottom:19, paddingTop:-10, paddingBottom: 10}}>
+        <View style={{marginBottom: 3, paddingTop:-10, paddingBottom: 10}}>
           <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
         </View>  
 
@@ -965,8 +965,8 @@ const styles = StyleSheet.create({
   mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#caaf38", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
   subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", color: 'crimson', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
   plusIcon: { width: 45, height: 45 },
-  iconAM: { height: 60, opacity: 1, marginTop: 3, textAlign: "center" },
-  header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 5 },
+  iconAM: { height: 50, width: "97%", opacity: 1, marginTop: 3, textAlign: "center", marginBottom: 9 },
+  header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 1, borderRadius: 9},
   searchRow: { flexDirection: 'row', paddingHorizontal: 9, paddingVertical: 4, gap: 8, marginBottom: 7, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 9, alignItems: 'center', justifyContent: 'center', width: '100%', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
   searchInput: { height: 38, width: '70%', backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 8, paddingHorizontal: 8, color: 'white', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)', fontSize: 11 },
   searchBtn: { width: 39, height: 37, backgroundColor: '#e7f5ed4f', borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
@@ -983,22 +983,22 @@ const styles = StyleSheet.create({
   myDojoDiscardIcon: { width: 35, height: 35 },
   myDojoDeleteIcon: { width: 35, height: 35 },
   formHeaderTitleRow: { width: '100%', alignItems: 'center', marginVertical: 10 },
-  discardBtn: { alignSelf: 'center', backgroundColor: 'rgba(220, 38, 38, 0.15)', borderWidth: 1, borderColor: '#dc2626', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, marginBottom: 12 },
-  discardText: { color: '#ef4444', fontWeight: 'bold', fontSize: 11 },
-  formScroller: { flex: 1, paddingHorizontal: 16, opacity: 1 },
-  label: { color: '#f3efbd', fontSize: 12, fontWeight: 'bold', marginTop: 10, marginBottom: 4 },
-  input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 5, marginTop: 7, backgroundColor: 'rgba(235, 224, 71, 0.57)', opacity: 1, fontWeight: "bold", fontSize: 13 },
+  discardBtn: { alignSelf: 'flex-start', justifyContent:"flex-start", alignItems: 'flex-start', backgroundColor: 'rgba(220, 38, 38, 0.15)', borderWidth: 1, borderColor: '#dc2626', paddingHorizontal: 3, paddingVertical: 7, borderRadius: 8, marginBottom: 7, marginLeft: 19 },
+  discardText: { color: '#ef4444', fontWeight: 'bold', fontSize: 11, marginTop: 5 },
+  formScroller: { flex: 1, paddingHorizontal: 7, opacity: 1 },
+  label: { color: '#f3efbd', fontSize: 12, fontWeight: 'bold', marginTop: 12, marginBottom: 2, marginLeft: 7 },
+  input: { borderWidth: 2.5, borderColor: '#998308', borderRadius: 12, padding: 3, marginTop: 3, backgroundColor: 'rgba(235, 224, 71, 0.57)', opacity: 1, fontWeight: "bold", fontSize: 13, width:"95%", marginLeft: 7, marginBottom: 9 },
   descInput: { height: 70, textAlignVertical: 'top', paddingVertical: 8 },
   dynamicLineRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
   selectedCard: { borderColor: '#e7cb4f', backgroundColor: 'rgba(247, 216, 114, 0.76)', borderWidth: 2 },
   styleTextView: { marginTop: 3, borderWidth: .5, borderRadius: 12, borderColor:'#caaf38', flexDirection:'row', backgroundColor:'#323232', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 4, paddingVertical: 2},
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 999 },
   loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
-  saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: -12, alignSelf:'center' },
-  addSignatureMoveBtn: { width: 171, height: 43, borderRadius: 19, marginTop: 7, alignSelf:'center' },
+  saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: 12, alignSelf:'center' },
+  addSignatureMoveBtn: { width: 171, height: 52, borderRadius: 19, marginTop: 7, alignSelf:'center' },
   addQuoteBtn: { width: 109, height: 31, borderRadius: 19, marginTop: 5, alignSelf:'center'},
-  removeSignatureMoveBtn: { width: 177, height: 47, borderRadius: 19, marginTop: 7, alignSelf:'center' },
-  formStreamSectionDivider: { color: '#caaf38', fontSize: 13, fontWeight: 'bold', marginTop: 22, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
+  removeSignatureMoveBtn: { width: 177, height: 52, borderRadius: 19, marginTop: 7, alignSelf:'center' },
+  formStreamSectionDivider: { color: '#f3efbd', fontSize: 13, fontWeight: 'bold', marginTop: 29, marginBottom: 5, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
   mediaPickerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 6, gap: 10 },
   fileLoadedIndicator: { color: '#4ade80', fontSize: 10, fontWeight: '600' },
