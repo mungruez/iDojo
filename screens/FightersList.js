@@ -389,9 +389,18 @@ export default function FightersList() {
         : [''];
       
       for (const dir of fighterDirs) {
-        const fighterPath = `${extractDir}${dir}fighter.json`;
-        const info = await FileSystem.getInfoAsync(fighterPath);
-        if (!info.exists) continue;
+        const itemPath = `${extractDir}${item}`;
+        const itemInfo = await FileSystem.getInfoAsync(itemPath);
+  
+        let fighterPath = '';
+
+        if (itemInfo.isDirectory) {
+          fighterPath = `${itemPath}/fighter.json`;
+        } else if (item === 'fighter.json') {
+          fighterPath = itemPath;
+        } else {
+          continue;
+        }
         
         const content = await FileSystem.readAsStringAsync(fighterPath);
         let fighterItem;
