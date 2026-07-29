@@ -391,9 +391,8 @@ export default function FightersList() {
       for (const dir of fighterDirs) {
         const itemPath = `${extractDir}${item}`;
         const itemInfo = await FileSystem.getInfoAsync(itemPath);
-  
         let fighterPath = '';
-
+        
         if (itemInfo.isDirectory) {
           fighterPath = `${itemPath}/fighter.json`;
         } else if (item === 'fighter.json') {
