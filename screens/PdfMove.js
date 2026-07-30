@@ -70,7 +70,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const handleZoomIn = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1995 || isTransitioningRef.current) return;
+    if ( now - globalLastActionTime < 2850 || isTransitioningRef.current) return;
     setGlobalLastActionTime(now);
     setZoomScale(s => Math.min(s + zoomStep, 4));
   }
@@ -78,7 +78,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
 
   const handleZoomOut = () => {
     const now = Date.now();
-    if ( now - globalLastActionTime < 1995 || isTransitioningRef.current) return;
+    if ( now - globalLastActionTime < 2850 || isTransitioningRef.current) return;
     setGlobalLastActionTime(now);
     setZoomScale(s => Math.max(s - zoomStep, 0.5));
   }
@@ -88,7 +88,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     if (isTransitioningRef.current || isLoading || !pdfRef.current) return;
 
     const now = Date.now();
-    if ( now - globalLastActionTime < 1995) {
+    if ( now - globalLastActionTime < 2850) {
       return;
     }
 
@@ -107,7 +107,7 @@ export default function PdfMove({ pdf, onClosePdf, isActive }) {
     if (isTransitioningRef.current || isLoading || !pdfRef.current) return;
     
     const now = Date.now();
-    if ( now - globalLastActionTime < 1995) {
+    if ( now - globalLastActionTime < 2850) {
       return;
     }
 

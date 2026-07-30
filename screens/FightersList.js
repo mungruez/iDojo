@@ -384,22 +384,25 @@ export default function FightersList() {
       }
       
       const rawFighters = [];
-      const fighterDirs = manifest.count > 1 
+      const fighterDirs = manifest.count > 0 
         ? Array.from({length: manifest.count}, (_, i) => `fighter_${i}/`) 
         : [''];
       
       for (const dir of fighterDirs) {
-        const itemPath = `${extractDir}${item}`;
+        const itemPath = `${extractDir}${dir}`;
         const itemInfo = await FileSystem.getInfoAsync(itemPath);
         let fighterPath = '';
         
-        if (itemInfo.isDirectory) {
-          fighterPath = `${itemPath}/fighter.json`;
-        } else if (item === 'fighter.json') {
-          fighterPath = itemPath;
+        if (itemInfo.exists && itemInfo.isDirectory) {
+          fighterPath = `${itemPath}fighter.json`; 
+        } else if (dir === '') {
+          fighterPath = `${extractDir}fighter.json`;
         } else {
           continue;
         }
+
+        const fileInfo = await FileSystem.getInfoAsync(fighterPath);
+        if (!fileInfo.exists) continue;
         
         const content = await FileSystem.readAsStringAsync(fighterPath);
         let fighterItem;
