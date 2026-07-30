@@ -1032,7 +1032,6 @@ export default function Chapters() {
   }, [mode]);
 
 
-
   const ChapterCard = ({ item }) => (
     <TouchableOpacity 
       onLongPress={() => toggleSelect(item.id)}
@@ -1102,7 +1101,7 @@ export default function Chapters() {
         <StatusBar barStyle="dark-content"/>
         <View style={styles.vcHeader}>
 
-          <Text style={styles.vcTitle} numberOfLines={1} ellipsizeMode="clip">{currentChapter.title}</Text>
+          <Text style={currentChapter.title.length < 32 ? styles.vcTitle : styles.vcTitleTwo} numberOfLines={1} ellipsizeMode="clip">{currentChapter.title}</Text>
           <TouchableOpacity onPress={() => setVcDropdownVisible(!vcDropdownVisible)} style={styles.vcToggleBtn}>
             <Text style={styles.vcToggleText}>
               {!vcDropdownVisible ? '▼' : '▲'}
@@ -1629,7 +1628,8 @@ clearBtn: { width: 32, height: 32, backgroundColor: '#31303080', borderRadius: 8
 vcToggleBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#8d7f30', justifyContent: 'center', alignItems: 'center',},
 vcToggleText: {color: 'white', fontSize: 16, fontWeight: 'bold'},
 vcHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#0c1429a9', paddingHorizontal: 16, paddingVertical: 3, borderWidth: 2, borderColor: '#99840f', borderBottomWidth: 2.5, borderBottomColor: '#99840f', borderRadius: 10, marginBottom: 2 },
-vcTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 10 },
+vcTitle: { flex: 1, color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 4 },
+vcTitleTwo: { flex: 1, color: 'white', fontSize: 12, fontWeight: 'bold', textAlign: 'center', marginHorizontal: 4 },
 vcDropdownContainer: {width: '96%', minHeight: height * 0.19, maxHeight: height * 0.21, alignSelf: 'center', backgroundColor: '#1e293b', borderRadius: 10, padding: 3, marginTop: 5, borderWidth: 1, borderColor: '#99840f', overflow: 'hidden', flexDirection: "row", alignItems: 'flex-start'},
 vcInfoRow: { alignItems: 'center', marginBottom: 4, width: '100%'},
 vcInfoLabel: { color: '#8d7f30',  fontSize: 11, fontWeight: 'bold', width: "100%", textAlign:"center", alignSelf: 'center'},
