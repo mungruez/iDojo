@@ -76,7 +76,7 @@ export const fighters = [
         {
           id: "41",
           title:"Head Kick",
-          img: require('../assets/fighters/rodtangheadkick.png'),
+          img: require('../assets/fighters/rodtangheadkickgf.png'),
           desc: "All proper strikes start with the lower body generating force off the ground. Studies of elite boxers have shown that the most important action during the early phase of power development is rear leg push-off. In addition to strong glutes and hamstrings, Rodtang's well-developed calves possess a high percentage of type 2/fast twitch muscle fibers which will explosively drive this movement.",
         },
         {
@@ -98,7 +98,7 @@ export const fighters = [
         {
           id: "51",
           title:"Long Guard",
-          img: require('../assets/fighters/buakawlongguard.png'),
+          img: require('../assets/fighters/buakawlongguardgf.png'),
           desc: "An underrated and often overlooked aspect of Buakaw’s success in the ring is his stellar defense. Buakaw forgoes many fancier, more advanced, defensive options in favor of a solid long guard. He most often holds his rear hand by his cheek, akin to a high guard, while his lead arm is extended in a classic Muay Thai long guard. The long guard effectively shuts down most attacks aimed at the head, while giving you control over your opponent’s posture and hand position. Buakaw will use the long guard to block and walk through heavy strikes, from punches to head kicks with knockout power. He will often use his extended lead arm to frame his opponent’s collarbone while hand-fighting with his rear hand. Once his opponent is off balance and exposed, Buakaw delivers devastating strikes. Buakaw also uses a tight high guard when his opponent can punch around his long guard. This seemingly small adjustment allows for better defense against punches and takes away his opponent’s biggest advantage. In the video above watch Buakaw adapt to his opponents’ looping punches by switching to a high guard.",
         },
         {
@@ -182,13 +182,13 @@ export const fighters = [
         {
           id: "82",
           title: "Pacman Countwr Punch - Part 1",
-          img: require('../assets/fighters/pacmancounterpunch1.png'),
+          img: require('../assets/fighters/pacmancounterpunchgf.png'),
           desc: "Pacquiao utilizes a combination of head movement, footwork, and blocking techniques to avoid incoming punches. Pacquiao's ability to slip punches and counterattack has frustrated many of his opponents, allowing him to maintain control of the fight. Here he uses a parry to knock the opponents incomming punch down and immmediately prepare for a counter punch. His defensive prowess, combined with his offensive capabilities, has made him a well-rounded and formidable boxer. By placing his lead foot infront of and between his opponent's feet, Pac Man is able to create better angles for defense and for punches and hooks.",
         },
         {
           id: "83",
           title: "Pacman Countwr Punch - Part 2",
-          img: require('../assets/fighters/pacmancounterpunch2.png'),
+          img: require('../assets/fighters/pacmancounterpunch2gf.png'),
           desc: "After successfully parrying his opponent's punch, Pacquiao quickly shifts his weight and rotates his hips to generate power for his counterpunch. This movement allows him to deliver a strong and accurate punch while maintaining his balance and positioning in the ring. Pacquiao's ability to seamlessly transition from defense to offense is a testament to his skill and experience as a boxer.",
         },
         {
