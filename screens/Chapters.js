@@ -1182,7 +1182,7 @@ export default function Chapters() {
               extraData = {[selectedIds, chapters]}
               keyExtractor = {(item, index) => item.id || index.toString()}
               style = {{ flex: 1 }}
-              contentContainerStyle = {{ paddingBottom: 38, flexGrow: 1, minHeight: 200 * Math.max(hchapters.length, 1) }}
+              contentContainerStyle = {{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max(hchapters.length, 1) }}
               ListEmptyComponent = {() => {
                 return (
                   <View style={{padding: 19, alignItems: 'center'}}>

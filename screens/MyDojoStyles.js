@@ -1432,7 +1432,7 @@ export default function MyDojoStyles({route}) {
             extraData = {[selectedIds, moves]}
             keyExtractor = {(item, index) => item.id || index.toString()}
             style = {{ flex: 1 }}
-            contentContainerStyle = {{ paddingBottom: 38, flexGrow: 1, minHeight: 200 * Math.max((hmoves || []).length, 1) }}
+            contentContainerStyle = {{ paddingBottom: 57, flexGrow: 1, minHeight: 200 * Math.max((hmoves || []).length, 1) }}
             ListEmptyComponent = {() => {
               return (
                 <View style={{padding: 19, alignItems: 'center'}}>
