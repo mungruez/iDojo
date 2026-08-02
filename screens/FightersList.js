@@ -842,7 +842,7 @@ export default function FightersList() {
                     onChangeText={(text) => updateDescLine(dIdx, text)}
                   />
                   {fighterDescList.length > 1 && (
-                    <TouchableOpacity onPress={() => removeDescLine(dIdx)} style={styles.addQuoteBtn}>
+                    <TouchableOpacity onPress={() => removeDescLine(dIdx)} style={styles.removeQuoteBtn}>
                       <ImageBackground style={{ height: 31, width: "100%", opacity: 1, borderRadius: 15 }} imageStyle={{ opacity: 1, borderRadius: 15 }} resizeMode='cover' source={require('../assets/removequotebtn.png')} />
                     </TouchableOpacity>
                   )}
@@ -920,11 +920,14 @@ export default function FightersList() {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2, marginLeft: 7, marginRight: 7, width: "50%", borderWidth: 0 }}>
-              { selectedIds.includes(item.id) && selectedIds.length === 1 ? ( <View> <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
+              { selectedIds.includes(item.id) && selectedIds.length === 1 ? ( <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2, marginLeft: 7, marginRight: 7, width: "100%", borderWidth: 0 }}> <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
                 onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
                 style={ selectedIds.includes(item.id) ? styles.mainCardViewSelected : styles.mainCardView} >
-                  <View style={styles.subCardView}>
+                  <View style={styles.subCardViewSelected}>
                     <Image source={typeof item.avatar === 'number' ? item.avatar : item.avatar ? { uri: item.avatar } : require('../assets/chapterplaceholder.png')} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
+                    <View style={{marginLeft: 12, marginBottom: 3}}>
+                        <Text style={{ fontSize: 12, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>  
+                      </View>
                   </View>
                 </Pressable>
                 <View style={styles.chapterCardFooter}>
@@ -938,7 +941,7 @@ export default function FightersList() {
                     <View style={styles.subCardView}>
                       <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                       <View style={{marginLeft: 12, marginBottom: 7}}>
-                        <Text style={{ fontSize: 14, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>  
+                        <Text style={{ fontSize: 13, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>  
                         <View style={styles.styleTextView}>
                           <Text style={{ color: '#9a9aa1', fontSize: 12 }}>{item.style}</Text>
                         </View>
@@ -974,8 +977,9 @@ const styles = StyleSheet.create({
   imgBackground: { minWidth: '100%', minHeight: '100%', height: Dimensions.get('window').height, flex: 1 },
   icon: { height: 57, opacity: 1, marginTop: 3, textAlign: "center"},
   mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#caaf38", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
-  mainCardViewSelected: { minHeight: 228, width: "100%", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, flexDirection: 'column', alignItems: 'flex-start', borderColor: 'rgba(126, 107, 21, 0.76)', backgroundColor: 'rgba(126, 107, 21, 0.76)', borderWidth: 2 },
-  subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", color: 'crimson', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
+  mainCardViewSelected: { minHeight: 192, width: "100%", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, flexDirection: 'column', alignItems: 'flex-start', borderColor: 'rgba(126, 107, 21, 0.76)', backgroundColor: 'rgba(212, 187, 73, 0.38)', borderWidth: 2 },
+  subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
+  subCardViewSelected: { minHeight: 171, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: 'rgba(247, 234, 60, 0.38)', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
   plusIcon: { width: 45, height: 45 },
   iconAM: { height: 50, width: "97%", opacity: 1, marginTop: 3, textAlign: "center", marginBottom: 9 },
   header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 1, borderRadius: 9},
@@ -987,9 +991,9 @@ const styles = StyleSheet.create({
   plusIcon: { height: 57, width: 76, backgroundColor: 'rgba(0,0,0,0.57)', borderRadius: 12, marginLeft: 15, marginRight: 7, opacity: 1},
   importIcon: {height: 76, width: 67, borderRadius: 9, marginLeft: 12 },
   chapterCardFooter: { flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: -7 },
-  editBtnCard: { backgroundColor: '#7e6b15', paddingVertical: 7, paddingHorizontal: 14, borderRadius: 5, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
+  editBtnCard: { backgroundColor: '#7e6b15', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 5, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
   editBtnText: { color: '#ffffff', fontSize: 12, fontWeight: '600', letterSpacing: 1},
-  batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, backgroundColor: '#1e293b', borderRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderWidth: 1.5, borderColor: '#caaf38', elevation: 10 },
+  batchBar: { position: 'absolute', bottom: 57, left: 20, right: 20, backgroundColor: '#1e293b', borderRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderWidth: 1.5, borderColor: '#caaf38', elevation: 10 },
   batchText: { color: '#caaf38', fontWeight: 'bold', fontSize: 13 },
   shareIcon: { width: 35, height: 35 },
   myDojoDiscardIcon: { width: 35, height: 35 },
@@ -1009,6 +1013,7 @@ const styles = StyleSheet.create({
   saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: 12, alignSelf:'center' },
   addSignatureMoveBtn: { width: 171, height: 52, borderRadius: 19, marginTop: 7, alignSelf:'center' },
   addQuoteBtn: { width: 109, height: 31, borderRadius: 19, marginTop: 5, alignSelf:'center'},
+  removeQuoteBtn: { width: 109, height: 31, borderRadius: 19, marginTop: 3, alignSelf:'center'},
   removeSignatureMoveBtn: { width: 177, height: 52, borderRadius: 19, marginTop: 7, alignSelf:'center' },
   formStreamSectionDivider: { color: '#f3efbd', fontSize: 13, fontWeight: 'bold', marginTop: 29, marginBottom: 5, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
