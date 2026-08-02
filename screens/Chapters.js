@@ -1568,7 +1568,7 @@ thumbPdf: { width: "100%", height: 76, resizeMode: 'contain', backgroundColor: '
 myDojoDeleteIcon: {height: 49, width: 49, borderRadius: 0,  alignItems: 'center', justifyContent: 'center' },
 pillRow: { backgroundColor: 'rgba(43, 37, 0, 0.5)',flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12, marginTop: 5, borderRadius: 9, opacity: 1, marginBottom: 9 },
 typePill: { backgroundColor: 'rgba(190, 190, 190, 0.19)', color: '#e6cc5a', fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
-batchBar: { position: 'absolute', bottom: 49, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#b39514', elevation: 10 },
+batchBar: { position: 'absolute', bottom: 57, left: 20, right: 20, flexDirection: 'row', backgroundColor: '#1a1a1a', padding: 15, borderRadius: 30, alignItems: 'center', justifyContent: 'space-around', borderWidth: 1, borderColor: '#b39514', elevation: 10 },
 batchText: { color: '#b39020', fontWeight: 'bold'},
 shareIcon: { height: 49, width: 49, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
 banner: { width: '100%', height: 57, borderRadius: 12, marginBottom: 10 },
