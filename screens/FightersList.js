@@ -926,7 +926,7 @@ export default function FightersList() {
                   <View style={styles.subCardViewSelected}>
                     <Image source={typeof item.avatar === 'number' ? item.avatar : item.avatar ? { uri: item.avatar } : require('../assets/chapterplaceholder.png')} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                     <View style={{marginLeft: 12, marginBottom: 3}}>
-                        <Text style={{ fontSize: 12, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>  
+                        <Text style={styles.nameTextViewSelected}>{item.name}</Text>  
                       </View>
                   </View>
                 </Pressable>
@@ -941,7 +941,7 @@ export default function FightersList() {
                     <View style={styles.subCardView}>
                       <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                       <View style={{marginLeft: 12, marginBottom: 7}}>
-                        <Text style={{ fontSize: 13, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' }}>{item.name}</Text>  
+                        <Text style={ selectedIds.includes(item.id) ? styles.nameTextViewSelected : styles.nameTextView}>{item.name}</Text>  
                         <View style={styles.styleTextView}>
                           <Text style={{ color: '#9a9aa1', fontSize: 12 }}>{item.style}</Text>
                         </View>
@@ -977,9 +977,9 @@ const styles = StyleSheet.create({
   imgBackground: { minWidth: '100%', minHeight: '100%', height: Dimensions.get('window').height, flex: 1 },
   icon: { height: 57, opacity: 1, marginTop: 3, textAlign: "center"},
   mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#caaf38", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
-  mainCardViewSelected: { minHeight: 192, width: "100%", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, flexDirection: 'column', alignItems: 'flex-start', borderColor: 'rgba(126, 107, 21, 0.76)', backgroundColor: 'rgba(212, 187, 73, 0.38)', borderWidth: 2 },
+  mainCardViewSelected: { minHeight: 192, width: "100%", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, flexDirection: 'column', alignItems: 'flex-start', borderColor: 'rgba(126, 107, 21, 0.76)', backgroundColor: 'rgba(126, 107, 21, 0.76)', borderWidth: 2 },
   subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
-  subCardViewSelected: { minHeight: 171, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: 'rgba(247, 234, 60, 0.38)', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
+  subCardViewSelected: { minHeight: 171, width: "100%", marginLeft: 7, borderRadius: 8, borderColor: 'rgba(126, 107, 21, 0.38)', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
   plusIcon: { width: 45, height: 45 },
   iconAM: { height: 50, width: "97%", opacity: 1, marginTop: 3, textAlign: "center", marginBottom: 9 },
   header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 1, borderRadius: 9},
@@ -1007,6 +1007,8 @@ const styles = StyleSheet.create({
   quoteinput: { borderWidth: 2.5, borderColor: '#7e6b15', borderRadius: 12, padding: 3, marginTop: 3, backgroundColor: 'rgba(235, 224, 71, 0.57)', opacity: 1, fontWeight: "bold", fontSize: 13, width: "95%" - 114, marginLeft: 3, marginBottom: 9 },
   descInput: { height: 70, textAlignVertical: 'top', paddingVertical: 8 },
   dynamicLineRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6, width: "100%" },
+  nameTextView: { fontSize: 13, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' },
+  nameTextViewSelected: { fontSize: 13, color: '#f3efbd', fontWeight: 'bold', textTransform: 'capitalize' },
   styleTextView: { marginTop: 3, borderWidth: .5, borderRadius: 12, borderColor:'#caaf38', flexDirection:'row', backgroundColor:'#323232', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 4, paddingVertical: 2},
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 999 },
   loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
