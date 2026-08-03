@@ -508,7 +508,7 @@ export default function Chapters() {
         return `${extractDir}${fileName}`;
       };
       
-      let manifest = { count: 1 };
+      let manifest = { count: 0 };
       try {
         const manifestContent = await FileSystem.readAsStringAsync(`${extractDir}manifest.json`);
         manifest = JSON.parse(manifestContent);
@@ -517,7 +517,7 @@ export default function Chapters() {
       }
       
       const rawChapters = [];
-      const chapterDirs = manifest.count > 1 
+      const chapterDirs = manifest.count > 0 
         ? Array.from({length: manifest.count}, (_, i) => `chapter_${i}/`) 
         : [''];
       
