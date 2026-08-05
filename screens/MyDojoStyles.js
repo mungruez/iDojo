@@ -46,7 +46,6 @@ export default function MyDojoStyles({route}) {
 
     const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
-
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
@@ -59,7 +58,6 @@ export default function MyDojoStyles({route}) {
           { cancelable: false } 
         );
     };
-
 
     const clearAppCache = async () => {
       try {
@@ -75,7 +73,6 @@ export default function MyDojoStyles({route}) {
       
       }
     };
-
 
     const parseStyles = (list, query) => {
       if (!Array.isArray(list)) {
@@ -155,8 +152,6 @@ export default function MyDojoStyles({route}) {
       }
     };
     
-
-
     const parseHMoves = (movesList) => {
       let hMoves = [];
       let stylesSeen = [];
@@ -517,11 +512,11 @@ export default function MyDojoStyles({route}) {
           };
 
           const fixedVid = (move.type === 'video' || move.type === "pdf") 
-            ? fixPath(move.vid || move.videoUrl) 
+            ? fixPath(move.vid) 
             : null;
             
           const fixedVideoUrl = (move.type === 'video' || move.type === "pdf") 
-            ? fixPath(move.videoUrl || move.vid) 
+            ? fixPath(move.videoUrl) 
             : '';
 
           const restored = {
@@ -960,13 +955,19 @@ export default function MyDojoStyles({route}) {
         }
         
         if (typeAM === 'steps') {
-          finalSteps = await Promise.all(steps.map(async (s, i) => ({
-            ...s,
-            title: s.title.trim() || `Step ${i + 1}`,
-            img: s.img && s.img.startsWith('file://') && !s.img.includes('/moves/') 
+          finalSteps = await Promise.all(validatedSteps.map(async (s, i) => {
+            const img = s.img && s.img.startsWith('file://') && !s.img.startsWith(permanentDirUri)
               ? await ensurePermanent(s.img, `idojo_step_${s.id}${getMediaFileExtension(s.img, 'image')}`)
-              : s.img
-          })));
+              : s.img;
+
+            if (img === 'COPYFAILED') copyfailed = true;
+
+            return {
+              ...s,
+              img
+            };
+
+          }));
         }
       
         if (copyfailed) {
@@ -1111,7 +1112,7 @@ export default function MyDojoStyles({route}) {
                   return require('../assets/onlinevideoicon.png');
                 }
 
-                if (item.vid && (item.vid.startsWith('file://') || item.vid.includes('/moves/'))) {
+                if (item.vid && (item.vid.startsWith('file://') || item.vid.includes('file') || item.vid.includes('idojo'))) {
                   return { uri: item.vid };
                 }
                 
@@ -1399,7 +1400,6 @@ export default function MyDojoStyles({route}) {
        </ScrollView>
       </KeyboardAvoidingView>
       </ImageBackground> );   
-
 
 
     if (listmode) return (
