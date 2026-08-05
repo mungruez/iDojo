@@ -926,7 +926,7 @@ export default function FightersList() {
                   <View style={styles.subCardViewSelected}>
                     <Image source={typeof item.avatar === 'number' ? item.avatar : item.avatar ? { uri: item.avatar } : require('../assets/chapterplaceholder.png')} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                     <View style={{marginLeft: 12, marginBottom: 3}}>
-                        <Text style={styles.nameTextViewSelected}>{item.name}</Text>  
+                        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.nameTextViewSelected}>{item.name}</Text>  
                       </View>
                   </View>
                 </Pressable>
