@@ -12,7 +12,7 @@ export const fighters = [
       "It isn't the grand destination ahead that halts a warrior; it is the tiny friction point in your current stance.", 
       "Combat is a calculation of risk. Out in the world, accidents happen every single day. In the arena, some falter, some adapt, and some carry on. You simply train so thoroughly that failure becomes unthinkable.", 
       "If pure focus can transform simple elements into medicine, it can certainly forge an unstoppable competitor.", 
-      "A competitor who chose to maximize every ounce of physical kinetic talent he was given."
+      "A competitor who chose to maximize every ounce of physical he was given."
     ],
     style: "MMA",
     conc: "",
@@ -21,7 +21,7 @@ export const fighters = [
         id: "21",
         title: "The One inch Jab - Part 1",
         img: require('../assets/fighters/bruceleeoneinchpunch1gf.png'),
-        desc: "Initiated from mere finger-lengths away from a target's chest, this strike generates hundreds of pounds of localized impact force within two-tenths of a second. Step 1: Stand with your stronger foot forward, knees bent and striking arm low with a slight bend in the elbow."
+        desc: "Initiated from mere finger-lengths away from a target's chest, done properly this strike generates hundreds of pounds of localized impact force within two-tenths of a second. Step 1: Stand with your stronger foot forward, knees bent and striking arm low with a slight bend in the elbow."
       },
       {
         id: "22",
@@ -108,5 +108,7 @@ export const fighters = [
         desc: "Finish this combo with an explosive, straight rear cross over the top to the head. This punch is delivered with maximum rotational force, utilizing exceptional hip snapping to generate significant impact. The rear cross acts as the finishing blow in the combination, capable of stunning or completely flattening opponents mid-exchange.",
       }
     ]
+    
   }
+
 ]
