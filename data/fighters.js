@@ -79,14 +79,14 @@ export const fighters = [
       },
       {
         id: "31",
-        title: "The Kinetic Trap - Part 1",
+        title: "The Kinetic Counter Punch - Part 1",
         img: require('../assets/fighters/pacmancounterpunch1gf.jpg'),
         desc: "Utilizing a combination of head movement, footwork, and blocking techniques to avoid incoming strikes, his ability to slip punches and counterattack frustrates aggressive opponents. Here, he uses a snapping downward parry to slap the opponent's incoming jab offline, immediately opening up a pocket for a return fire. By strategically stepping his lead foot on the outside of his opponent's base, he creates dominant angles for passing the guard.",
       },
         {
         id: "32",
-        title: "The Kinetic Trap - Part 2",
-        img: require('../assets/fighters/pacmancounterpunch2gf.png'),
+        title: "The Kinetic Counter Punch - Part 2",
+        img: require('../assets/fighters/pacmancounterpunch2gf.jpg'),
         desc: "After successfully parrying his opponent's punch, the fighter quickly shifts his weight and rotates his hips along a tight axis to generate massive leverage for his counterpunch. This rapid weight transfer allows him to deliver a strong and accurate punch while maintaining perfect baseline balance and positioning in the ring.",
       },
       {
