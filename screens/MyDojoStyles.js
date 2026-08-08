@@ -391,33 +391,29 @@ export default function MyDojoStyles({route}) {
 
         const normalizeLocalFileUri = async (uri) => {
           if (!uri || typeof uri !== 'string') return null;
+          const pathCandidates = [uri];
+
           if (uri.startsWith('file://')) {
-            try {
-              const info = await FileSystem.getInfoAsync(uri);
-              if (info.exists) return uri;
-            } catch {}
             const rawPath = uri.replace('file://', '');
-            try {
-              const info = await FileSystem.getInfoAsync(rawPath);
-              if (info.exists) return rawPath;
-            } catch {}
-            return null;
+            if (rawPath) pathCandidates.push(rawPath);
           }
 
-          if (uri.startsWith('/') || uri.startsWith('content://') || uri.startsWith('ph://')) {
-            try {
-              const info = await FileSystem.getInfoAsync(uri);
-              if (info.exists) return uri;
-            } catch {}
-            const fileUri = `file://${uri}`;
-            try {
-              const info = await FileSystem.getInfoAsync(fileUri);
-              if (info.exists) return fileUri;
-            } catch {}
-            return null;
+          if (uri.startsWith('/') && !uri.startsWith('file://')) {
+            pathCandidates.push(`file://${uri}`);
           }
 
-          return uri;
+          if (uri.startsWith('content://') || uri.startsWith('ph://')) {
+            pathCandidates.push(uri);
+          }
+
+          for (const candidate of pathCandidates) {
+            try {
+              const info = await FileSystem.getInfoAsync(candidate);
+              if (info.exists) return candidate;
+            } catch {}
+          }
+
+          return null;
         };
 
         const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
@@ -1102,7 +1098,6 @@ export default function MyDojoStyles({route}) {
         } else if (isLoadingRef.current) {
           return true;
         }
-
         return false;
       });
 
@@ -1126,16 +1121,18 @@ export default function MyDojoStyles({route}) {
         if (images.length === 0) return;
 
         if (images.length === 1) {
-          const singleUri = images[0].startsWith('file://') ? images[0] : `file://${images[0]}`;
-          await Sharing.shareAsync(singleUri);
+          const normalizedImageUri = await normalizeLocalFileUri(images[0]);
+          if (!normalizedImageUri) return;
+          await Sharing.shareAsync(normalizedImageUri);
         } else {
           const shareDir = `${FileSystem.cacheDirectory}images/`;
           await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
           
           for (let i = 0; i < images.length; i++) {
-            const sourceUri = images[i].startsWith('file://') ? images[i] : `file://${images[i]}`;
+            const normalizedImageUri = await normalizeLocalFileUri(images[i]);
+            if (!normalizedImageUri) continue;
             const dest = `${shareDir}image_${i}.jpg`;
-            await FileSystem.copyAsync({ from: sourceUri, to: dest });
+            await FileSystem.copyAsync({ from: normalizedImageUri, to: dest });
           }
           
           const zipPath = `${FileSystem.cacheDirectory}images.zip`;
