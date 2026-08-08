@@ -389,25 +389,56 @@ export default function MyDojoStyles({route}) {
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.makeDirectoryAsync(shareDirUri, { intermediates: true });
 
+        const normalizeLocalFileUri = async (uri) => {
+          if (!uri || typeof uri !== 'string') return null;
+          if (uri.startsWith('file://')) {
+            try {
+              const info = await FileSystem.getInfoAsync(uri);
+              if (info.exists) return uri;
+            } catch {}
+            const rawPath = uri.replace('file://', '');
+            try {
+              const info = await FileSystem.getInfoAsync(rawPath);
+              if (info.exists) return rawPath;
+            } catch {}
+            return null;
+          }
+
+          if (uri.startsWith('/') || uri.startsWith('content://') || uri.startsWith('ph://')) {
+            try {
+              const info = await FileSystem.getInfoAsync(uri);
+              if (info.exists) return uri;
+            } catch {}
+            const fileUri = `file://${uri}`;
+            try {
+              const info = await FileSystem.getInfoAsync(fileUri);
+              if (info.exists) return fileUri;
+            } catch {}
+            return null;
+          }
+
+          return uri;
+        };
+
         const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
           const updatedMove = { ...move };
           const copyToStaging = async (uri) => {
-            if (!uri || typeof uri !== 'string' || !uri.startsWith('file://')) return uri;
-              const info = await FileSystem.getInfoAsync(uri);
-              if (!info.exists) {
-                alert(`File does not exist: ${uri}`);
-                return null; 
-              }  
-              const fileName = `${idx}_${uri.split('/').pop()}`;
-              const dest = `${shareDirUri}${fileName}`;  
+            if (!uri || typeof uri !== 'string') return uri;
+            const normalizedSource = await normalizeLocalFileUri(uri);
+            if (!normalizedSource) return null;
+
+            const fileName = `${idx}_${uri.split('/').pop()}`;
+            const dest = `${shareDirUri}${fileName}`;
             try {
-              await FileSystem.copyAsync({ from: uri, to: dest });
+              await FileSystem.copyAsync({ from: normalizedSource, to: dest });
               const destInfo = await FileSystem.getInfoAsync(dest);
               if (!destInfo.exists) {
                 throw new Error(`Copy verification failed: ${fileName} not found after copy`);
               }
               return fileName;
-            } catch (e) { return null; }
+            } catch (e) {
+              return null;
+            }
           };
 
           if (move.vid) updatedMove.vid = await copyToStaging(move.vid);
@@ -634,7 +665,10 @@ export default function MyDojoStyles({route}) {
           setVid(mv.vid);
           setVideoUrl(mv.videoUrl || "");
         } else {
-          setSteps(mv.steps || [{ id: Date.now().toString(), title: "", img: null, desc: "" }]);
+          setSteps((mv.steps || [{ id: Date.now().toString(), title: "", img: null, desc: "" }]).map(step => ({
+            ...step,
+            img: normalizeMediaUri(step.img)
+          })));
         }
         setAddMode(true);
       }
@@ -779,6 +813,23 @@ export default function MyDojoStyles({route}) {
       return true;
     };
 
+    const normalizeMediaUri = (uri) => {
+      if (!uri || typeof uri !== 'string') return uri;
+      if (
+        uri.startsWith('http://') ||
+        uri.startsWith('https://') ||
+        uri.startsWith('file://') ||
+        uri.startsWith('content://') ||
+        uri.startsWith('ph://')
+      ) {
+        return uri;
+      }
+      if (uri.startsWith('/')) {
+        return `file://${uri}`;
+      }
+      return uri;
+    };
+
 
     const pickMedia = async (index = null) => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -919,19 +970,35 @@ export default function MyDojoStyles({route}) {
   
         const activeSavedFilenames = [];
         await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
+        const isLocalMediaUri = (uri) => {
+          return typeof uri === 'string' && (
+            uri.startsWith('file://') ||
+            uri.startsWith('/') ||
+            uri.startsWith('content://') ||
+            uri.startsWith('ph://')
+          );
+        };
+        const normalizeForCopy = (uri) => {
+          if (!uri || typeof uri !== 'string') return uri;
+          if (uri.startsWith('/') && !uri.startsWith('file://')) {
+            return `file://${uri}`;
+          }
+          return uri;
+        };
         const ensurePermanent = async (uri, fileName) => {
-          if (!uri || !uri.startsWith('file://')) return uri;
-          if (uri.startsWith(permanentDirUri)) {
-            const existingName = uri.split('/').pop();
+          if (!isLocalMediaUri(uri)) return uri;
+          const sourceUri = normalizeForCopy(uri);
+          if (sourceUri.startsWith(permanentDirUri)) {
+            const existingName = sourceUri.split('/').pop();
             activeSavedFilenames.push(existingName);
-            return uri;
+            return sourceUri;
           }
           const destUri = `${permanentDirUri}${fileName}`;
           let lastError;
 
           for (let attempt = 1; attempt < 2; attempt += 1) {
             try {
-              await FileSystem.copyAsync({ from: uri, to: destUri });
+              await FileSystem.copyAsync({ from: sourceUri, to: destUri });
               activeSavedFilenames.push(fileName);
               return destUri;
             } catch (e) {
@@ -956,15 +1023,16 @@ export default function MyDojoStyles({route}) {
         
         if (typeAM === 'steps') {
           finalSteps = await Promise.all(validatedSteps.map(async (s, i) => {
-            const img = s.img && s.img.startsWith('file://') && !s.img.startsWith(permanentDirUri)
-              ? await ensurePermanent(s.img, `idojo_step_${s.id}${getMediaFileExtension(s.img, 'image')}`)
-              : s.img;
+            const normalizedImg = normalizeMediaUri(s.img);
+            const img = normalizedImg && isLocalMediaUri(normalizedImg) && !normalizedImg.startsWith(permanentDirUri)
+              ? await ensurePermanent(normalizedImg, `idojo_step_${s.id}${getMediaFileExtension(normalizedImg, 'image')}`)
+              : normalizedImg;
 
             if (img === 'COPYFAILED') copyfailed = true;
 
             return {
               ...s,
-              img
+              img: normalizeMediaUri(img)
             };
 
           }));
@@ -1057,22 +1125,24 @@ export default function MyDojoStyles({route}) {
         
         if (images.length === 0) return;
 
-        if(images.length === 1) {
-          await Sharing.shareAsync(images[0]);
+        if (images.length === 1) {
+          const singleUri = images[0].startsWith('file://') ? images[0] : `file://${images[0]}`;
+          await Sharing.shareAsync(singleUri);
         } else {
           const shareDir = `${FileSystem.cacheDirectory}images/`;
           await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
           
           for (let i = 0; i < images.length; i++) {
+            const sourceUri = images[i].startsWith('file://') ? images[i] : `file://${images[i]}`;
             const dest = `${shareDir}image_${i}.jpg`;
-            await FileSystem.copyAsync({ from: images[i], to: dest });
+            await FileSystem.copyAsync({ from: sourceUri, to: dest });
           }
           
           const zipPath = `${FileSystem.cacheDirectory}images.zip`;
           await zip(shareDir.replace('file://', ''), zipPath.replace('file://', ''));
           await Sharing.shareAsync(zipPath);
-          await FileSystem.deleteAsync(shareDir);
-          await FileSystem.deleteAsync(zipPath);
+          await FileSystem.deleteAsync(shareDir, { idempotent: true });
+          await FileSystem.deleteAsync(zipPath, { idempotent: true });
         }
       } catch (e) {
 
@@ -1206,7 +1276,7 @@ export default function MyDojoStyles({route}) {
                     onLongPress={() => toggleSelectSingle(index) }
                     onPress={() => selectedSingles.length > 0 && toggleSelectSingle(index)}
                     style={[styles.itemContainerVM, selectedSingles.includes(index) && styles.selectedItem ]}>
-                      <Image source = {{uri: step.img}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
+                      <Image source = {{uri: normalizeMediaUri(step.img)}} resizeMode="contain" style={{ borderRadius: 19, alignSelf: 'center', margin: 0, height: 490, width: 380 }} />
                   </TouchableOpacity> 
 
                   <View style={{backgroundColor: "#0c3312", marginTop: 5, marginBottom: 1, flex: 1, padding: 3, borderColor: "silver", borderWidth: 1, borderRadius: 6, borderBottomWidth: 2}}>
