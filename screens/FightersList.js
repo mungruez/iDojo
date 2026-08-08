@@ -797,7 +797,6 @@ export default function FightersList() {
   };
 
 
-
   if (mode === "view") { return <Fighter fighter={currentFighter} offset={0} />; }
 
 
@@ -920,14 +919,14 @@ export default function FightersList() {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2, marginLeft: 7, marginRight: 7, width: "50%", borderWidth: 0 }}>
-              { selectedIds.includes(item.id) && selectedIds.length === 1 ? ( <View style={{ flex: 1, flexDirection: "row", alignItems: "center", marginTop: 2, marginLeft: 7, marginRight: 7, width: "100%", borderWidth: 0 }}> <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
+              { selectedIds.includes(item.id) && selectedIds.length === 1 ? ( <View style={{ flex: 1, flexDirection: "column", alignItems: "center", marginTop: 2, marginLeft: 7, marginRight: 7, width: "100%", borderWidth: 0, minHeight: 228 }}> <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
                 onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
                 style={ selectedIds.includes(item.id) ? styles.mainCardViewSelected : styles.mainCardView} >
                   <View style={styles.subCardViewSelected}>
                     <Image source={typeof item.avatar === 'number' ? item.avatar : item.avatar ? { uri: item.avatar } : require('../assets/chapterplaceholder.png')} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                     <View style={{marginLeft: 12, marginBottom: 3}}>
-                        <Text numberOfLines={1} ellipsizeMode="clip" style={styles.nameTextViewSelected}>{item.name}</Text>  
-                      </View>
+                      <Text numberOfLines={1} ellipsizeMode="clip" style={styles.nameTextViewSelected}>{item.name}</Text>  
+                    </View>
                   </View>
                 </Pressable>
                 <View style={styles.chapterCardFooter}>
@@ -937,8 +936,8 @@ export default function FightersList() {
                 </View> 
                 </View> ) : ( <Pressable onLongPress={() => !item.isStaticBundle && toggleSelect(item.id)}
                   onPress={() => { if (selectedIds.length > 0) { if (!item.isStaticBundle) toggleSelect(item.id); } else { navKSound(item); }}}  
-                  style={ selectedIds.includes(item.id) ? styles.mainCardViewSelected : styles.mainCardView}  >
-                    <View style={styles.subCardView}>
+                  style={ selectedIds.includes(item.id) ? styles.mainCardViewSelected : styles.mainCardView }>
+                    <View style={ selectedIds.includes(item.id) ? styles.subCardViewSelectedBig : styles.subCardView }>
                       <Image source={typeof item.avatar === 'number' ? item.avatar : { uri: item.avatar }} resizeMode="contain" style={{ borderRadius: 12, alignSelf: 'flex-start', margin: 0, height: 133, width: "100%" }} />
                       <View style={{marginLeft: 12, marginBottom: 7}}>
                         <Text style={ selectedIds.includes(item.id) ? styles.nameTextViewSelected : styles.nameTextView}>{item.name}</Text>  
@@ -977,9 +976,10 @@ const styles = StyleSheet.create({
   imgBackground: { minWidth: '100%', minHeight: '100%', height: Dimensions.get('window').height, flex: 1 },
   icon: { height: 57, opacity: 1, marginTop: 3, textAlign: "center"},
   mainCardView: { minHeight: 228, width: "100%", backgroundColor: "#2f4f4f", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, borderColor: "#caaf38", borderWidth: 2, flexDirection: 'column', alignItems: 'flex-start'},
-  mainCardViewSelected: { minHeight: 192, width: "100%", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, flexDirection: 'column', alignItems: 'flex-start', borderColor: 'rgba(126, 107, 21, 0.76)', backgroundColor: 'rgba(126, 107, 21, 0.76)', borderWidth: 2 },
+  mainCardViewSelected: { minHeight: 181, width: "100%", borderRadius: 15, shadowColor: "#000", shadowOffset: {width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 5, elevation: 8, justifyContent: 'center', padding: 5,marginTop: 12, marginBottom: 12, marginLeft: 1, marginRight: 5, flexDirection: 'column', alignItems: 'flex-start', borderColor: 'rgba(158, 131, 21, 0.76)', backgroundColor: 'rgba(221, 191, 55, 0.76)', borderWidth: 2 },
   subCardView: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, backgroundColor: "slategray", borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
-  subCardViewSelected: { minHeight: 171, width: "100%", marginLeft: 7, borderRadius: 8, borderColor: 'rgba(126, 107, 21, 0.38)', borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding:0},
+  subCardViewSelected: { minHeight: 171, width: "100%", marginLeft: 7, borderRadius: 8, borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding: 0},
+  subCardViewSelectedBig: { minHeight: 207, width: "100%", marginLeft: 7, borderRadius: 8, borderWidth: 0, alignSelf: 'center', justifyContent: 'center', marginRight: 7, padding: 0},
   plusIcon: { width: 45, height: 45 },
   iconAM: { height: 50, width: "97%", opacity: 1, marginTop: 3, textAlign: "center", marginBottom: 9 },
   header: { flexDirection: 'column', width: "95%", minHeight: 76, backgroundColor: 'rgba(195, 209, 223, 0.4)', borderWidth: 1, borderColor: '#c2cdd4',justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 1, borderRadius: 9},
@@ -990,7 +990,7 @@ const styles = StyleSheet.create({
   infoIcon: { height: 47, width: 47, marginLeft: 21, marginBottom: 5, opacity: 1 },
   plusIcon: { height: 57, width: 76, backgroundColor: 'rgba(0,0,0,0.57)', borderRadius: 12, marginLeft: 15, marginRight: 7, opacity: 1},
   importIcon: {height: 76, width: 67, borderRadius: 9, marginLeft: 12 },
-  chapterCardFooter: { flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: -7 },
+  chapterCardFooter: { flexDirection: 'row', justifyContent: 'center', marginTop: -7 },
   editBtnCard: { backgroundColor: '#7e6b15', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 5, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3, alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: "#caaf38"},
   editBtnText: { color: '#ffffff', fontSize: 12, fontWeight: '600', letterSpacing: 1},
   batchBar: { position: 'absolute', bottom: 57, left: 20, right: 20, backgroundColor: '#1e293b', borderRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderWidth: 1.5, borderColor: '#caaf38', elevation: 10 },
@@ -1008,7 +1008,7 @@ const styles = StyleSheet.create({
   descInput: { height: 70, textAlignVertical: 'top', paddingVertical: 8 },
   dynamicLineRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6, width: "100%" },
   nameTextView: { fontSize: 13, color: "gold", fontWeight: 'bold', textTransform: 'capitalize' },
-  nameTextViewSelected: { fontSize: 13, color: '#f3efbd', fontWeight: 'bold', textTransform: 'capitalize' },
+  nameTextViewSelected: { fontSize: 13, color: '#fdf9e4', fontWeight: 'bold', textTransform: 'capitalize' },
   styleTextView: { marginTop: 3, borderWidth: .5, borderRadius: 12, borderColor:'#caaf38', flexDirection:'row', backgroundColor:'#323232', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 4, paddingVertical: 2},
   loadingOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 999 },
   loadingText: { color: '#caaf38', fontWeight: 'bold', fontSize: 12, marginTop: 10, letterSpacing: 0.5 },
