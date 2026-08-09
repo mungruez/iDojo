@@ -14,8 +14,8 @@ import PdfMove from './PdfMove';
 const { width } = Dimensions.get('window');
     
 export default function MyDojoStyles({route}) {
-    const [moves, setMoves] = useState([]); 
     const [loading, setLoading] = useState(true);
+    const [moves, setMoves] = useState([]); 
     const [smoves, setSMoves] = useState([]);
     const navigation = useNavigation();
 
@@ -46,6 +46,7 @@ export default function MyDojoStyles({route}) {
 
     const bgColor = ['khaki', 'sandybrown', 'bisque', 'honeydew', 'darkkhaki', 'oldlace', 'papayawhip', 'lavender', 'wheat', 'mintcream', 'aliceblue', 'goldenrod', 'tan', 'lightsteelblue', 'burlywood', 'palegoldenrod', 'beige', 'azure'];
 
+
     const showInstructions = () => {
         Alert.alert(
           "My Dojo Moves List",
@@ -58,6 +59,7 @@ export default function MyDojoStyles({route}) {
           { cancelable: false } 
         );
     };
+
 
     const clearAppCache = async () => {
       try {
@@ -73,6 +75,7 @@ export default function MyDojoStyles({route}) {
       
       }
     };
+
 
     const parseStyles = (list, query) => {
       if (!Array.isArray(list)) {
@@ -152,6 +155,7 @@ export default function MyDojoStyles({route}) {
       }
     };
     
+
     const parseHMoves = (movesList) => {
       let hMoves = [];
       let stylesSeen = [];
@@ -177,8 +181,10 @@ export default function MyDojoStyles({route}) {
     const getMoves = (mstyle, mtype, movesList) => {
       if( !mstyle || mstyle.trim() === "" || !mtype || mtype.trim() === "" || !movesList) return [];
       if( mtype !== "video" && mtype !== "steps" && mtype !== "pdf" ) return [];
+      
       let sMoves = movesList.filter(m => m.type === mtype && (mstyle === "allstyles" || m.style === mstyle));
       if(mstyle === "allstyles") return parseHMoves(sMoves);
+
       return sMoves;
     }
 
@@ -389,7 +395,6 @@ export default function MyDojoStyles({route}) {
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.makeDirectoryAsync(shareDirUri, { intermediates: true });
 
-
         const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
           const updatedMove = { ...move };
           const copyToStaging = async (uri) => {
@@ -422,7 +427,9 @@ export default function MyDojoStyles({route}) {
           if (move.videoUrl) updatedMove.videoUrl = await copyToStaging(move.videoUrl);
           if (Array.isArray(move.steps)) {
             updatedMove.steps = await Promise.all(move.steps.map(async (s, sIdx) => {
-              const imgFileName = await copyToStaging(s.img);
+              const originalName = s.img.split('/').pop();
+              const uniqueFakeUri = s.img.replace(originalName, `step_${sIdx}_${originalName}`);
+              const imgFileName = await copyToStaging(uniqueFakeUri);
               return { ...s, img: imgFileName };
             }));
 
@@ -570,6 +577,7 @@ export default function MyDojoStyles({route}) {
         }
       }
     };
+
 
 
     const viewPdf = async (move) => {
@@ -1059,6 +1067,7 @@ export default function MyDojoStyles({route}) {
     };
     
 
+
     useEffect(() => {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
         if (viewmode > 0) {
@@ -1139,6 +1148,7 @@ export default function MyDojoStyles({route}) {
         }
     };
       
+
 
     const MoveCard = ({ item }) => (
       <TouchableOpacity 
