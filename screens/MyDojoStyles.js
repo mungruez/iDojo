@@ -993,13 +993,20 @@ export default function MyDojoStyles({route}) {
           finalSteps = [];
           for (let i = 0; i < validatedSteps.length; i++) {
             const step = validatedSteps[i];
-            const uniqueStepId = step.id || `new_${i}_${Date.now()}`;
-            const fileExt = getMediaFileExtension(step.img, 'image') || '.jpg';
-            const distinctFileName = `idojo_step_${uniqueStepId}${fileExt}`;
+            const isAlreadySaved = step.img && normalizeMediaUri(step.img).startsWith(normalizeMediaUri(permanentDirUri));
+            if (isAlreadySaved) {
+              const existingName = normalizeMediaUri(step.img).split('/').pop();
+              if (existingName) activeSavedFilenames.push(existingName);
+            }
 
-            const img = step.img && isLocalMediaUri(step.img) && !step.img.startsWith(permanentDirUri)
-              ? await ensurePermanent(step.img, distinctFileName)
-              : step.img;
+            let img = step.img;
+            if (step.img && isLocalMediaUri(step.img) && !isAlreadySaved) {
+              const uniqueStepId = step.id ? `${step.id}_${Date.now()}` : `new_${i}_${Date.now()}`;
+              const fileExt = getMediaFileExtension(step.img, 'image') || '.jpg';
+              const distinctFileName = `idojo_step_${uniqueStepId}${fileExt}`;
+              
+              img = await ensurePermanent(step.img, distinctFileName);
+            }
 
             if (img === 'COPYFAILED') copyfailed = true;
 
@@ -1009,6 +1016,7 @@ export default function MyDojoStyles({route}) {
             });
           }
         }
+
       
         if (copyfailed) {
           Alert.alert("Save Failed", "Unable to copy step image. Please try again.");
