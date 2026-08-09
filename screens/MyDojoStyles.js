@@ -951,23 +951,27 @@ export default function MyDojoStyles({route}) {
         await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
         const ensurePermanent = async (uri, fileName) => {
           if (!isLocalMediaUri(uri)) return uri;
-          if (uri.startsWith(permanentDirUri)) {
-            const existingName = uri.split('/').pop();
+          const normalizedUri = normalizeMediaUri(uri);
+          const normalizedPermanentDir = normalizeMediaUri(permanentDirUri);
+
+          if (normalizedUri.startsWith(normalizedPermanentDir)) {
+            const existingName = normalizedUri.split('/').pop();
             activeSavedFilenames.push(existingName);
-            return uri;
+            return normalizedUri;
           }
+          
           const destUri = `${permanentDirUri}${fileName}`;
 
           try {
             await FileSystem.copyAsync({ from: uri, to: destUri });
             activeSavedFilenames.push(fileName);
-            return destUri;
+            return normalizeMediaUri(destUri);
           } catch (e) {
             try {
               const rawSource = uri.replace('file://', '');
               await FileSystem.copyAsync({ from: rawSource, to: destUri });
               activeSavedFilenames.push(fileName);
-              return destUri;
+              return normalizeMediaUri(destUri);
             } catch (fallbackError) {
               // fall through to failure alert
             }
