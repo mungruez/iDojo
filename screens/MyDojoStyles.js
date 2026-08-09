@@ -993,8 +993,12 @@ export default function MyDojoStyles({route}) {
           finalSteps = [];
           for (let i = 0; i < validatedSteps.length; i++) {
             const step = validatedSteps[i];
+            const uniqueStepId = step.id || `new_${i}_${Date.now()}`;
+            const fileExt = getMediaFileExtension(step.img, 'image') || '.jpg';
+            const distinctFileName = `idojo_step_${uniqueStepId}${fileExt}`;
+
             const img = step.img && isLocalMediaUri(step.img) && !step.img.startsWith(permanentDirUri)
-              ? await ensurePermanent(step.img, `idojo_step_${step.id}${getMediaFileExtension(step.img, 'image')}`)
+              ? await ensurePermanent(step.img, distinctFileName)
               : step.img;
 
             if (img === 'COPYFAILED') copyfailed = true;
