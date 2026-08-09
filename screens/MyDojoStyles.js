@@ -959,7 +959,7 @@ export default function MyDojoStyles({route}) {
         const activeSavedFilenames = [];
         await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
         const ensurePermanent = async (uri, fileName) => {
-          if (!isLocalMediaUri(uri)) return uri;
+          if (!uri || typeof uri !== 'string') return uri;
           const normalizedUri = normalizeMediaUri(uri);
           const normalizedPermanentDir = normalizeMediaUri(permanentDirUri);
 
@@ -1009,7 +1009,7 @@ export default function MyDojoStyles({route}) {
             }
 
             let img = step.img;
-            if (step.img && isLocalMediaUri(step.img) && !isAlreadySaved) {
+            if (step.img && !isAlreadySaved) {
               const uniqueStepId = step.id ? `${step.id}_${Date.now()}` : `new_${i}_${Date.now()}`;
               const fileExt = getMediaFileExtension(step.img, 'image') || '.jpg';
               const distinctFileName = `idojo_step_${uniqueStepId}${fileExt}`;
