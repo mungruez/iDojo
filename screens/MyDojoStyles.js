@@ -792,6 +792,7 @@ export default function MyDojoStyles({route}) {
       }
     };
 
+    
     const normalizeMediaUri = (uri) => {
       if (!uri || typeof uri !== 'string') return uri;
       if (
@@ -973,7 +974,7 @@ export default function MyDojoStyles({route}) {
               activeSavedFilenames.push(fileName);
               return normalizeMediaUri(destUri);
             } catch (fallbackError) {
-              // fall through to failure alert
+
             }
           }
 
@@ -1111,6 +1112,7 @@ export default function MyDojoStyles({route}) {
           await Sharing.shareAsync(normalizedImageUri);
         } else {
           const shareDir = `${FileSystem.cacheDirectory}images/`;
+          await FileSystem.deleteAsync(shareDir, { idempotent: true });
           await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
           
           for (let i = 0; i < images.length; i++) {
@@ -1121,7 +1123,10 @@ export default function MyDojoStyles({route}) {
           }
           
           const zipPath = `${FileSystem.cacheDirectory}images.zip`;
-          await zip(shareDir.replace('file://', ''), zipPath.replace('file://', ''));
+          await FileSystem.deleteAsync(zipPath, { idempotent: true });
+          const cleanSrcDir = shareDir.replace('file://', '').replace(/\/$/, '');
+          const cleanZipPath = zipPath.replace('file://', '');
+          await zip(cleanSrcDir, cleanZipPath);
           await Sharing.shareAsync(zipPath);
           await FileSystem.deleteAsync(shareDir, { idempotent: true });
           await FileSystem.deleteAsync(zipPath, { idempotent: true });

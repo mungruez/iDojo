@@ -581,6 +581,7 @@ export default function FightersList() {
       setAllFighters(nextCombinedMaster);
       setHFighters(nextCombinedMaster);
       setSearchQuery('');
+      setSelectedIds([]);
       setMode('list');
     } catch (e) {
       Alert.alert('Save Failed', e.message);
@@ -970,7 +971,6 @@ export default function FightersList() {
   )
 }
 
-
 const styles = StyleSheet.create({ 
   dashboardIconsControlsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 1, minHeight: 73, width: '100%', gap: 15 },
   imgBackground: { minWidth: '100%', minHeight: '100%', height: Dimensions.get('window').height, flex: 1 },
@@ -1015,7 +1015,7 @@ const styles = StyleSheet.create({
   saveBtn: { width: 133, height: 114, borderRadius: 15, marginTop: 12, alignSelf:'center' },
   addSignatureMoveBtn: { width: 171, height: 52, borderRadius: 19, marginTop: 7, alignSelf:'center' },
   addQuoteBtn: { width: 109, height: 31, borderRadius: 19, marginTop: 5, alignSelf:'center'},
-  removeQuoteBtn: { width: 109, height: 31, borderRadius: 19, marginTop: -1, marginLeft: 9, alignSelf:'center'},
+  removeQuoteBtn: { width: 109, height: 31, borderRadius: 19, marginTop: -2, marginLeft: 9, alignSelf:'center'},
   removeSignatureMoveBtn: { width: 177, height: 52, borderRadius: 19, marginTop: 7, alignSelf:'center' },
   formStreamSectionDivider: { color: '#f3efbd', fontSize: 13, fontWeight: 'bold', marginTop: 29, marginBottom: 5, borderBottomWidth: 1, borderBottomColor: '#947e1f', paddingBottom: 4 },
   sectionContainerBlock: { backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: 10, padding: 12, marginVertical: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)' },
