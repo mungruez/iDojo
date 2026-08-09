@@ -389,38 +389,19 @@ export default function MyDojoStyles({route}) {
         await FileSystem.deleteAsync(shareDirUri, { idempotent: true });
         await FileSystem.makeDirectoryAsync(shareDirUri, { intermediates: true });
 
-        const normalizeLocalFileUri = async (uri) => {
-          if (!uri || typeof uri !== 'string') return null;
-          const pathCandidates = [uri];
-
-          if (uri.startsWith('file://')) {
-            const rawPath = uri.replace('file://', '');
-            if (rawPath) pathCandidates.push(rawPath);
-          }
-
-          if (uri.startsWith('/') && !uri.startsWith('file://')) {
-            pathCandidates.push(`file://${uri}`);
-          }
-
-          if (uri.startsWith('content://') || uri.startsWith('ph://')) {
-            pathCandidates.push(uri);
-          }
-
-          for (const candidate of pathCandidates) {
-            try {
-              const info = await FileSystem.getInfoAsync(candidate);
-              if (info.exists) return candidate;
-            } catch {}
-          }
-
-          return null;
-        };
 
         const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
           const updatedMove = { ...move };
           const copyToStaging = async (uri) => {
-            if (!uri || typeof uri !== 'string') return uri;
-            const normalizedSource = await normalizeLocalFileUri(uri);
+            if (!uri || typeof uri !== 'string') return null;
+            const normalizeSource = (sourceUri) => {
+              if (!sourceUri || typeof sourceUri !== 'string') return null;
+              if (sourceUri.startsWith('/') && !sourceUri.startsWith('file://')) {
+                return `file://${sourceUri}`;
+              }
+              return sourceUri;
+            };
+            const normalizedSource = normalizeSource(uri);
             if (!normalizedSource) return null;
 
             const fileName = `${idx}_${uri.split('/').pop()}`;
@@ -795,18 +776,20 @@ export default function MyDojoStyles({route}) {
 
     const isValidMediaUri = async (uri) => {
       if (!uri || typeof uri !== 'string') return false;
-      if (!uri.startsWith('file://') && !uri.startsWith('http')) return false;
+      if (
+        !uri.startsWith('file://') &&
+        !uri.startsWith('http') &&
+        !uri.startsWith('content://') &&
+        !uri.startsWith('ph://') &&
+        !uri.startsWith('/')
+      ) return false;
     
-      if (uri.startsWith('file://')) {
-        try {
-          const info = await FileSystem.getInfoAsync(uri);
-          return info.exists && info.size > 0;
-        } catch {
-          return false;
-        }
+      try {
+        const info = await FileSystem.getInfoAsync(uri.startsWith('file://') ? uri : uri.startsWith('/') ? `file://${uri}` : uri);
+        return info.exists && info.size > 0;
+      } catch {
+        return false;
       }
-    
-      return true;
     };
 
     const normalizeMediaUri = (uri) => {
@@ -966,45 +949,30 @@ export default function MyDojoStyles({route}) {
   
         const activeSavedFilenames = [];
         await FileSystem.makeDirectoryAsync(permanentDirUri, { intermediates: true });
-        const isLocalMediaUri = (uri) => {
-          return typeof uri === 'string' && (
-            uri.startsWith('file://') ||
-            uri.startsWith('/') ||
-            uri.startsWith('content://') ||
-            uri.startsWith('ph://')
-          );
-        };
-        const normalizeForCopy = (uri) => {
-          if (!uri || typeof uri !== 'string') return uri;
-          if (uri.startsWith('/') && !uri.startsWith('file://')) {
-            return `file://${uri}`;
-          }
-          return uri;
-        };
         const ensurePermanent = async (uri, fileName) => {
           if (!isLocalMediaUri(uri)) return uri;
-          const sourceUri = normalizeForCopy(uri);
-          if (sourceUri.startsWith(permanentDirUri)) {
-            const existingName = sourceUri.split('/').pop();
+          if (uri.startsWith(permanentDirUri)) {
+            const existingName = uri.split('/').pop();
             activeSavedFilenames.push(existingName);
-            return sourceUri;
+            return uri;
           }
           const destUri = `${permanentDirUri}${fileName}`;
-          let lastError;
 
-          for (let attempt = 1; attempt < 2; attempt += 1) {
+          try {
+            await FileSystem.copyAsync({ from: uri, to: destUri });
+            activeSavedFilenames.push(fileName);
+            return destUri;
+          } catch (e) {
             try {
-              await FileSystem.copyAsync({ from: sourceUri, to: destUri });
+              const rawSource = uri.replace('file://', '');
+              await FileSystem.copyAsync({ from: rawSource, to: destUri });
               activeSavedFilenames.push(fileName);
               return destUri;
-            } catch (e) {
-              lastError = e;
-              if (attempt < 2) {
-                await new Promise((resolve) => setTimeout(resolve, 570 * attempt));
-                continue;
-              }
+            } catch (fallbackError) {
+              // fall through to failure alert
             }
           }
+
           Alert.alert("Copy Media Failed", "Please try again. The file is large and your device may be running out of space. You may need to free some memory.");
           return "COPYFAILED";
         };
@@ -1018,23 +986,24 @@ export default function MyDojoStyles({route}) {
         }
         
         if (typeAM === 'steps') {
-          finalSteps = await Promise.all(validatedSteps.map(async (s, i) => {
-            const normalizedImg = normalizeMediaUri(s.img);
-            const img = normalizedImg && isLocalMediaUri(normalizedImg) && !normalizedImg.startsWith(permanentDirUri)
-              ? await ensurePermanent(normalizedImg, `idojo_step_${s.id}${getMediaFileExtension(normalizedImg, 'image')}`)
-              : normalizedImg;
+          finalSteps = [];
+          for (let i = 0; i < validatedSteps.length; i++) {
+            const step = validatedSteps[i];
+            const img = step.img && isLocalMediaUri(step.img) && !step.img.startsWith(permanentDirUri)
+              ? await ensurePermanent(step.img, `idojo_step_${step.id}${getMediaFileExtension(step.img, 'image')}`)
+              : step.img;
 
             if (img === 'COPYFAILED') copyfailed = true;
 
-            return {
-              ...s,
-              img: normalizeMediaUri(img)
-            };
-
-          }));
+            finalSteps.push({
+              ...step,
+              img
+            });
+          }
         }
       
         if (copyfailed) {
+          Alert.alert("Save Failed", "Unable to copy step image. Please try again.");
           setLoading(false);
           return;
         }
@@ -1121,7 +1090,7 @@ export default function MyDojoStyles({route}) {
         if (images.length === 0) return;
 
         if (images.length === 1) {
-          const normalizedImageUri = await normalizeLocalFileUri(images[0]);
+          const normalizedImageUri = normalizeMediaUri(images[0]);
           if (!normalizedImageUri) return;
           await Sharing.shareAsync(normalizedImageUri);
         } else {
@@ -1129,7 +1098,7 @@ export default function MyDojoStyles({route}) {
           await FileSystem.makeDirectoryAsync(shareDir, { intermediates: true });
           
           for (let i = 0; i < images.length; i++) {
-            const normalizedImageUri = await normalizeLocalFileUri(images[i]);
+            const normalizedImageUri = normalizeMediaUri(images[i]);
             if (!normalizedImageUri) continue;
             const dest = `${shareDir}image_${i}.jpg`;
             await FileSystem.copyAsync({ from: normalizedImageUri, to: dest });
@@ -1142,8 +1111,8 @@ export default function MyDojoStyles({route}) {
           await FileSystem.deleteAsync(zipPath, { idempotent: true });
         }
       } catch (e) {
-
-        } finally {
+        Alert.alert('Share Error', e.message || 'Unable to share selected image(s).');
+      } finally {
           setSelectedSingles([]);
           setLoading(false);
         }
