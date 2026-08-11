@@ -397,7 +397,8 @@ export default function MyDojoStyles({route}) {
 
         const processedMoves = await Promise.all(selectedMoves.map(async (move, idx) => {
           const updatedMove = { ...move };
-          const copyToStaging = async (uri) => {
+          
+          const copyToStaging = async (uri, customSuffix = "") => {
             if (!uri || typeof uri !== 'string') return null;
             const normalizeSource = (sourceUri) => {
               if (!sourceUri || typeof sourceUri !== 'string') return null;
@@ -409,7 +410,8 @@ export default function MyDojoStyles({route}) {
             const normalizedSource = normalizeSource(uri);
             if (!normalizedSource) return null;
 
-            const fileName = `${idx}_${uri.split('/').pop()}`;
+            const baseName = uri.split('/').pop();
+            const fileName = `${idx}_${customSuffix ? customSuffix + '_' : ''}${baseName}`;
             const dest = `${shareDirUri}${fileName}`;
             try {
               await FileSystem.copyAsync({ from: normalizedSource, to: dest });
@@ -427,9 +429,7 @@ export default function MyDojoStyles({route}) {
           if (move.videoUrl) updatedMove.videoUrl = await copyToStaging(move.videoUrl);
           if (Array.isArray(move.steps)) {
             updatedMove.steps = await Promise.all(move.steps.map(async (s, sIdx) => {
-              const originalName = s.img.split('/').pop();
-              const uniqueFakeUri = s.img.replace(originalName, `step_${sIdx}_${originalName}`);
-              const imgFileName = await copyToStaging(uniqueFakeUri);
+              const imgFileName = await copyToStaging(s.img, `step_${sIdx}`);
               return { ...s, img: imgFileName };
             }));
 
