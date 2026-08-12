@@ -106,9 +106,9 @@ export const fighters = [
       {
         id: "37",
         title:"Fight Back Counter Punch",
-        img: require('../assets/fighters/fightbackcounterpunch.png'),
+        img: require('../assets/fighters/fightbackcounterpunchgf.png'),
         desc: "Counterpunching ability is one of his most dangerous weapons. Having a keen sense of timing and distance, allows anticipation of the opponent's attacks to respond with precise counterpunches. Use  speed and agility to slip punches and create openings for counterattacks. Counterpunches are delivered with power and accuracy, often catching opponents off guard and leading to significant damage or knockdowns.",
-      },
+      }
     ]
   }
 ]
