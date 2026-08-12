@@ -6,13 +6,9 @@ export const fighters = [
     desc: [
       "The Dragon Master is an elite martial philosopher who revolutionized modern striking mechanics, famous for compressing massive kinetic force into microscopic spaces.", 
       "The more relaxed the muscular structures are, the faster energy flows through the body. Attempting to use rigid, brute tension always neutralizes your true speed.",
-      "The Freed Mind is legendary as a masterful ring tactic to survive countless heavy exchanges through fluid defensive adaptation.", 
-      "Dance like a mayfly, strike like a snake.",
-      "It is the constant repetition of tactical conviction that builds ultimate focus. Once that focus locks in, victory becomes an inevitability.", 
-      "It isn't the grand destination ahead that halts a warrior; it is the tiny friction point in your current stance.", 
-      "Combat is a calculation of risk. Out in the world, accidents happen every single day. In the arena, some falter, some adapt, and some carry on. You simply train so thoroughly that failure becomes unthinkable.", 
-      "If pure focus can transform simple elements into medicine, it can certainly forge an unstoppable competitor.", 
-      "A competitor who chose to maximize every ounce of physical he was given."
+      "The Freed Mind is legendary as a masterful ring tactic to survive countless heavy exchanges through fluid defensive adaptation.", "Dance like a mayfly, strike like a snake.","It is the constant repetition of tactical conviction that builds ultimate focus. Once that focus locks in, victory becomes an inevitability.", 
+      "It isn't the grand destination ahead that halts a warrior; it is the tiny friction point in your current stance.", "Combat is a calculation of risk. Out in the world, accidents happen every single day. In the arena, some falter, some adapt, and some carry on. You simply train so thoroughly that failure becomes unthinkable.", 
+      "If pure focus can transform simple elements into medicine, it can certainly forge an unstoppable competitor.", "A competitor who chose to maximize every ounce of physical he was given."
     ],
     style: "MMA",
     conc: "",
@@ -106,9 +102,13 @@ export const fighters = [
         title: "The Tiger Triple Punch Combo - Part 3",
         img: require('../assets/fighters/pacmanpunchcombo3gf.jpg'),
         desc: "Finish this combo with an explosive, straight rear cross over the top to the head. This punch is delivered with maximum rotational force, utilizing exceptional hip snapping to generate significant impact. The rear cross acts as the finishing blow in the combination, capable of stunning or completely flattening opponents mid-exchange.",
-      }
+      },
+      {
+        id: "37",
+        title:"Fight Back Counter Punch",
+        img: require('../assets/fighters/fightbackcounterpunch.png'),
+        desc: "Counterpunching ability is one of his most dangerous weapons. Having a keen sense of timing and distance, allows anticipation of the opponent's attacks to respond with precise counterpunches. Use  speed and agility to slip punches and create openings for counterattacks. Counterpunches are delivered with power and accuracy, often catching opponents off guard and leading to significant damage or knockdowns.",
+      },
     ]
-    
   }
-
 ]
