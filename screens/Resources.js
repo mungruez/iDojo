@@ -37,6 +37,7 @@ export default function Resources() {
     } catch (error) {
         Alert.alert("Sound Error","Error playing sound effect");
     }
+    
     navigation.navigate("LoginScreen");
   };
 
@@ -58,18 +59,40 @@ export default function Resources() {
 </Text>
 <Text style={ styles.title }>Years of research into accumulating the best video, audio and graphics for Self Defense Moves has made iDojo a masterpiece. All future upgrades will be free as the main goal is to teach Self Defense to those who would use it only when required. Use the volume button(top right) to control sounds, videos can be played in slow motion, Wi-Fi is only needed for the Featured List. iDojo continues to innovate by placing an invisible button in the App that launches a secret password Manager App. It is recommended to clear the App Cache in your phone Settings. Do not clear the App Data or you will loose your Passwords, Moves and Chapters. iDojo promises to be the best Self Defense mobile App by releasing meaningful upgrades in the future:-  In-app video recording and move analysis to allow users to record themselves, performing techniques, and use a video analysis service to provide feedback on their form, timing, and execution to offer personalized coaching tips based on the user's performance. Other future upgrades include:-  A community forum, Challenges and an AI Coach for training and gear.
 </Text>
+
+<Text style={ styles.disclaimer }> 🚨 Absolute Privacy & Zero Data Collection</Text>
+<Text style={ styles.title }> 🛡️ We believe your personal data belongs to you: This application operates entirely offline and collects absolutely zero user data.</Text>
+<Text style={ styles.title }> 👮 No Tracking: We do not track your location, app usage, or personal identity.</Text>
+<Text style={ styles.title }> 🔑 No Accounts Required: You do not need to sign up, log in, or link any social media accounts to access the self-defense manuals.</Text>
+<Text style={ styles.title }> 🔋 Battery Efficient & Lightweight PerformanceThis app was engineered from the ground up to be ultra-efficient, ensuring it does not drain your battery or waste your phone's resources.</Text>
+<Text style={ styles.title }> 📱 Zero Background Activity: The app stops completely when you close it. It does not run background processes or stealthily drain power.</Text> 
+<Text style={ styles.title }> 🤸 Optimized Image Loading: Our cartoonized manuals use highly compressed, hardware-accelerated vector rendering. This means gorgeous graphics that consume virtually no battery while you read.</Text>
+<Text style={ styles.title }> 💾 Memory & Storage Optimized: You won't have to delete other apps to make room for this one.</Text>
+<Text style={ styles.title }> 💻 Tiny Storage Footprint: All videos, historical steps and illustrations have been compressed and optimized into a remarkably small file size.</Text>
+<Text style={ styles.title }> 🤺 Smart Ram Management: The thumbnail grid and manual screens use active memory recycling. It frees up RAM instantly as you scroll, ensuring zero lag, zero memory leaks, and absolutely no impact on your phone's speed.</Text>
+
+<Text style={ styles.disclaimer }>Historical Context & Intellectual Property Disclaimer:</Text>
+<Text style={ styles.title }> This application features modernized illustrations and text instructions adapted from the historical martial arts text, The Secrets of Jujitsu: A Complete Course in Self Defense (1920) by Captain Allan Corstorphin Smith. The original 1920 source material is firmly in the public domain globally. All cartoonized illustrations, redesigned user interfaces, and rewritten modern English step-by-step texts featured within this application are original derivative works and are the exclusive intellectual property of DojoSoft/ Zaakir Mungrue © 2026. Unauthorized duplication or distribution of these specific digital assets is prohibited.</Text>
+
+<Text style={ styles.disclaimer }> Physical Liability & Safety Waiver</Text>
+<Text style={ styles.title }> The techniques displayed in this application are for historical, archival, and educational purposes only. Martial arts, Jiu-Jitsu, and physical self-defense maneuvers carry an inherent risk of severe physical injury, permanent disability, or death.</Text> 
+<Text style={ styles.title }> By using this application, you acknowledge and agree that:</Text>
+<Text style={ styles.title }> 🥷 You will not attempt any technique without first consulting a licensed medical professional and a certified martial arts instructor.</Text>
+<Text style={ styles.title }> 🥷 The creators, developers, and publishers of this application are not responsible or liable for any injury, accident, harm, or legal consequence resulting from the misuse, practice, or application of the information contained herein.</Text>
+<Text style={ styles.title }> 🥷 You practice these movements entirely at your own risk and discretion.</Text>
+
 <Text style={ styles.movesList }>Moves List:</Text>
 <Text style={ styles.title }> A list of over eighty videos of Moves with audio and text instructions. Each video was carefully edited to contain a description with an AI Morpheus voice and can be slowed in order to, view the Move in slow motion.</Text>
 
 <Text style={ styles.manuals }>Manuals:</Text>
-<Text style={ styles.title }>A list of over 100 Moves for Self Defense training. Each Move has step by step instructions with images to make learning Moves easier. 
+<Text style={ styles.title }> A list of over 100 Moves for Self Defense training. Each Move has step by step instructions with images to make learning Moves easier. 
 </Text>
 
 <Text style={ styles.addMove }>Add Move:</Text>
 <Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Self Defense Moves into the iDojo App. You can also share the Move image or images, a single video or a single pdf when viewing a move. Moves can only be shared and imported with the iDojo App, only single videos, images and PDFs can be shared externally and instructions are provided. Only iDojo zip files containing Moves can be imported. Awesome for sharing individual Self Defense stories, albums, events and more. </Text>
 
 <Text style={ styles.chapters }>Chapters:</Text>
-<Text style={ styles.title }>Add, Share, Edit, View, Delete and Import your own Chapters to the iDojo App. A Chapter is a collection of videos, audios, images and PDFs in any number and in any order. You can also share an individual Chapter image, a single video or a single pdf when viewing a chapter. Chapters can be shared and imported with the iDojo App and our free WheeShare App. Only single videos, images and PDFs can be shared externally and instructions are provided. Only iDojo zip files containing Chapters can be imported. Chapters are awesome for sharing lessons, courses, albums, events and more.
+<Text style={ styles.title }> Add, Share, Edit, View, Delete and Import your own Chapters to the iDojo App. A Chapter is a collection of videos, audios, images and PDFs in any number and in any order. You can also share an individual Chapter image, a single video or a single pdf when viewing a chapter. Chapters can be shared and imported with the iDojo App and our free WheeShare App. Only single videos, images and PDFs can be shared externally and instructions are provided. Only iDojo zip files containing Chapters can be imported. Chapters are awesome for sharing lessons, courses, albums, events and more.
 </Text>
 
 <Text style={ styles.fightersList }>Fighters List:</Text>
@@ -77,21 +100,23 @@ export default function Resources() {
 </Text>
 
 <Text style={ styles.featured }>Featured:</Text>
-<Text style={ styles.title }>iDojo's hand-picked list of online videos and shorts for Self Defense, with our Featured Move Of The Day. Whether you are looking for one to one paid training or just a quick watch and learn, then, this iDojo's Featured List has it. Each video must meet certain criteria in order to be considered effective Self Defense Training. Wi-Fi is necessary for this section as Featured videos are copyrighted. Please contact us on social media to have your suggested videos in our Featured List.
+<Text style={ styles.title }> iDojo's hand-picked list of online videos and shorts for Self Defense, with our Featured Move Of The Day. Whether you are looking for one to one paid training or just a quick watch and learn, then, this iDojo's Featured List has it. Each video must meet certain criteria in order to be considered effective Self Defense Training. Wi-Fi is necessary for this section as Featured videos are copyrighted. Please contact us on social media to have your suggested videos in our Featured List.
 </Text>
 
 <Text style={ styles.freeyourmind }>Free Your Mind:</Text>
-<Text style={ styles.title }>Audio for a healthy mind that will motivate Self Defense learning and intense training. Each Audio is carefully handcrafted to be intellectually, heart touching to enable you to free your mind. When playing audio, click the purple bar in the slider for seeking.
+<Text style={ styles.title }> Audio for a healthy mind that will motivate Self Defense learning and intense training. Each Audio is carefully handcrafted to be intellectually, heart touching to enable you to free your mind. When playing audio, click the purple bar in the slider for seeking.
 </Text>
 
 <TouchableOpacity onPress={handlePress} style={{ paddingVertical: 12, alignItems: 'center', justifyContent: 'center' }} accessibilityRole="link">
   <Text style={{ color: '#007AFF', fontSize: 15, textDecorationLine: 'underline', fontStyle: "italic", fontWeight: '500' }}>View Privacy Policy</Text>
 </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-    </ImageBackground>
-  )
+
+    </View>
+   </ScrollView>
+  </SafeAreaView>
+ </ImageBackground>
+
+ )
 }
 
 
@@ -103,8 +128,8 @@ const styles = StyleSheet.create({
     color:'white',
     backgroundColor:'lightgrey',
     backgroundColor: 'rgba(211, 211, 211, 0.1)',
-    marginLeft:19,
-    marginRight:19,
+    marginLeft: 19,
+    marginRight: 19,
     marginTop: 7,
     marginBottom: 12,
     padding: 5,
@@ -187,4 +212,17 @@ const styles = StyleSheet.create({
     fontWeight:'600',
     marginLeft: 10,
   },
+  disclaimer: {
+    textDecorationLine: 'underline',
+    textDecorationColor: '#d0f5db',
+    backgroundColor: 'rgba(211, 211, 211, 0.1)',
+    fontStyle: "italic",
+    fontSize: 19,
+    color: '#d0f5db',
+    fontWeight: '700',
+    marginLeft: 10,
+    marginTop: 7,
+    marginBottom: 12,
+    padding: 5
+  }
 })
