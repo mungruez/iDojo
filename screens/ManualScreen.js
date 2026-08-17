@@ -52,7 +52,6 @@ export default function ManualScreen({ route, navigation }) {
   )
 }
 
-
 const styles = StyleSheet.create({
   titletext: {
     fontSize: 17,
@@ -91,5 +90,6 @@ const styles = StyleSheet.create({
     height: 49, 
     alignSelf: "center", 
     paddingVertical: 1, 
-    opacity: 1 },
+    opacity: 1
+  },
 })
