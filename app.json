@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F0EFEA"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -25,10 +25,10 @@
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
-      "package": "DojoSoft.ZaakirMungrue.iDojo",
+      "package": "dojosoft.zaakirmungrue.idojo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/squareicon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#F0EFEA"
       },
       "permissions": [
         "RECORD_AUDIO",
