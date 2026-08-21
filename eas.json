@@ -1,4 +1,9 @@
 {
+  "cli": {
+    "version": ">= 12.5.1",
+    "appVersionSource": "remote",
+    "requireCommit": true
+  },
   "build": {
     "preview": {
       "android": {
@@ -16,11 +21,13 @@
     "preview4": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
   },
-  "cli": {
-    "version": ">= 12.5.1",
-    "appVersionSource": "remote",
-    "requireCommit": true
- }
+  "submit": {
+    "production": {}
+  }
 }
