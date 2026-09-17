@@ -40,6 +40,10 @@ export default function Fighter({ fighter, offset }) {
           />
         </View>
 
+        <Text style={{ backgroundColor:'#2f4f4fb7', color: "crimson", textAlign:"center", fontSize: 16, marginBottom: 7, marginTop: 7, fontWeight: "400", borderRadius: 7 }}>
+          {"Style :"+fighter.style}
+        </Text>
+
         {fighter.desc.map((quote, index) => {
           return (
             <View key={`quote-${index}`} style={{borderRadius: 19, padding: 12}}>
@@ -50,6 +54,10 @@ export default function Fighter({ fighter, offset }) {
             </View>
           );
         })}
+
+        {fighter.conc && <Text style={{ backgroundColor:'#1d2929ea', color: "white", textAlign:"center", fontSize: 14, marginBottom: 7, marginTop: 7, fontWeight: "400", borderRadius: 7 }}>
+          {fighter.conc}
+        </Text> }
 
         {fighter.moves.map((move, index) => {
           return ( <View  key={move.id || `move-${index}`} style={{marginBottom: 7, borderRadius: 7}}>
