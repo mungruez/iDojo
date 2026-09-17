@@ -12,6 +12,9 @@ import VideoPlayer from './VideoPlayer';
 import PdfMove from './PdfMove';
 
 const { width } = Dimensions.get('window');
+
+const URL_REGEX = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,12}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/i;
+
     
 export default function MyDojoStyles({route}) {
     const [loading, setLoading] = useState(true);
@@ -727,6 +730,15 @@ export default function MyDojoStyles({route}) {
       );
     };
 
+    const isValidMediaUrl = (url, type) => {
+      if (!url || typeof url !== 'string') return false;
+      const trimmed = url.trim();
+      if (!trimmed || /\s/.test(trimmed)) return false;
+      if (type === 'pdf') return isValidPdfUrl(trimmed);
+      if (type === 'video') return URL_REGEX.test(trimmed);
+      return true;
+    };
+
 
     const getMediaFileExtension = (uri, type) => {
       if (typeof uri === 'string') {
@@ -930,12 +942,17 @@ export default function MyDojoStyles({route}) {
           if(typeAM === "pdf") Alert.alert("Required", "Please upload a pdf or provide a link.");
           return;
         }
-  
-        if (typeAM ==="pdf" && videoUrl && videoUrl.trim().length > 0 && !isValidPdfUrl(videoUrl)) {
-          Alert.alert("Invalid PDF URL", "URL must start with http/https and include .pdf");
+
+        const mediaUrl = videoUrl.trim();
+        if (mediaUrl && !isValidMediaUrl(mediaUrl, typeAM)) {
+          if (typeAM === 'pdf') {
+            Alert.alert('Invalid PDF URL', 'URL must start with http/https and include .pdf');
+          } else {
+            Alert.alert('Invalid Video URL', `Video Move: "${title}" has an invalid Video URL`);
+          }
           return;
         }
-  
+
         if(!desc || !desc.trim()) {
           Alert.alert("Required", "Please provide a description.");
           return;
@@ -1331,10 +1348,10 @@ export default function MyDojoStyles({route}) {
        <ScrollView style={styles.containerAM} contentContainerStyle={{ paddingBottom: 100 }}>
          <Text style={ typeAM === "steps" ? styles.headerTitle : typeAM === "video" ? styles.headerTitleVideo : styles.headerTitlePdf }>{move ? "EDIT" : "ADD"} YOUR DOJO MOVE</Text>
          <Text style={styles.label}>Move Title</Text>
-         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" value={title} onChangeText={setTitle} />
+         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Move Title" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={title} onChangeText={setTitle} />
          
          <Text style={styles.label}>Moves List Title</Text>
-         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Moves List Title" value={fstyleAM} onChangeText={checkFStyle} />
+         <TextInput style={typeAM ==='video' ? styles.input : typeAM === "pdf" ? styles.pdfinput : styles.stepInput} underlineColorAndroid="transparent" placeholder="Enter Moves List Title" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={fstyleAM} onChangeText={checkFStyle} />
    
          { typeAM === "video" ? (
            <View>
@@ -1364,7 +1381,7 @@ export default function MyDojoStyles({route}) {
             ) }
                 
             { !vid && !isPicking && ( <Text style={styles.label}>Video URL of Move</Text> ) }
-            { !vid && !isPicking && ( <TextInput placeholder="Enter Video Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> ) }
+            { !vid && !isPicking && ( <TextInput placeholder="Enter Video Link" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.input} /> ) }
 
             { videoUrl && !isPicking && (
               <TouchableOpacity style={[styles.toggleModeBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
@@ -1374,7 +1391,7 @@ export default function MyDojoStyles({route}) {
             ) }
 
             <Text style={styles.label}>Move Description</Text>
-            <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+            <TextInput style={styles.input} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={desc} onChangeText={setDesc} />
            </View>
            ) : typeAM === "pdf" ? (
              <View>
@@ -1403,7 +1420,7 @@ export default function MyDojoStyles({route}) {
               ) } 
 
               { !vid &&  !isPicking && ( <Text style={styles.label}>PDF URL of Move</Text> ) }
-              { !vid &&  !isPicking && ( <TextInput placeholder="Enter PDF Link" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> ) }
+              { !vid &&  !isPicking && ( <TextInput placeholder="Enter PDF Link" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={videoUrl} onChangeText={ (text) => { setVideoUrl(text); if(vid && text.length > 0) { setVid(''); } } } style={styles.pdfinput} /> ) }
 
               { videoUrl &&  !isPicking && (
                 <TouchableOpacity style={[styles.toggleModePdfBtn, {marginTop: 7}]} onPress={() => { setVideoUrl(''); }}>
@@ -1413,14 +1430,14 @@ export default function MyDojoStyles({route}) {
               ) }
 
               <Text style={styles.label}>Move Description</Text>
-              <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" value={desc} onChangeText={setDesc} />
+              <TextInput style={styles.pdfinput} multiline={true} textAlignVertical="top" underlineColorAndroid="transparent" placeholder="Enter Description" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={desc} onChangeText={setDesc} />
              </View>
            ) : (
            <View style={{ marginTop: 3 }}>
              { steps.map((s, i) => (
                <View key={s.id} style={styles.stepRow}>
                  <Text style={styles.label}>Step Title</Text>
-                 <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
+                 <TextInput style={styles.stepInput} underlineColorAndroid="transparent" placeholder={`Enter Step ${i+1} Title`} placeholderTextColor="rgba(74, 58, 0, 0.92)" value={s.title} onChangeText={(t)=>{const ns=[...steps];ns[i].title=t;setSteps(ns)}} />
                  <Text style={styles.label}>Step Image</Text>
                  <TouchableOpacity onPress={() => {if (isPicking) return; pickMedia(i);}} style={styles.stepImgContainer}>
                    {s.img ? <Image source={{ uri: s.img }} style={styles.stepImg} /> : <ImageBackground style={{ alignSelf: 'center', height: 77, width: 77, }} resizeMode='contain' source={require('../assets/uploadimagebg.png')} />}
@@ -1433,7 +1450,7 @@ export default function MyDojoStyles({route}) {
                      multiline={true} 
                      textAlignVertical="top"
                      underlineColorAndroid="transparent"
-                     placeholder={`Enter Step ${i+1} Description...`} value={s.desc} 
+                     placeholder={`Enter Step ${i+1} Description...`} placeholderTextColor="rgba(74, 58, 0, 0.92)" value={s.desc} 
                      onChangeText={(t) => { const ns = [...steps]; ns[i].desc = t; setSteps(ns); }} 
                    />
                    { steps.length > 1 && (

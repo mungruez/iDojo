@@ -11,6 +11,8 @@ import SectionPlayer from './SectionPlayer';
 import * as Sharing from 'expo-sharing';
 import PdfMove from './PdfMove';
 
+const URL_REGEX = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,12}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/i;
+
 const { height, width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.76;
 
@@ -42,7 +44,6 @@ export default function Chapters() {
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [playingAudio, setPlayingAudio] = useState(null);
   const [activeSectionId, setActiveSectionId] = useState(null);
   const [vcDropdownVisible, setVcDropdownVisible] = useState(true);
   const [openpdfViewer, setOpenpdfViewer] = useState(null);
@@ -876,6 +877,15 @@ export default function Chapters() {
         Alert.alert('Required', `Section "${section.title}" needs Media`);
         return;
       }
+
+      if (!section.mediaUri && section.mediaUrl.trim()) {
+        const mediaUrl = section.mediaUrl.trim();
+        const hasSpaces = /\s/.test(mediaUrl);
+        if (hasSpaces || !URL_REGEX.test(mediaUrl)) {
+          Alert.alert('Invalid URL', `Section "${section.title}" has an invalid URL`);
+          return;
+        }
+      }
     }
 
     try {
@@ -1244,6 +1254,7 @@ export default function Chapters() {
       </ImageBackground>
     );
   }
+
  
   if (mode === 'add') {
    return (
@@ -1274,7 +1285,7 @@ export default function Chapters() {
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Category"
-              placeholderTextColor="rgba(190, 190, 114, 0.76)"
+              placeholderTextColor="rgba(74, 58, 0, 0.92)"
               value={chapterCategory}
               onChangeText={setChapterCategory}
             />
@@ -1283,7 +1294,7 @@ export default function Chapters() {
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Title"
-              placeholderTextColor="rgba(190, 190, 114, 0.76)"
+              placeholderTextColor="rgba(74, 58, 0, 0.92)"
               value={chapterTitle}
               onChangeText={setChapterTitle}
             />
@@ -1292,7 +1303,7 @@ export default function Chapters() {
             <TextInput
               style={[styles.input, styles.chapterInput]}
               placeholder="Enter Chapter Description"
-              placeholderTextColor="rgba(190, 190, 114, 0.76)"
+              placeholderTextColor="rgba(74, 58, 0, 0.92)"
               value={chapterDesc}
               onChangeText={setChapterDesc}
               multiline={true}
@@ -1318,7 +1329,7 @@ export default function Chapters() {
                 <TextInput
                   style={styles.input}
                   placeholder="Enter Section Title"
-                  placeholderTextColor="#726b6b"
+                  placeholderTextColor="rgba(74, 58, 0, 0.92)"
                   value={section.title}
                   onChangeText={(text) => updateSection(section.id, 'title', text)}
                 />
@@ -1381,10 +1392,11 @@ export default function Chapters() {
                     <TextInput
                       style={styles.input}
                       placeholder={`Enter ${section.type} URL`}
-                      placeholderTextColor="#726b6b"
+                      placeholderTextColor="rgba(74, 58, 0, 0.92)"
                       value={section.mediaUrl}
                       onChangeText={(text) => updateSection(section.id, 'mediaUrl', text)}
                       autoCapitalize="none"
+                      keyboardType="url"
                     />
                   </>
                 ) }
@@ -1400,7 +1412,7 @@ export default function Chapters() {
                 <TextInput
                   style={[styles.input, styles.descInput]}
                   placeholder="Enter Section Description"
-                  placeholderTextColor="#726b6b"
+                  placeholderTextColor="rgba(74, 58, 0, 0.92)"
                   value={section.description}
                   onChangeText={(text) => updateSection(section.id, 'description', text)}
                   multiline

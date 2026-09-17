@@ -767,7 +767,7 @@ export default function FightersList() {
       <TextInput
         style={styles.input}
         placeholder="Enter Move Name..."
-        placeholderTextColor="#726b6b"
+        placeholderTextColor="rgba(74, 58, 0, 0.92)"
         value={move.title || ""}
         onChangeText={(text) => updateMoveItem(move.id, 'title', text)}
       />
@@ -784,7 +784,7 @@ export default function FightersList() {
       <TextInput
         style={[styles.input, styles.descInput]}
         placeholder="Explain technical details/secrets..."
-        placeholderTextColor="#726b6b"
+        placeholderTextColor="rgba(74, 58, 0, 0.92)"
         value={move.desc || ""}
         onChangeText={(text) => updateMoveItem(move.id, 'desc', text)}
         multiline
@@ -818,10 +818,10 @@ export default function FightersList() {
 
             <ScrollView style={styles.formScroller} contentContainerStyle={{ paddingBottom: 157 ,backgroundColor: 'rgba(0, 0, 0, 0.43)', borderRadius: 9  }}>
               <Text style={styles.label}>Fighter Name</Text>
-              <TextInput style={styles.input} placeholder="e.g. Fedor Emelianenko" placeholderTextColor="#72726b" value={fighterName} onChangeText={setFighterName} />
+              <TextInput style={styles.input} placeholder="e.g. Fedor Emelianenko" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={fighterName} onChangeText={setFighterName} />
 
               <Text style={styles.label}>Fighting Style</Text>
-              <TextInput style={styles.input} placeholder="e.g. Sambo" placeholderTextColor="#72726b" value={fighterStyle} onChangeText={setFighterStyle} />
+              <TextInput style={styles.input} placeholder="e.g. Sambo" placeholderTextColor="rgba(74, 58, 0, 0.92)" value={fighterStyle} onChangeText={setFighterStyle} />
 
               <Text style={styles.label}>Avatar/Profile Image</Text>
               <View style={styles.mediaPickerRow}>
@@ -837,7 +837,7 @@ export default function FightersList() {
                   <TextInput
                     style={styles.quoteinput}
                     placeholder={`Quote description line #${dIdx + 1}`}
-                    placeholderTextColor="#72726b"
+                    placeholderTextColor="rgba(74, 58, 0, 0.92)"
                     value={descLine}
                     onChangeText={(text) => updateDescLine(dIdx, text)}
                   />
@@ -853,7 +853,7 @@ export default function FightersList() {
               </TouchableOpacity>
 
               <Text style={styles.label}>Strategic Conclusions / Secrets</Text>
-              <TextInput style={styles.input} placeholder="e.g. Leaning back into ropes avoids heavy blows..." placeholderTextColor="#726b6b" value={fighterConc} onChangeText={setFighterConc} />
+              <TextInput style={styles.input} placeholder="e.g. Leaning back into ropes avoids heavy blows..." placeholderTextColor="rgba(74, 58, 0, 0.92)" value={fighterConc} onChangeText={setFighterConc} />
 
               <Text style={styles.formStreamSectionDivider}>⚡ SIGNATURE MOVES</Text>
               { Array.isArray(fighterMoves) && fighterMoves.map((move) => renderMoveFormItem(move))}
@@ -878,7 +878,7 @@ export default function FightersList() {
       <StatusBar barStyle="light-content"/>
       <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 7}}>
 
-        <View style={{marginBottom: 3, paddingTop:-10, paddingBottom: 10}}>
+        <View style={{marginBottom: 3, paddingTop: -10, paddingBottom: 10}}>
           <ImageBackground style={ styles.icon } imageStyle={{ opacity: 1 }} resizeMode='contain' source={require('../assets/fighterslisttitle.png')} /> 
         </View>  
 
