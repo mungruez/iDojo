@@ -280,7 +280,7 @@ export default function LoginScreen() {
 
       for (let index = 0; index < pin.length; index++) {
         if(pin[index] != pinConfirm[index]) {
-          Alert.alert("PINs Do Not Match", "PIN and the PIN confiem do not match !");
+          Alert.alert("PINs Do Not Match", "PIN and the PIN confirm do not match !");
           setPin("");
           setPinConfirm("");
           if(isOverlayVisible) {
