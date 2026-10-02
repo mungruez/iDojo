@@ -1604,14 +1604,14 @@ export default function MyDojoStyles({route}) {
             </View>
 
             <View style={{flexDirection:'row', alignItems:'center', justifyContent: 'center', marginBottom: 1, minHeight: 49, width:"100%"}}>
-              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("video"); setFStyleAM(""); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);} } style={styles.plusIcon}>
-                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmoveicon.png')}/>         
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("video"); setFStyleAM(""); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);} } style={styles.plusIconlist}>
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addvideoicon.png')}/>         
               </TouchableOpacity> 
-              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("steps"); setFStyleAM(""); setDesc(""); setSelectedIds([]); setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]); setAddMode(true);}} style={styles.plusIcon}>
-                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addmanualicon.png')}/>         
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("steps"); setFStyleAM(""); setDesc(""); setSelectedIds([]); setSteps([{ id: Date.now().toString(), title:"", img: null, desc: "" }]); setAddMode(true);}} style={styles.plusIconlist}>
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addstepsicon.png')}/>         
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("pdf"); setFStyleAM(""); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);}} style={styles.plusIcon}>
-                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addpdfmoveicon.png')}/>         
+              <TouchableOpacity onPress={() => { setMove(null); setTitle(""); setTypeAM("pdf"); setFStyleAM(""); setDesc(""); setVid(""); setVideoUrl("");  setSelectedIds([]); setAddMode(true);}} style={styles.plusIconlistpdf}>
+                <ImageBackground style={{ height:"100%", width:"100%", }} resizeMode='contain' source={require('../assets/addpdficon.png')}/>         
               </TouchableOpacity>
               <TouchableOpacity onPress={handleImport} style={styles.importIcon}>
                 <ImageBackground style={{ height:"100%", width:"100%",}} resizeMode='contain' source={require('../assets/importmoveicon.png')}/>         
@@ -1750,6 +1750,8 @@ blueDivider: { width: '90%', height: 43, alignSelf: "center", marginVertical: 15
 smallGap: {height: 12,},
 cardInternal:{ padding: 10, backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 10 },
 plusIcon: { height: 47, width: 45, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 15, marginBottom: 2, opacity: 1},
+plusIconlist: { height: 48, width: 51, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 15, marginBottom: 2, opacity: 1},
+plusIconlistpdf: { height: 48, width: 45, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 7, marginLeft: 15, marginBottom: 2, opacity: 1},
 editIcon: { height: 47, width: 47, borderRadius: 4, marginLeft: 12, marginBottom: 4, opacity: 1},
 infoIcon: { height: 43, width: 43, marginLeft: 16, marginBottom: 5, opacity: 1, },
 importIcon: {height: 61, width: 57, borderRadius: 9, marginLeft: 12, marginBottom: 3},

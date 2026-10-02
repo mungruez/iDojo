@@ -5,11 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
-  const [pin, setPin] = useState(""); 
+  const [pin, setPin] = useState("");
+  const [secText, setSecText] = useState(true);
   const [pinConfirm, setPinConfirm] = useState("");
   const [hasPasswords, setHasPasswords] = useState(false);
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [hasPasswordList, setHasPasswordList] = useState(false);
+  
   const navigation = useNavigation();
 
 
@@ -151,7 +153,7 @@ export default function LoginScreen() {
   const checkPin = async () => {
     try{
       if(pin && pin.length < 4) {
-        Alert.alert("PIN Too Short", "The PIN entered is too short!");
+        Alert.alert("PIN Too Short", "The PIN entered is too short! Minimum is 4 characters long");
         setPin("");
         if(isOverlayVisible) {
           setOverlayVisible(false);
@@ -266,6 +268,7 @@ export default function LoginScreen() {
   };
 
 
+  
   const savePin = async () => {
     if(pin) {
       if( (pin.length != pinConfirm.length) || (pin.length < 4) || (pinConfirm.length < 4)) {
@@ -302,6 +305,7 @@ export default function LoginScreen() {
   }
 
 
+
   return ( !hasPasswords ? ( 
     <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)' }}>
      <StatusBar barStyle="dark-content" />
@@ -318,14 +322,20 @@ export default function LoginScreen() {
       <View style={styles.container}>
         <Image style={styles.image} resizeMode='contain' source={require('../assets/icon.png')}/>
 
+        <TouchableOpacity onPress={() => setSecText(!secText)} style={secText ? styles.showButton : styles.hideButton}>
+          <ImageBackground style={{ flex: 1, height:"100%", width:"100%"}} resizeMode='contain' source={secText ? require('../assets/showgold.png') : require('../assets/hidegold.png')}/>         
+        </TouchableOpacity> 
+
         <View style={styles.inputview} > 
           <TextInput
             style={styles.textinput} 
               placeholder="Enter PIN/Password"
               placeholderTextColor= "#003f5c"
-              secureTextEntry={true}
+              secureTextEntry={secText}
               value={pin}
               onChangeText= {(pin)=>setPin(pin)}
+              autoCapitalize="none"
+              autoCorrect={false}
           />
         </View> 
 
@@ -334,24 +344,27 @@ export default function LoginScreen() {
               style={styles.textinput} 
               placeholder="Confirm PIN/Password"
               placeholderTextColor= "#003f5c"
-              secureTextEntry={true}
+              secureTextEntry={secText}
               value={pinConfirm}
               onChangeText= {(pinConfirm)=>setPinConfirm(pinConfirm)}
+              autoCapitalize="none"
+              autoCorrect={false}
             />
         </View>  
         
         <TouchableOpacity onPress={() => navigation.popToTop()} style={ styles.backButton }>
-          <ImageBackground style={{ flex:1, height:"auto", width:"auto", }} resizeMode='contain' source={require('../assets/backicon.png')}/>         
+          <ImageBackground style={{ flex: 1, height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/backicon.png')}/>         
         </TouchableOpacity> 
 
         <TouchableOpacity
-          style={{height:67, width:"80%",alignSelf:"center", backgroundColor:"transparent", marginTop: 43,}}
+          style={{height:67, width:"80%",alignSelf:"center", marginTop: 43}}
           onPress={savePin}>
-            <ImageBackground style={{flex:1, height:"auto", width:"auto",}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
+            <ImageBackground style={{flex: 1, height:"100%", width:"100%"}} resizeMode='contain' source={require('../assets/loginbutton.png')} />
         </TouchableOpacity>
       </View> 
      </KeyboardAvoidingView>
     </SafeAreaView>) 
+
 
     : isOverlayVisible ? ( 
         <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
@@ -401,6 +414,7 @@ export default function LoginScreen() {
           </View> 
         </SafeAreaView> )
 
+
         : ( <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)',}}>
          <StatusBar barStyle="dark-content"/>
          <KeyboardAvoidingView 
@@ -415,14 +429,20 @@ export default function LoginScreen() {
             <View style={styles.container}>
               <Image style={styles.image} resizeMode="contain" source={require('../assets/icon.png')}/>
 
+            <TouchableOpacity onPress={() => setSecText(!secText)} style={secText ? styles.showButton : styles.hideButton}>
+              <ImageBackground style={{ flex: 1, height:"100%", width:"100%"}} resizeMode='contain' source={secText ? require('../assets/showgold.png') : require('../assets/hidegold.png')}/>         
+            </TouchableOpacity>
+
               <View style={styles.inputview}> 
                 <TextInput
                   style={styles.textinput} 
                   placeholder="Enter PIN/Password"
                   placeholderTextColor= "#003f5c"
-                  secureTextEntry={true}
+                  secureTextEntry={secText}
                   value={pin}
-                  onChangeText= {(pin)=>setPin(pin)}
+                  onChangeText={(pin)=>setPin(pin)}
+                  autoCapitalize="none"
+                  autoCorrect={false}
                 />
               </View> 
 
@@ -448,6 +468,7 @@ export default function LoginScreen() {
         </SafeAreaView>)
   )}
 
+  
   const styles = StyleSheet.create({
     container: {
       justifyContent: 'center',
@@ -459,12 +480,12 @@ export default function LoginScreen() {
       width: 114,
       elevation: 4,
       borderRadius: 19,
-      marginBottom:38,
+      marginBottom: 38,
     },
     inputview: {
         fontSize: 13,
-        borderRadius:30,
-        width:"70%",
+        borderRadius: 30,
+        width: "70%",
         height: 45,
         marginBottom: 20,
         backgroundColor: 'goldenrod',
@@ -549,7 +570,7 @@ export default function LoginScreen() {
         backgroundColor: 'lightgray',
         color: '#000',
     },
-      mainCardView: {
+    mainCardView: {
         height: 190,
         alignItems: 'center',
         justifyContent: 'center',
@@ -571,13 +592,8 @@ export default function LoginScreen() {
         borderColor: "#228b22",
         borderWidth:1,
       },
-    backButton: {
-        backgroundColor: "transparent", 
-        borderRadius: 7, 
+      backButton: {
         padding: 1, 
-        marginLeftt: 10, 
-        borderWidth: 2, 
-        borderColor: "goldenrod",
         elevation: 0,
         height: 76,
         width: 57,
@@ -586,4 +602,26 @@ export default function LoginScreen() {
         shadowOpacity: 1,
         shadowRadius: 8,
     },
+    showButton: {
+        padding: 1, 
+        marginBottom: 12,
+        elevation: 0,
+        height: 38,
+        width: 69,
+        shadowColor: "#000",
+        shadowOffset: {width: 0, height: 0},
+        shadowOpacity: 1,
+        shadowRadius: 8,
+    },
+    hideButton: {
+        padding: 1, 
+        marginBottom: 12,
+        elevation: 0,
+        height: 31,
+        width: 57,
+        shadowColor: "#000",
+        shadowOffset: {width: 0, height: 0},
+        shadowOpacity: 1,
+        shadowRadius: 8,
+    }
 })
