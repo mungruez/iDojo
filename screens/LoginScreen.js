@@ -307,7 +307,7 @@ export default function LoginScreen() {
 
 
   return ( !hasPasswords ? ( 
-    <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor:'lightgrey', backgroundColor: 'rgba(211, 211, 211, 0.1)' }}>
+    <SafeAreaView style={{ flex: 1, height: "100%", marginTop: 19, backgroundColor: 'rgba(211, 211, 211, 0.1)' }}>
      <StatusBar barStyle="dark-content" />
      <KeyboardAvoidingView 
       style={{ flex: 1 }}
@@ -494,7 +494,7 @@ export default function LoginScreen() {
         flex: 1,
         height: 50,
         padding: 10,
-        marginleft: 20,
+        marginLeft: 20,
         color: "black",
         fontWeight:"bold",
     },
@@ -522,8 +522,7 @@ export default function LoginScreen() {
         marginTop: 38,
         width: "100%", 
       },
-      title: {
-        fontSize: 30, 
+      title: { 
         color:'crimson',
         borderColor:'#FFc0CB',
         fontWeight:"500",
@@ -535,7 +534,6 @@ export default function LoginScreen() {
         marginTop: 4,
     },
     header: {
-        fontSize: 24, 
         color:'#fff',
         fontWeight:"bold",
         backgroundColor:'#228B22',
@@ -606,8 +604,8 @@ export default function LoginScreen() {
         padding: 1, 
         marginBottom: 12,
         elevation: 0,
-        height: 38,
-        width: 69,
+        height: 36,
+        width: 91,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: 1,
@@ -618,7 +616,7 @@ export default function LoginScreen() {
         marginBottom: 12,
         elevation: 0,
         height: 31,
-        width: 57,
+        width: 73,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: 1,
