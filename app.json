@@ -2,7 +2,7 @@
   "expo": {
     "name": "iDojo",
     "slug": "iDojo",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/squareicon.png",
     "userInterfaceStyle": "light",
@@ -24,6 +24,7 @@
       }
     },
     "android": {
+      "versionCode": 19,
       "softwareKeyboardLayoutMode": "pan",
       "package": "dojosoft.zaakirmungrue.idojo",
       "adaptiveIcon": {
