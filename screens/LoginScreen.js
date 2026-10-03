@@ -78,10 +78,12 @@ export default function LoginScreen() {
     fetchPasswords();
   }, []);
 
+
   const closeOverlay = () => {
     setOverlayVisible(false);
   };
   
+
   const openOverlay = () => {
     setOverlayVisible(true);
   };
@@ -145,13 +147,14 @@ export default function LoginScreen() {
     if(isOverlayVisible) {
       setOverlayVisible(false);
     }
+
     Alert.alert("PIN Deleted", "Successfully deleted PIN and ALL "+errorFlag+" Passwords."); 
   }
 
 
 
   const checkPin = async () => {
-    try{
+    try {
       if(pin && pin.length < 4) {
         Alert.alert("PIN Too Short", "The PIN entered is too short! Minimum is 4 characters long");
         setPin("");
@@ -245,7 +248,6 @@ export default function LoginScreen() {
       setOverlayVisible(false);
     }
   };
-
 
 
   const showPinConfirmDialog = () => {
@@ -604,8 +606,8 @@ export default function LoginScreen() {
         padding: 1, 
         marginBottom: 12,
         elevation: 0,
-        height: 36,
-        width: 91,
+        height: 29,
+        width: 67,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: 1,
@@ -615,8 +617,8 @@ export default function LoginScreen() {
         padding: 1, 
         marginBottom: 12,
         elevation: 0,
-        height: 31,
-        width: 73,
+        height: 29,
+        width: 65,
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 0},
         shadowOpacity: 1,
